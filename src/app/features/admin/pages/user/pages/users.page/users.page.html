@@ -1,0 +1,137 @@
+<section class="users-page">
+
+  <header class="users-page__header">
+
+    <div>
+      <h1>Users</h1>
+      <p>Manage administrators and customers.</p>
+    </div>
+
+    <button
+      type="button"
+      class="users-page__refresh"
+      (click)="refresh()">
+
+      Refresh
+
+    </button>
+
+  </header>
+
+  <div class="users-page__filters">
+
+    <div class="users-page__search">
+
+      <input
+        type="text"
+        placeholder="Search by name or email..."
+        [ngModel]="search()"
+        (ngModelChange)="search.set($event); onSearch()">
+
+    </div>
+
+    <select
+      [ngModel]="selectedRole()"
+      (ngModelChange)="onRoleChanged($event)">
+
+      <option value="">All Roles</option>
+      <option value="Admin">Admin</option>
+      <option value="Customer">Customer</option>
+
+    </select>
+
+    <select
+      [ngModel]="selectedStatus()"
+      (ngModelChange)="onStatusChanged($event)">
+
+      <option value="">All Status</option>
+      <option value="true">Active</option>
+      <option value="false">Inactive</option>
+
+    </select>
+
+  </div>
+
+  <app-data-table
+    [columns]="columns"
+    [rows]="users()"
+    [isLoading]="loading()"
+    emptyMessage="No users found.">
+
+    <ng-template #actions let-user>
+
+      <div class="users-page__actions">
+
+        <button
+          type="button"
+          class="users-page__action users-page__action--view"
+          (click)="viewUser(user)"
+          title="View">
+
+          View
+
+        </button>
+
+        <button
+          type="button"
+          class="users-page__action users-page__action--edit"
+          (click)="editRole(user)"
+          title="Change Role">
+
+          Role
+
+        </button>
+
+        <button
+          type="button"
+          class="users-page__action"
+
+          [class.users-page__action--danger]="user.isActive"
+
+          [class.users-page__action--success]="!user.isActive"
+
+          (click)="toggleStatus(user)">
+
+          {{ user.isActive ? 'Disable' : 'Activate' }}
+
+        </button>
+
+      </div>
+
+    </ng-template>
+
+  </app-data-table>
+
+  @if (totalPages() > 1) {
+
+    <app-pagination
+
+      [currentPage]="currentPage()"
+
+      [totalPages]="totalPages()"
+
+      (pageChange)="changePage($event)">
+
+    </app-pagination>
+
+  }
+</section>
+<app-user-details-drawer
+  [user]="selectedUser()"
+  [open]="drawerOpen()"
+  (close)="closeDrawer()"
+  (changeRole)="editRole($event)"
+  (toggleStatus)="toggleStatus($event)">
+</app-user-details-drawer>
+<app-change-user-role-dialog
+  [open]="roleDialogOpen()"
+  [user]="selectedUser()"
+  (close)="roleDialogOpen.set(false)"
+  (save)="saveRole($event)">
+</app-change-user-role-dialog>
+<app-confirm-user-status-dialog
+  [open]="statusDialogOpen()"
+  [user]="selectedUser()"
+  (close)="statusDialogOpen.set(false)"
+  (confirm)="confirmStatus($event)">
+</app-confirm-user-status-dialog>

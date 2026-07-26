@@ -1,0 +1,138 @@
+<section class="scaffold-page profile-page">
+  <header class="profile-page__hero">
+    <p class="section-kicker">Account</p>
+    <h1 class="section-title">Profile settings</h1>
+  </header>
+
+  <div class="profile-page__grid">
+    <!-- Personal information -->
+    <div class="scaffold-card profile-block">
+      <div class="profile-block__header">
+        <h3 class="profile-block__title">Personal information</h3>
+        @if (!isEditingProfile()) {
+          <button type="button" class="profile-block__edit-btn" (click)="startEditProfile()">Edit</button>
+        }
+      </div>
+
+      @if (!isEditingProfile()) {
+        <!-- وضع العرض -->
+        <div class="profile-view">
+          <div class="profile-view__row">
+            <span>First name</span>
+            <strong>{{ profile()?.firstName || '—' }}</strong>
+          </div>
+          <div class="profile-view__row">
+            <span>Last name</span>
+            <strong>{{ profile()?.lastName || '—' }}</strong>
+          </div>
+          <div class="profile-view__row">
+            <span>Email</span>
+            <strong>{{ profile()?.email || '—' }}</strong>
+          </div>
+          <div class="profile-view__row">
+            <span>Phone number</span>
+            <strong>{{ profile()?.phoneNumber || '—' }}</strong>
+          </div>
+        </div>
+      } @else {
+        <!-- وضع التعديل -->
+        <form class="profile-form" [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+          @if (profileError()) {
+            <p class="profile-block__error">{{ profileError() }}</p>
+          }
+
+          <div class="field-grid">
+            <label class="field">
+              <span>First name</span>
+              <input type="text" formControlName="firstName" placeholder="First name" />
+              @if (profileControlHasError('firstName', 'required')) {
+                <small>First name is required.</small>
+              }
+            </label>
+
+            <label class="field">
+              <span>Last name</span>
+              <input type="text" formControlName="lastName" placeholder="Last name" />
+              @if (profileControlHasError('lastName', 'required')) {
+                <small>Last name is required.</small>
+              }
+            </label>
+          </div>
+
+          <label class="field">
+            <span>Phone number</span>
+            <input type="tel" formControlName="phoneNumber" placeholder="01xxxxxxxxx" />
+          </label>
+
+          <div class="profile-form__actions">
+            <button class="btn btn-primary" type="submit" [disabled]="isSavingProfile()">
+              {{ isSavingProfile() ? 'Saving…' : 'Save changes' }}
+            </button>
+            <button class="btn btn-outline" type="button" (click)="cancelEditProfile()">Cancel</button>
+          </div>
+        </form>
+      }
+    </div>
+
+    <!-- Change password -->
+    <div class="scaffold-card profile-block">
+      <div class="profile-block__header">
+        <h3 class="profile-block__title">Password</h3>
+        @if (!isChangingPassword()) {
+          <button type="button" class="profile-block__edit-btn" (click)="startChangePassword()">Change password</button>
+        }
+      </div>
+
+      @if (!isChangingPassword()) {
+        <p class="profile-view__hint">
+          @if (passwordSuccess()) {
+            <span class="profile-block__success">Your password was changed successfully.</span>
+          } @else {
+            ••••••••
+          }
+        </p>
+      } @else {
+        <form class="profile-form" [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+          @if (passwordError()) {
+            <p class="profile-block__error">{{ passwordError() }}</p>
+          }
+
+          <label class="field">
+            <span>Current password</span>
+            <input type="password" formControlName="currentPassword" placeholder="Current password" />
+            @if (passwordControlHasError('currentPassword', 'required')) {
+              <small>Current password is required.</small>
+            }
+          </label>
+
+          <label class="field">
+            <span>New password</span>
+            <input type="password" formControlName="newPassword" placeholder="New password" />
+            @if (passwordControlHasError('newPassword', 'required')) {
+              <small>New password is required.</small>
+            } @else if (passwordControlHasError('newPassword', 'minlength')) {
+              <small>Password must be at least 8 characters.</small>
+            }
+          </label>
+
+          <label class="field">
+            <span>Confirm new password</span>
+            <input type="password" formControlName="confirmNewPassword" placeholder="Repeat new password" />
+            @if (passwordControlHasError('confirmNewPassword', 'required')) {
+              <small>Please confirm your new password.</small>
+            } @else if (passwordMismatch) {
+              <small>Passwords do not match.</small>
+            }
+          </label>
+
+          <div class="profile-form__actions">
+            <button class="btn btn-primary" type="submit" [disabled]="isSavingPassword()">
+              {{ isSavingPassword() ? 'Updating…' : 'Update password' }}
+            </button>
+            <button class="btn btn-outline" type="button" (click)="cancelChangePassword()">Cancel</button>
+          </div>
+        </form>
+      }
+    </div>
+  </div>
+</section>

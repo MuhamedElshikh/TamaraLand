@@ -1,0 +1,37 @@
+<section class="checkout-block">
+  <div class="checkout-block__header">
+    <div>
+      <p class="section-kicker">Step 2</p>
+      <h3>Shipping area</h3>
+    </div>
+  </div>
+
+  @if (!governorate()) {
+    <p class="section-copy">Select a delivery address first to see shipping options.</p>
+  } @else if (noShippingAvailable()) {
+    <p class="checkout-shipping__error">
+      Sorry, we don't deliver to "{{ governorate() }}" yet. Please choose a different address.
+    </p>
+  } @else {
+    <div class="field-grid">
+      <label class="field">
+        <span>Governorate</span>
+        <input type="text" [value]="governorate()" disabled />
+      </label>
+
+      <label class="field">
+        <span>Area</span>
+        <select
+          [ngModel]="selectedAreaId()"
+          (ngModelChange)="onAreaChange($event)"
+          name="checkoutArea"
+        >
+          <option [ngValue]="null" disabled>Select area</option>
+          @for (area of areasForGovernorate(); track area.id) {
+            <option [ngValue]="area.id">{{ area.name }} — {{ area.shippingCost | number }} EGP</option>
+          }
+        </select>
+      </label>
+    </div>
+  }
+</section>

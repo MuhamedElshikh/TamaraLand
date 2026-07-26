@@ -1,0 +1,164 @@
+@if (showIntro()) {
+
+<section class="hero-intro">
+
+  <div class="hero-intro__overlay"></div>
+
+  <div class="hero-intro__content">
+
+    <img
+      src="assets/logo.png"
+      alt="Tamara Land"
+      class="hero-intro__logo">
+
+    <p class="hero-intro__eyebrow">
+      LUXURY FASHION
+    </p>
+
+    <h1 class="hero-intro__title">
+      Be Proud To Be A Woman
+    </h1>
+
+    <p class="hero-intro__description">
+      Discover timeless dresses, elegant abayas and carefully curated
+      accessories designed to celebrate confidence, beauty and femininity.
+    </p>
+
+    <div class="hero-intro__actions">
+
+      <a
+        routerLink="/new-in"
+        class="btn btn-primary">
+
+        Shop New In
+
+      </a>
+
+      <a
+        routerLink="/categories"
+        class="btn btn-outline">
+
+        Explore Collections
+
+      </a>
+
+    </div>
+
+  </div>
+
+
+</section>
+
+}
+
+@if(showSlider()) {
+
+<section
+  class="hero-slider"
+  (mouseenter)="pause()"
+  (mouseleave)="resume()">
+
+  @if(hasBanners()) {
+
+  <div class="hero-background">
+
+    <img
+      class="hero-image current"
+      [class.hidden]="!showCurrent()"
+      [src]="currentImage()"
+      alt="Banner">
+
+    <img
+      class="hero-image next"
+      [class.visible]="!showCurrent()"
+      [src]="nextImage()"
+      alt="Banner">
+
+  </div>
+
+  <div class="hero-overlay"></div>
+
+  <button
+    class="hero-arrow hero-arrow--left"
+    (click)="previous()">
+
+    ❮
+
+  </button>
+
+  <button
+    class="hero-arrow hero-arrow--right"
+    (click)="next()">
+
+    ❯
+
+  </button>
+
+  <div class="hero-indicators">
+
+    @for (banner of banners(); track banner.id; let i = $index) {
+
+      <button
+        class="hero-dot"
+        [class.active]="i === currentIndex()"
+        (click)="go(i)">
+
+      </button>
+
+    }
+
+  </div>
+
+  @if(currentBanner(); as banner) {
+
+  <div class="hero-banner-content">
+
+    <!-- @if (banner.title) {
+
+      <h2>
+
+        {{ banner.title }}
+
+      </h2>
+
+    } -->
+
+    <!-- @if (banner.description) {
+
+      <p>
+
+        {{ banner.description }}
+
+      </p>
+
+    } -->
+
+    @if (banner.link) {
+
+      <a
+        [href]="banner.link"
+        class="btn btn-primary">
+
+        {{ banner.title }}
+
+      </a>
+
+    }
+
+  </div>
+
+  }
+
+  } @else {
+
+  <div class="hero-loading">
+
+    <div class="loader"></div>
+
+  </div>
+
+  }
+
+</section>
+
+}

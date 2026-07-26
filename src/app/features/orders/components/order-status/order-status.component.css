@@ -1,0 +1,8 @@
+.order-status-block__cancelled {
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(224, 132, 132, 0.35);
+  background: rgba(224, 132, 132, 0.1);
+  color: #e08484;
+  font-weight: 600;
+}

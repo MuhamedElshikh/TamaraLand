@@ -1,0 +1,73 @@
+<app-hero-banner />
+
+<section class="scaffold-page">
+  <div class="section-header">
+    <div>
+      <p class="section-kicker">Shop by category</p>
+      <h2 class="section-title">Find your style</h2>
+    </div>
+  </div>
+
+  @if (categoriesLoading()) {
+    <div class="category-strip">
+      @for (i of [1, 2, 3, 4]; track i) {
+        <div class="category-card--skeleton"></div>
+      }
+    </div>
+  } @else if (categories().length === 0) {
+    <p class="muted">No categories available yet.</p>
+  } @else {
+    <div class="category-strip">
+      @for (category of categories(); track category.id) {
+        <a [routerLink]="['/categories', category.id]" class="category-card">
+          <img [src]="category.imageUrl || fallbackImage" [alt]="category.name" />
+          <span class="category-card__label">{{ category.name }}</span>
+        </a>
+      }
+    </div>
+  }
+</section>
+
+<app-featured-products />
+
+<section class="brand-banner">
+  <div class="brand-banner__glow"></div>
+  <p class="brand-banner__eyebrow">Our promise</p>
+  <blockquote class="brand-banner__quote">
+    "Every piece at Tamara Land is chosen to make you feel seen,
+    confident, and unapologetically yourself."
+  </blockquote>
+  <a routerLink="/categories" class="btn btn-primary">Discover the collection</a>
+</section>
+
+<section class="trust-strip">
+  <div class="trust-item">
+    <span class="trust-item__icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 7h13v9H3z" stroke="currentColor" stroke-width="1.6"/><path d="M16 10h3l2 3v3h-5z" stroke="currentColor" stroke-width="1.6"/><circle cx="7" cy="18.5" r="1.6" stroke="currentColor" stroke-width="1.6"/><circle cx="17.5" cy="18.5" r="1.6" stroke="currentColor" stroke-width="1.6"/></svg>
+    </span>
+    <div>
+      <p class="trust-item__title">Fast delivery</p>
+      <p class="trust-item__copy">2-4 business days nationwide</p>
+    </div>
+  </div>
+
+  <div class="trust-item">
+    <span class="trust-item__icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 109-9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M3 5v5h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </span>
+    <div>
+      <p class="trust-item__title">Easy returns</p>
+      <p class="trust-item__copy">14-day free return policy</p>
+    </div>
+  </div>
+
+  <div class="trust-item">
+    <span class="trust-item__icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+    </span>
+    <div>
+      <p class="trust-item__title">Secure checkout</p>
+      <p class="trust-item__copy">Encrypted payments, always</p>
+    </div>
+  </div>
+</section>

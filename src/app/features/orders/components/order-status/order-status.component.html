@@ -1,0 +1,12 @@
+@if (isCancelled()) {
+  <div class="order-status-block__cancelled">This order has been cancelled.</div>
+} @else {
+  <div class="stepper">
+    @for (step of statusSteps; track step; let i = $index) {
+      <div class="step" [class.active]="stepState(i) === 'active'" [class.completed]="stepState(i) === 'completed'">
+        <div class="step-icon">{{ i + 1 }}</div>
+        <p class="step-label">{{ step }}</p>
+      </div>
+    }
+  </div>
+}

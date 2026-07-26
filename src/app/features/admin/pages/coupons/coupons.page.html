@@ -1,0 +1,128 @@
+<section class="admin-coupons-page">
+  <header class="admin-page__hero">
+    <div>
+      <p class="section-kicker">Marketing</p>
+      <h1 class="section-title">Coupons</h1>
+    </div>
+    @if (!isFormOpen()) {
+      <button type="button" class="btn btn-primary" (click)="openCreateForm()">+ New coupon</button>
+    }
+  </header>
+
+  @if (listError()) {
+    <p class="admin-page__error">{{ listError() }}</p>
+  }
+
+  @if (isFormOpen()) {
+    <form class="scaffold-card coupon-form" [formGroup]="form" (ngSubmit)="submit()">
+      <h3 class="coupon-form__title">{{ editingCoupon() ? 'Edit coupon' : 'New coupon' }}</h3>
+
+      @if (formError()) {
+        <p class="admin-page__error">{{ formError() }}</p>
+      }
+
+      <div class="field-grid">
+        <label class="field">
+          <span>Code</span>
+          <input type="text" formControlName="code" placeholder="SUMMER20" style="text-transform: uppercase;" />
+          @if (controlHasError('code', 'required')) {
+            <small>Coupon code is required.</small>
+          }
+        </label>
+
+        <label class="field">
+          <span>Discount type</span>
+          <select formControlName="discountType">
+            <option [value]="0">Percentage (%)</option>
+            <option [value]="1">Fixed amount (EGP)</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="field-grid">
+        <label class="field">
+          <span>Discount value</span>
+          <input type="number" formControlName="discountValue" min="0.01" step="0.01" />
+          @if (controlHasError('value', 'required')) {
+            <small>Value is required.</small>
+          }
+        </label>
+
+        <label class="field">
+          <span>Minimum order amount</span>
+          <input type="number" formControlName="minimumOrder" min="0" step="0.01" />
+        </label>
+      </div>
+      <label class="field">
+          <span>Maximum discount</span>
+          <input type="number" formControlName="maximumDiscount" min="0" step="0.01" />
+        </label>
+      
+
+      <div class="field-grid">
+        <label class="field">
+          <span>Usage limit</span>
+          <input type="number" formControlName="usageLimit" min="1" />
+          @if (controlHasError('usageLimit', 'required')) {
+            <small>Usage limit is required.</small>
+          }
+        </label>
+
+        <label class="field">
+          <span>Start date</span>
+          <input type="date" formControlName="startDate" />
+          @if (controlHasError('startDate', 'required')) {
+            <small>Expiry date is required.</small>
+          }
+        </label>
+        <label class="field">
+          <span>Expires at</span>
+          <input type="date" formControlName="endDate" />
+          @if (controlHasError('endDate', 'required')) {
+            <small>Expiry date is required.</small>
+          }
+        </label>
+      </div>
+
+      <label class="coupon-form__checkbox">
+        <input type="checkbox" formControlName="isActive" />
+        <span>Coupon is active</span>
+      </label>
+
+      <div class="coupon-form__actions">
+        <button class="btn btn-primary" type="submit" [disabled]="isSubmitting()">
+          {{ isSubmitting() ? 'Saving…' : (editingCoupon() ? 'Save changes' : 'Create coupon') }}
+        </button>
+        <button class="btn btn-outline" type="button" (click)="closeForm()">Cancel</button>
+      </div>
+    </form>
+  }
+
+  <div class="admin-page__toolbar">
+    <input
+      type="text"
+      class="admin-page__search"
+      placeholder="Search coupon code..."
+      [value]="search()"
+      (input)="onSearch($any($event.target).value)"
+    />
+  </div>
+
+  <app-data-table [columns]="columns" [rows]="coupons()" [isLoading]="isLoading()" emptyMessage="No coupons found.">
+    <ng-template #actions let-row>
+      <div class="admin-page__row-actions">
+        <button type="button" (click)="openEditForm(row)">Edit</button>
+        <button
+          type="button"
+          class="admin-page__delete"
+          (click)="deleteCoupon(row)"
+          [disabled]="isDeleting() === row.id"
+        >
+          {{ isDeleting() === row.id ? 'Deleting…' : 'Delete' }}
+        </button>
+      </div>
+    </ng-template>
+  </app-data-table>
+
+  <app-pagination [currentPage]="pageIndex()" [totalPages]="totalPages()" (pageChange)="onPageChange($event)" />
+</section>

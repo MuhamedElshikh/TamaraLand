@@ -1,0 +1,91 @@
+<section class="admin-shipping-page">
+  <header class="admin-page__hero">
+    <div>
+      <p class="section-kicker">Logistics</p>
+      <h1 class="section-title">Shipping areas</h1>
+    </div>
+    @if (!isFormOpen()) {
+      <button type="button" class="btn btn-primary" (click)="openCreateForm()">+ New area</button>
+    }
+  </header>
+
+  @if (listError()) {
+    <p class="admin-page__error">{{ listError() }}</p>
+  }
+
+  @if (isFormOpen()) {
+    <form class="scaffold-card shipping-form" [formGroup]="form" (ngSubmit)="submit()">
+      <h3 class="shipping-form__title">{{ editingArea() ? 'Edit shipping area' : 'New shipping area' }}</h3>
+
+      @if (formError()) {
+        <p class="admin-page__error">{{ formError() }}</p>
+      }
+
+      <div class="field-grid">
+        <label class="field">
+          <span>Governorate</span>
+          <input type="text" formControlName="governorate" placeholder="القاهرة" />
+          @if (controlHasError('governorate', 'required')) {
+            <small>Governorate is required.</small>
+          }
+        </label>
+
+        <label class="field">
+          <span>Area name</span>
+          <input type="text" formControlName="area" placeholder="مدينة نصر" />
+          @if (controlHasError('area', 'required')) {
+            <small>Area name is required.</small>
+          }
+        </label>
+      </div>
+
+      <label class="field">
+        <span>Shipping cost (EGP)</span>
+        <input type="number" formControlName="shippingCost" min="0" step="0.01" />
+        @if (controlHasError('shippingCost', 'required')) {
+          <small>Shipping cost is required.</small>
+        }
+      </label>
+
+      <label class="shipping-form__checkbox">
+        <input type="checkbox" formControlName="isActive" />
+        <span>Area is active</span>
+      </label>
+
+      <div class="shipping-form__actions">
+        <button class="btn btn-primary" type="submit" [disabled]="isSubmitting()">
+          {{ isSubmitting() ? 'Saving…' : (editingArea() ? 'Save changes' : 'Add area') }}
+        </button>
+        <button class="btn btn-outline" type="button" (click)="closeForm()">Cancel</button>
+      </div>
+    </form>
+  }
+
+  <div class="admin-page__toolbar">
+    <input
+      type="text"
+      class="admin-page__search"
+      placeholder="Search governorate or area..."
+      [value]="search()"
+      (input)="onSearch($any($event.target).value)"
+    />
+  </div>
+
+  <app-data-table [columns]="columns" [rows]="areas()" [isLoading]="isLoading()" emptyMessage="No shipping areas found.">
+    <ng-template #actions let-row>
+      <div class="admin-page__row-actions">
+        <button type="button" (click)="openEditForm(row)">Edit</button>
+        <button
+          type="button"
+          class="admin-page__delete"
+          (click)="deleteArea(row)"
+          [disabled]="isDeleting() === row.id"
+        >
+          {{ isDeleting() === row.id ? 'Deleting…' : 'Delete' }}
+        </button>
+      </div>
+    </ng-template>
+  </app-data-table>
+
+  <app-pagination [currentPage]="pageIndex()" [totalPages]="totalPages()" (pageChange)="onPageChange($event)" />
+</section>

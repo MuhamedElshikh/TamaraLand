@@ -1,0 +1,62 @@
+<div
+  class="dialog-overlay"
+  [class.dialog-overlay--show]="open()"
+  (click)="close.emit()">
+</div>
+
+<div
+  class="dialog"
+  [class.dialog--show]="open()">
+
+  @if (user(); as u) {
+
+    <h2>Change User Role</h2>
+
+    <p>
+      Select a new role for
+      <strong>{{ u.fullName }}</strong>.
+    </p>
+
+    <label>
+
+      Role
+
+      <select
+        [ngModel]="role()"
+        (ngModelChange)="role.set($event)">
+
+        <option value="Admin">
+          Admin
+        </option>
+
+        <option value="Customer">
+          Customer
+        </option>
+
+      </select>
+
+    </label>
+
+    <div class="dialog__actions">
+
+      <button
+        class="btn btn-secondary"
+        (click)="close.emit()">
+
+        Cancel
+
+      </button>
+
+      <button
+        class="btn btn-primary"
+        (click)="submit()">
+
+        Save
+
+      </button>
+
+    </div>
+
+  }
+
+</div>

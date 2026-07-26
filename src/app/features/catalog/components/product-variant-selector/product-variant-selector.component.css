@@ -1,0 +1,90 @@
+.variant-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+}
+
+.variant-shell__header h3 {
+  margin-top: 0.2rem;
+  font-size: 1.3rem;
+}
+
+.variant-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.variant-group__label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.variant-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.variant-chip {
+  padding: 0.6rem 0.9rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.variant-chip:hover:not(:disabled) {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.variant-chip--active {
+  background: var(--gold-gradient);
+  color: var(--secondary-dark);
+  border-color: var(--primary);
+}
+
+.variant-chip:disabled,
+.variant-chip--disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.variant-status {
+  margin-top: 0.25rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.variant-price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.variant-price__current {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary-light);
+}
+
+.variant-price__old {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.variant-dimensions {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}

@@ -1,0 +1,6 @@
+<div class="price-display">
+  <span class="current">{{ value | currencyFormat: currencySymbol }}</span>
+  @if (originalValue !== null && originalValue !== undefined && originalValue > value) {
+    <span class="original">{{ originalValue | currencyFormat: currencySymbol }}</span>
+  }
+</div>

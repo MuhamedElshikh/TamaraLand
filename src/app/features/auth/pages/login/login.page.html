@@ -1,0 +1,56 @@
+<app-auth-form-shell>
+  <section class="auth-copy">
+    <div class="auth-copy__header">
+      <p class="section-kicker">Welcome back</p>
+      <h1>Sign in to TmaraLand</h1>
+    </div>
+
+    @if (errorMessage()) {
+      <app-error-message title="Login failed" [message]="errorMessage()!"></app-error-message>
+    }
+
+    <form class="auth-form" [formGroup]="form" (ngSubmit)="submit()">
+      <label class="field">
+        <span>Email</span>
+        <input type="email" formControlName="email" placeholder="you@example.com" autocomplete="email" />
+        @if (controlHasError('email', 'required')) {
+          <small>Email is required.</small>
+        } @else if (controlHasError('email', 'email')) {
+          <small>Please enter a valid email address.</small>
+        }
+      </label>
+
+      <label class="field">
+        <span>Password</span>
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="Your password"
+          autocomplete="current-password"
+        />
+        @if (controlHasError('password', 'required')) {
+          <small>Password is required.</small>
+        } @else if (controlHasError('password', 'minlength')) {
+          <small>Password must be at least 8 characters.</small>
+        }
+      </label>
+
+      <button class="auth-submit" type="submit" [disabled]="isSubmitting()">
+        @if (isSubmitting()) {
+          <span class="auth-submit__spinner"></span>
+          <span>Signing in...</span>
+        } @else {
+          <span>Sign in</span>
+        }
+      </button>
+    </form>
+
+    <footer class="auth-footer">
+      <a routerLink="/forgot-password">Forgot password?</a>
+      <p>
+        New here?
+        <a routerLink="/register">Create an account</a>
+      </p>
+    </footer>
+  </section>
+</app-auth-form-shell>

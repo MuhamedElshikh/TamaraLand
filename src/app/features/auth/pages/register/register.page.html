@@ -1,0 +1,93 @@
+<app-auth-form-shell>
+  <section class="auth-copy">
+    <div class="auth-copy__header">
+      <p class="section-kicker">Get started</p>
+      <h1>Create your account</h1>
+    </div>
+
+    @if (errorMessage()) {
+      <app-error-message title="Registration failed" [message]="errorMessage()!"></app-error-message>
+    }
+
+    <form class="auth-form" [formGroup]="form" (ngSubmit)="submit()">
+      <div class="field-grid">
+        <label class="field">
+          <span>First name</span>
+          <input type="text" formControlName="firstName" placeholder="Ahmed" autocomplete="given-name" />
+          @if (controlHasError('firstName', 'required')) {
+            <small>First name is required.</small>
+          } @else if (controlHasError('firstName', 'minlength')) {
+            <small>First name should be at least 2 characters.</small>
+          }
+        </label>
+
+        <label class="field">
+          <span>Last name</span>
+          <input type="text" formControlName="lastName" placeholder="Ali" autocomplete="family-name" />
+          @if (controlHasError('lastName', 'required')) {
+            <small>Last name is required.</small>
+          } @else if (controlHasError('lastName', 'minlength')) {
+            <small>Last name should be at least 2 characters.</small>
+          }
+        </label>
+      </div>
+
+      <label class="field">
+        <span>Email</span>
+        <input type="email" formControlName="email" placeholder="you@example.com" autocomplete="email" />
+        @if (controlHasError('email', 'required')) {
+          <small>Email is required.</small>
+        } @else if (controlHasError('email', 'email')) {
+          <small>Please enter a valid email address.</small>
+        }
+      </label>
+
+      <label class="field">
+        <span>Password</span>
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="Create a password"
+          autocomplete="new-password"
+        />
+        @if (controlHasError('password', 'required')) {
+          <small>Password is required.</small>
+        } @else if (controlHasError('password', 'minlength')) {
+          <small>Password must be at least 8 characters.</small>
+        }
+      </label>
+
+      <label class="field">
+        <span>Confirm password</span>
+        <input
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="Repeat password"
+          autocomplete="new-password"
+        />
+        @if (controlHasError('confirmPassword', 'required')) {
+          <small>Please confirm your password.</small>
+        } @else if (passwordMismatch()) {
+          <small>Passwords do not match.</small>
+        }
+      </label>
+
+      <button class="auth-submit" type="submit" [disabled]="isSubmitting()">
+        @if (isSubmitting()) {
+          <span class="auth-submit__spinner"></span>
+          <span>Creating account...</span>
+        } @else {
+          <span>Create account</span>
+        }
+      </button>
+    </form>
+
+    <footer class="auth-footer">
+      <p>
+        Already have an account?
+        <a routerLink="/login">Sign in</a>
+      </p>
+      <small>By continuing you agree to the store policies and terms.</small>
+    </footer>
+  </section>
+</app-auth-form-shell>

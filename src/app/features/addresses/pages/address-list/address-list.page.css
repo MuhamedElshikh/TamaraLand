@@ -1,0 +1,49 @@
+.addresses-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.addresses-page__hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 0 0.25rem;
+}
+
+.addresses-page__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.addresses-page__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 3rem 1.5rem;
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+}
+
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.9; }
+}
+
+.addresses-page__skeleton {
+  height: 160px;
+  border-radius: var(--radius-md);
+  background: var(--secondary-light);
+  border: 1px solid var(--border-color);
+  animation: skeletonPulse 1.4s ease-in-out infinite;
+}
+
+@media (max-width: 640px) {
+  .addresses-page__grid {
+    grid-template-columns: 1fr;
+  }
+}

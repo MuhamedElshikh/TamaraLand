@@ -1,0 +1,71 @@
+<section class="order-details-page">
+  @if (isLoading()) {
+    <p class="section-copy">Loading order…</p>
+  } @else if (notFound() || !order()) {
+    <p class="section-copy">This order doesn't exist or you don't have access to it.</p>
+  } @else {
+    <header class="order-details-page__hero">
+      <div>
+        <p class="section-kicker">Order</p>
+        <h1 class="section-title">{{ order()!.orderNumber }}</h1>
+        <p class="section-copy">Placed on {{ order()!.createdAt | date: 'medium' }}</p>
+      </div>
+
+      <span class="order-status-badge" [class]="'order-status-badge--' + orderStatus[order()!.status].toLowerCase()">
+        {{ orderStatus[order()!.status] }}
+      </span>
+    </header>
+
+<app-order-status
+[status]="orderStatus[order()!.status]">
+</app-order-status>
+    <div class="order-details-page__content">
+      <app-order-items [items]="order()!.items" />
+
+      <aside class="order-details-page__aside">
+        <div class="order-details-page__card">
+          <h3>Delivery address</h3>
+          <p>{{ order()!.fullName }}</p>
+          <p>{{ order()!.phoneNumber }}</p>
+          <p>
+            {{ order()!.street }}
+            @if (order()!.building) {, Bldg {{ order()!.building }} }
+            @if (order()!.floor) {, Fl {{ order()!.floor }} }
+            @if (order()!.apartment) {, Apt {{ order()!.apartment }} }
+          </p>
+          <p>{{ order()!.area }}, {{ order()!.governorate }}</p>
+          @if (order()!.notes) {
+            <p class="order-details-page__notes">{{ order()!.notes }}</p>
+          }
+        </div>
+
+        <div class="order-details-page__card">
+          <h3>Payment</h3>
+          <p>{{ paymentMethod[order()!.paymentMethod] }}•{{ paymentStatus[order()!.paymentStatus] }}</p>
+        </div>
+
+        <div class="order-details-page__card">
+          <h3>Order summary</h3>
+          <div class="order-details-page__row">
+            <span>Subtotal</span>
+            <span>{{ order()!.subTotal | number }} EGP</span>
+          </div>
+          @if (order()!.discount > 0) {
+            <div class="order-details-page__row">
+              <span>Discount @if (order()!.couponCode) { ({{ order()!.couponCode }}) }</span>
+              <span>−{{ order()!.discount | number }} EGP</span>
+            </div>
+          }
+          <div class="order-details-page__row">
+            <span>Shipping ({{ order()!.shippingAreaName }})</span>
+            <span>{{ order()!.shippingCost | number }} EGP</span>
+          </div>
+          <div class="order-details-page__row order-details-page__row--total">
+            <span>Total</span>
+            <span>{{ order()!.total | number }} EGP</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  }
+</section>

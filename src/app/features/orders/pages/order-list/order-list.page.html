@@ -1,0 +1,39 @@
+<section class="orders-page">
+  @if (justPlaced()) {
+    <div class="orders-page__success">Your order was placed successfully! 🎉</div>
+  }
+
+  <header class="orders-page__hero">
+    <div>
+      <p class="section-kicker">Account</p>
+      <h1 class="section-title">Your orders</h1>
+    </div>
+
+    <select class="orders-page__filter" [value]="selectedStatus()" (change)="onStatusChange($any($event.target).value)">
+      <option value="">All statuses</option>
+      @for (status of statusOptions; track status) {
+        <option [value]="status">{{ status }}</option>
+      }
+    </select>
+  </header>
+
+  @if (isLoading()) {
+    <div class="orders-page__list">
+      @for (i of [1, 2, 3]; track i) {
+        <div class="orders-page__skeleton"></div>
+      }
+    </div>
+  } @else if (orders().length === 0) {
+    <div class="orders-page__empty">
+      <p class="section-copy">No orders found.</p>
+    </div>
+  } @else {
+    <div class="orders-page__list">
+      @for (order of orders(); track order.id) {
+        <app-order-card [order]="order" />
+      }
+    </div>
+
+    <app-pagination [currentPage]="pageIndex()" [totalPages]="totalPages()" (pageChange)="onPageChange($event)" />
+  }
+</section>

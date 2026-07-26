@@ -1,0 +1,59 @@
+.cart-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 5.5rem;
+}
+
+.cart-summary__title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  color: var(--text-primary);
+}
+
+.cart-summary__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.cart-summary__row--discount {
+  color: var(--primary-light);
+}
+
+.cart-summary__row--total {
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.cart-summary__note {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.cart-summary__checkout {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.cart-summary__checkout--disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+@media (max-width: 980px) {
+  .cart-summary {
+    position: static;
+  }
+}

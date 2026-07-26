@@ -1,0 +1,22 @@
+.product-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.9; }
+}
+
+.product-card--skeleton {
+  aspect-ratio: 3 / 4.3;
+  border-radius: var(--radius-md);
+  background: var(--secondary-light);
+  border: 1px solid var(--border-color);
+  animation: skeletonPulse 1.4s ease-in-out infinite;
+}
+
+@media (max-width: 900px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

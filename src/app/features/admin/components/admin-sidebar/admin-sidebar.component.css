@@ -1,0 +1,329 @@
+.admin-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  width: 260px;
+  flex-shrink: 0;
+
+  height: 100vh;
+
+  position: sticky;
+  top: 0;
+
+  padding: 1.5rem 1.1rem;
+
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+
+  overflow-y: auto;
+
+  transition:
+    transform .35s ease,
+    box-shadow .35s ease;
+     backdrop-filter:blur(18px);
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.35),
+        inset -1px 0 rgba(255,255,255,.04);
+}
+
+/* ---------------- Brand ---------------- */
+
+.admin-sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+
+  padding-bottom: 1.25rem;
+
+  border-bottom: 1px solid var(--border-color);
+
+  position: relative;
+}
+
+.admin-sidebar__logo{
+  width: 80px;
+  box-shadow: 0 0 20px rgba(201,162,75,.35);
+  transition:.35s;
+}
+
+.admin-sidebar__brand:hover .admin-sidebar__logo{
+
+    transform:rotate(-8deg) scale(1.08);
+
+    box-shadow:
+        0 0 28px rgba(201,162,75,.6);
+
+}
+
+.admin-sidebar__title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.admin-sidebar__subtitle {
+  font-size: .7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+/* ---------------- Navigation ---------------- */
+
+.admin-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  flex: 1;
+}
+
+.admin-sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+
+  padding: .7rem .85rem;
+
+  border-radius: var(--radius-sm);
+
+  color: var(--text-secondary);
+
+  transition: var(--transition-fast);
+
+    position:relative;
+
+    overflow:hidden;
+
+    transition:
+        background .25s,
+        transform .25s,
+        color .25s;
+}
+.admin-sidebar__icon{
+
+    transition:
+        transform .25s,
+        color .25s;
+
+}
+
+.admin-sidebar__link:hover .admin-sidebar__icon{
+    transform:translateX(5px);
+    -webkit-transform:translateX(5px);
+    -moz-transform:translateX(5px);
+    -ms-transform:translateX(5px);
+    -o-transform:translateX(5px);
+}
+
+.admin-sidebar__link:hover {
+  background: rgba(201,162,75,.08);
+  color: var(--text-primary);
+}
+
+.admin-sidebar__link--active{
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(201,162,75,.18),
+            rgba(201,162,75,.05)
+        );
+
+    border:1px solid rgba(201,162,75,.22);
+
+    box-shadow:
+        0 6px 22px rgba(201,162,75,.18);
+
+}
+.admin-sidebar__link::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    top:12%;
+
+    width:3px;
+    height:76%;
+
+    border-radius:999px;
+
+    background:#c9a24b;
+
+    opacity:0;
+
+    transform:scaleY(.4);
+
+    transition:.25s;
+
+}
+
+.admin-sidebar__link--active::before{
+
+    opacity:1;
+
+    transform:scaleY(1);
+
+}
+
+.admin-sidebar__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+/* ---------------- Back ---------------- */
+
+.admin-sidebar__back {
+  padding-top: 1rem;
+
+  border-top: 1px solid var(--border-color);
+
+  color: var(--text-muted);
+  font-size: .8rem;
+}
+
+.admin-sidebar__back:hover {
+  color: var(--primary);
+}
+
+/* ---------------- Mobile Close ---------------- */
+
+.admin-sidebar__close {
+  display: none;
+
+  position: absolute;
+
+  right: 0;
+  top: -2px;
+
+  width: 36px;
+  height: 36px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: var(--text-primary);
+
+  cursor: pointer;
+
+  font-size: 20px;
+}
+
+/* ---------------- Overlay ---------------- */
+
+.admin-sidebar-overlay {
+  display: none;
+}
+
+/* ====================================================== */
+/* ====================== MOBILE ========================= */
+/* ====================================================== */
+
+@media (max-width: 992px) {
+
+  .admin-sidebar {
+
+    position: fixed;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    z-index: 1200;
+
+    width: 280px;
+    max-width: 82vw;
+
+    transform: translateX(-100%);
+
+    border-right: 1px solid var(--border-color);
+
+    box-shadow: 0 16px 48px rgba(0,0,0,.45);
+  }
+
+  .admin-sidebar--open {
+    transform: translateX(0);
+  }
+
+  .admin-sidebar__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .admin-sidebar-overlay {
+
+    display: block;
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,.45);
+
+    backdrop-filter: blur(2px);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: .3s;
+
+    z-index: 1100;
+  }
+
+  .admin-sidebar-overlay--show {
+
+    opacity: 1;
+    visibility: visible;
+
+  }
+
+}
+
+/* Small Phones */
+
+@media (max-width:480px){
+
+  .admin-sidebar{
+
+    width:260px;
+    max-width:88vw;
+
+    padding:1.2rem .9rem;
+
+  }
+
+  .admin-sidebar__link{
+
+    font-size:.84rem;
+
+    padding:.65rem .7rem;
+
+  }
+
+}
+.admin-sidebar::-webkit-scrollbar{
+    width:0;
+}
+
+.admin-sidebar:hover::-webkit-scrollbar{
+    width:8px;
+}
+
+.admin-sidebar::-webkit-scrollbar-track{
+    background:transparent;
+}
+
+.admin-sidebar::-webkit-scrollbar-thumb{
+    background:var(--primary);
+    border-radius:999px;
+}

@@ -1,0 +1,59 @@
+.orders-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.orders-page__success {
+  padding: 0.9rem 1.1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(76, 175, 125, 0.35);
+  background: rgba(76, 175, 125, 0.1);
+  color: #4caf7d;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.orders-page__hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 0 0.25rem;
+}
+
+.orders-page__filter {
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border-color);
+  background-color: var(--secondary);
+  padding: 0.6rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  outline: none;
+}
+
+.orders-page__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.orders-page__empty {
+  padding: 3rem 1.5rem;
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+}
+
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.9; }
+}
+
+.orders-page__skeleton {
+  height: 80px;
+  border-radius: var(--radius-md);
+  background: var(--secondary-light);
+  border: 1px solid var(--border-color);
+  animation: skeletonPulse 1.4s ease-in-out infinite;
+}

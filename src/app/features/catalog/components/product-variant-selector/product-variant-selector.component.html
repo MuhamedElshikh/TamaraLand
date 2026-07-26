@@ -1,0 +1,68 @@
+<section class="variant-shell">
+  <div class="variant-shell__header">
+    <div>
+      <p class="section-kicker">Variants</p>
+      <h3>Select options</h3>
+    </div>
+  </div>
+
+  @if (colors.length > 0) {
+    <div class="variant-group">
+      <p class="variant-group__label">Color</p>
+      <div class="variant-options">
+        @for (color of colors; track color) {
+          <button
+            type="button"
+            class="variant-chip"
+            [class.variant-chip--active]="selectedColor() === color"
+            [class.variant-chip--disabled]="isColorDisabled(color)"
+            [disabled]="isColorDisabled(color)"
+            (click)="selectColor(color)"
+          >
+            {{ color }}
+          </button>
+        }
+      </div>
+    </div>
+  }
+
+  @if (sizes.length > 0) {
+    <div class="variant-group">
+      <p class="variant-group__label">Size</p>
+      <div class="variant-options">
+        @for (size of sizes; track size) {
+          <button
+            type="button"
+            class="variant-chip"
+            [class.variant-chip--active]="selectedSize() === size"
+            [class.variant-chip--disabled]="isSizeDisabled(size)"
+            [disabled]="isSizeDisabled(size)"
+            (click)="selectSize(size)"
+          >
+            {{ size }}
+          </button>
+        }
+      </div>
+    </div>
+  }
+
+  @if (matchedVariant(); as variant) {
+    <div class="variant-price">
+      <span class="variant-price__current">{{ variant.price | number }} EGP</span>
+      @if (variant.hasDiscount && variant.originalPrice > variant.price) {
+        <span class="variant-price__old">{{ variant.originalPrice | number }} EGP</span>
+      }
+    </div>
+  }
+
+  <p class="variant-status">
+    @if (matchedVariant()?.sku) {
+      SKU: {{ matchedVariant()?.sku }} •
+    }
+    {{ stockStatusLabel() }} • {{ variantSummary() }}
+  </p>
+
+  @if (dimensionsLabel(); as dims) {
+    <p class="variant-dimensions">{{ dims }}</p>
+  }
+</section>

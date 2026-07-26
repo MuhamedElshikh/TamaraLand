@@ -1,0 +1,101 @@
+<div
+  class="drawer-overlay"
+  [class.drawer-overlay--show]="open()"
+  (click)="close.emit()">
+</div>
+
+<aside
+  class="drawer"
+  [class.drawer--open]="open()">
+
+  @if (user(); as u) {
+
+    <header class="drawer__header">
+
+      <div>
+
+        <h2>{{ u.fullName }}</h2>
+
+        <p>{{ u.email }}</p>
+
+      </div>
+
+      <button
+        type="button"
+        class="drawer__close"
+        (click)="close.emit()">
+
+        ✕
+
+      </button>
+
+    </header>
+
+    <div class="drawer__body">
+
+      <div class="drawer__item">
+
+        <span>Role</span>
+
+        <app-status-badge
+          [label]="u.role">
+        </app-status-badge>
+
+      </div>
+
+      <div class="drawer__item">
+
+        <span>Status</span>
+
+        <app-status-badge
+          [label]="u.isActive ? 'Active' : 'Inactive'">
+        </app-status-badge>
+
+      </div>
+
+      <div class="drawer__item">
+
+        <span>Phone</span>
+
+        <strong>{{ u.phoneNumber || '-' }}</strong>
+
+      </div>
+
+      <div class="drawer__item">
+
+        <span>Joined</span>
+
+        <strong>{{ u.createdAt | date:'mediumDate' }}</strong>
+
+      </div>
+
+    </div>
+
+    <footer class="drawer__footer">
+
+      <button
+        class="btn btn-primary"
+        (click)="changeRole.emit(u)">
+
+        Change Role
+
+      </button>
+
+      <button
+        class="btn"
+
+        [class.btn-danger]="u.isActive"
+
+        [class.btn-success]="!u.isActive"
+
+        (click)="toggleStatus.emit(u)">
+
+        {{ u.isActive ? 'Deactivate' : 'Activate' }}
+
+      </button>
+
+    </footer>
+
+  }
+
+</aside>

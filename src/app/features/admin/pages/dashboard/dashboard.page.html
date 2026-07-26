@@ -1,0 +1,83 @@
+<section class="dashboard-page">
+  <header class="dashboard-page__hero">
+    <p class="section-kicker">Overview</p>
+    <h1 class="section-title">Dashboard</h1>
+  </header>
+
+  @if (loadError()) {
+    <p class="section-copy">Couldn't load dashboard data right now.</p>
+  } @else {
+    <div class="dashboard-stats">
+      @if (isLoading()) {
+        @for (i of [1,2,3,4,5,6,7,8,9]; track i) {
+          <div class="stat-card stat-card--skeleton"></div>
+        }
+      } @else {
+        <div class="stat-card">
+          <p class="stat-card__label">Total revenue</p>
+          <p class="stat-card__value">{{ data()?.totalRevenue | number }} EGP</p>
+        </div>
+        <div class="stat-card stat-card--accent">
+          <p class="stat-card__label">Today's revenue</p>
+          <p class="stat-card__value">{{ data()?.todayRevenue | number }} EGP</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-card__label">Total orders</p>
+          <p class="stat-card__value">{{ data()?.totalOrders | number }}</p>
+        </div>
+        <div class="stat-card" [class.stat-card--warning]="(data()?.pendingOrders ?? 0) > 0">
+          <p class="stat-card__label">Pending orders</p>
+          <p class="stat-card__value">{{ data()?.pendingOrders | number }}</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-card__label">Total products</p>
+          <p class="stat-card__value">{{ data()?.totalProducts | number }}</p>
+        </div>
+        <div class="stat-card" [class.stat-card--warning]="(data()?.lowStockProducts ?? 0) > 0">
+          <p class="stat-card__label">Low stock products</p>
+          <p class="stat-card__value">{{ data()?.lowStockProducts | number }}</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-card__label">Total customers</p>
+          <p class="stat-card__value">{{ data()?.totalCustomers | number }}</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-card__label">Active coupons</p>
+          <p class="stat-card__value">{{ data()?.activeCoupons | number }}</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-card__label">Active discounts</p>
+          <p class="stat-card__value">{{ data()?.activeDiscounts | number }}</p>
+        </div>
+      }
+    </div>
+
+    <div class="dashboard-tables">
+      <div class="dashboard-tables__block">
+        <div class="dashboard-tables__header">
+          <h3>Latest orders</h3>
+          <a routerLink="/admin/orders" class="dashboard-tables__link">View all</a>
+        </div>
+        <app-data-table
+          [columns]="ordersColumns"
+          [rows]="data()?.latestOrders || []"
+          [isLoading]="isLoading()"
+          emptyMessage="No orders yet."
+        />
+      </div>
+
+      <div class="dashboard-tables__block">
+        <div class="dashboard-tables__header">
+          <h3>Top selling products</h3>
+          <a routerLink="/admin/products" class="dashboard-tables__link">View all</a>
+        </div>
+        <app-data-table
+          [columns]="topProductsColumns"
+          [rows]="topProductsRows"
+          [isLoading]="isLoading()"
+          emptyMessage="No sales data yet."
+        />
+      </div>
+    </div>
+  }
+</section>

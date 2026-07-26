@@ -1,0 +1,14 @@
+<header class="section-header">
+  <div>
+    <p class="section-kicker">{{ eyebrow }}</p>
+    <h1 class="section-title">{{ title }}</h1>
+    @if (subtitle) {
+      <p class="section-copy">{{ subtitle }}</p>
+    }
+  </div>
+  @if (ctaLabel) {
+    <div class="header-actions">
+      <button type="button" class="btn btn-primary">{{ ctaLabel }}</button>
+    </div>
+  }
+</header>

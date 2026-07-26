@@ -1,0 +1,95 @@
+<form class="address-form" [formGroup]="form" (ngSubmit)="submit()">
+  <h3 class="address-form__title">{{ existingAddress ? 'Edit address' : 'Add a new address' }}</h3>
+
+  @if (errorMessage()) {
+    <p class="address-form__error">{{ errorMessage() }}</p>
+  }
+
+  <div class="field-grid">
+    <label class="field">
+      <span>Full name</span>
+      <input type="text" formControlName="fullName" placeholder="Full name" />
+      @if (controlHasError('fullName', 'required')) {
+        <small>Full name is required.</small>
+      }
+    </label>
+
+    <label class="field">
+      <span>Phone number</span>
+      <input type="tel" formControlName="phoneNumber" placeholder="01xxxxxxxxx" />
+      @if (controlHasError('phoneNumber', 'required')) {
+        <small>Phone number is required.</small>
+      } @else if (controlHasError('phoneNumber', 'pattern')) {
+        <small>Enter a valid phone number.</small>
+      }
+    </label>
+  </div>
+
+  <div class="field-grid">
+    <label class="field">
+      <span>Governorate</span>
+      <select formControlName="governorate">
+        <option value="" disabled>Select governorate</option>
+        @for (gov of governorates(); track gov) {
+          <option [value]="gov">{{ gov }}</option>
+        }
+      </select>
+      @if (controlHasError('governorate', 'required')) {
+        <small>Please select a governorate.</small>
+      }
+    </label>
+
+    <label class="field">
+      <span>Area</span>
+      <select formControlName="Area" [disabled]="!form.get('governorate')?.value">
+        <option value="" disabled>Select area</option>
+        @for (area of areasForSelectedGovernorate(); track area.id) {
+          <option [value]="area.name">{{ area.name }} (+{{ area.shippingCost | number }} EGP shipping)</option>
+        }
+      </select>
+      @if (controlHasError('Area', 'required')) {
+        <small>Please select an area.</small>
+      }
+    </label>
+  </div>
+
+  <label class="field">
+    <span>Street</span>
+    <input type="text" formControlName="street" placeholder="Street name" />
+    @if (controlHasError('street', 'required')) {
+      <small>Street is required.</small>
+    }
+  </label>
+
+  <div class="field-grid field-grid--three">
+    <label class="field">
+      <span>Building</span>
+      <input type="text" formControlName="building" placeholder="Optional" />
+    </label>
+    <label class="field">
+      <span>Floor</span>
+      <input type="text" formControlName="floor" placeholder="Optional" />
+    </label>
+    <label class="field">
+      <span>Apartment</span>
+      <input type="text" formControlName="apartment" placeholder="Optional" />
+    </label>
+  </div>
+
+  <label class="field">
+    <span>Notes (optional)</span>
+    <textarea formControlName="notes" rows="2" placeholder="Delivery instructions..."></textarea>
+  </label>
+
+  <label class="address-form__checkbox">
+    <input type="checkbox" formControlName="isDefault" />
+    <span>Set as default address</span>
+  </label>
+
+  <div class="address-form__actions">
+    <button type="submit" class="btn btn-primary" [disabled]="isSubmitting()">
+      {{ isSubmitting() ? 'Saving…' : (existingAddress ? 'Save changes' : 'Add address') }}
+    </button>
+    <button type="button" class="btn btn-outline" (click)="cancel()">Cancel</button>
+  </div>
+</form>

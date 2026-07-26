@@ -1,0 +1,220 @@
+<aside class="filters-shell">
+
+  <!-- Header -->
+  <header class="filters-header">
+    <div class="filters-header__top">
+      <p class="section-kicker">Filters</p>
+      @if (activeFiltersCount() > 0) {
+        <span class="filters-badge">{{ activeFiltersCount() }} active</span>
+      }
+    </div>
+
+    <h2 class="filters-title">
+      Refine Your Selection
+    </h2>
+
+    <p class="filters-copy">
+      Discover pieces tailored to your style with elegant filtering.
+    </p>
+  </header>
+
+  <!-- Search -->
+
+  <section class="filter-group">
+
+    <div class="filter-group__header">
+      <h3>Search</h3>
+    </div>
+
+    <input
+      class="form-control"
+      type="text"
+      placeholder="Search products..."
+      [value]="search()"
+      (input)="onSearch($any($event.target).value)"
+    />
+
+  </section>
+
+  <!-- Categories -->
+
+  @if (!hideCategoryFilter) {
+    <section class="filter-group">
+
+      <div class="filter-group__header">
+        <h3>Categories</h3>
+      </div>
+
+      <div class="filter-options">
+
+        <label class="filter-option">
+          <input
+            type="radio"
+            name="category"
+            [checked]="selectedCategoryId() === undefined"
+            (change)="selectCategory(undefined)"
+          />
+          <span>All categories</span>
+        </label>
+
+        @for (category of categories(); track category.id) {
+
+          <label class="filter-option">
+
+            <input
+              type="radio"
+              name="category"
+              [checked]="selectedCategoryId() === category.id"
+              (change)="selectCategory(category.id)"
+            />
+
+            <span>{{ category.name }}</span>
+
+          </label>
+
+        }
+
+      </div>
+
+    </section>
+  }
+
+  <!-- Brands -->
+
+  @if (!hideBrandFilter) {
+    <section class="filter-group">
+
+      <div class="filter-group__header">
+        <h3>Brands</h3>
+      </div>
+
+      <div class="filter-options">
+
+        <label class="filter-option">
+          <input
+            type="radio"
+            name="brand"
+            [checked]="selectedBrandId() === undefined"
+            (change)="selectBrand(undefined)"
+          />
+          <span>All brands</span>
+        </label>
+
+        @for (brand of brands(); track brand.id) {
+
+          <label class="filter-option">
+
+            <input
+              type="radio"
+              name="brand"
+              [checked]="selectedBrandId() === brand.id"
+              (change)="selectBrand(brand.id)"
+            />
+
+            <span>{{ brand.name }}</span>
+
+          </label>
+
+        }
+
+      </div>
+
+    </section>
+  }
+
+  <!-- Price -->
+
+  <section class="filter-group">
+
+    <div class="filter-group__header">
+      <h3>Price Range</h3>
+    </div>
+
+    <div class="price-range">
+
+      <input
+        class="form-control"
+        type="number"
+        placeholder="Min"
+        [value]="minPrice()"
+        (input)="setMinPrice($any($event.target).value)"
+        (keyup.enter)="applyPriceRange()"
+      />
+
+      <span class="price-divider">—</span>
+
+      <input
+        class="form-control"
+        type="number"
+        placeholder="Max"
+        [value]="maxPrice()"
+        (input)="setMaxPrice($any($event.target).value)"
+        (keyup.enter)="applyPriceRange()"
+      />
+
+    </div>
+
+    <button class="btn btn-outline filter-group__apply" type="button" (click)="applyPriceRange()">
+      Apply price
+    </button>
+
+  </section>
+
+  <!-- Availability -->
+
+  <section class="filter-group">
+
+    <div class="filter-group__header">
+      <h3>Availability</h3>
+    </div>
+
+    <label class="filter-option">
+
+      <input
+        type="checkbox"
+        [checked]="inStockOnly()"
+        (change)="toggleInStock()"
+      />
+
+      <span>In Stock Only</span>
+
+    </label>
+
+  </section>
+
+  <!-- Sort -->
+
+  <section class="filter-group">
+
+    <div class="filter-group__header">
+      <h3>Sort By</h3>
+    </div>
+
+    <select
+      class="form-control"
+      [value]="sortBy()"
+      (change)="changeSort($any($event.target).value)"
+    >
+      <option value="">Featured</option>
+      <option value="newest">Newest</option>
+      <option value="priceAsc">Price: Low → High</option>
+      <option value="priceDesc">Price: High → Low</option>
+      <option value="discount">Best Discount</option>
+    </select>
+
+  </section>
+
+  <!-- Footer -->
+
+  @if (activeFiltersCount() > 0) {
+    <footer class="filters-footer">
+      <button
+        class="btn btn-outline"
+        (click)="clearFilters()"
+      >
+        Clear All ({{ activeFiltersCount() }})
+      </button>
+    </footer>
+  }
+
+</aside>

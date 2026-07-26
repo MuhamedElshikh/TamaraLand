@@ -1,0 +1,31 @@
+<section class="checkout-page">
+  <header class="checkout-page__hero">
+    <p class="section-kicker">Almost there</p>
+    <h1 class="section-title">Checkout</h1>
+  </header>
+
+  @if (isLoadingCart()) {
+    <p class="section-copy">Loading your cart…</p>
+  } @else if (!cart() || cart()!.items.length === 0) {
+    <div class="checkout-page__empty">
+      <p class="section-copy">Your cart is empty, so there's nothing to check out yet.</p>
+      <a routerLink="/products" class="btn btn-primary">Start shopping</a>
+    </div>
+  } @else {
+    <div class="checkout-page__layout">
+      <div class="checkout-page__steps">
+        <app-checkout-address (addressSelected)="onAddressSelected($event)" />
+        <app-checkout-shipping [selectedAddress]="selectedAddress()" (areaSelected)="onAreaSelected($event)" />
+      </div>
+
+      <app-checkout-summary
+        [cart]="cart()"
+        [shippingArea]="selectedShippingArea()"
+        [canPlaceOrder]="canPlaceOrder()"
+        [isSubmitting]="isSubmitting()"
+        [errorMessage]="errorMessage()"
+        (placeOrder)="placeOrder()"
+      />
+    </div>
+  }
+</section>

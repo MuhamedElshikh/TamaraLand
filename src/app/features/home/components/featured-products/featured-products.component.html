@@ -1,0 +1,25 @@
+<section class="scaffold-page">
+  <div class="section-header">
+    <div>
+      <p class="section-kicker">Just landed</p>
+      <h2 class="section-title">New arrivals</h2>
+    </div>
+    <a routerLink="/new-in" class="btn btn-outline">View all</a>
+  </div>
+
+  @if (loading()) {
+    <div class="page-grid two-up product-grid">
+      @for (i of [1, 2, 3, 4]; track i) {
+        <div class="product-card--skeleton"></div>
+      }
+    </div>
+  } @else if (products().length === 0) {
+    <p class="muted">No products available yet.</p>
+  } @else {
+    <div class="page-grid two-up product-grid">
+      @for (product of products(); track product.id) {
+        <app-product-card [product]="product" />
+      }
+    </div>
+  }
+</section>

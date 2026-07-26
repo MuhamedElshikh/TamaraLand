@@ -1,0 +1,67 @@
+<section class="product-details-page">
+  @if (!product()) {
+    <p class="section-copy">This product doesn't exist or is no longer available.</p>
+  } @else {
+    <header class="product-details-page__hero">
+      <app-breadcrumbs [items]="breadcrumbs()" />
+      <div>
+        <p class="section-kicker">{{ product()?.categoryName || 'Catalog' }}</p>
+        <h1 class="section-title">{{ product()?.name }}</h1>
+        <p class="section-copy">{{ product()?.brandName || 'Premium selection' }} • {{ product()?.categoryName || 'Featured item' }}</p>
+      </div>
+
+      <button
+        type="button"
+        class="wishlist-toggle"
+        [class.wishlist-toggle--active]="isInWishlist()"
+        (click)="toggleWishlist()"
+        [attr.aria-label]="isInWishlist() ? 'Remove from wishlist' : 'Add to wishlist'"
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" [attr.fill]="isInWishlist() ? 'currentColor' : 'none'">
+          <path d="M12 20s-7-4.35-9.5-8.5C.8 8 2.4 4.5 6 4.5c2 0 3.4 1.1 6 3.6 2.6-2.5 4-3.6 6-3.6 3.6 0 5.2 3.5 3.5 7-2.5 4.15-9.5 8.5-9.5 8.5z" stroke="currentColor" stroke-width="1.8"/>
+        </svg>
+      </button>
+    </header>
+
+    <div class="product-details-page__content">
+      <div class="product-details-page__gallery">
+        <app-product-gallery [images]="product()?.images || []" [title]="product()?.name || 'Product images'" [fallbackImage]="product()?.imageUrl || ''" />
+      </div>
+
+      <div class="product-details-page__aside">
+        <div class="product-details-page__summary">
+          <h2>{{ product()?.name }}</h2>
+          <p class="product-details-page__price">{{ priceLabel() }}</p>
+          <p class="section-copy">{{ stockLabel() }} • Rating {{ ratingLabel() }}</p>
+          @if (selectedVariant()) {
+            <p class="section-copy">Selected: {{ selectedVariant()?.color }} • {{ selectedVariant()?.size }}</p>
+          }
+        </div>
+
+        <app-product-variant-selector [variants]="product()?.variants || []" (selectionChange)="onVariantSelected($event)" />
+        <button class="btn btn-primary" type="button" (click)="addToCart()" [disabled]="isAddingToCart()">
+          {{ isAddingToCart() ? 'Adding…' : 'Add to cart' }}
+        </button>
+        @if (cartMessage()) {
+          <p class="section-copy">{{ cartMessage() }}</p>
+        }
+        <app-review-form [productId]="product()?.id" />
+      </div>
+    </div>
+
+    <div class="product-details-page__reviews">
+      <app-review-list [productId]="product()?.id" />
+    </div>
+
+    @if (product()?.relatedProducts?.length) {
+      <div class="product-details-page__related">
+        <h3 class="product-details-page__related-title">You might also like</h3>
+        <div class="product-details-page__related-grid">
+          @for (related of product()!.relatedProducts; track related.id) {
+            <app-product-card [product]="related" />
+          }
+        </div>
+      </div>
+    }
+  }
+</section>

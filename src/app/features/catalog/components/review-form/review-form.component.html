@@ -1,0 +1,42 @@
+<section class="review-form-shell">
+  <div class="review-form-shell__header">
+    <div>
+      <p class="section-kicker">Leave a review</p>
+      <h3>Share your thoughts</h3>
+    </div>
+  </div>
+
+  @if (!isLoggedIn()) {
+    <p class="review-form__login-prompt">
+      <a routerLink="/login">Sign in</a> to leave a review for this product.
+    </p>
+  } @else {
+    <form class="review-form" (submit)="submitReview($event)">
+      @if (errorMessage()) {
+        <p class="review-form__error">{{ errorMessage() }}</p>
+      }
+
+      <label class="review-form__field">
+        <span>Rating</span>
+        <div class="review-stars" aria-label="rating">
+          @for (star of [1,2,3,4,5]; track star) {
+            <button type="button" class="review-stars__star" (click)="selectRating(star)">{{ star <= rating() ? '★' : '☆' }}</button>
+          }
+        </div>
+      </label>
+
+      <label class="review-form__field">
+        <span>Comment</span>
+        <textarea name="comment" rows="4" placeholder="Tell us what you loved..."></textarea>
+      </label>
+
+      <button class="btn btn-primary" type="submit" [disabled]="isSubmitting()">
+        {{ isSubmitting() ? 'Submitting…' : 'Submit review' }}
+      </button>
+
+      @if (submitted()) {
+        <p class="section-copy">Thanks for sharing your feedback.</p>
+      }
+    </form>
+  }
+</section>

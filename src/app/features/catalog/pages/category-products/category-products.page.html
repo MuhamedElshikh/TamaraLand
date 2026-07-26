@@ -1,0 +1,47 @@
+<section class="collection-page">
+  @if (notFound()) {
+    <p class="section-copy">This category doesn't exist or is no longer available.</p>
+  } @else {
+    <header class="collection-page__hero">
+      <app-breadcrumbs [items]="[{ label: 'Home', link: '/' }, { label: 'Categories', link: '/categories' }, { label: category()?.name || 'Category' }]" />
+      <div>
+        <p class="section-kicker">Category</p>
+        <h1 class="section-title">{{ category()?.name || 'Loading…' }}</h1>
+        @if (category()?.description) {
+          <p class="section-copy">{{ category()?.description }}</p>
+        }
+      </div>
+    </header>
+
+    <div class="collection-page__layout">
+      <aside class="collection-page__filters">
+        <app-product-filters [hideCategoryFilter]="true" (filtersChanged)="onFiltersChanged($event)" />
+      </aside>
+
+      <div class="collection-page__content">
+        @if (isLoading()) {
+          <div class="collection-page__grid">
+            @for (i of [1, 2, 3, 4]; track i) {
+              <div class="collection-page__skeleton"></div>
+            }
+          </div>
+        } @else if (products().length === 0) {
+          <p class="section-copy">No products match your current filters.</p>
+        } @else {
+          <p class="section-copy">{{ totalCount() }} product{{ totalCount() === 1 ? '' : 's' }}</p>
+          <div class="collection-page__grid">
+            @for (product of products(); track product.id) {
+              <app-product-card [product]="product" />
+            }
+          </div>
+
+          <app-pagination
+            [currentPage]="pageIndex()"
+            [totalPages]="totalPages()"
+            (pageChange)="onPageChange($event)"
+          />
+        }
+      </div>
+    </div>
+  }
+</section>

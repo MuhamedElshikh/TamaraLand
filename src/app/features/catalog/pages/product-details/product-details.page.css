@@ -1,0 +1,129 @@
+.product-details-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.product-details-page__hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.25rem 0 0;
+}
+
+.wishlist-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.wishlist-toggle:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.wishlist-toggle--active {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: rgba(201, 162, 75, 0.1);
+}
+
+/* ---- اللي كان ناقص: الجاليري والمعلومات جنب بعض ---- */
+.product-details-page__content {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.product-details-page__gallery {
+  position: sticky;
+  top: 5.5rem;
+  align-self: start;
+  max-height: calc(100vh - 7rem);
+}
+
+.product-details-page__gallery,
+.product-details-page__aside,
+.product-details-page__reviews {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.product-details-page__summary,
+.product-details-page__reviews {
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+}
+
+.product-details-page__summary h2 {
+  margin: 0 0 0.35rem;
+  color: var(--text-primary);
+}
+
+.product-details-page__price {
+  margin: 0 0 0.45rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-light);
+}
+
+/* بس تحت بعض على التابلت/الموبايل، مش على الديسكتوب */
+@media (max-width: 900px) {
+  .product-details-page__content {
+    grid-template-columns: 1fr;
+  }
+
+  .product-details-page__gallery {
+    position: static;
+    max-height: none;
+  }
+}
+
+.product-details-page__related {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.product-details-page__related-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  color: var(--text-primary);
+}
+
+.product-details-page__related-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 900px) {
+  .product-details-page__related-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .product-details-page__related-grid {
+    grid-template-columns: 1fr;
+  }
+}

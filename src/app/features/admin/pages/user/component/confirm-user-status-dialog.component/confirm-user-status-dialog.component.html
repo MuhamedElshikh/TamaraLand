@@ -1,0 +1,53 @@
+<div
+  class="dialog-overlay"
+  [class.dialog-overlay--show]="open()"
+  (click)="close.emit()">
+</div>
+
+<div
+  class="dialog"
+  [class.dialog--show]="open()">
+
+  @if (user(); as u) {
+
+    <h2>
+      {{ u.isActive ? 'Deactivate User' : 'Activate User' }}
+    </h2>
+
+    <p>
+
+      Are you sure you want to
+
+      <strong>
+        {{ u.isActive ? 'deactivate' : 'activate' }}
+      </strong>
+
+      <strong>{{ u.fullName }}</strong>?
+
+    </p>
+
+    <div class="dialog__actions">
+
+      <button
+        class="btn btn-secondary"
+        (click)="close.emit()">
+
+        Cancel
+
+      </button>
+
+      <button
+        class="btn"
+        [class.btn-danger]="u.isActive"
+        [class.btn-success]="!u.isActive"
+        (click)="submit()">
+
+        {{ u.isActive ? 'Deactivate' : 'Activate' }}
+
+      </button>
+
+    </div>
+
+  }
+
+</div>

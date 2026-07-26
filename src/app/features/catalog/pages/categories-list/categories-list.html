@@ -1,0 +1,31 @@
+<section class="listing-page">
+  <header class="listing-page__hero">
+    <p class="section-kicker">Browse</p>
+    <h1 class="section-title">Shop by category</h1>
+    <p class="section-copy">Explore every corner of Tamara Land, from everyday essentials to statement pieces.</p>
+  </header>
+
+  @if (isLoading()) {
+    <div class="listing-page__grid">
+      @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+        <div class="listing-page__skeleton"></div>
+      }
+    </div>
+  } @else if (categories().length === 0) {
+    <p class="section-copy">No categories available yet.</p>
+  } @else {
+    <div class="listing-page__grid">
+      @for (category of categories(); track category.id) {
+        <a [routerLink]="['/categories', category.id]" class="listing-card">
+          <img [src]="category.imageUrl || fallbackImage" [alt]="category.name" />
+          <div class="listing-card__overlay">
+            <span class="listing-card__name">{{ category.name }}</span>
+            @if (category.description) {
+              <span class="listing-card__desc">{{ category.description }}</span>
+            }
+          </div>
+        </a>
+      }
+    </div>
+  }
+</section>

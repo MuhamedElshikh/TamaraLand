@@ -1,0 +1,36 @@
+<header class="admin-header">
+
+  <button
+    type="button"
+    class="admin-header__menu"
+    (click)="openMenu()"
+    aria-label="Open menu">
+
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M4 6H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M4 12H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+
+  </button>
+
+  <div class="admin-header__spacer"></div>
+
+  <div class="admin-header__profile">
+
+    <span class="admin-header__name">
+      {{ fullName() }}
+    </span>
+
+    <button
+      type="button"
+      class="admin-header__logout"
+      (click)="logout()">
+
+      Sign out
+
+    </button>
+
+  </div>
+
+</header>

@@ -1,0 +1,100 @@
+.checkout-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 5.5rem;
+}
+
+.checkout-summary__title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  color: var(--text-primary);
+}
+
+.checkout-summary__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.checkout-summary__row--discount {
+  color: var(--primary-light);
+}
+
+.checkout-summary__pending {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.checkout-summary__row--total {
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.checkout-summary__payment {
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.checkout-summary__payment-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--primary-light);
+}
+
+.checkout-summary__payment-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-sm);
+  background: rgba(201, 162, 75, 0.06);
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+
+.checkout-summary__payment-option input {
+  accent-color: var(--primary);
+}
+
+.checkout-summary__payment-note {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.checkout-summary__error {
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(224, 132, 132, 0.35);
+  background-color: rgba(224, 132, 132, 0.1);
+  color: #e08484;
+  font-size: 0.82rem;
+}
+
+.checkout-summary__submit {
+  width: 100%;
+  margin-top: 0.4rem;
+}
+
+@media (max-width: 980px) {
+  .checkout-summary {
+    position: static;
+  }
+}

@@ -1,0 +1,142 @@
+.product-card {
+  display: block;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  position: relative;
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-sm);
+}
+
+.product-card:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary);
+}
+
+.img-container {
+  position: relative;
+  aspect-ratio: 1;
+  background-color: var(--secondary-light);
+  overflow: hidden;
+}
+
+.img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition-smooth);
+}
+
+.product-card:hover .img-container img {
+  transform: scale(1.08);
+}
+
+.product-card__badge {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-full);
+  background: var(--gold-gradient);
+  color: var(--secondary-dark);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.product-card__info {
+  padding: 0.9rem 1rem 1.1rem;
+}
+
+.product-card__name {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.product-card__price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.product-card__price {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary-light);
+}
+
+.product-card__price-old {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.product-card__add-btn {
+  position: absolute;
+  left: 0.6rem;
+  right: 0.6rem;
+  bottom: 0.6rem;
+  padding: 0.55rem 0.75rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--gold-gradient);
+  color: var(--secondary-dark);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: var(--transition-fast);
+}
+
+.product-card:hover .product-card__add-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.product-card__add-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+.product-card__add-btn--added {
+  background: none;
+  background-color: #4caf7d;
+  color: #ffffff;
+}
+
+/* على الموبايل مفيش hover، فخليه ظاهر دايمًا */
+@media (hover: none) {
+  .product-card__add-btn {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.product-card__wishlist-btn {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(13, 11, 8, 0.6);
+  color: #ffffff;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: var(--transition-fast);
+}
+
+.product-card__wishlist-btn:hover {
+  background: rgba(13, 11, 8, 0.85);
+}
+
+.product-card__wishlist-btn--active {
+  color: var(--primary);
+}

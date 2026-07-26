@@ -1,0 +1,39 @@
+<section class="addresses-page">
+  <header class="addresses-page__hero">
+    <div>
+      <p class="section-kicker">Delivery</p>
+      <h1 class="section-title">Your addresses</h1>
+    </div>
+
+    @if (!isFormOpen()) {
+      <button type="button" class="btn btn-primary" (click)="openCreateForm()">+ Add address</button>
+    }
+  </header>
+
+  @if (isFormOpen()) {
+    <app-address-form
+      [existingAddress]="editingAddress()"
+      (saved)="onSaved()"
+      (cancelled)="closeForm()"
+    />
+  }
+
+  @if (isLoading()) {
+    <div class="addresses-page__grid">
+      @for (i of [1, 2]; track i) {
+        <div class="addresses-page__skeleton"></div>
+      }
+    </div>
+  } @else if (addresses().length === 0 && !isFormOpen()) {
+    <div class="addresses-page__empty">
+      <p class="section-copy">You haven't saved any addresses yet.</p>
+      <button type="button" class="btn btn-primary" (click)="openCreateForm()">Add your first address</button>
+    </div>
+  } @else if (addresses().length > 0) {
+    <div class="addresses-page__grid">
+      @for (address of addresses(); track address.id) {
+        <app-address-card [address]="address" (edit)="openEditForm($event)" />
+      }
+    </div>
+  }
+</section>

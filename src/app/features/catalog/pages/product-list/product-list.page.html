@@ -1,0 +1,47 @@
+<section class="catalog-page">
+  <header class="catalog-page__hero">
+    <div>
+      <p class="section-kicker">{{ pageKicker() }}</p>
+
+      <h1 class="section-title">{{ pageTitle() }}</h1>
+
+      <p class="section-copy">
+        {{ pageSubtitle() }}
+      </p>
+    </div>
+  </header>
+
+  <div class="catalog-page__layout">
+    <aside class="catalog-page__filters">
+      <app-product-filters (filtersChanged)="onFiltersChanged($event)" />
+    </aside>
+
+    <div class="catalog-page__content">
+      <div class="catalog-page__toolbar">
+        <p class="catalog-page__summary">{{ summary() }}</p>
+      </div>
+
+      @if (isLoading()) {
+        <div class="catalog-page__grid">
+          @for (i of [1, 2, 3, 4]; track i) {
+            <div class="catalog-page__skeleton"></div>
+          }
+        </div>
+      } @else if (products().length === 0) {
+        <p class="section-copy">No products match your current filters.</p>
+      } @else {
+        <div class="catalog-page__grid">
+          @for (product of products(); track product.id) {
+            <app-product-card [product]="product" />
+          }
+        </div>
+
+        <app-pagination
+          [currentPage]="pageIndex()"
+          [totalPages]="totalPages()"
+          (pageChange)="onPageChange($event)"
+        />
+      }
+    </div>
+  </div>
+</section>

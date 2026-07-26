@@ -1,0 +1,130 @@
+<section class="admin-discounts-page">
+  <header class="admin-page__hero">
+    <div>
+      <p class="section-kicker">Marketing</p>
+      <h1 class="section-title">Discounts</h1>
+    </div>
+    @if (!isFormOpen()) {
+      <button type="button" class="btn btn-primary" (click)="openCreateForm()">+ New discount</button>
+    }
+  </header>
+
+  @if (listError()) {
+    <p class="admin-page__error">{{ listError() }}</p>
+  }
+
+  @if (isFormOpen()) {
+    <form class="scaffold-card discount-form" [formGroup]="form" (ngSubmit)="submit()">
+      <h3 class="discount-form__title">{{ editingDiscount() ? 'Edit discount' : 'New discount' }}</h3>
+
+      @if (formError()) {
+        <p class="admin-page__error">{{ formError() }}</p>
+      }
+
+      <label class="field">
+        <span>Name</span>
+        <input type="text" formControlName="name" placeholder="Summer sale" />
+        @if (controlHasError('name', 'required')) {
+          <small>Name is required.</small>
+        }
+      </label>
+
+      <div class="field-grid">
+        <label class="field">
+          <span>Discount type</span>
+          <select formControlName="discountType">
+            <option [ngValue]="0">Percentage (%)</option>
+            <option [ngValue]="1">Fixed amount (EGP)</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Value</span>
+          <input type="number" formControlName="discountValue" min="0.01" step="0.01" />
+          @if (controlHasError('discountValue', 'required')) {
+            <small>Value is required.</small>
+          }
+        </label>
+      </div>
+
+      <div class="field-grid">
+        <label class="field">
+          <span>Maximum discount (EGP)</span>
+          <input type="number" formControlName="maximumDiscount" min="0" step="0.01" />
+        </label>
+
+        <label class="field">
+          <span>Priority</span>
+          <input type="number" formControlName="priority" min="0" />
+        </label>
+      </div>
+
+      <div class="field-grid">
+        <label class="field">
+          <span>Applies to</span>
+          <select formControlName="target">
+            <option [ngValue]="0">Product</option>
+            <option [ngValue]="1">Category</option>
+            <option [ngValue]="2">Brand</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Select {{ targetLabels[form.get('target')?.value ?? 0] }}</span>
+          <select formControlName="targetId">
+            <option [value]="0" disabled>Select one</option>
+            @for (opt of targetOptions(); track opt.id) {
+              <option [value]="opt.id">{{ opt.name }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      <div class="field-grid">
+        <label class="field">
+          <span>Start date</span>
+          <input type="date" formControlName="startDate" />
+          @if (controlHasError('startDate', 'required')) {
+            <small>Start date is required.</small>
+          }
+        </label>
+
+        <label class="field">
+          <span>End date</span>
+          <input type="date" formControlName="endDate" />
+          @if (controlHasError('endDate', 'required')) {
+            <small>End date is required.</small>
+          }
+        </label>
+      </div>
+
+      <label class="discount-form__checkbox">
+        <input type="checkbox" formControlName="isActive" />
+        <span>Discount is active</span>
+      </label>
+
+      <div class="discount-form__actions">
+        <button class="btn btn-primary" type="submit" [disabled]="isSubmitting()">
+          {{ isSubmitting() ? 'Saving…' : (editingDiscount() ? 'Save changes' : 'Create discount') }}
+        </button>
+        <button class="btn btn-outline" type="button" (click)="closeForm()">Cancel</button>
+      </div>
+    </form>
+  }
+
+  <app-data-table [columns]="columns" [rows]="rows()" [isLoading]="isLoading()" emptyMessage="No discounts found.">
+    <ng-template #actions let-row>
+      <div class="admin-page__row-actions">
+        <button type="button" (click)="openEditForm(row)">Edit</button>
+        <button
+          type="button"
+          class="admin-page__delete"
+          (click)="deleteDiscount(row)"
+          [disabled]="isDeleting() === row.id"
+        >
+          {{ isDeleting() === row.id ? 'Deleting…' : 'Delete' }}
+        </button>
+      </div>
+    </ng-template>
+  </app-data-table>
+</section>

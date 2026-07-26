@@ -1,0 +1,36 @@
+<section class="gallery-shell">
+  <div class="gallery-shell__header">
+    <div>
+      <p class="section-kicker">Gallery</p>
+      <h3>{{ title }}</h3>
+    </div>
+  </div>
+
+  @if (images.length > 0) {
+    <div class="gallery-shell__preview">
+      <div class="gallery-shell__main">
+        <img [src]="selectedImage()?.imageUrl || images[0].imageUrl" [alt]="title" />
+      </div>
+
+      <div class="gallery-shell__thumbnails">
+        @for (image of images; track image.id) {
+          <button type="button" class="gallery-shell__thumb" (click)="selectImage(image)">
+            <img [src]="image.imageUrl" [alt]="title" />
+          </button>
+        }
+      </div>
+    </div>
+  } @else if (fallbackImage) {
+    <div class="gallery-shell__preview">
+      <div class="gallery-shell__main">
+        <img [src]="fallbackImage" [alt]="title" />
+      </div>
+    </div>
+  } @else {
+    <div class="gallery-shell__preview">
+      <div class="gallery-shell__main">
+        <div class="gallery-shell__placeholder"></div>
+      </div>
+    </div>
+  }
+</section>

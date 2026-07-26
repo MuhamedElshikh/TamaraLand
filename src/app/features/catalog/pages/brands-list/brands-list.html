@@ -1,0 +1,31 @@
+<section class="listing-page">
+  <header class="listing-page__hero">
+    <p class="section-kicker">Browse</p>
+    <h1 class="section-title">Shop by brand</h1>
+    <p class="section-copy">Discover the labels behind every Tamara Land piece.</p>
+  </header>
+
+  @if (isLoading()) {
+    <div class="listing-page__grid">
+      @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+        <div class="listing-page__skeleton"></div>
+      }
+    </div>
+  } @else if (brands().length === 0) {
+    <p class="section-copy">No brands available yet.</p>
+  } @else {
+    <div class="listing-page__grid">
+      @for (brand of brands(); track brand.id) {
+        <a [routerLink]="['/brands', brand.id]" class="listing-card">
+          <img [src]="brand.imageUrl || fallbackImage" [alt]="brand.name" />
+          <div class="listing-card__overlay">
+            <span class="listing-card__name">{{ brand.name }}</span>
+            @if (brand.description) {
+              <span class="listing-card__desc">{{ brand.description }}</span>
+            }
+          </div>
+        </a>
+      }
+    </div>
+  }
+</section>

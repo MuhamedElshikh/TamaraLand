@@ -1,0 +1,38 @@
+.checkout-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.checkout-page__hero {
+  padding: 1.25rem 0 0.25rem;
+}
+
+.checkout-page__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 3rem 1.5rem;
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+}
+
+.checkout-page__layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.checkout-page__steps {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+@media (max-width: 980px) {
+  .checkout-page__layout {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,86 @@
+<div class="scaffold-card data-table-shell">
+  <ng-content />
+</div>
+<div class="data-table-wrapper">
+  <table class="data-table">
+    <thead>
+      <tr>
+        @for (col of columns(); track col.key) {
+          <th [class]="'data-table__align-' + (col.align || 'left')">{{ col.header }}</th>
+        }
+        @if (actionsTemplate()) {
+          <th class="data-table__align-right">Actions</th>
+        }
+      </tr>
+    </thead>
+
+    <tbody>
+      @if (isLoading()) {
+        @for (i of [1, 2, 3, 4, 5]; track i) {
+          <tr class="data-table__skeleton-row">
+            @for (col of columns(); track col.key) {
+              <td><div class="data-table__skeleton"></div></td>
+            }
+            @if (actionsTemplate()) {
+              <td><div class="data-table__skeleton"></div></td>
+            }
+          </tr>
+        }
+      } @else if (rows().length === 0) {
+        <tr>
+          <td [attr.colspan]="columns().length + (actionsTemplate() ? 1 : 0)" class="data-table__empty">
+            {{ emptyMessage() }}
+          </td>
+        </tr>
+      } @else {
+        @for (row of rows(); track row.id) {
+          <tr (click)="rowClick.emit(row)">
+            @for (col of columns(); track col.key) {
+              <td [class]="'data-table__align-' + (col.align || 'left')">
+                @switch (col.type) {
+                  @case ('badge') {
+                    <app-status-badge [label]="cellValue(row, col)" />
+                  }
+                  @case ('currency') {
+                    {{ cellValue(row, col) | number }} EGP
+                  }
+                  @case ('date') {
+                    {{ cellValue(row, col) | date: 'mediumDate' }}
+                  }
+                  @case ('image') {
+                    @if (cellValue(row, col)) {
+                      <img [src]="cellValue(row, col)" [alt]="col.header" class="data-table__thumb" (error)="onImageError($event)" />
+                      <div class="data-table__thumb-placeholder" style="display: none;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                          <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                      </div>
+                    } @else {
+                      <div class="data-table__thumb-placeholder">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                          <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                      </div>
+                    }
+                  }
+                  @default {
+                    {{ cellValue(row, col) }}
+                  }
+                }
+              </td>
+            }
+            @if (actionsTemplate(); as template) {
+              <td class="data-table__align-right" (click)="$event.stopPropagation()">
+                <ng-container [ngTemplateOutlet]="template" [ngTemplateOutletContext]="{ $implicit: row }"></ng-container>
+              </td>
+            }
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,376 @@
+<div class="admin-page">
+  <!-- Page Header -->
+  <header class="admin-page__header">
+    <div class="header-title-group">
+      <a routerLink="/admin/products" class="btn-back" title="Back to Products">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </a>
+      <div>
+        <h1 class="admin-page__title">
+          {{ isEditMode() ? 'Edit Product' : 'Create New Product' }}
+        </h1>
+        <p class="admin-page__subtitle">
+          {{ isEditMode() ? 'Update product details, variants and gallery images' : 'Fill in product info and add variants before saving' }}
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <!-- Global Alerts -->
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      {{ successMessage() }}
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <!-- Main Form -->
+  <form [formGroup]="productForm" (ngSubmit)="onSubmitProduct()">
+    <!-- Section 1: Main Product Details Form -->
+    <div class="scaffold-card mb-4">
+      <h2 class="card-title">General Information</h2>
+
+      <div class="form-grid">
+        <!-- Name -->
+        <div class="form-group form-group--full">
+          <label class="form-label" for="product-name">Product Name *</label>
+          <input
+            id="product-name"
+            type="text"
+            class="form-control"
+            formControlName="name"
+            placeholder="e.g. Royal Oud Perfume"
+          />
+          @if (productForm.get('name')?.touched && productForm.get('name')?.invalid) {
+            <span class="field-error">Product name is required (minimum 2 characters).</span>
+          }
+        </div>
+
+        <!-- Category -->
+        <div class="form-group">
+          <label class="form-label" for="product-category">Category *</label>
+          <select id="product-category" class="form-control form-select" formControlName="categoryId">
+            <option value="" disabled>Select Category</option>
+            @for (cat of categories(); track cat.id) {
+              <option [ngValue]="cat.id">{{ cat.name }}</option>
+            }
+          </select>
+          @if (productForm.get('categoryId')?.touched && productForm.get('categoryId')?.invalid) {
+            <span class="field-error">Please select a category.</span>
+          }
+        </div>
+
+        <!-- Brand -->
+        <div class="form-group">
+          <label class="form-label" for="product-brand">Brand *</label>
+          <select id="product-brand" class="form-control form-select" formControlName="brandId">
+            <option value="" disabled>Select Brand</option>
+            @for (brand of brands(); track brand.id) {
+              <option [ngValue]="brand.id">{{ brand.name }}</option>
+            }
+          </select>
+          @if (productForm.get('brandId')?.touched && productForm.get('brandId')?.invalid) {
+            <span class="field-error">Please select a brand.</span>
+          }
+        </div>
+
+        <!-- Slug (Edit mode or optional) -->
+        @if (isEditMode()) {
+          <div class="form-group form-group--full">
+            <label class="form-label" for="product-slug">Slug URL</label>
+            <input
+              id="product-slug"
+              type="text"
+              class="form-control"
+              formControlName="slug"
+              placeholder="e.g. royal-oud-perfume"
+            />
+          </div>
+        }
+
+        <!-- Description -->
+        <div class="form-group form-group--full">
+          <label class="form-label" for="product-description">Description</label>
+          <textarea
+            id="product-description"
+            rows="4"
+            class="form-control"
+            formControlName="description"
+            placeholder="Enter detailed product description..."
+          ></textarea>
+        </div>
+
+        <!-- Is Active -->
+        @if (isEditMode()) {
+          <div class="form-group form-group--full">
+            <label class="checkbox-label">
+              <input type="checkbox" formControlName="isActive" />
+              <span>Product is Active and visible in store</span>
+            </label>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Section 2: Product Variants (Required for both Create & Edit) -->
+    <div class="scaffold-card mb-4">
+      <div class="card-header-flex">
+        <div>
+          <h2 class="card-title">Product Variants *</h2>
+          <p class="card-subtitle">At least 1 variant is required (SKU, Price, Stock, Height & Width)</p>
+        </div>
+
+        <button type="button" class="btn btn-secondary btn-sm" (click)="toggleVariantForm()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          {{ showVariantForm() ? 'Cancel' : (editingVariantIndex() !== null ? 'Cancel Edit' : 'Add Variant') }}
+        </button>
+      </div>
+
+      <!-- Add / Edit Variant Form Box -->
+      @if (showVariantForm()) {
+        <div class="nested-form-box mb-4">
+          <h3 class="nested-form-title">
+            {{ editingVariantIndex() !== null ? 'Edit Variant' : 'New Variant Information' }}
+          </h3>
+
+          @if (variantError()) {
+            <div class="alert alert-danger mb-3">{{ variantError() }}</div>
+          }
+
+          <div [formGroup]="variantForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="v-sku">SKU *</label>
+                <input id="v-sku" type="text" class="form-control" formControlName="sku" placeholder="e.g. PRD-001-BLK" />
+                @if (variantForm.get('sku')?.touched && variantForm.get('sku')?.invalid) {
+                  <span class="field-error">SKU is required.</span>
+                }
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="v-price">Price (EGP) *</label>
+                <input id="v-price" type="number" class="form-control" formControlName="price" min="0.01" step="0.01" />
+                @if (variantForm.get('price')?.touched && variantForm.get('price')?.invalid) {
+                  <span class="field-error">Price must be greater than 0.</span>
+                }
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="v-stock">Stock Quantity *</label>
+                <input id="v-stock" type="number" class="form-control" formControlName="stock" min="0" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="v-color">Color</label>
+                <input id="v-color" type="text" class="form-control" formControlName="color" placeholder="e.g. Black / Gold" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="v-size">Size</label>
+                <input id="v-size" type="text" class="form-control" formControlName="size" placeholder="e.g. 100ml / Large" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="v-cost">Cost Price (EGP)</label>
+                <input id="v-cost" type="number" class="form-control" formControlName="costPrice" min="0" step="0.01" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="v-compare">Compare At Price (EGP)</label>
+                <input id="v-compare" type="number" class="form-control" formControlName="compareAtPrice" min="0" step="0.01" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="v-weight">Weight (g)</label>
+                <input id="v-weight" type="number" class="form-control" formControlName="weight" min="0" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="v-height">Height (cm)</label>
+                <input id="v-height" type="number" class="form-control" formControlName="height" min="0" step="0.1" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="v-width">Width (cm)</label>
+                <input id="v-width" type="number" class="form-control" formControlName="width" min="0" step="0.1" />
+              </div>
+            </div>
+
+            <div class="form-actions mt-3">
+              <button type="button" class="btn btn-primary btn-sm" (click)="onAddOrUpdateVariant()">
+                {{ editingVariantIndex() !== null ? 'Update Variant' : 'Confirm Variant' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Variants List Table -->
+      @if (variants().length === 0) {
+        <div class="empty-placeholder">
+          No variants added yet. Please click <strong>"Add Variant"</strong> above to add at least one variant before saving.
+        </div>
+      } @else {
+        <div class="table-responsive">
+          <table class="sub-table">
+            <thead>
+              <tr>
+                <th>SKU</th>
+                <th>Color</th>
+                <th>Size</th>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Dimensions (W × H)</th>
+                <th>Weight</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (v of variants(); track $index) {
+                <tr>
+                  <td><code>{{ v.sku }}</code></td>
+                  <td>{{ v.color || '—' }}</td>
+                  <td>{{ v.size || '—' }}</td>
+                  <td>
+                    <span [class.text-danger]="v.stock === 0" [class.text-warning]="v.stock > 0 && v.stock < 5">
+                      {{ v.stock }}
+                    </span>
+                  </td>
+                  <td><strong>{{ v.price | number }} EGP</strong></td>
+                  <td>{{ (v.width || 0) + ' × ' + (v.height || 0) + ' cm' }}</td>
+                  <td>{{ v.weight ? v.weight + ' g' : '—' }}</td>
+                  <td class="text-end">
+                    <div class="action-buttons">
+                      <button
+                        type="button"
+                        class="btn-icon btn-icon--edit"
+                        (click)="onEditVariant(v, $index)"
+                        title="Edit Variant"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                      </button>
+
+                      <button
+                        type="button"
+                        class="btn-icon btn-icon--delete"
+                        (click)="onRemoveVariant($index)"
+                        title="Remove Variant"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+
+    <!-- Submit Action Button -->
+    <div class="form-actions mb-4">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="isSubmitting()"
+      >
+        @if (isSubmitting()) {
+          <span class="spinner-sm"></span>
+          Saving Product...
+        } @else {
+          {{ isEditMode() ? 'Update Product' : 'Create Product' }}
+        }
+      </button>
+
+      <a routerLink="/admin/products" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+
+  <!-- Section 3: Product Image Gallery Management (Available in Edit Mode / After Saving Product) -->
+  @if (isEditMode() && productId()) {
+    <div class="scaffold-card">
+      <div class="card-header-flex">
+        <div>
+          <h2 class="card-title">Image Gallery</h2>
+          <p class="card-subtitle">Upload product images and select the main thumbnail</p>
+        </div>
+      </div>
+
+      <!-- Upload Form Box -->
+      <div class="nested-form-box">
+        <h3 class="nested-form-title">Upload New Image</h3>
+
+        @if (imageError()) {
+          <div class="alert alert-danger mb-3">{{ imageError() }}</div>
+        }
+
+        <div class="upload-flex-row">
+          <input type="file" accept="image/*" class="form-control file-input" (change)="onFileSelected($event)" />
+
+          <label class="checkbox-label mb-0">
+            <input type="checkbox" [(ngModel)]="isMainImageSelection" />
+            <span>Set as Main Image</span>
+          </label>
+
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            [disabled]="!selectedFile || isUploadingImage()"
+            (click)="onUploadImage()"
+          >
+            @if (isUploadingImage()) {
+              <span class="spinner-sm"></span> Uploading...
+            } @else {
+              Upload Image
+            }
+          </button>
+        </div>
+      </div>
+
+      <!-- Image Gallery Grid -->
+      @if (isLoadingImages()) {
+        <div class="loading-placeholder">Loading gallery images...</div>
+      } @else if (images().length === 0) {
+        <div class="empty-placeholder">No images uploaded for this product yet.</div>
+      } @else {
+        <div class="image-gallery-grid">
+          @for (img of images(); track img.id) {
+            <div class="gallery-card" [class.gallery-card--main]="img.isMain">
+              <div class="gallery-img-wrap">
+                <img [src]="img.imageUrl" [alt]="'Product Image ' + img.id" />
+                @if (img.isMain) {
+                  <span class="main-badge">Main</span>
+                }
+              </div>
+
+              <div class="gallery-card-actions">
+                @if (!img.isMain) {
+                  <button type="button" class="btn-text" (click)="onSetMainImage(img.id)">Set Main</button>
+                }
+                <button type="button" class="btn-text btn-text--danger" (click)="onDeleteImage(img.id)">Delete</button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

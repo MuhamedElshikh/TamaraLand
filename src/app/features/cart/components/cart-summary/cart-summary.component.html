@@ -1,0 +1,32 @@
+<aside class="cart-summary">
+  <h3 class="cart-summary__title">Order summary</h3>
+
+  <div class="cart-summary__row">
+    <span>Items ({{ cart()?.totalItems || 0 }})</span>
+    <span>{{ cart()?.subTotal || 0 | number }} EGP</span>
+  </div>
+
+  @if (cart() && cart()!.discount > 0) {
+    <div class="cart-summary__row cart-summary__row--discount">
+      <span>Discount @if (cart()!.couponCode) { ({{ cart()!.couponCode }}) }</span>
+      <span>−{{ cart()!.discount | number }} EGP</span>
+    </div>
+  }
+
+  <div class="cart-summary__row cart-summary__row--total">
+    <span>Estimated total</span>
+    <span>{{ estimatedTotal() | number }} EGP</span>
+  </div>
+
+  <p class="cart-summary__note">Shipping is calculated at checkout.</p>
+
+  <a
+    routerLink="/checkout"
+    class="btn btn-primary cart-summary__checkout"
+    [class.cart-summary__checkout--disabled]="isEmpty"
+    [attr.aria-disabled]="isEmpty"
+    (click)="onCheckoutClick($event)"
+  >
+    Proceed to checkout
+  </a>
+</aside>

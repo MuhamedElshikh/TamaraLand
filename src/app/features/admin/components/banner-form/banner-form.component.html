@@ -1,0 +1,344 @@
+<form
+  class="banner-form"
+  [formGroup]="form"
+  (ngSubmit)="submit()">
+
+  <section class="form-card">
+
+    <div class="card-header">
+      <div>
+        <h2>Banner Images</h2>
+        <p>Upload desktop and optional mobile banner images.</p>
+      </div>
+    </div>
+
+    <div class="image-grid">
+
+      <!-- Desktop -->
+
+      <div class="upload-container">
+
+        <label class="upload-title">
+          Desktop Image
+        </label>
+
+        @if(desktopPreview()){
+
+        <div class="image-preview">
+
+          <img
+            [src]="desktopPreview()!"
+            alt="Desktop Banner">
+
+          <div class="image-actions">
+
+            <label class="btn btn-outline">
+
+              Replace
+
+              <input
+                hidden
+                type="file"
+                accept="image/*"
+                (change)="desktopSelected($event)">
+
+            </label>
+
+            <button
+              type="button"
+              class="btn btn-danger"
+              (click)="removeDesktopImage()">
+
+              Remove
+
+            </button>
+
+          </div>
+
+        </div>
+
+        }@else{
+
+        <label
+          class="upload-box"
+          (drop)="desktopDrop($event)"
+          (dragover)="$event.preventDefault()">
+
+          <input
+            hidden
+            type="file"
+            accept="image/*"
+            (change)="desktopSelected($event)">
+
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+
+          <span>Click to upload</span>
+
+          <small>PNG, JPG or WEBP</small>
+
+        </label>
+
+        }
+
+      </div>
+
+      <!-- Mobile -->
+
+      <div class="upload-container">
+
+        <label class="upload-title">
+
+          Mobile Image (Optional)
+
+        </label>
+
+        @if(mobilePreview()){
+
+        <div class="image-preview">
+
+          <img
+            [src]="mobilePreview()!"
+            alt="Mobile Banner">
+
+          <div class="image-actions">
+
+            <label class="btn btn-outline">
+
+              Replace
+
+              <input
+                hidden
+                type="file"
+                accept="image/*"
+                (change)="mobileSelected($event)">
+
+            </label>
+
+            <button
+              type="button"
+              class="btn btn-danger"
+              (click)="removeMobileImage()">
+
+              Remove
+
+            </button>
+
+          </div>
+
+        </div>
+
+        }@else{
+
+        <label
+          class="upload-box"
+          (drop)="mobileDrop($event)"
+          (dragover)="$event.preventDefault()">
+
+          <input
+            hidden
+            type="file"
+            accept="image/*"
+            (change)="mobileSelected($event)">
+
+          <i class="fa-solid fa-mobile-screen"></i>
+
+          <span>Upload Mobile Banner</span>
+
+          <small>Optional</small>
+
+        </label>
+
+        }
+
+      </div>
+
+    </div>
+
+  </section>
+  <section class="form-card">
+
+  <div class="card-header">
+
+    <div>
+
+      <h2>Banner Content</h2>
+
+      <p>
+        Configure what customers will see.
+      </p>
+
+    </div>
+
+  </div>
+
+  <div class="form-grid">
+
+    <div class="form-group full">
+
+      <label>
+
+        Title
+
+      </label>
+
+      <input
+        type="text"
+        formControlName="title">
+
+    </div>
+
+    <div class="form-group full">
+
+      <label>
+
+        Description
+
+      </label>
+
+      <textarea
+        rows="5"
+        formControlName="description">
+      </textarea>
+
+    </div>
+
+    <div class="form-group full">
+
+      <label>
+
+        Link
+
+      </label>
+
+      <input
+        type="text"
+        formControlName="link">
+
+    </div>
+
+  </div>
+
+</section>
+<section class="form-card">
+
+  <div class="card-header">
+
+    <div>
+
+      <h2>Display Settings</h2>
+
+      <p>
+        Control where and when this banner appears.
+      </p>
+
+    </div>
+
+  </div>
+
+  <div class="settings-grid">
+
+    <div class="form-group">
+
+      <label>
+
+        Banner Type
+
+      </label>
+
+      <select formControlName="type">
+
+        @for(item of bannerTypes;track item.value){
+
+        <option [ngValue]="item.value">
+
+          {{item.text}}
+
+        </option>
+
+        }
+
+      </select>
+
+    </div>
+
+    <div class="form-group">
+
+      <label>
+
+        Display Order
+
+      </label>
+
+      <input
+        type="number"
+        formControlName="displayOrder">
+
+    </div>
+
+    <div class="form-group">
+
+      <label>
+
+        Start Date
+
+      </label>
+
+      <input
+        type="date"
+        formControlName="startDate">
+
+    </div>
+
+    <div class="form-group">
+
+      <label>
+
+        End Date
+
+      </label>
+
+      <input
+        type="date"
+        formControlName="endDate">
+
+    </div>
+
+  </div>
+
+  <label class="switch">
+
+    <input
+      type="checkbox"
+      formControlName="isActive">
+
+    <span>
+
+      Active Banner
+
+    </span>
+
+  </label>
+
+</section>
+<div class="form-footer">
+
+  <button
+    type="button"
+    class="btn btn-outline"
+    (click)="router.navigate(['/admin/banners'])">
+
+    Cancel
+
+  </button>
+
+  <button
+    class="btn btn-primary"
+    type="submit">
+
+    {{isEdit() ? 'Update Banner' : 'Create Banner'}}
+
+  </button>
+
+</div>
+
+</form>

@@ -1,0 +1,162 @@
+<div class="search-overlay" (click)="$event.stopPropagation()">
+
+  <form class="search-overlay__form" (submit)="onSubmit($event)">
+
+    <svg
+      class="search-overlay__icon"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none">
+
+      <circle
+        cx="11"
+        cy="11"
+        r="7"
+        stroke="currentColor"
+        stroke-width="1.8" />
+
+      <path
+        d="M21 21l-4.3-4.3"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round" />
+
+    </svg>
+
+    <input
+      #searchInput
+      type="text"
+      class="search-overlay__input"
+      placeholder="Search for products..."
+      [value]="query()"
+      (input)="onInput($any($event.target).value)" />
+
+    @if (query()) {
+      <button
+        type="button"
+        class="search-overlay__clear"
+        (click)="onInput('')"
+        aria-label="Clear">
+
+        ×
+
+      </button>
+    }
+
+  </form>
+
+  @if (!query()) {
+
+    <div class="search-overlay__suggestions">
+
+      @if (recentSearches().length) {
+
+        <section class="search-section">
+
+          <h4>Recent Searches</h4>
+
+          <div class="search-tags">
+
+            @for (search of recentSearches(); track search) {
+
+              <button
+                type="button"
+                (click)="onInput(search)">
+
+                {{ search }}
+
+              </button>
+
+            }
+
+          </div>
+
+        </section>
+
+      }
+
+    
+    </div>
+
+  } @else {
+
+    <div class="search-overlay__results">
+
+      @if (isLoading()) {
+
+        <div class="search-overlay__loading">
+
+          @for (i of [1,2,3]; track i) {
+
+            <div class="search-overlay__skeleton"></div>
+
+          }
+
+        </div>
+
+      } @else if (results().length === 0 && hasSearched()) {
+
+        <p class="search-overlay__empty">
+
+          No products found for
+          <strong>"{{ query() }}"</strong>
+
+        </p>
+
+      } @else if (results().length) {
+
+        <div class="search-overlay__list">
+
+          @for (product of results(); track product.id) {
+
+            <a
+              [routerLink]="['/products', product.id]"
+              class="search-overlay__item"
+              [class.active]="selectedIndex() === $index"
+              (mouseenter)="selectedIndex.set($index)"
+              (click)="close()">
+
+              <img
+                [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
+                [alt]="product.name" />
+
+              <div class="search-overlay__content">
+
+                <p class="search-overlay__item-name">
+
+                  {{ product.name }}
+
+                </p>
+
+                <p class="search-overlay__item-price">
+
+                  {{ product.price | number:'1.0-0' }} EGP
+
+                </p>
+
+              </div>
+
+            </a>
+
+          }
+
+        </div>
+
+        <button
+          type="button"
+          class="search-overlay__view-all"
+          (click)="viewAllResults()">
+
+          View all results for
+          <strong>"{{ query() }}"</strong>
+
+        </button>
+
+      }
+
+    </div>
+
+  }
+
+</div>

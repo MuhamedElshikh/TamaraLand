@@ -1,0 +1,10 @@
+<a [routerLink]="['/orders', order().id]" class="order-card">
+  <div class="order-card__main">
+    <p class="order-card__number">{{ order().orderNumber }}</p>
+  </div>
+
+
+  <p class="order-card__total">{{ order().total | number }} EGP</p>
+
+  <span class="order-card__arrow">›</span>
+</a>

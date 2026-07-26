@@ -1,0 +1,202 @@
+.admin-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ===========================
+   Header
+=========================== */
+
+.admin-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.admin-page__title {
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.admin-page__subtitle {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* ===========================
+   Filters
+=========================== */
+
+.filters-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 280px));
+  gap: 16px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-select {
+  appearance: none;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23C9A24B' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+
+  background-repeat: no-repeat;
+
+  background-position: right 14px center;
+
+  padding-right: 40px;
+
+  cursor: pointer;
+}
+
+/* ===========================
+   Actions
+=========================== */
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-icon {
+  width: 34px;
+  height: 34px;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: var(--radius-sm);
+
+  border: 1px solid var(--border-color);
+
+  background: var(--secondary-light);
+
+  color: var(--text-secondary);
+
+  cursor: pointer;
+
+  transition: var(--transition-fast);
+}
+
+.btn-icon:hover {
+  background: var(--secondary);
+  border-color: var(--primary);
+  color: var(--text-primary);
+}
+
+.btn-icon--edit:hover {
+  color: var(--primary);
+}
+
+.btn-icon--delete:hover {
+  color: #ef4444;
+  border-color: #ef4444;
+}
+
+.btn-icon:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+/* ===========================
+   Alerts
+=========================== */
+
+.alert {
+  padding: 12px 16px;
+
+  border-radius: var(--radius-sm);
+
+  font-size: .9rem;
+}
+
+.alert-danger {
+  background: rgba(239, 68, 68, .15);
+
+  border: 1px solid rgba(239, 68, 68, .35);
+
+  color: #fca5a5;
+}
+
+/* ===========================
+   Spinner
+=========================== */
+
+.spinner-sm {
+  width: 14px;
+  height: 14px;
+
+  border-radius: 50%;
+
+  border: 2px solid currentColor;
+
+  border-top-color: transparent;
+
+  animation: spin .7s linear infinite;
+}
+
+@keyframes spin {
+
+  to {
+
+    transform: rotate(360deg);
+
+  }
+
+}
+
+/* ===========================
+   Pagination
+=========================== */
+
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width:768px) {
+
+  .filters-grid {
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .admin-page__header {
+
+    flex-direction: column;
+    align-items: stretch;
+
+  }
+
+  .admin-page__header .btn {
+
+    width: 100%;
+    justify-content: center;
+
+  }
+
+}
