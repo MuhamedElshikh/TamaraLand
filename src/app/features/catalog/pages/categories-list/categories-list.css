@@ -2,11 +2,13 @@
   display: flex;
   flex-direction: column;
   gap: 1.75rem;
+  padding: 1.25rem 1rem 0.25rem;
+
 }
 
 .listing-page__hero {
   max-width: 44rem;
-  padding: 1.5rem 0 0.25rem;
+  padding: 1.5rem 1rem 0.25rem;
 }
 
 .listing-page__grid {
