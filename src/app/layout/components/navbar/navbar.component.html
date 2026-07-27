@@ -2,8 +2,10 @@
   @if(searchOpen()){
 
 
-
+<div class="search-backdrop" (closed)="closeSearch()">
     <app-search-overlay (closed)="closeSearch()"></app-search-overlay>
+
+</div>
     
 
 }

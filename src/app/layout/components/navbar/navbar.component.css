@@ -3,7 +3,13 @@
 :host {
   display: block;
 }
-
+.search-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 4999;
+  animation: fadeIn 0.2s ease forwards;
+}
 .site-header {
   position: sticky;
   top: 0;
