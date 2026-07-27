@@ -621,6 +621,24 @@
 
 }
 
+/* أهم حاجة: min-height: 100vh كان بيخلي الـ container طولاني جدًا على الموبايل
+   (نسبة portrait متطرفة)، فالصور الأفقية كانت بتتقص بشكل وحش مع object-fit: cover.
+   تقليل الطول هنا بيخلي القص أقرب للطبيعي وبيوريك جزء أكبر من الصورة الحقيقية. */
+.hero-slider{
+
+    min-height: 70vh;
+    max-height: 640px;
+
+}
+
+.hero-background,
+.hero-overlay{
+
+    position: absolute;
+    inset: 0;
+
+}
+
 }
 
 
@@ -634,10 +652,6 @@
 
     width:170px;
 
-}
-.hero-slider{
- width: 1920px;
- height: 800px;   
 }
 
 .hero-intro__eyebrow{
