@@ -16,7 +16,21 @@ const PAGE_SIZE = 12;
 })
 export class ProductListPage implements OnInit {
   private readonly catalogService = inject(CatalogService);
+filtersOpen = signal(false);
+openFilters() {
+  this.filtersOpen.set(true);
+  document.body.style.overflow = 'hidden';
+}
 
+closeFilters() {
+  this.filtersOpen.set(false);
+  document.body.style.overflow = '';
+}
+
+clearFilters() {
+  // reset your filters
+  this.closeFilters();
+}
   private currentFilter: ProductFilterRequest = {};
   private readonly route = inject(ActivatedRoute);
 

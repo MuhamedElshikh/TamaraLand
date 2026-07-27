@@ -2,16 +2,13 @@
   <header class="catalog-page__hero">
     <div class="header">
       <p class="section-kicker">{{ pageKicker() }}</p>
-
       <h1 class="section-title">{{ pageTitle() }}</h1>
-
-      <p class="section-copy">
-        {{ pageSubtitle() }}
-      </p>
+      <p class="section-copy">{{ pageSubtitle() }}</p>
     </div>
   </header>
 
   <div class="catalog-page__layout">
+    <!-- Desktop sidebar -->
     <aside class="catalog-page__filters">
       <app-product-filters (filtersChanged)="onFiltersChanged($event)" />
     </aside>
@@ -19,6 +16,30 @@
     <div class="catalog-page__content">
       <div class="catalog-page__toolbar">
         <p class="catalog-page__summary">{{ summary() }}</p>
+
+        <!-- Mobile filter toggle -->
+        <button class="filters-toggle" (click)="openFilters()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+          Filters
+        </button>
+      </div>
+
+      <!-- Mobile filter drawer -->
+      <div class="filters-backdrop" [class.filters-backdrop--visible]="filtersOpen()" (click)="closeFilters()"></div>
+      <div class="filters-drawer" [class.filters-drawer--open]="filtersOpen()">
+        <div class="filters-drawer__header">
+          <span class="filters-drawer__title">Filters</span>
+          <button class="filters-drawer__close" (click)="closeFilters()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+        <div class="filters-drawer__body">
+          <app-product-filters (filtersChanged)="onFiltersChanged($event)" />
+        </div>
+        <div class="filters-drawer__footer">
+          <button class="btn btn-outline" (click)="clearFilters()">Clear All</button>
+          <button class="btn btn-primary" (click)="closeFilters()">Show Results</button>
+        </div>
       </div>
 
       @if (isLoading()) {
@@ -35,12 +56,7 @@
             <app-product-card [product]="product" />
           }
         </div>
-
-        <app-pagination
-          [currentPage]="pageIndex()"
-          [totalPages]="totalPages()"
-          (pageChange)="onPageChange($event)"
-        />
+        <app-pagination [currentPage]="pageIndex()" [totalPages]="totalPages()" (pageChange)="onPageChange($event)" />
       }
     </div>
   </div>
