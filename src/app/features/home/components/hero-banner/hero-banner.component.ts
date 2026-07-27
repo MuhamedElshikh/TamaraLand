@@ -33,25 +33,21 @@ export class HeroBannerComponent implements OnInit, OnDestroy {
    */
 
   readonly showIntro = signal(true);
-
   readonly showSlider = signal(false);
+  private introTimer?: ReturnType<typeof setTimeout>;
 
   /**
    * Banner Data
    */
 
   readonly banners = signal<BannerResponse[]>([]);
-
   readonly loading = signal(true);
+  readonly loadError = signal(false);
 
   readonly currentIndex = signal(0);
-
   readonly isAnimating = signal(false);
-
   readonly showCurrent = signal(true);
-
   readonly currentImage = signal('');
-
   readonly nextImage = signal('');
 
   readonly currentBanner = computed(() =>
@@ -62,30 +58,59 @@ export class HeroBannerComponent implements OnInit, OnDestroy {
 
   private autoSlideTimer?: number;
 
+  // ==========================
+  // Touch / Swipe (Mobile)
+  // ==========================
+
+  private touchStartX = 0;
+  private touchStartY = 0;
+
+  onTouchStart(event: TouchEvent): void {
+    this.touchStartX = event.touches[0].clientX;
+    this.touchStartY = event.touches[0].clientY;
+    this.pause();
+  }
+
+  onTouchEnd(event: TouchEvent): void {
+    const deltaX = event.changedTouches[0].clientX - this.touchStartX;
+    const deltaY = event.changedTouches[0].clientY - this.touchStartY;
+
+    // بنتجاهل اللمسة لو حركة رأسية (سكرول) أكبر من الأفقية، عشان منتدخلش في السكرول العادي
+    if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (deltaX < 0) {
+        this.next();
+      } else {
+        this.previous();
+      }
+    }
+
+    this.resume();
+  }
+
   ngOnInit(): void {
 
     this.loadBanners();
 
     window.addEventListener('resize', this.onResize);
 
-    setTimeout(() => {
+    this.introTimer = setTimeout(() => {
 
-  this.showIntro.set(false);
+      this.showIntro.set(false);
 
-  requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
 
-    this.showSlider.set(true);
+        this.showSlider.set(true);
 
-  });
+      });
 
-},5000);
+    }, 5000);
 
   }
 
   ngOnDestroy(): void {
 
     this.pause();
-
+    clearTimeout(this.introTimer);
     window.removeEventListener('resize', this.onResize);
 
   }
@@ -114,6 +139,7 @@ export class HeroBannerComponent implements OnInit, OnDestroy {
           }
 
           this.loading.set(false);
+          this.loadError.set(false);
 
           if (this.banners().length > 1) {
 
@@ -126,6 +152,7 @@ export class HeroBannerComponent implements OnInit, OnDestroy {
         error: () => {
 
           this.loading.set(false);
+          this.loadError.set(true);
 
         }
 
@@ -165,6 +192,9 @@ export class HeroBannerComponent implements OnInit, OnDestroy {
 
   go(index: number): void {
 
+    // كانت ناقصة هنا - كانت بتسمح تدوس على أي نقطة حتى لو transition شغالة
+    if (this.isAnimating()) return;
+
     if (index === this.currentIndex()) return;
 
     this.changeTo(index);
@@ -187,29 +217,35 @@ export class HeroBannerComponent implements OnInit, OnDestroy {
 
     image.src = this.resolveImage(banner);
 
-    image.onload = () => {
+    image.onload = () => this.finishTransition(image.src, index);
 
-      this.nextImage.set(image.src);
+    // كانت ناقصة: لو الصورة فشلت تحميل، isAnimating كانت بتفضل true للأبد
+    // وتوقف الـ slider بالكامل. دلوقتي بننتقل للسلايد المطلوب برضو من غير الصورة الجديدة.
+    image.onerror = () => this.finishTransition(this.currentImage(), index);
 
-      requestAnimationFrame(() => {
+  }
 
-        this.showCurrent.set(false);
+  private finishTransition(imageSrc: string, index: number): void {
 
-      });
+    this.nextImage.set(imageSrc);
 
-      setTimeout(() => {
+    requestAnimationFrame(() => {
 
-        this.currentImage.set(image.src);
+      this.showCurrent.set(false);
 
-        this.currentIndex.set(index);
+    });
 
-        this.showCurrent.set(true);
+    setTimeout(() => {
 
-        this.isAnimating.set(false);
+      this.currentImage.set(imageSrc);
 
-      }, 600);
+      this.currentIndex.set(index);
 
-    };
+      this.showCurrent.set(true);
+
+      this.isAnimating.set(false);
+
+    }, 600);
 
   }
 

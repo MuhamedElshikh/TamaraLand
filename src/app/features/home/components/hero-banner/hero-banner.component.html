@@ -56,7 +56,9 @@
 <section
   class="hero-slider"
   (mouseenter)="pause()"
-  (mouseleave)="resume()">
+  (mouseleave)="resume()"
+  (touchstart)="onTouchStart($event)"
+  (touchend)="onTouchEnd($event)">
 
   @if(hasBanners()) {
 
@@ -113,26 +115,6 @@
 
   <div class="hero-banner-content">
 
-    <!-- @if (banner.title) {
-
-      <h2>
-
-        {{ banner.title }}
-
-      </h2>
-
-    } -->
-
-    <!-- @if (banner.description) {
-
-      <p>
-
-        {{ banner.description }}
-
-      </p>
-
-    } -->
-
     @if (banner.link) {
 
       <a
@@ -148,6 +130,12 @@
   </div>
 
   }
+
+  } @else if (loadError()) {
+
+  <div class="hero-loading">
+    <p class="hero-error">Couldn't load the banners right now.</p>
+  </div>
 
   } @else {
 
