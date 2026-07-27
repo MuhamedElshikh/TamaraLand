@@ -31,7 +31,22 @@ export class BrandProductsPage implements OnInit {
   readonly totalPages = signal(1);
   readonly isLoading = signal(true);
   readonly notFound = signal(false);
+filtersOpen = signal(false);
 
+openFilters() {
+  this.filtersOpen.set(true);
+  document.body.style.overflow = 'hidden';
+}
+
+closeFilters() {
+  this.filtersOpen.set(false);
+  document.body.style.overflow = '';
+}
+
+clearFilters() {
+  // reset your filters
+  this.closeFilters();
+}
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       this.brandId = Number(params.get('id'));
