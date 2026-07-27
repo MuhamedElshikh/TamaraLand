@@ -41,7 +41,6 @@ export class AdminProductFormPage implements OnInit {
   readonly errorMessage = signal<string | null>(null);
   readonly successMessage = signal<string | null>(null);
 
-  // Main Form
   productForm: FormGroup = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
     categoryId: ['', [Validators.required]],
@@ -51,7 +50,6 @@ export class AdminProductFormPage implements OnInit {
     isActive: [true],
   });
 
-  // Variants state & form
   readonly variants = signal<UpdateProductVariantRequest[]>([]);
   readonly showVariantForm = signal(false);
   readonly editingVariantIndex = signal<number | null>(null);
@@ -66,13 +64,13 @@ export class AdminProductFormPage implements OnInit {
     price: [0, [Validators.required, Validators.min(0.01)]],
     costPrice: [0],
     compareAtPrice: [0],
-    weight: [0],
-    height: [0],
-    width: [0],
+    bust: [0],
+    waist: [0],
+    hip: [0],
+    length: [0],
     isActive: [true],
   });
 
-  // Images state & upload
   readonly images = signal<AdminProductImageResponse[]>([]);
   readonly isLoadingImages = signal(false);
   readonly isUploadingImage = signal(false);
@@ -87,7 +85,6 @@ export class AdminProductFormPage implements OnInit {
 
     this.isLoadingProduct.set(true);
 
-    // Load categories and brands first, then load product details if editing
     forkJoin({
       catRes: this.adminCatalogService.getCategories({ pageSize: 100 }),
       brandRes: this.adminCatalogService.getBrands({ pageSize: 100 }),
@@ -114,8 +111,6 @@ export class AdminProductFormPage implements OnInit {
       },
     });
   }
-
-  // ---- Main Product Form Handlers ----
 
   onSubmitProduct(): void {
     if (this.productForm.invalid) {
@@ -150,9 +145,10 @@ export class AdminProductFormPage implements OnInit {
           compareAtPrice: Number(v.compareAtPrice || 0),
           price: Number(v.price),
           stock: Number(v.stock),
-          weight: Number(v.weight || 0),
-          height: Number(v.height || 0),
-          width: Number(v.width || 0),
+          bust: Number(v.bust || 0),
+          waist: Number(v.waist || 0),
+          hip: Number(v.hip || 0),
+          length: Number(v.length || 0),
           sku: v.sku,
           isActive: v.isActive ?? true,
         })),
@@ -179,9 +175,10 @@ export class AdminProductFormPage implements OnInit {
         price: Number(v.price),
         stock: Number(v.stock),
         sku: v.sku,
-        weight: Number(v.weight || 0),
-        height: Number(v.height || 0),
-        width: Number(v.width || 0),
+        bust: Number(v.bust || 0),
+        waist: Number(v.waist || 0),
+        hip: Number(v.hip || 0),
+        length: Number(v.length || 0),
       }));
 
       const createData: CreateProductRequest = {
@@ -212,8 +209,6 @@ export class AdminProductFormPage implements OnInit {
     }
   }
 
-  // ---- Variant Handlers ----
-
   toggleVariantForm(): void {
     this.showVariantForm.update((v) => !v);
     this.editingVariantIndex.set(null);
@@ -223,9 +218,10 @@ export class AdminProductFormPage implements OnInit {
       price: 0,
       costPrice: 0,
       compareAtPrice: 0,
-      weight: 0,
-      height: 0,
-      width: 0,
+      bust: 0,
+      waist: 0,
+      hip: 0,
+      length: 0,
       isActive: true,
     });
     this.variantError.set(null);
@@ -242,9 +238,10 @@ export class AdminProductFormPage implements OnInit {
       price: variant.price || 0,
       costPrice: variant.costPrice || 0,
       compareAtPrice: variant.compareAtPrice || 0,
-      weight: variant.weight || 0,
-      height: variant.height || 0,
-      width: variant.width || 0,
+      bust: variant.bust || 0,
+      waist: variant.waist || 0,
+      hip: variant.hip || 0,
+      length: variant.length || 0,
       isActive: variant.isActive ?? true,
     });
     this.showVariantForm.set(true);
@@ -267,9 +264,10 @@ export class AdminProductFormPage implements OnInit {
       price: Number(val.price),
       costPrice: Number(val.costPrice || 0),
       compareAtPrice: Number(val.compareAtPrice || 0),
-      weight: Number(val.weight || 0),
-      height: Number(val.height || 0),
-      width: Number(val.width || 0),
+      bust: Number(val.bust || 0),
+      waist: Number(val.waist || 0),
+      hip: Number(val.hip || 0),
+      length: Number(val.length || 0),
       isActive: val.isActive ?? true,
     };
 
@@ -298,9 +296,10 @@ export class AdminProductFormPage implements OnInit {
       price: 0,
       costPrice: 0,
       compareAtPrice: 0,
-      weight: 0,
-      height: 0,
-      width: 0,
+      bust: 0,
+      waist: 0,
+      hip: 0,
+      length: 0,
       isActive: true,
     });
     this.variantError.set(null);
@@ -316,8 +315,6 @@ export class AdminProductFormPage implements OnInit {
       this.editingVariantIndex.set(null);
     }
   }
-
-  // ---- Image Handlers ----
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -380,8 +377,6 @@ export class AdminProductFormPage implements OnInit {
     });
   }
 
-  // ---- Helper Loaders ----
-
   private loadProductDetails(id: number): void {
     this.adminCatalogService.getProductById(id).subscribe({
       next: (res) => {
@@ -390,7 +385,6 @@ export class AdminProductFormPage implements OnInit {
           const p = res.data as any;
           this.productSlug.set(p.slug || '');
 
-          // Resolve category ID from p.categoryId, p.category?.id, or by matching categoryName
           const resolvedCatId =
             p.categoryId ??
             p.category?.id ??
@@ -399,7 +393,6 @@ export class AdminProductFormPage implements OnInit {
             )?.id ??
             '';
 
-          // Resolve brand ID from p.brandId, p.brand?.id, or by matching brandName
           const resolvedBrandId =
             p.brandId ??
             p.brand?.id ??
@@ -427,9 +420,10 @@ export class AdminProductFormPage implements OnInit {
               price: v.price || v.finalPrice || v.originalPrice || 0,
               costPrice: v.costPrice || 0,
               compareAtPrice: v.compareAtPrice || 0,
-              weight: v.weight || 0,
-              height: v.height || 0,
-              width: v.width || 0,
+              bust: v.bust || 0,
+              waist: v.waist || 0,
+              hip: v.hip || 0,
+              length: v.length || 0,
               isActive: v.isActive ?? true,
             }));
             this.variants.set(mappedVariants);

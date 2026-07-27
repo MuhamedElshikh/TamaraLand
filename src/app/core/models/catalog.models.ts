@@ -41,9 +41,10 @@ export interface ProductVariantResponse {
   hasDiscount: boolean;
   stock: number;
   sku: string;
-  weight: number;
-  height: number;
-  width: number;
+  bust: number;
+  waist: number;
+  hip: number;
+  length: number;
 }
 
 export interface ProductCardResponse {
@@ -67,36 +68,25 @@ export interface ProductDetailsResponse extends ProductResponse {
 }
 
 export enum ProductCollection {
-
   None = 0,
   NewArrivals = 1,
   Offers = 2
-
 }
 
 export interface ProductFilterRequest {
-
   search?: string;
-
   categoryId?: number;
-
   brandId?: number;
-
   minPrice?: number;
-
   maxPrice?: number;
-
   collection?: ProductCollection;
-
   pageIndex?: number;
-
   pageSize?: number;
-
   sortBy?: string;
-
 }
+
 export type RelatedProductResponse = ProductCardResponse;
- 
+
 export interface ProductResponse extends ProductCardResponse {
   categoryName: string;
   brandName: string;

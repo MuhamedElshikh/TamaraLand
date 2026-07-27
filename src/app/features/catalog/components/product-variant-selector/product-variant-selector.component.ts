@@ -2,6 +2,11 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, compu
 import { DecimalPipe } from '@angular/common';
 import { ProductVariantResponse } from '../../../../core/models/catalog.models';
 
+interface DimensionItem {
+  label: string;
+  value: number;
+}
+
 @Component({
   selector: 'app-product-variant-selector',
   standalone: true,
@@ -79,15 +84,18 @@ export class ProductVariantSelectorComponent implements OnChanges {
     return 'In stock';
   });
 
-  // عرض الأبعاد بس لو فيها قيم حقيقية (مش صفر)
-  readonly dimensionsLabel = computed(() => {
+  // عرض الأبعاد (Bust / Waist / Hip / Length) بس لو فيها قيم حقيقية (مش صفر)
+  readonly dimensionsLabel = computed((): DimensionItem[] | null => {
     const v = this.matchedVariant();
-    if (!v || (!v.weight && !v.height && !v.width)) return null;
+    if (!v) return null;
 
-    const parts: string[] = [];
-    if (v.height || v.width) parts.push(`${v.height || '—'} × ${v.width || '—'} cm`);
-    if (v.weight) parts.push(`${v.weight} kg`);
-    return parts.join(' • ');
+    const dims: DimensionItem[] = [];
+    if (v.bust > 0) dims.push({ label: 'Bust', value: v.bust });
+    if (v.waist > 0) dims.push({ label: 'Waist', value: v.waist });
+    if (v.hip > 0) dims.push({ label: 'Hip', value: v.hip });
+    if (v.length > 0) dims.push({ label: 'Length', value: v.length });
+
+    return dims.length > 0 ? dims : null;
   });
 
   private emitSelection(): void {

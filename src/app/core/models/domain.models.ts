@@ -337,36 +337,6 @@ export interface CreateCouponRequest {
 
 export type UpdateCouponRequest = CreateCouponRequest;
 
-// ---- Store Settings ----
-export interface StoreSettings {
-  storeName: string;
-  logoUrl?: string;
-  supportEmail: string;
-  supportPhone: string;
-  address: string;
-  currency: string;
-  currencySymbol: string;
-  facebookUrl?: string;
-  instagramUrl?: string;
-  whatsAppNumber?: string;
-}
-
-export interface StoreSettingsRequest {
-  storeName: string;
-  logoUrl?: string;
-  supportEmail: string;
-  supportPhone: string;
-  address: string;
-  currency: string;
-  currencySymbol: string;
-  facebookUrl?: string;
-  instagramUrl?: string;
-  whatsAppNumber?: string;
-}
-
-export interface StoreSettingsResponse extends StoreSettings { }
-
-export type UpdateStoreSettingsRequest = StoreSettingsRequest;
 
 // ---- Create/Update for Admin catalog ----
 export interface CreateCategoryRequest {
@@ -409,16 +379,16 @@ export interface BrandUpsertResponse {
   description?: string;
   imageUrl?: string;
 }
-
 export interface CreateProductVariantRequest {
   color?: string;
   size?: string;
   price: number;
   stock: number;
   sku: string;
-  weight?: number;
-  height?: number;
-  width?: number;
+  bust: number;
+  waist: number;
+  hip: number;
+  length: number;
 }
 
 export interface CreateProductRequest {
@@ -437,9 +407,10 @@ export interface UpdateProductVariantRequest {
   compareAtPrice?: number;
   price: number;
   stock: number;
-  weight?: number;
-  height?: number;
-  width?: number;
+  bust: number;
+  waist: number;
+  hip: number;
+  length: number;
   sku: string;
   isActive?: boolean;
 }
@@ -460,9 +431,10 @@ export interface ProductVariantRequest {
   size?: string;
   stock: number;
   price: number;
-  weight?: number;
-  height?: number;
-  width?: number;
+  bust: number;
+  waist: number;
+  hip: number;
+  length: number;
 }
 
 export interface AdminProductVariantResponse {
@@ -477,9 +449,10 @@ export interface AdminProductVariantResponse {
   originalPrice?: number;
   finalPrice?: number;
   stock: number;
-  weight?: number;
-  height?: number;
-  width?: number;
+  bust: number;
+  waist: number;
+  hip: number;
+  length: number;
   isActive: boolean;
   discountPercentage?: number;
 }
@@ -554,3 +527,34 @@ export interface AdminOrderDetailsResponse extends OrderDetailsResponse {
   customerId?: number;
   customerEmail?: string;
 }
+// ---- Store Settings ----
+export interface StoreSettings {
+  storeName: string;
+  logoUrl?: string;
+  supportEmail: string;
+  supportPhone: string;
+  address: string;
+  currency: string;
+  currencySymbol: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  whatsAppNumber?: string;
+}
+
+export interface StoreSettingsRequest {
+  storeName: string;
+  logoUrl?: string;
+  supportEmail: string;
+  supportPhone: string;
+  address: string;
+  currency: string;
+  currencySymbol: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  whatsAppNumber?: string;
+}
+
+export interface StoreSettingsResponse extends StoreSettings { }
+
+export type UpdateStoreSettingsRequest = StoreSettingsRequest;
+

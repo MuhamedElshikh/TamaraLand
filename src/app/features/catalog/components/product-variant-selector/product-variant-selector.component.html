@@ -57,12 +57,19 @@
 
   <p class="variant-status">
     @if (matchedVariant()?.sku) {
-      SKU: {{ matchedVariant()?.sku }} •
+      <strong>SKU:</strong> {{ matchedVariant()?.sku }} •
     }
-    {{ stockStatusLabel() }} • {{ variantSummary() }}
+    <strong>{{ stockStatusLabel() }}</strong> • {{ variantSummary() }}
   </p>
 
   @if (dimensionsLabel(); as dims) {
-    <p class="variant-dimensions">{{ dims }}</p>
+    <div class="variant-dimensions">
+      @for (dim of dims; track dim.label) {
+        <div class="variant-dimension">
+          <span class="variant-dimension__label">{{ dim.label }}</span>
+          <span class="variant-dimension__value">{{ dim.value }} cm</span>
+        </div>
+      }
+    </div>
   }
 </section>
