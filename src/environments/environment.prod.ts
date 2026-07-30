@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'http://localhost:5116',
+  apiBaseUrl: 'https://tamaraland.runasp.net',
   analytics: {
     enabled: true,
     gaMeasurementId: '',
