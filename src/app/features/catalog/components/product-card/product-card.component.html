@@ -43,8 +43,28 @@
         <p class="product-card__price-old">{{ originalPrice | number }} EGP</p>
       }
     </div>
-    <p class="product-card__meta">
-      {{ ratingValue.toFixed(1) }}/5 • {{ reviewCount }} review{{ reviewCount === 1 ? '' : 's' }}
-    </p>
+   <div class="product-card__footer">
+
+    <div class="product-card__rating">
+        ⭐ {{ ratingValue.toFixed(1) }}
+    </div>
+
+    <div class="product-card__analytics">
+
+        <span>
+
+            👁 {{ product.viewsCount }}
+
+        </span>
+
+        <span>
+
+            💬 {{ reviewCount }}
+
+        </span>
+
+    </div>
+
+</div>
   </div>
 </a>

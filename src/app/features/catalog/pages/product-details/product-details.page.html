@@ -29,19 +29,140 @@
       </div>
 
       <div class="product-details-page__aside">
-        <div class="product-details-page__summary">
-          <h2>{{ product()?.name }}</h2>
-          <p class="product-details-page__price">{{ priceLabel() }}</p>
-          <p class="section-copy">{{ stockLabel() }} • Rating {{ ratingLabel() }}</p>
-          @if (selectedVariant()) {
-            <p class="section-copy">Selected: {{ selectedVariant()?.color }} • {{ selectedVariant()?.size }}</p>
-          }
-        </div>
+      <div class="product-details-page__summary">
 
-        <app-product-variant-selector [variants]="product()?.variants || []" (selectionChange)="onVariantSelected($event)" />
-        <button class="btn btn-primary" type="button" (click)="addToCart()" [disabled]="isAddingToCart()">
-          {{ isAddingToCart() ? 'Adding…' : 'Add to cart' }}
-        </button>
+  <span class="product-details-page__brand">
+    {{ product()?.brandName }}
+  </span>
+
+  <h2 class="product-details-page__title">
+    {{ product()?.name }}
+  </h2>
+
+  <div class="product-details-page__price-wrapper">
+
+    <span class="product-details-page__price">
+      {{ priceLabel() }}
+    </span>
+  <app-product-variant-selector
+      [variants]="product()?.variants || []"
+      (selectionChange)="onVariantSelected($event)">
+  </app-product-variant-selector>
+
+  <button
+      class="btn btn-primary product-details-page__cart-btn"
+      type="button"
+      (click)="addToCart()"
+      [disabled]="isAddingToCart()">
+
+      {{ isAddingToCart() ? 'Adding...' : 'Add to cart' }}
+
+  </button>
+
+  @if(cartMessage()){
+
+      <p class="product-details-page__cart-msg">
+
+          {{cartMessage()}}
+
+      </p>
+
+  }
+  </div>
+
+  <div class="product-details-page__stats">
+
+    <div class="stat-card">
+
+      <div class="stat-card__value">
+
+        ⭐ {{ ratingLabel() }}
+
+      </div>
+
+      <div class="stat-card__label">
+
+        Rating
+
+      </div>
+
+    </div>
+
+    <div class="stat-card">
+
+      <div class="stat-card__value">
+
+        👁 {{ product()?.viewsCount ?? 0 }}
+
+      </div>
+
+      <div class="stat-card__label">
+
+        Views
+
+      </div>
+
+    </div>
+
+    <div class="stat-card">
+
+      <div class="stat-card__value">
+
+        💬 {{ product()?.reviewsCount ?? 0 }}
+
+      </div>
+
+      <div class="stat-card__label">
+
+        Reviews
+
+      </div>
+
+    </div>
+
+    <div class="stat-card">
+
+      <div class="stat-card__value">
+
+        {{ stockLabel() }}
+
+      </div>
+
+      <div class="stat-card__label">
+
+        Availability
+
+      </div>
+
+    </div>
+
+  </div>
+
+  @if (selectedVariant()) {
+
+    <div class="product-selected-variant">
+
+      Selected
+
+      <strong>
+
+        {{ selectedVariant()?.color }}
+
+      </strong>
+
+      •
+
+      <strong>
+
+        {{ selectedVariant()?.size }}
+
+      </strong>
+
+    </div>
+
+  }
+
+</div>
         @if (cartMessage()) {
           <p class="section-copy">{{ cartMessage() }}</p>
         }

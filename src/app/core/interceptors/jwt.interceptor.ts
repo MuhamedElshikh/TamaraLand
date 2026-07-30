@@ -16,7 +16,9 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError((error) => {
-      if (error.status === 401) {
+      // Only redirect to login if a token existed but was rejected (expired/invalid).
+      // Guests (no token) should NOT be redirected away from guest-accessible pages.
+      if (error.status === 401 && token) {
         localStorage.removeItem('usertoken');
         router.navigate(['/login']);
       }

@@ -13,12 +13,14 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  currentUser(): any {
-    throw new Error('Method not implemented.');
+  currentUser(): ProfileResponse | null {
+    return this._profile();
   }
-  isAuthenticated(): any {
-    throw new Error('Method not implemented.');
+
+  isAuthenticated(): boolean {
+    return this.isLoggedIn();
   }
+
   private readonly _profile = signal<ProfileResponse | null>(null);
   private readonly _token = signal<string | null>(localStorage.getItem('usertoken'));
 
@@ -40,6 +42,28 @@ export class AuthService {
 
   login(data: LoginRequest): Observable<ApiResponse<AuthResponse>> {
     return this.http.post<ApiResponse<AuthResponse>>(`${API_BASE_URL}/api/Auth/login`, data).pipe(
+      tap(res => {
+        if (res.success && res.data) {
+          this._token.set(res.data.accessToken);
+          localStorage.setItem('usertoken', res.data.accessToken);
+        }
+      })
+    );
+  }
+
+  loginWithGoogle(idToken: string): Observable<ApiResponse<AuthResponse>> {
+    return this.http.post<ApiResponse<AuthResponse>>(`${API_BASE_URL}/api/Auth/google`, { idToken }).pipe(
+      tap(res => {
+        if (res.success && res.data) {
+          this._token.set(res.data.accessToken);
+          localStorage.setItem('usertoken', res.data.accessToken);
+        }
+      })
+    );
+  }
+
+  loginWithFacebook(accessToken: string): Observable<ApiResponse<AuthResponse>> {
+    return this.http.post<ApiResponse<AuthResponse>>(`${API_BASE_URL}/api/Auth/facebook`, { accessToken }).pipe(
       tap(res => {
         if (res.success && res.data) {
           this._token.set(res.data.accessToken);

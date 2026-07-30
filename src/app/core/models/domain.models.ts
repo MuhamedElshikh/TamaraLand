@@ -26,15 +26,18 @@ export interface CartResponse {
 export interface AddToCartRequest {
   productVariantId: number;
   quantity: number;
+  guestId?: string;
 }
 
 export interface UpdateCartItemRequest {
   productVariantId: number;
   quantity: number;
+  guestId?: string;
 }
 
 export interface ApplyCouponRequest {
   code: string;
+  guestId?: string;
 }
 
 // ---- Wishlist ----

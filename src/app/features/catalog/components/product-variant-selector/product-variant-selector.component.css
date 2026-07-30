@@ -1,14 +1,19 @@
 /* ================= Product Variant Selector ================= */
 
-.variant-shell {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  padding: 1.5rem;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  background: var(--bg-card);
-  box-shadow: var(--shadow-sm);
+.variant-shell{
+
+padding:0;
+
+background:transparent;
+
+border:none;
+
+box-shadow:none;
+
+gap:1rem;
+
+margin-top:.5rem;
+
 }
 
 .variant-shell__header h3 {
@@ -21,13 +26,17 @@
 
 .variant-group {
   display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+  flex-direction: row;
+  gap: 0.35rem;
+  margin-bottom:.75rem;
+
 }
 
 .variant-group__label {
   font-size: 0.85rem;
+  align-self: center;
   font-weight: 700;
+  padding-right: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--text-secondary);
@@ -74,26 +83,6 @@
   border-color: var(--border-color);
 }
 
-/* ---- Price Display ---- */
-
-.variant-price {
-  display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.variant-price__current {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--primary-light);
-}
-
-.variant-price__old {
-  font-size: 0.95rem;
-  color: var(--text-muted);
-  text-decoration: line-through;
-}
 
 /* ---- Status & Info ---- */
 
@@ -112,29 +101,27 @@
 
 /* ---- Dimensions (Bust / Waist / Hip / Length) ---- */
 
-.variant-dimensions {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.6rem;
-  padding: 0.85rem;
-  border-radius: var(--radius-sm);
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
+.variant-dimensions{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(140px,1fr));
+    gap:.75rem 1.5rem;
+
+    padding:1rem;
+
+    margin-top:.75rem;
 }
 
-.variant-dimension {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  font-size: 0.85rem;
+.variant-dimension{
+    justify-content:space-between;
 }
 
-.variant-dimension__label {
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+.variant-dimension__label{
+    font-size:.72rem;
+    letter-spacing:.08em;
+}
+
+.variant-dimension__value{
+    font-size:.9rem;
 }
 
 .variant-dimension__value {
@@ -155,11 +142,11 @@
     font-size: 1.15rem;
   }
 
-  .variant-chip {
-    padding: 0.5rem 0.85rem;
-    font-size: 0.85rem;
-  }
-
+ .variant-chip{
+    min-width:88px;
+    height:46px;
+    padding:0 .9rem;
+}
   .variant-options {
     gap: 0.5rem;
   }

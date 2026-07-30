@@ -9,7 +9,8 @@ import { ReviewListComponent } from '../../components/review-list/review-list.co
 import { BreadcrumbsComponent, BreadcrumbItem } from '../../../../shared/breadcrumbs.component/breadcrumbs.component'; // عدّل المسار
 import { ProductDetailsResponse } from '../../../../core/models/catalog.models';
 import { CartService } from '../../../../core/services/cart.service';
-import { WishlistService } from '../../../../core/services/wishlist.service'; // ⚠️ افتراض - عدّل حسب الشكل الحقيقي
+import { WishlistService } from '../../../../core/services/wishlist.service';
+import { AnalyticsService } from '../../../../core/services/analytics.service';
 
 @Component({
   selector: 'app-product-details',
@@ -31,6 +32,7 @@ export class ProductDetailsPage {
   private readonly route = inject(ActivatedRoute);
   private readonly cartService = inject(CartService);
   private readonly wishlistService = inject(WishlistService);
+  private readonly analyticsService = inject(AnalyticsService);
 
   readonly product = signal<ProductDetailsResponse | null>(null);
   readonly selectedVariant = signal<{ color: string; size: string; variantId?: number; price?: number } | null>(null);
@@ -90,6 +92,15 @@ export class ProductDetailsPage {
       const productData = data['product'] as ProductDetailsResponse | null;
       this.product.set(productData);
       this.isInWishlist.set(Boolean(productData?.isInWishlist));
+
+      if (productData) {
+        this.analyticsService.viewItem({
+          id: productData.id,
+          name: productData.name,
+          price: productData.price,
+          category: productData.categoryName,
+        });
+      }
     });
   }
 
@@ -109,6 +120,15 @@ export class ProductDetailsPage {
     this.cartService.addItem({ productVariantId: variantId, quantity: 1 }).subscribe((response) => {
       this.isAddingToCart.set(false);
       this.cartMessage.set(response.success ? 'Added to cart successfully.' : 'Could not add to cart right now.');
+      if (response.success && this.product()) {
+        const prod = this.product()!;
+        this.analyticsService.addToCart({
+          id: prod.id,
+          name: prod.name,
+          price: this.selectedVariant()?.price ?? prod.price ?? 0,
+          quantity: 1,
+        });
+      }
     });
   }
 

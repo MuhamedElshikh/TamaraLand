@@ -61,8 +61,12 @@
   (touchend)="onTouchEnd($event)">
 
   @if(hasBanners()) {
-
+ 
   <div class="hero-background">
+
+  <a
+    class="hero-link"
+    [routerLink]="currentBanner()?.link">
 
     <img
       class="hero-image current"
@@ -70,13 +74,22 @@
       [src]="currentImage()"
       alt="Banner">
 
+  </a>
+
+  <a
+    class="hero-link"
+    [routerLink]="nextBanner()?.link">
+
     <img
       class="hero-image next"
       [class.visible]="!showCurrent()"
       [src]="nextImage()"
       alt="Banner">
 
-  </div>
+  </a>
+
+</div>
+
 
   <div class="hero-overlay"></div>
 
@@ -111,25 +124,7 @@
 
   </div>
 
-  @if(currentBanner(); as banner) {
-
-  <div class="hero-banner-content">
-
-    @if (banner.link) {
-
-      <a
-        [href]="banner.link"
-        class="btn btn-primary">
-
-        {{ banner.title }}
-
-      </a>
-
-    }
-
-  </div>
-
-  }
+ 
 
   } @else if (loadError()) {
 

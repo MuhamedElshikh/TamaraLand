@@ -41,7 +41,7 @@
 
     <label class="field">
       <span>Area</span>
-      <select formControlName="Area" [disabled]="!form.get('governorate')?.value">
+      <select formControlName="area" [disabled]="!form.get('governorate')?.value">
         <option value="" disabled>Select area</option>
         @for (area of areasForSelectedGovernorate(); track area.id) {
           <option [value]="area.name">{{ area.name }} (+{{ area.shippingCost | number }} EGP shipping)</option>

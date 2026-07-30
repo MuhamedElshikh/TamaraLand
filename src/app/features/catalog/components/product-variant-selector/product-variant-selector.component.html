@@ -1,11 +1,4 @@
 <section class="variant-shell">
-  <div class="variant-shell__header">
-    <div>
-      <p class="section-kicker">Variants</p>
-      <h3>Select options</h3>
-    </div>
-  </div>
-
   @if (colors.length > 0) {
     <div class="variant-group">
       <p class="variant-group__label">Color</p>
@@ -46,20 +39,14 @@
     </div>
   }
 
-  @if (matchedVariant(); as variant) {
-    <div class="variant-price">
-      <span class="variant-price__current">{{ variant.price | number }} EGP</span>
-      @if (variant.hasDiscount && variant.originalPrice > variant.price) {
-        <span class="variant-price__old">{{ variant.originalPrice | number }} EGP</span>
-      }
-    </div>
-  }
+
 
   <p class="variant-status">
     @if (matchedVariant()?.sku) {
-      <strong>SKU:</strong> {{ matchedVariant()?.sku }} •
+      <strong>SKU:</strong> {{ matchedVariant()?.sku }} 
+      <span class="dot"></span>
     }
-    <strong>{{ stockStatusLabel() }}</strong> • {{ variantSummary() }}
+      <strong>Stock:</strong> <strong>{{ stockStatusLabel() }}</strong>
   </p>
 
   @if (dimensionsLabel(); as dims) {

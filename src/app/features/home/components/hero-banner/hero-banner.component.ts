@@ -49,6 +49,7 @@ export class HeroBannerComponent implements OnInit, OnDestroy {
   readonly showCurrent = signal(true);
   readonly currentImage = signal('');
   readonly nextImage = signal('');
+  readonly nextBanner = signal<BannerResponse | null>(null);
 
   readonly currentBanner = computed(() =>
     this.banners()[this.currentIndex()] ?? null
@@ -135,6 +136,7 @@ export class HeroBannerComponent implements OnInit, OnDestroy {
           if (first) {
 
             this.currentImage.set(this.resolveImage(first));
+          this.nextBanner.set(first);
 
           }
 
@@ -210,7 +212,7 @@ export class HeroBannerComponent implements OnInit, OnDestroy {
     const banner = this.banners()[index];
 
     if (!banner) return;
-
+this.nextBanner.set(banner);
     this.isAnimating.set(true);
 
     const image = new Image();
@@ -240,6 +242,7 @@ export class HeroBannerComponent implements OnInit, OnDestroy {
       this.currentImage.set(imageSrc);
 
       this.currentIndex.set(index);
+      this.nextBanner.set(this.banners()[index] ?? null);
 
       this.showCurrent.set(true);
 
