@@ -4,7 +4,7 @@
   <div class="site-footer__grid">
     <div class="footer-col footer-col--brand">
       <img src="assets/logo.png" alt="Tamara Land" class="footer-logo" />
-      <p class="footer-tagline">Be proud to be a woman.</p>
+      <p class="footer-tagline">{{ 'footer.tagline' | translate }}</p>
       <div class="footer-social">
         <a href="#" aria-label="Instagram" class="icon-btn">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
@@ -19,19 +19,22 @@
     </div>
 
     <div class="footer-col">
-      <h4>Shop</h4>
-      <a routerLink="/new-in">New In</a>
-      <a routerLink="/categories">Collections</a>
-      <a routerLink="/brands">Brands</a>
-      <a routerLink="/sale">Sale</a>
+      <h4>{{ 'footer.shop' | translate }}</h4>
+      <a routerLink="/new-in">{{ 'footer.newIn' | translate }}</a>
+      <a routerLink="/categories">{{ 'footer.collections' | translate }}</a>
+      <a routerLink="/brands">{{ 'footer.brands' | translate }}</a>
+      <a routerLink="/sale">{{ 'footer.sale' | translate }}</a>
     </div> 
   </div>
 
   <div class="site-footer__bottom">
-    <p>&copy; {{ year }} Tamara Land. All rights reserved.</p>
+<p>
+  &copy; {{ year }} Tamara Land.
+  {{ 'footer.allRightsReserved' | translate }}
+</p>
     <div class="site-footer__legal">
-      <a routerLink="/privacy">Privacy policy</a>
-      <a routerLink="/terms">Terms of service</a>
+      <a routerLink="/privacy">{{ 'footer.privacyPolicy' | translate }}</a>
+      <a routerLink="/terms">{{ 'footer.termsOfService' | translate }}</a>
     </div>
   </div>
 </footer>

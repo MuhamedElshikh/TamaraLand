@@ -919,7 +919,7 @@ app-error-message .error-message {
 
 .footer-logo {
   height: 72px;
-  margin-right: auto;
+  margin: auto;
   width: auto;
   object-fit: contain;
   margin-bottom: 1rem;

@@ -3,11 +3,12 @@ import { RouterLink } from '@angular/router';
 import { CatalogService } from '../../../../core/services/catalog.service'; // عدّل المسار
 import { ProductCardResponse } from '../../../../core/models/catalog.models'; // عدّل المسار
 import { ProductCardComponent } from '../../../catalog/components/product-card/product-card.component'; // عدّل المسار
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-featured-products',
   standalone: true,
-  imports: [RouterLink, ProductCardComponent],
+  imports: [RouterLink, ProductCardComponent,TranslatePipe],
   templateUrl: './featured-products.component.html',
   styleUrl: './featured-products.component.css',
 })

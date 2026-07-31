@@ -4,11 +4,13 @@ import { CatalogService } from '../../../../core/services/catalog.service'; // �
 import { CategoryResponse } from '../../../../core/models/catalog.models'; // عدّل المسار
 import { HeroBannerComponent } from '../../components/hero-banner/hero-banner.component';
 import { FeaturedProductsComponent } from '../../components/featured-products/featured-products.component';
+import { TranslatePipe } from '@ngx-translate/core';
+import {LocalizedNamePipe} from '../../../../shared/pipes/localized-name.pipe'
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [RouterLink, HeroBannerComponent, FeaturedProductsComponent],
+  imports: [RouterLink, HeroBannerComponent, FeaturedProductsComponent,TranslatePipe ,LocalizedNamePipe],
   templateUrl: './home.page.html',
   styleUrl: './home.page.css',
 })

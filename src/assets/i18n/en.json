@@ -1,0 +1,89 @@
+{
+  "navbar": {
+    "home": "Home",
+    "newIn": "New In",
+    "collections": "Collections",
+    "brands": "Brands",
+    "sale": "Sale",
+    "contact": "Contact",
+    "wishlist": "Wishlist",
+    "cart": "Cart",
+    "profile": "My Profile",
+    "orders": "My Orders",
+    "signin": "Sign In",
+    "signup": "Create Account",
+    "logout": "Sign Out",
+    "hello": "Hi",
+    "search": "Search"
+    
+  },
+  
+  "home": {
+    "shopByCategory": "Shop by category",
+    "findYourStyle": "Find your style",
+    "noCategories": "No categories available yet.",
+
+    "ourPromise": "Our promise",
+
+    "brandQuote": "Every piece at Tamara Land is chosen to make you feel seen, confident, and unapologetically yourself.",
+
+    "discoverCollection": "Discover the collection",
+
+    "fastDelivery": "Fast delivery",
+    "fastDeliveryDescription": "2-4 business days nationwide",
+
+    "secureCheckout": "Secure checkout",
+    "secureCheckoutDescription": "Encrypted payments, always"
+  },
+  "footer": {
+    "tagline": "Be proud to be a woman.",
+
+    "shop": "Shop",
+    "newIn": "New In",
+    "collections": "Collections",
+    "brands": "Brands",
+    "sale": "Sale",
+
+    "allRightsReserved": "All rights reserved.",
+
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service"
+  },
+  
+  "featuredProducts": {
+    "justLanded": "Just landed",
+    "newArrivals": "New arrivals",
+    "viewAll": "View all",
+    "noProducts": "No products available yet."
+  },
+
+  "hero": {
+    "eyebrow": "LUXURY FASHION",
+
+    "title": "Be Proud To Be A Woman",
+
+    "description": "Discover timeless dresses, elegant abayas and carefully curated accessories designed to celebrate confidence, beauty and femininity.",
+
+    "shopNewIn": "Shop New In",
+
+    "exploreCollections": "Explore Collections",
+
+    "bannerLoadError": "Couldn't load the banners right now."
+  },
+  
+  "productCard": {
+    "addToCart": "Add to Cart",
+    "adding": "Adding...",
+    "added": "Added ✓",
+    "tryAgain": "Try Again",
+
+    "addToWishlist": "Add to Wishlist",
+    "removeFromWishlist": "Remove from Wishlist",
+
+    "currency": "EGP"
+  }
+}
+
+
+
+

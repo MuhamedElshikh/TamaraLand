@@ -10,6 +10,25 @@
   z-index: 4999;
   animation: fadeIn 0.2s ease forwards;
 }
+.lang-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+
+  color: var(--text-primary);
+
+  font-weight: 600;
+  font-size: .9rem;
+
+  padding: .45rem .75rem;
+  border-radius: 999px;
+
+  transition: .25s;
+}
+
+.lang-btn:hover {
+  background: rgba(201,161,74,.12);
+}
 .site-header {
   position: sticky;
   top: 0;

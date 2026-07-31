@@ -1,0 +1,85 @@
+{
+  "navbar": {
+    "home": "الرئيسية",
+    "newIn": "وصل حديثاً",
+    "collections": "المجموعات",
+    "brands": "العلامات التجارية",
+    "sale": "العروض",
+    "contact": "تواصل معنا",
+    "wishlist": "المفضلة",
+    "cart": "السلة",
+    "profile": "حسابي",
+    "orders": "طلباتي",
+    "signin": "تسجيل الدخول",
+    "signup": "إنشاء حساب",
+    "logout": "تسجيل الخروج",
+    "hello": "مرحباً",
+    "search": "بحث"
+  },
+  "home": {
+    "shopByCategory": "تسوق حسب القسم",
+    "findYourStyle": "اعثري على استايلك",
+    "noCategories": "لا توجد أقسام متاحة حالياً.",
+
+    "ourPromise": "وعدنا",
+
+    "brandQuote": "كل قطعة في تمارا لاند تم اختيارها بعناية لتجعلك تشعرين بالثقة والتميز وتعبرين عن شخصيتك بكل فخر.",
+
+    "discoverCollection": "اكتشف المجموعة",
+
+    "fastDelivery": "توصيل سريع",
+    "fastDeliveryDescription": "من يومين إلى أربعة أيام عمل داخل جميع المحافظات",
+
+    "secureCheckout": "دفع آمن",
+    "secureCheckoutDescription": "مدفوعات مشفرة وآمنة دائماً"
+  },
+  "footer": {
+    "tagline": "كوني فخورة بكونك امرأة.",
+
+    "shop": "تسوق",
+    "newIn": "وصل حديثًا",
+    "collections": "المجموعات",
+    "brands": "العلامات التجارية",
+    "sale": "العروض",
+
+    "allRightsReserved": "جميع الحقوق محفوظة.",
+
+    "privacyPolicy": "سياسة الخصوصية",
+    "termsOfService": "شروط الاستخدام"
+  },
+  
+  "featuredProducts": {
+    "justLanded": "وصل حديثًا",
+    "newArrivals": "أحدث المنتجات",
+    "viewAll": "عرض الكل",
+    "noProducts": "لا توجد منتجات متاحة حاليًا."
+  },
+
+  "hero": {
+    "eyebrow": "أزياء فاخرة",
+
+    "title": "كوني فخورة بكونك امرأة",
+
+    "description": "اكتشفي فساتين راقية وعبايات أنيقة وإكسسوارات مختارة بعناية، صُممت لتعكس الثقة والجمال والأنوثة.",
+
+    "shopNewIn": "تسوقي أحدث المنتجات",
+
+    "exploreCollections": "استكشفي المجموعات",
+
+    "bannerLoadError": "تعذر تحميل البنرات حالياً."
+  },
+  "productCard": {
+    "addToCart": "أضف إلى السلة",
+    "adding": "جارٍ الإضافة...",
+    "added": "تمت الإضافة ✓",
+    "tryAgain": "حاول مرة أخرى",
+
+    "addToWishlist": "إضافة إلى المفضلة",
+    "removeFromWishlist": "إزالة من المفضلة",
+
+    "currency": "ج.م"
+  }
+  
+}
+
+

@@ -15,11 +15,12 @@ import {
   BannerResponse,
   BannerType
 } from '../../../../core/models/banner.models';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-hero-banner',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink,TranslatePipe],
   templateUrl: './hero-banner.component.html',
   styleUrl: './hero-banner.component.css'
 })

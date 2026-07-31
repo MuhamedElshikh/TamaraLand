@@ -1,6 +1,6 @@
-<a [routerLink]="['/products', product.id]" class="product-card" [attr.aria-label]="product.name">
+<a [routerLink]="['/products', product.id]" class="product-card" [attr.aria-label]="product | localizedName">
   <div class="img-container">
-    <img [src]="imageUrl" [alt]="product.name" loading="lazy" />
+    <img [src]="imageUrl" [alt]="product | localizedName" loading="lazy" />
     @if (discountPercent > 0) {
       <span class="product-card__badge">-{{ discountPercent }}%</span>
     }
@@ -10,8 +10,7 @@
       class="product-card__wishlist-btn"
       [class.product-card__wishlist-btn--active]="isInWishlist()"
       (click)="toggleWishlist($event)"
-      [attr.aria-label]="isInWishlist() ? 'Remove from wishlist' : 'Add to wishlist'"
-    >
+      [attr.aria-label]="isInWishlist()? ('productCard.removeFromWishlist' | translate): ('productCard.addToWishlist' | translate)">
       <svg width="16" height="16" viewBox="0 0 24 24" [attr.fill]="isInWishlist() ? 'currentColor' : 'none'">
         <path d="M12 20s-7-4.35-9.5-8.5C.8 8 2.4 4.5 6 4.5c2 0 3.4 1.1 6 3.6 2.6-2.5 4-3.6 6-3.6 3.6 0 5.2 3.5 3.5 7-2.5 4.15-9.5 8.5-9.5 8.5z" stroke="currentColor" stroke-width="1.8"/>
       </svg>
@@ -24,23 +23,34 @@
       [disabled]="isAdding()"
       (click)="addToCart($event)"
     >
-      @if (isAdding()) {
-        Adding…
-      } @else if (addState() === 'added') {
-        Added ✓
-      } @else if (addState() === 'error') {
-        Try again
-      } @else {
-        Add to cart
-      }
+     @if (isAdding()) {
+
+{{ 'productCard.adding' | translate }}
+
+}
+@else if (addState() === 'added') {
+
+{{ 'productCard.added' | translate }}
+
+}
+@else if (addState() === 'error') {
+
+{{ 'productCard.tryAgain' | translate }}
+
+}
+@else {
+
+{{ 'productCard.addToCart' | translate }}
+
+}
     </button>
   </div>
   <div class="product-card__info">
-    <p class="product-card__name">{{ product.name }}</p>
+    <p class="product-card__name">{{ product | localizedName }}</p>
     <div class="product-card__price-row">
-      <p class="product-card__price">{{ finalPrice | number }} EGP</p>
+      <p class="product-card__price">{{ finalPrice | number }}{{ 'productCard.currency' | translate }}</p>
       @if (hasDiscount && originalPrice !== null) {
-        <p class="product-card__price-old">{{ originalPrice | number }} EGP</p>
+        <p class="product-card__price-old">{{ originalPrice | number }}{{ 'productCard.currency' | translate }}</p>
       }
     </div>
    <div class="product-card__footer">

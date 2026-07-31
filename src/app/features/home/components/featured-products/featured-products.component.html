@@ -1,10 +1,10 @@
 <section class="scaffold-page">
   <div class="section-header">
     <div>
-      <p class="section-kicker">Just landed</p>
-      <h2 class="section-title">New arrivals</h2>
+      <p class="section-kicker">{{ 'featuredProducts.justLanded' | translate }}</p>
+      <h2 class="section-title">{{ 'featuredProducts.newArrivals' | translate }}</h2>
     </div>
-    <a routerLink="/new-in" class="btn btn-outline">View all</a>
+    <a routerLink="/new-in" class="btn btn-outline">{{ 'featuredProducts.viewAll' | translate }}</a>
   </div>
 
   @if (loading()) {
@@ -14,7 +14,7 @@
       }
     </div>
   } @else if (products().length === 0) {
-    <p class="muted">No products available yet.</p>
+    <p class="muted">{{ 'featuredProducts.noProducts' | translate }}</p>
   } @else {
     <div class="page-grid two-up product-grid">
       @for (product of products(); track product.id) {

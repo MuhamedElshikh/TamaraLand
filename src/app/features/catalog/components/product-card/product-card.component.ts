@@ -4,11 +4,13 @@ import { Router, RouterLink } from '@angular/router';
 import { ProductCardResponse } from '../../../../core/models/catalog.models';
 import { CartService } from '../../../../core/services/cart.service';
 import { WishlistService } from '../../../../core/services/wishlist.service';
+import { TranslatePipe } from '@ngx-translate/core';
+import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe';
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink,TranslatePipe,LocalizedNamePipe],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.css',
 })

@@ -12,16 +12,14 @@
       class="hero-intro__logo">
 
     <p class="hero-intro__eyebrow">
-      LUXURY FASHION
-    </p>
+{{ 'hero.eyebrow' | translate }}    </p>
 
     <h1 class="hero-intro__title">
-      Be Proud To Be A Woman
+{{ 'hero.title' | translate }}
     </h1>
 
     <p class="hero-intro__description">
-      Discover timeless dresses, elegant abayas and carefully curated
-      accessories designed to celebrate confidence, beauty and femininity.
+      {{ 'hero.description' | translate }}
     </p>
 
     <div class="hero-intro__actions">
@@ -30,7 +28,7 @@
         routerLink="/new-in"
         class="btn btn-primary">
 
-        Shop New In
+       {{ 'hero.shopNewIn' | translate }}
 
       </a>
 
@@ -38,7 +36,7 @@
         routerLink="/categories"
         class="btn btn-outline">
 
-        Explore Collections
+        {{ 'hero.exploreCollections' | translate }}
 
       </a>
 
@@ -129,7 +127,7 @@
   } @else if (loadError()) {
 
   <div class="hero-loading">
-    <p class="hero-error">Couldn't load the banners right now.</p>
+    <p class="hero-error">{{ 'hero.bannerLoadError' | translate }}</p>
   </div>
 
   } @else {

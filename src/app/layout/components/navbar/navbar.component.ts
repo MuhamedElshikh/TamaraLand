@@ -6,6 +6,8 @@ import { CartService } from '../../../core/services/cart.service';
 import { WishlistService } from '../../../core/services/wishlist.service'; // عدّل المسار
 import { ThemeService } from '../../../core/theme/theme.service';
 import { SearchOverlayComponent } from "../../../features/home/components/search-overlay.component/search-overlay.component";
+import { TranslatePipe } from '@ngx-translate/core';
+import { LanguageService } from '../../../core/services/language.service';
 
 type ThemeMode = 'dark' | 'light';
 
@@ -13,7 +15,7 @@ type ThemeMode = 'dark' | 'light';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, SearchOverlayComponent],
+  imports: [RouterLink, RouterLinkActive, SearchOverlayComponent,TranslatePipe],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
@@ -22,6 +24,8 @@ export class NavbarComponent {
   private cartService = inject(CartService);
   private wishlistService = inject(WishlistService);
   private themeService = inject(ThemeService);
+   private languageService = inject(LanguageService);
+
 
   theme = this.themeService.theme;
   toggleTheme(): void {
@@ -99,6 +103,14 @@ export class NavbarComponent {
     this.closeMenu();
     this.auth.logout(); // بيعمل navigate لـ /login لوحده
   }
+
+toggleLanguage(): void {
+  this.languageService.toggle();
+}
+
+isArabic(): boolean {
+  return this.languageService.isArabic();
+}
 
   @HostListener('window:scroll')
   onScroll() {

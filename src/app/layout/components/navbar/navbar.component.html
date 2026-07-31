@@ -15,26 +15,27 @@
     </a>
 
     <nav class="site-nav" [class.site-nav--open]="menuOpen()">
-      <a routerLink="/" routerLinkActive="nav-link--active" [routerLinkActiveOptions]="{exact: true}" class="nav-link" (click)="closeMenu()">Home</a>
-      <a routerLink="/new-in" routerLinkActive="nav-link--active" class="nav-link" (click)="closeMenu()">New In</a>
-      <a routerLink="/categories" routerLinkActive="nav-link--active" class="nav-link" (click)="closeMenu()">Collections</a>
-      <a routerLink="/brands" routerLinkActive="nav-link--active" class="nav-link" (click)="closeMenu()">Brands</a>
-      <a routerLink="/sale" routerLinkActive="nav-link--active" class="nav-link" (click)="closeMenu()">Sale</a>
-      <a routerLink="/contact" routerLinkActive="nav-link--active" class="nav-link" (click)="closeMenu()">Contact</a>
+      <a routerLink="/" routerLinkActive="nav-link--active" [routerLinkActiveOptions]="{exact: true}" class="nav-link" (click)="closeMenu()">{{'navbar.home'|translate}}</a>
+      <a routerLink="/new-in" routerLinkActive="nav-link--active" class="nav-link" (click)="closeMenu()">{{ 'navbar.newIn' | translate }}</a>
+      <a routerLink="/categories" routerLinkActive="nav-link--active" class="nav-link" (click)="closeMenu()">{{ 'navbar.collections' | translate }}</a>
+      <a routerLink="/brands" routerLinkActive="nav-link--active" class="nav-link" (click)="closeMenu()">{{ 'navbar.brands' | translate }}</a>
+      <a routerLink="/sale" routerLinkActive="nav-link--active" class="nav-link" (click)="closeMenu()">{{ 'navbar.sale' | translate }}</a>
+      <a routerLink="/contact" routerLinkActive="nav-link--active" class="nav-link" (click)="closeMenu()">{{ 'navbar.contact' | translate }}</a>
 
       <div class="site-nav__mobile-actions">
         @if (isLoggedIn()) {
-          <a routerLink="/profile" class="nav-link" (click)="closeMenu()">Hi, {{ firstName() }}</a>
-          <a routerLink="/orders" class="nav-link" (click)="closeMenu()">My orders</a>
-          <button type="button" class="nav-link nav-link--button" (click)="logout()">Sign out</button>
+          <a routerLink="/profile" class="nav-link" (click)="closeMenu()">{{ 'navbar.hello' | translate }}, {{ firstName() }}</a>
+          <a routerLink="/orders" class="nav-link" (click)="closeMenu()">{{ 'navbar.orders' | translate }}</a>
+          <button type="button" class="nav-link nav-link--button" (click)="logout()">{{ 'navbar.logout' | translate }}</button>
         } @else {
-          <a routerLink="/login" class="nav-link" (click)="closeMenu()">Sign in</a>
-          <a routerLink="/register" class="nav-link" (click)="closeMenu()">Create account</a>
+          <a routerLink="/login" class="nav-link" (click)="closeMenu()">{{ 'navbar.signin' | translate }}</a>
+          <a routerLink="/register" class="nav-link" (click)="closeMenu()">{{ 'navbar.signup' | translate }}</a>
         }
       </div>
     </nav>
 
     <div class="site-header__actions">
+      <button class="lang-btn"type="button"(click)="toggleLanguage()">{{ isArabic() ? 'EN' : 'العربية' }}</button>
       <button class="icon-btn" (click)="toggleTheme()" [attr.aria-label]="theme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'">
         @if (theme() === 'dark') {
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M12 3a1 1 0 011 1v1a1 1 0 01-2 0V4a1 1 0 011-1zm0 15a1 1 0 011 1v1a1 1 0 01-2 0v-1a1 1 0 011-1zm9-6a1 1 0 01-1 1h-1a1 1 0 010-2h1a1 1 0 011 1zM6 12a1 1 0 01-1 1H4a1 1 0 010-2h1a1 1 0 011 1zm11.66-6.66a1 1 0 010 1.42l-.7.7a1 1 0 11-1.42-1.42l.7-.7a1 1 0 011.42 0zM7.46 16.54a1 1 0 010 1.42l-.7.7a1 1 0 01-1.42-1.42l.7-.7a1 1 0 011.42 0zm10.2 1.42a1 1 0 01-1.42 0l-.7-.7a1 1 0 111.42-1.42l.7.7a1 1 0 010 1.42zM8.16 7.16a1 1 0 01-1.42 0l-.7-.7A1 1 0 017.46 5l.7.7a1 1 0 010 1.42zM12 7a5 5 0 100 10 5 5 0 000-10z" fill="currentColor"/></svg>
@@ -68,15 +69,15 @@
           @if (accountMenuOpen()) {
             <div class="account-menu__dropdown">
               <p class="account-menu__greeting">Hi, {{ firstName() }}</p>
-              <a routerLink="/profile" (click)="closeAccountMenu()">My profile</a>
-              <a routerLink="/orders" (click)="closeAccountMenu()">My orders</a>
-              <a routerLink="/wishlist" (click)="closeAccountMenu()">Wishlist</a>
-              <button type="button" (click)="logout()">Sign out</button>
+              <a routerLink="/profile" (click)="closeAccountMenu()">{{ 'navbar.profile' | translate }}</a>
+              <a routerLink="/orders" (click)="closeAccountMenu()">{{ 'navbar.orders' | translate }}</a>
+              <a routerLink="/wishlist" (click)="closeAccountMenu()">{{ 'navbar.wishlist' | translate }}</a>
+              <button type="button" (click)="logout()">{{ 'navbar.logout' | translate }}</button>
             </div>
           }
         </div>
       } @else {
-        <a routerLink="/login" class="nav-signin-btn icon-btn--desktop">Sign in</a>
+        <a routerLink="/login" class="nav-signin-btn icon-btn--desktop">{{ 'navbar.signin' | translate }}</a>
       }
 
       <button class="menu-toggle" (click)="toggleMenu()" [class.menu-toggle--open]="menuOpen()" aria-label="Menu">
