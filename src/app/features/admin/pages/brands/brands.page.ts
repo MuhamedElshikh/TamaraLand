@@ -137,6 +137,7 @@ export class AdminBrandsPage implements OnInit {
       const updateData: UpdateBrandRequest = {
         name: formVal.name.trim(),
         description: formVal.description ? formVal.description.trim() : undefined,
+        IsPublished: false
       };
 
       this.adminCatalogService.updateBrand(this.editingBrandId()!, updateData, this.selectedImageFile).subscribe({
@@ -158,6 +159,7 @@ export class AdminBrandsPage implements OnInit {
       const createData: CreateBrandRequest = {
         name: formVal.name.trim(),
         description: formVal.description ? formVal.description.trim() : undefined,
+        IsPublished: false
       };
 
       this.adminCatalogService.createBrand(createData, this.selectedImageFile).subscribe({

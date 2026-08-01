@@ -41,11 +41,11 @@ export class AdminCatalogService {
         params[k] = String(v);
       }
     });
-    return this.http.get<ApiResponse<PagedResponse<ProductAdminResponse>>>(this.productUrl, { params });
+    return this.http.get<ApiResponse<PagedResponse<ProductAdminResponse>>>(`${this.productUrl}/admin`, { params });
   }
 
   getProductById(id: number): Observable<ApiResponse<ProductAdminResponse>> {
-    return this.http.get<ApiResponse<ProductAdminResponse>>(`${this.productUrl}/${id}`);
+    return this.http.get<ApiResponse<ProductAdminResponse>>(`${this.productUrl}/admin/${id}`);
   }
 
   createProduct(data: CreateProductRequest): Observable<ApiResponse<ProductAdminResponse>> {

@@ -38,6 +38,10 @@
           }
         </div>
 
+<div class="form-group form-group--full">
+  <label class="form-label" for="product-arabic-name">Arabic Name</label>
+  <input id="product-arabic-name" type="text" class="form-control" dir="rtl" formControlName="arabicName" placeholder="مثال: عطر عود ملكي" />
+</div>
         <div class="form-group">
           <label class="form-label" for="product-category">Category *</label>
           <select id="product-category" class="form-control form-select" formControlName="categoryId">
@@ -79,7 +83,7 @@
         @if (isEditMode()) {
           <div class="form-group form-group--full">
             <label class="checkbox-label">
-              <input type="checkbox" formControlName="isActive" />
+              <input type="checkbox" formControlName="IsPublished" />
               <span>Product is Active and visible in store</span>
             </label>
           </div>

@@ -43,11 +43,12 @@ export class AdminProductFormPage implements OnInit {
 
   productForm: FormGroup = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
+      arabicName: [''],
     categoryId: ['', [Validators.required]],
     brandId: ['', [Validators.required]],
     description: [''],
     slug: [''],
-    isActive: [true],
+    IsPublished:true
   });
 
   readonly variants = signal<UpdateProductVariantRequest[]>([]);
@@ -55,21 +56,20 @@ export class AdminProductFormPage implements OnInit {
   readonly editingVariantIndex = signal<number | null>(null);
   readonly variantError = signal<string | null>(null);
 
-  variantForm: FormGroup = this.fb.group({
-    id: [0],
-    sku: ['', [Validators.required]],
-    color: [''],
-    size: [''],
-    stock: [0, [Validators.required, Validators.min(0)]],
-    price: [0, [Validators.required, Validators.min(0.01)]],
-    costPrice: [0],
-    compareAtPrice: [0],
-    bust: [0],
-    waist: [0],
-    hip: [0],
-    length: [0],
-    isActive: [true],
-  });
+ variantForm: FormGroup = this.fb.group({
+  id: [0],
+  sku: ['', [Validators.required]],
+  color: [''],
+  size: [''],
+  stock: [0, [Validators.required, Validators.min(0)]],
+  price: [0, [Validators.required, Validators.min(0.01)]],
+  costPrice: [0],
+  compareAtPrice: [0],
+  bust: [0],
+  waist: [0],
+  hip: [0],
+  length: [0],
+});
 
   readonly images = signal<AdminProductImageResponse[]>([]);
   readonly isLoadingImages = signal(false);
@@ -113,101 +113,104 @@ export class AdminProductFormPage implements OnInit {
   }
 
   onSubmitProduct(): void {
-    if (this.productForm.invalid) {
-      this.productForm.markAllAsTouched();
-      return;
-    }
+  if (this.productForm.invalid) {
+    this.productForm.markAllAsTouched();
+    return;
+  }
 
-    if (this.variants().length === 0) {
-      this.errorMessage.set('Please add at least one product variant (SKU, Price, Stock).');
-      return;
-    }
+  if (this.variants().length === 0) {
+    this.errorMessage.set('Please add at least one product variant (SKU, Price, Stock).');
+    return;
+  }
 
-    this.isSubmitting.set(true);
-    this.errorMessage.set(null);
-    this.successMessage.set(null);
+  this.isSubmitting.set(true);
+  this.errorMessage.set(null);
+  this.successMessage.set(null);
 
-    const formVal = this.productForm.value;
+  const formVal = this.productForm.value;
 
-    if (this.isEditMode() && this.productId()) {
-      const updateData: UpdateProductRequest = {
-        name: formVal.name,
-        description: formVal.description || '',
-        slug: formVal.slug || this.productSlug() || this.slugify(formVal.name),
-        categoryId: Number(formVal.categoryId),
-        brandId: Number(formVal.brandId),
-        isActive: formVal.isActive,
-        variants: this.variants().map((v) => ({
-          id: v.id || 0,
-          color: v.color || '',
-          size: v.size || '',
-          costPrice: Number(v.costPrice || 0),
-          compareAtPrice: Number(v.compareAtPrice || 0),
-          price: Number(v.price),
-          stock: Number(v.stock),
-          bust: Number(v.bust || 0),
-          waist: Number(v.waist || 0),
-          hip: Number(v.hip || 0),
-          length: Number(v.length || 0),
-          sku: v.sku,
-          isActive: v.isActive ?? true,
-        })),
-      };
-
-      this.adminCatalogService.updateProduct(this.productId()!, updateData).subscribe({
-        next: (res) => {
-          this.isSubmitting.set(false);
-          if (res.success) {
-            this.successMessage.set('Product updated successfully!');
-          } else {
-            this.errorMessage.set(res.message || 'Failed to update product.');
-          }
-        },
-        error: (err) => {
-          this.isSubmitting.set(false);
-          this.errorMessage.set(err?.error?.message || err?.message || 'Error updating product.');
-        },
-      });
-    } else {
-      const createVariants: CreateProductVariantRequest[] = this.variants().map((v) => ({
+  if (this.isEditMode() && this.productId()) {
+    const updateData: UpdateProductRequest = {
+      name: formVal.name,
+        arabicName: formVal.arabicName || '',
+      description: formVal.description || '',
+      slug: formVal.slug || this.productSlug() || this.slugify(formVal.name),
+      categoryId: Number(formVal.categoryId),
+      brandId: Number(formVal.brandId),
+      isActive: true,
+      isPublished: formVal.IsPublished,
+      variants: this.variants().map((v) => ({
+        id: v.id || 0,
         color: v.color || '',
         size: v.size || '',
+        costPrice: Number(v.costPrice || 0),
+        compareAtPrice: Number(v.compareAtPrice || 0),
         price: Number(v.price),
         stock: Number(v.stock),
-        sku: v.sku,
         bust: Number(v.bust || 0),
         waist: Number(v.waist || 0),
         hip: Number(v.hip || 0),
         length: Number(v.length || 0),
-      }));
+        sku: v.sku,
+        isActive: true
+      })),
+    };
 
-      const createData: CreateProductRequest = {
-        name: formVal.name,
-        description: formVal.description || '',
-        categoryId: Number(formVal.categoryId),
-        brandId: Number(formVal.brandId),
-        variants: createVariants,
-      };
+    this.adminCatalogService.updateProduct(this.productId()!, updateData).subscribe({
+      next: (res) => {
+        this.isSubmitting.set(false);
+        if (res.success) {
+          this.successMessage.set('Product updated successfully!');
+        } else {
+          this.errorMessage.set(res.message || 'Failed to update product.');
+        }
+      },
+      error: (err) => {
+        this.isSubmitting.set(false);
+        this.errorMessage.set(err?.error?.message || err?.message || 'Error updating product.');
+      },
+    });
+  } else {
+    const createVariants: CreateProductVariantRequest[] = this.variants().map((v) => ({
+      color: v.color || '',
+      size: v.size || '',
+      price: Number(v.price),
+      stock: Number(v.stock),
+      sku: v.sku,
+      bust: Number(v.bust || 0),
+      waist: Number(v.waist || 0),
+      hip: Number(v.hip || 0),
+      length: Number(v.length || 0),
+    }));
 
-      this.adminCatalogService.createProduct(createData).subscribe({
-        next: (res) => {
-          this.isSubmitting.set(false);
-          if (res.success && res.data) {
-            this.successMessage.set('Product created successfully! You can now manage gallery images.');
-            this.productId.set(res.data.id);
-            this.isEditMode.set(true);
-            this.router.navigate(['/admin/product-form', res.data.id], { replaceUrl: true });
-          } else {
-            this.errorMessage.set(res.message || 'Failed to create product.');
-          }
-        },
-        error: (err) => {
-          this.isSubmitting.set(false);
-          this.errorMessage.set(err?.error?.message || err?.message || 'Error creating product.');
-        },
-      });
-    }
+    const createData: CreateProductRequest = {
+      name: formVal.name,
+      arabicName: formVal.arabicName || '',
+      description: formVal.description || '',
+      categoryId: Number(formVal.categoryId),
+      brandId: Number(formVal.brandId),
+      variants: createVariants,
+    };
+
+    this.adminCatalogService.createProduct(createData).subscribe({
+      next: (res) => {
+        this.isSubmitting.set(false);
+        if (res.success && res.data) {
+          this.successMessage.set('Product created successfully! You can now manage gallery images.');
+          this.productId.set(res.data.id);
+          this.isEditMode.set(true);
+          this.router.navigate(['/admin/product-form', res.data.id], { replaceUrl: true });
+        } else {
+          this.errorMessage.set(res.message || 'Failed to create product.');
+        }
+      },
+      error: (err) => {
+        this.isSubmitting.set(false);
+        this.errorMessage.set(err?.error?.message || err?.message || 'Error creating product.');
+      },
+    });
   }
+}
 
   toggleVariantForm(): void {
     this.showVariantForm.update((v) => !v);
@@ -222,7 +225,7 @@ export class AdminProductFormPage implements OnInit {
       waist: 0,
       hip: 0,
       length: 0,
-      isActive: true,
+      IsPublished:true
     });
     this.variantError.set(null);
   }
@@ -242,7 +245,6 @@ export class AdminProductFormPage implements OnInit {
       waist: variant.waist || 0,
       hip: variant.hip || 0,
       length: variant.length || 0,
-      isActive: variant.isActive ?? true,
     });
     this.showVariantForm.set(true);
     this.variantError.set(null);
@@ -267,8 +269,8 @@ export class AdminProductFormPage implements OnInit {
       bust: Number(val.bust || 0),
       waist: Number(val.waist || 0),
       hip: Number(val.hip || 0),
+      isActive:true,
       length: Number(val.length || 0),
-      isActive: val.isActive ?? true,
     };
 
     const currentVars = [...this.variants()];
@@ -300,7 +302,7 @@ export class AdminProductFormPage implements OnInit {
       waist: 0,
       hip: 0,
       length: 0,
-      isActive: true,
+      IsPublished:true
     });
     this.variantError.set(null);
   }
@@ -378,61 +380,62 @@ export class AdminProductFormPage implements OnInit {
   }
 
   private loadProductDetails(id: number): void {
-    this.adminCatalogService.getProductById(id).subscribe({
-      next: (res) => {
-        this.isLoadingProduct.set(false);
-        if (res.success && res.data) {
-          const p = res.data as any;
-          this.productSlug.set(p.slug || '');
+  this.adminCatalogService.getProductById(id).subscribe({
+    next: (res) => {
+      this.isLoadingProduct.set(false);
+      if (res.success && res.data) {
+        const p = res.data as any;
+        this.productSlug.set(p.slug || '');
 
-          const resolvedCatId =
-            p.categoryId ??
-            p.category?.id ??
-            this.categories().find(
-              (c) => c.name.toLowerCase() === (p.categoryName || p.category)?.toLowerCase()
-            )?.id ??
-            '';
+        const resolvedCatId =
+          p.categoryId ??
+          p.category?.id ??
+          this.categories().find(
+            (c) => c.name.toLowerCase() === (p.categoryName || p.category)?.toLowerCase()
+          )?.id ??
+          '';
 
-          const resolvedBrandId =
-            p.brandId ??
-            p.brand?.id ??
-            this.brands().find(
-              (b) => b.name.toLowerCase() === (p.brandName || p.brand)?.toLowerCase()
-            )?.id ??
-            '';
+        const resolvedBrandId =
+          p.brandId ??
+          p.brand?.id ??
+          this.brands().find(
+            (b) => b.name.toLowerCase() === (p.brandName || p.brand)?.toLowerCase()
+          )?.id ??
+          '';
 
-          this.productForm.patchValue({
-            name: p.name,
-            categoryId: resolvedCatId,
-            brandId: resolvedBrandId,
-            description: p.description || '',
-            slug: p.slug || '',
-            isActive: p.isActive,
-          });
+        this.productForm.patchValue({
+          name: p.name,
+          arabicName: p.arabicName || '',
+          categoryId: resolvedCatId,
+          brandId: resolvedBrandId,
+          description: p.description || '',
+          slug: p.slug || '',
+          IsPublished: p.isPublished ?? true
+        });
 
-          if (p.variants && p.variants.length > 0) {
-            const mappedVariants: UpdateProductVariantRequest[] = p.variants.map((v: any) => ({
-              id: v.id,
-              sku: v.sku,
-              color: v.color || '',
-              size: v.size || '',
-              stock: v.stock,
-              price: v.price || v.finalPrice || v.originalPrice || 0,
-              costPrice: v.costPrice || 0,
-              compareAtPrice: v.compareAtPrice || 0,
-              bust: v.bust || 0,
-              waist: v.waist || 0,
-              hip: v.hip || 0,
-              length: v.length || 0,
-              isActive: v.isActive ?? true,
-            }));
-            this.variants.set(mappedVariants);
-          }
+        if (p.variants && p.variants.length > 0) {
+          const mappedVariants: UpdateProductVariantRequest[] = p.variants.map((v: any) => ({
+            id: v.id,
+            sku: v.sku,
+            color: v.color || '',
+            size: v.size || '',
+            stock: v.stock,
+            price: v.price || v.finalPrice || v.originalPrice || 0,
+            costPrice: v.costPrice || 0,
+            compareAtPrice: v.compareAtPrice || 0,
+            bust: v.bust || 0,
+            waist: v.waist || 0,
+            hip: v.hip || 0,
+            length: v.length || 0,
+            isActive: true
+          }));
+          this.variants.set(mappedVariants);
         }
-      },
-      error: () => this.isLoadingProduct.set(false),
-    });
-  }
+      }
+    },
+    error: () => this.isLoadingProduct.set(false),
+  });
+}
 
   private loadImages(id: number): void {
     this.isLoadingImages.set(true);

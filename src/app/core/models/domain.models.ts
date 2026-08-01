@@ -346,6 +346,7 @@ export interface CreateCategoryRequest {
   name: string;
   description?: string;
   image?: string;
+    IsPublished:boolean;
 
 }
 
@@ -353,6 +354,7 @@ export interface UpdateCategoryRequest {
   name: string;
   description?: string;
   image?: string;
+  IsPublished:boolean;
 
 }
 
@@ -361,12 +363,14 @@ export interface CategoryUpsertResponse {
   name: string;
   description?: string;
   imageUrl?: string;
+    IsPublished:boolean;
 }
 
 export interface CreateBrandRequest {
   name: string;
   description?: string;
   image?: string;
+ IsPublished:boolean;
 
 }
 
@@ -374,6 +378,7 @@ export interface UpdateBrandRequest {
   name: string;
   description?: string;
   image?: string;
+    IsPublished:boolean;
 }
 
 export interface BrandUpsertResponse {
@@ -381,6 +386,8 @@ export interface BrandUpsertResponse {
   name: string;
   description?: string;
   imageUrl?: string;
+    IsPublished:boolean;
+
 }
 export interface CreateProductVariantRequest {
   color?: string;
@@ -396,6 +403,7 @@ export interface CreateProductVariantRequest {
 
 export interface CreateProductRequest {
   name: string;
+  arabicName:string;
   description?: string;
   categoryId: number;
   brandId: number;
@@ -415,16 +423,18 @@ export interface UpdateProductVariantRequest {
   hip: number;
   length: number;
   sku: string;
-  isActive?: boolean;
+  isActive: boolean;
 }
 
 export interface UpdateProductRequest {
   name: string;
+  arabicName?: string;
   description?: string;
   slug?: string;
   categoryId: number;
   brandId: number;
   isActive: boolean;
+  isPublished: boolean;
   variants: UpdateProductVariantRequest[];
 }
 
@@ -438,10 +448,11 @@ export interface ProductVariantRequest {
   waist: number;
   hip: number;
   length: number;
+    IsPublished:boolean;
 }
 
 export interface AdminProductVariantResponse {
-  id: number;
+   id: number;
   productId?: number;
   sku: string;
   color?: string;
@@ -473,7 +484,7 @@ export interface AdminProductImageResponse {
 }
 
 export interface ProductAdminResponse {
-  id: number;
+ id: number;
   name: string;
   description?: string;
   slug?: string;
@@ -482,6 +493,7 @@ export interface ProductAdminResponse {
   brandId: number;
   brandName?: string;
   isActive: boolean;
+  isPublished: boolean;
   averageRating?: number;
   totalReviews?: number;
   mainImageUrl?: string;
