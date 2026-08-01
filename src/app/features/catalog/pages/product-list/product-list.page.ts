@@ -6,6 +6,7 @@ import { CatalogService } from '../../../../core/services/catalog.service';
 import { ProductCardResponse, ProductFilterRequest,ProductCollection } from '../../../../core/models/catalog.models';
 import { ActivatedRoute } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 const PAGE_SIZE = 12;
 
 @Component({
@@ -34,7 +35,7 @@ clearFilters() {
 }
   private currentFilter: ProductFilterRequest = {};
   private readonly route = inject(ActivatedRoute);
-
+private readonly translate = inject(TranslateService);
   readonly products = signal<ProductCardResponse[]>([]);
   readonly isLoading = signal(false);
   readonly totalCount = signal(0);
@@ -56,12 +57,17 @@ private collection: ProductCollection = ProductCollection.None;
 
   const data = this.route.snapshot.data;
 
-  this.pageTitle.set(data['title'] ?? 'All Products');
-  this.pageKicker.set(data['kicker'] ?? 'Catalog');
-  this.pageSubtitle.set(
-    data['subtitle'] ??
-      'Explore curated pieces with refined filters and elegant browsing.'
-  );
+ this.translate.stream(data['title']).subscribe(title => {
+  this.pageTitle.set(title);
+});
+
+this.translate.stream(data['kicker']).subscribe(kicker => {
+  this.pageKicker.set(kicker);
+});
+
+this.translate.stream(data['subtitle']).subscribe(subtitle => {
+  this.pageSubtitle.set(subtitle);
+});
 
   this.collection = data['collection'] ?? ProductCollection.None;
 

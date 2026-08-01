@@ -8,9 +8,9 @@ export const CATALOG_ROUTES: Routes = [
     loadComponent: () =>
       import('./pages/product-list/product-list.page').then((m) => m.ProductListPage),
     data: {
-      title: 'All Products',
-      kicker: 'Catalog',
-      subtitle: 'Explore curated pieces with refined filters and elegant browsing.',
+      title: 'catalogs.products.title',
+      kicker: 'catalogs.products.kicker',
+      subtitle: 'catalogs.products.subtitle',
       collection: ProductCollection.None,
     },
   },
@@ -20,9 +20,9 @@ export const CATALOG_ROUTES: Routes = [
     loadComponent: () =>
       import('./pages/product-list/product-list.page').then((m) => m.ProductListPage),
     data: {
-      title: 'New In',
-      kicker: 'Latest Arrivals',
-      subtitle: 'Discover the newest pieces added to the Tamara Land collection.',
+      title: 'catalogs.newIn.title',
+      kicker: 'catalogs.newIn.kicker',
+      subtitle: 'catalogs.newIn.subtitle',
       collection: ProductCollection.NewArrivals,
     },
   },
@@ -32,9 +32,9 @@ export const CATALOG_ROUTES: Routes = [
     loadComponent: () =>
       import('./pages/product-list/product-list.page').then((m) => m.ProductListPage),
     data: {
-      title: 'Sale',
-      kicker: 'Exclusive Offers',
-      subtitle: 'Shop premium styles at exclusive prices for a limited time.',
+      title: 'catalogs.sale.title',
+      kicker: 'catalogs.sale.kicker',
+      subtitle: 'catalogs.sale.subtitle',
       collection: ProductCollection.Offers,
     },
   },
@@ -43,7 +43,9 @@ export const CATALOG_ROUTES: Routes = [
     path: 'products/:id',
     loadComponent: () =>
       import('./pages/product-details/product-details.page').then((m) => m.ProductDetailsPage),
-    resolve: { product: productDetailsResolver },
+    resolve: {
+      product: productDetailsResolver
+    }
   },
 
   {
@@ -51,6 +53,7 @@ export const CATALOG_ROUTES: Routes = [
     loadComponent: () =>
       import('./pages/categories-list/categories-list').then((m) => m.CategoriesListPage),
   },
+
   {
     path: 'categories/:id',
     loadComponent: () =>
@@ -62,6 +65,7 @@ export const CATALOG_ROUTES: Routes = [
     loadComponent: () =>
       import('./pages/brands-list/brands-list').then((m) => m.BrandsListPage),
   },
+
   {
     path: 'brands/:id',
     loadComponent: () =>

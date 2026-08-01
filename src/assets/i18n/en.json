@@ -675,6 +675,23 @@
   "title": "Your Wishlist",
   "empty": "You haven't saved anything yet.",
   "discoverProducts": "Discover Products"
+},
+"catalogs": {
+  "products": {
+    "title": "All Products",
+    "kicker": "Catalog",
+    "subtitle": "Explore curated pieces with refined filters and elegant browsing."
+  },
+  "newIn": {
+    "title": "New In",
+    "kicker": "Latest Arrivals",
+    "subtitle": "Discover the newest pieces added to the Tamara Land collection."
+  },
+  "sale": {
+    "title": "Sale",
+    "kicker": "Exclusive Offers",
+    "subtitle": "Shop premium styles at exclusive prices for a limited time."
+  }
 }
 
 }
