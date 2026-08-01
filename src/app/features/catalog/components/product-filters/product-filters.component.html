@@ -3,19 +3,16 @@
   <!-- Header -->
   <header class="filters-header">
     <div class="filters-header__top">
-      <p class="section-kicker">Filters</p>
+      <p class="section-kicker">{{ 'filters.filters' | translate }}</p>
       @if (activeFiltersCount() > 0) {
-        <span class="filters-badge">{{ activeFiltersCount() }} active</span>
+        <span class="filters-badge">{{ activeFiltersCount() }} {{ activeFiltersCount() }} {{ 'filters.active' | translate }}</span>
       }
     </div>
 
-    <h2 class="filters-title">
-      Refine Your Selection
-    </h2>
+    <h2 class="filters-title">{{ 'filters.title' | translate }}    </h2>
 
     <p class="filters-copy">
-      Discover pieces tailored to your style with elegant filtering.
-    </p>
+{{ 'filters.subtitle' | translate }}    </p>
   </header>
 
   <!-- Search -->
@@ -23,13 +20,13 @@
   <section class="filter-group">
 
     <div class="filter-group__header">
-      <h3>Search</h3>
+      <h3>{{ 'filters.search' | translate }}</h3>
     </div>
 
     <input
       class="form-control"
       type="text"
-      placeholder="Search products..."
+      [placeholder]="'filters.searchPlaceholder' | translate"
       [value]="search()"
       (input)="onSearch($any($event.target).value)"
     />
@@ -42,7 +39,7 @@
     <section class="filter-group">
 
       <div class="filter-group__header">
-        <h3>Categories</h3>
+        <h3>{{ 'filters.categories' | translate }}</h3>
       </div>
 
       <div class="filter-options">
@@ -54,7 +51,7 @@
             [checked]="selectedCategoryId() === undefined"
             (change)="selectCategory(undefined)"
           />
-          <span>All categories</span>
+          <span>{{ 'filters.allCategories' | translate }}</span>
         </label>
 
         @for (category of categories(); track category.id) {
@@ -68,7 +65,7 @@
               (change)="selectCategory(category.id)"
             />
 
-            <span>{{ category.name }}</span>
+            <span>{{ category | localizedName }}</span>
 
           </label>
 
@@ -85,7 +82,7 @@
     <section class="filter-group">
 
       <div class="filter-group__header">
-        <h3>Brands</h3>
+        <h3>{{ 'filters.brands' | translate }}</h3>
       </div>
 
       <div class="filter-options">
@@ -97,7 +94,7 @@
             [checked]="selectedBrandId() === undefined"
             (change)="selectBrand(undefined)"
           />
-          <span>All brands</span>
+          <span>{{ 'filters.allBrands' | translate }}</span>
         </label>
 
         @for (brand of brands(); track brand.id) {
@@ -111,7 +108,7 @@
               (change)="selectBrand(brand.id)"
             />
 
-            <span>{{ brand.name }}</span>
+            <span>{{ brand | localizedName }}</span>
 
           </label>
 
@@ -127,7 +124,7 @@
   <section class="filter-group">
 
     <div class="filter-group__header">
-      <h3>Price Range</h3>
+      <h3>{{ 'filters.priceRange' | translate }}</h3>
     </div>
 
     <div class="price-range">
@@ -135,7 +132,7 @@
       <input
         class="form-control"
         type="number"
-        placeholder="Min"
+        [placeholder]="'filters.min' | translate"
         [value]="minPrice()"
         (input)="setMinPrice($any($event.target).value)"
         (keyup.enter)="applyPriceRange()"
@@ -146,7 +143,7 @@
       <input
         class="form-control"
         type="number"
-        placeholder="Max"
+        [placeholder]="'filters.max' | translate"
         [value]="maxPrice()"
         (input)="setMaxPrice($any($event.target).value)"
         (keyup.enter)="applyPriceRange()"
@@ -155,7 +152,7 @@
     </div>
 
     <button class="btn btn-outline filter-group__apply" type="button" (click)="applyPriceRange()">
-      Apply price
+     {{ 'filters.applyPrice' | translate }}
     </button>
 
   </section>
@@ -165,7 +162,7 @@
   <section class="filter-group">
 
     <div class="filter-group__header">
-      <h3>Availability</h3>
+      <h3>{{ 'filters.availability' | translate }}</h3>
     </div>
 
     <label class="filter-option">
@@ -176,7 +173,7 @@
         (change)="toggleInStock()"
       />
 
-      <span>In Stock Only</span>
+      <span>{{ 'filters.inStockOnly' | translate }}</span>
 
     </label>
 
@@ -187,7 +184,7 @@
   <section class="filter-group">
 
     <div class="filter-group__header">
-      <h3>Sort By</h3>
+      <h3>{{ 'filters.sortBy' | translate }}</h3>
     </div>
 
     <select
@@ -195,11 +192,11 @@
       [value]="sortBy()"
       (change)="changeSort($any($event.target).value)"
     >
-      <option value="">Featured</option>
-      <option value="newest">Newest</option>
-      <option value="priceAsc">Price: Low → High</option>
-      <option value="priceDesc">Price: High → Low</option>
-      <option value="discount">Best Discount</option>
+      <option value="">{{ 'filters.featured' | translate }}</option>
+      <option value="newest">{{ 'filters.newest' | translate }}</option>
+      <option value="priceAsc">{{ 'filters.priceLowHigh' | translate }}</option>
+      <option value="priceDesc">{{ 'filters.priceHighLow' | translate }}</option>
+      <option value="discount">{{ 'filters.bestDiscount' | translate }}</option>
     </select>
 
   </section>
@@ -212,7 +209,7 @@
         class="btn btn-outline"
         (click)="clearFilters()"
       >
-        Clear All ({{ activeFiltersCount() }})
+        {{ 'filters.clearAll' | translate }}({{ activeFiltersCount() }})
       </button>
     </footer>
   }

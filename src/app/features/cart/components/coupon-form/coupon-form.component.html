@@ -1,26 +1,66 @@
 <div class="coupon-form">
+
   @if (appliedCouponCode) {
+
     <div class="coupon-form__applied">
-      <span>Coupon <strong>{{ appliedCouponCode }}</strong> applied</span>
-      <button type="button" (click)="removeCoupon()" [disabled]="isSubmitting()">
-        {{ isSubmitting() ? 'Removing…' : 'Remove' }}
+
+      <span>
+
+        {{ 'coupon.applied' | translate }}
+
+        <strong>{{ appliedCouponCode }}</strong>
+
+      </span>
+
+      <button
+        type="button"
+        (click)="removeCoupon()"
+        [disabled]="isSubmitting()">
+
+        {{
+          isSubmitting()
+            ? ('coupon.removing' | translate)
+            : ('coupon.remove' | translate)
+        }}
+
       </button>
+
     </div>
+
   } @else {
-    <form class="coupon-form__row" (submit)="$event.preventDefault(); apply()">
+
+    <form
+      class="coupon-form__row"
+      (submit)="$event.preventDefault(); apply()">
+
       <input
         type="text"
-        placeholder="Coupon code"
+        [placeholder]="'coupon.placeholder' | translate"
         [value]="code()"
         (input)="code.set($any($event.target).value)"
       />
-      <button type="submit" class="btn btn-outline" [disabled]="isSubmitting() || !code().trim()">
-        {{ isSubmitting() ? 'Applying…' : 'Apply' }}
+
+      <button
+        type="submit"
+        class="btn btn-outline"
+        [disabled]="isSubmitting() || !code().trim()">
+
+        {{
+          isSubmitting()
+            ? ('coupon.applying' | translate)
+            : ('coupon.apply' | translate)
+        }}
+
       </button>
+
     </form>
 
     @if (errorMessage()) {
-      <p class="coupon-form__error">{{ errorMessage() }}</p>
+      <p class="coupon-form__error">
+        {{ errorMessage() }}
+      </p>
     }
+
   }
+
 </div>

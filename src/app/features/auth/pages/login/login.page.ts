@@ -9,12 +9,13 @@ import { SocialAuthService } from '../../../../core/services/social-auth.service
 import { ApiResponse } from '../../../../core/models/api-response.model';
 import { AuthResponse, LoginRequest } from '../../../../core/models/auth.models';
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
+import { TranslatePipe } from '@ngx-translate/core';
 
 /** Login page with form and social authentication. */
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [AuthFormShellComponent, ReactiveFormsModule, RouterLink, ErrorMessageComponent],
+  imports: [AuthFormShellComponent, ReactiveFormsModule, RouterLink, ErrorMessageComponent,TranslatePipe],
   templateUrl: './login.page.html',
   styleUrl: './login.page.css',
 })

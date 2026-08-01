@@ -2,12 +2,14 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject, sign
 import { PhoneVerificationService } from '../../../../core/services/phoneverification.service'; // عدّل المسار
 import { ToastService } from '../../../../shared/toast/toast.service'; // عدّل المسار
 import { extractErrorMessage } from '../../../../core/utils/error-message.util'; // عدّل المسار
+import { TranslatePipe } from '@ngx-translate/core';
 
 const RESEND_COOLDOWN_SECONDS = 60;
 
 @Component({
   selector: 'app-phone-verify-dialog',
   standalone: true,
+  imports: [TranslatePipe],
   templateUrl: './phone-verify-dialog.html',
   styleUrl: './phone-verify-dialog.css',
 })

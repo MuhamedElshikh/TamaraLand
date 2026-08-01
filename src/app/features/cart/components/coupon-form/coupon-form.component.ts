@@ -1,10 +1,12 @@
 import { Component, Input, signal } from '@angular/core';
 import { CartService } from '../../../../core/services/cart.service';
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-coupon-form',
   standalone: true,
+  imports: [TranslatePipe],
   templateUrl: './coupon-form.component.html',
   styleUrl: './coupon-form.component.css',
 })

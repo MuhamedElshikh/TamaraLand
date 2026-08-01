@@ -48,7 +48,7 @@ export class AdminProductFormPage implements OnInit {
     brandId: ['', [Validators.required]],
     description: [''],
     slug: [''],
-    IsPublished:true
+    isPublished:true
   });
 
   readonly variants = signal<UpdateProductVariantRequest[]>([]);
@@ -138,7 +138,7 @@ export class AdminProductFormPage implements OnInit {
       categoryId: Number(formVal.categoryId),
       brandId: Number(formVal.brandId),
       isActive: true,
-      isPublished: formVal.IsPublished,
+      isPublished: formVal.isPublished,
       variants: this.variants().map((v) => ({
         id: v.id || 0,
         color: v.color || '',
@@ -225,7 +225,7 @@ export class AdminProductFormPage implements OnInit {
       waist: 0,
       hip: 0,
       length: 0,
-      IsPublished:true
+      isPublished:true
     });
     this.variantError.set(null);
   }
@@ -302,7 +302,7 @@ export class AdminProductFormPage implements OnInit {
       waist: 0,
       hip: 0,
       length: 0,
-      IsPublished:true
+      isPublished:true
     });
     this.variantError.set(null);
   }
@@ -410,7 +410,7 @@ export class AdminProductFormPage implements OnInit {
           brandId: resolvedBrandId,
           description: p.description || '',
           slug: p.slug || '',
-          IsPublished: p.isPublished ?? true
+          isPublished: p.isPublished ?? true
         });
 
         if (p.variants && p.variants.length > 0) {

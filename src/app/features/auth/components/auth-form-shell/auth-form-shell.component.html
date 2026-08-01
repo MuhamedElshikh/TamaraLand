@@ -7,28 +7,40 @@
       <div class="auth-hero__brand">
         <img src='assets/logo.png' alt="Tamara Land" class="auth-hero__logo-img" />
         <div>
-          <p class="auth-hero__eyebrow">Tamara Land</p>
-          <h2>Be proud to be a woman.</h2>
+          <p class="auth-hero__eyebrow">{{ 'auth.brand' | translate }}</p>
+          <h2>{{ 'auth.headline' | translate }}</h2>
         </div>
       </div>
 
-      <p class="auth-hero__copy">
-        Curated pieces for the woman who knows her worth. Sign in to keep your
-        cart, wishlist, and orders exactly where you left them.
-      </p>
+      <p class="auth-hero__copy">{{ 'auth.description' | translate }}</p>
 
       <div class="auth-hero__points">
         <div class="auth-hero__point">
-          <span>Handpicked collections</span>
-          <small>New arrivals selected for every occasion</small>
+         <span>
+    {{ 'auth.features.collections.title' | translate }}
+</span>
+
+<small>
+    {{ 'auth.features.collections.subtitle' | translate }}
+</small>
         </div>
         <div class="auth-hero__point">
-          <span>Your size, your fit</span>
-          <small>Saved sizes and preferences for faster checkout</small>
+         <span>
+    {{ 'auth.features.sizes.title' | translate }}
+</span>
+
+<small>
+    {{ 'auth.features.sizes.subtitle' | translate }}
+</small>
         </div>
         <div class="auth-hero__point">
-          <span>Secure and private</span>
-          <small>Your data is protected with encrypted, token-based access</small>
+          <span>
+    {{ 'auth.features.security.title' | translate }}
+</span>
+
+<small>
+    {{ 'auth.features.security.subtitle' | translate }}
+</small>
         </div>
       </div>
     </aside>

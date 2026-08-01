@@ -7,13 +7,15 @@ import { PaginationComponent } from '../../../../shared/pagination/pagination';
 import { BreadcrumbsComponent } from '../../../../shared/breadcrumbs.component/breadcrumbs.component';
 import { CatalogService } from '../../../../core/services/catalog.service';
 import { ProductCardResponse, CategoryResponse, ProductFilterRequest } from '../../../../core/models/catalog.models';
+import { TranslatePipe } from '@ngx-translate/core';
+import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe';
 
 const PAGE_SIZE = 20;
 
 @Component({
   selector: 'app-category-products',
   standalone: true,
-  imports: [ProductCardComponent, ProductFiltersComponent, PaginationComponent, BreadcrumbsComponent],
+  imports: [ProductCardComponent, ProductFiltersComponent, PaginationComponent, BreadcrumbsComponent,TranslatePipe,LocalizedNamePipe],
   templateUrl: './category-products.page.html',
   styleUrl: './category-products.page.css',
 })

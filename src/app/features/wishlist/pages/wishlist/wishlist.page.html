@@ -1,25 +1,59 @@
 <section class="wishlist-page">
+
   <header class="wishlist-page__hero">
-    <p class="section-kicker">Saved</p>
-    <h1 class="section-title">Your wishlist</h1>
+
+    <p class="section-kicker">
+      {{ 'wishlist.kicker' | translate }}
+    </p>
+
+    <h1 class="section-title">
+      {{ 'wishlist.title' | translate }}
+    </h1>
+
   </header>
 
   @if (isLoading()) {
+
     <div class="wishlist-page__loading">
-      @for (i of [1, 2, 3]; track i) {
+
+      @for (i of [1,2,3]; track i) {
         <div class="wishlist-page__skeleton"></div>
       }
+
     </div>
+
   } @else if (items().length === 0) {
+
     <div class="wishlist-page__empty">
-      <p class="section-copy">You haven't saved anything yet.</p>
-      <a routerLink="/products" class="btn btn-primary">Discover products</a>
+
+      <p class="section-copy">
+        {{ 'wishlist.empty' | translate }}
+      </p>
+
+      <a
+        routerLink="/products"
+        class="btn btn-primary">
+
+        {{ 'wishlist.discoverProducts' | translate }}
+
+      </a>
+
     </div>
+
   } @else {
+
     <div class="wishlist-page__list">
+
       @for (item of items(); track item.id) {
-        <app-wishlist-item [item]="item" (removed)="onItemRemoved()" />
+
+        <app-wishlist-item
+          [item]="item"
+          (removed)="onItemRemoved()" />
+
       }
+
     </div>
+
   }
+
 </section>

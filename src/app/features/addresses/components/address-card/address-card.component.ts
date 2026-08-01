@@ -1,10 +1,12 @@
 import { Component, Input, Output, EventEmitter, inject, signal } from '@angular/core';
 import { AddressService } from '../../../../core/services/address.service';
 import { AddressResponse } from '../../../../core/models/domain.models';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-address-card',
   standalone: true,
+  imports: [TranslatePipe],
   templateUrl: './address-card.component.html',
   styleUrl: './address-card.component.css',
 })
@@ -17,6 +19,7 @@ export class AddressCardComponent {
 
   readonly isDeleting = signal(false);
   readonly isSettingDefault = signal(false);
+  readonly currentLang = signal('en');
 
   onEdit(): void {
     this.edit.emit(this.address);

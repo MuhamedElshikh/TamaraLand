@@ -1,138 +1,288 @@
 <section class="scaffold-page profile-page">
   <header class="profile-page__hero">
-    <p class="section-kicker">Account</p>
-    <h1 class="section-title">Profile settings</h1>
+    <p class="section-kicker">
+      {{ 'profile.kicker' | translate }}
+    </p>
+
+    <h1 class="section-title">
+      {{ 'profile.title' | translate }}
+    </h1>
   </header>
 
   <div class="profile-page__grid">
+
     <!-- Personal information -->
     <div class="scaffold-card profile-block">
       <div class="profile-block__header">
-        <h3 class="profile-block__title">Personal information</h3>
+        <h3 class="profile-block__title">
+          {{ 'profile.personalInformation' | translate }}
+        </h3>
+
         @if (!isEditingProfile()) {
-          <button type="button" class="profile-block__edit-btn" (click)="startEditProfile()">Edit</button>
+          <button
+            type="button"
+            class="profile-block__edit-btn"
+            (click)="startEditProfile()">
+
+            {{ 'profile.edit' | translate }}
+
+          </button>
         }
       </div>
 
       @if (!isEditingProfile()) {
-        <!-- وضع العرض -->
+
         <div class="profile-view">
+
           <div class="profile-view__row">
-            <span>First name</span>
+            <span>{{ 'profile.fields.firstName' | translate }}</span>
             <strong>{{ profile()?.firstName || '—' }}</strong>
           </div>
+
           <div class="profile-view__row">
-            <span>Last name</span>
+            <span>{{ 'profile.fields.lastName' | translate }}</span>
             <strong>{{ profile()?.lastName || '—' }}</strong>
           </div>
+
           <div class="profile-view__row">
-            <span>Email</span>
+            <span>{{ 'profile.fields.email' | translate }}</span>
             <strong>{{ profile()?.email || '—' }}</strong>
           </div>
+
           <div class="profile-view__row">
-            <span>Phone number</span>
+            <span>{{ 'profile.fields.phoneNumber' | translate }}</span>
             <strong>{{ profile()?.phoneNumber || '—' }}</strong>
           </div>
+
         </div>
+
       } @else {
-        <!-- وضع التعديل -->
-        <form class="profile-form" [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+
+        <form
+          class="profile-form"
+          [formGroup]="profileForm"
+          (ngSubmit)="saveProfile()">
+
           @if (profileError()) {
             <p class="profile-block__error">{{ profileError() }}</p>
           }
 
           <div class="field-grid">
+
             <label class="field">
-              <span>First name</span>
-              <input type="text" formControlName="firstName" placeholder="First name" />
-              @if (profileControlHasError('firstName', 'required')) {
-                <small>First name is required.</small>
+              <span>{{ 'profile.fields.firstName' | translate }}</span>
+
+              <input
+                type="text"
+                formControlName="firstName"
+                [placeholder]="'profile.fields.firstName' | translate" />
+
+              @if (profileControlHasError('firstName','required')) {
+                <small>{{ 'profile.validation.firstNameRequired' | translate }}</small>
               }
             </label>
 
             <label class="field">
-              <span>Last name</span>
-              <input type="text" formControlName="lastName" placeholder="Last name" />
-              @if (profileControlHasError('lastName', 'required')) {
-                <small>Last name is required.</small>
+              <span>{{ 'profile.fields.lastName' | translate }}</span>
+
+              <input
+                type="text"
+                formControlName="lastName"
+                [placeholder]="'profile.fields.lastName' | translate" />
+
+              @if (profileControlHasError('lastName','required')) {
+                <small>{{ 'profile.validation.lastNameRequired' | translate }}</small>
               }
             </label>
+
           </div>
 
           <label class="field">
-            <span>Phone number</span>
-            <input type="tel" formControlName="phoneNumber" placeholder="01xxxxxxxxx" />
+
+            <span>{{ 'profile.fields.phoneNumber' | translate }}</span>
+
+            <input
+              type="tel"
+              formControlName="phoneNumber"
+              [placeholder]="'profile.fields.phoneNumber' | translate" />
+
           </label>
 
           <div class="profile-form__actions">
-            <button class="btn btn-primary" type="submit" [disabled]="isSavingProfile()">
-              {{ isSavingProfile() ? 'Saving…' : 'Save changes' }}
+
+            <button
+              class="btn btn-primary"
+              type="submit"
+              [disabled]="isSavingProfile()">
+
+              {{
+                isSavingProfile()
+                ? ('profile.saving' | translate)
+                : ('profile.saveChanges' | translate)
+              }}
+
             </button>
-            <button class="btn btn-outline" type="button" (click)="cancelEditProfile()">Cancel</button>
+
+            <button
+              class="btn btn-outline"
+              type="button"
+              (click)="cancelEditProfile()">
+
+              {{ 'profile.cancel' | translate }}
+
+            </button>
+
           </div>
+
         </form>
+
       }
+
     </div>
 
-    <!-- Change password -->
+    <!-- Password -->
+
     <div class="scaffold-card profile-block">
+
       <div class="profile-block__header">
-        <h3 class="profile-block__title">Password</h3>
+
+        <h3 class="profile-block__title">
+          {{ 'profile.password' | translate }}
+        </h3>
+
         @if (!isChangingPassword()) {
-          <button type="button" class="profile-block__edit-btn" (click)="startChangePassword()">Change password</button>
+
+          <button
+            type="button"
+            class="profile-block__edit-btn"
+            (click)="startChangePassword()">
+
+            {{ 'profile.changePassword' | translate }}
+
+          </button>
+
         }
+
       </div>
 
       @if (!isChangingPassword()) {
+
         <p class="profile-view__hint">
+
           @if (passwordSuccess()) {
-            <span class="profile-block__success">Your password was changed successfully.</span>
+
+            <span class="profile-block__success">
+              {{ 'profile.passwordChanged' | translate }}
+            </span>
+
           } @else {
+
             ••••••••
+
           }
+
         </p>
+
       } @else {
-        <form class="profile-form" [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+
+        <form
+          class="profile-form"
+          [formGroup]="passwordForm"
+          (ngSubmit)="changePassword()">
+
           @if (passwordError()) {
             <p class="profile-block__error">{{ passwordError() }}</p>
           }
 
           <label class="field">
-            <span>Current password</span>
-            <input type="password" formControlName="currentPassword" placeholder="Current password" />
-            @if (passwordControlHasError('currentPassword', 'required')) {
-              <small>Current password is required.</small>
+
+            <span>{{ 'profile.fields.currentPassword' | translate }}</span>
+
+            <input
+              type="password"
+              formControlName="currentPassword"
+              [placeholder]="'profile.fields.currentPassword' | translate" />
+
+            @if (passwordControlHasError('currentPassword','required')) {
+              <small>{{ 'profile.validation.currentPasswordRequired' | translate }}</small>
             }
+
           </label>
 
           <label class="field">
-            <span>New password</span>
-            <input type="password" formControlName="newPassword" placeholder="New password" />
-            @if (passwordControlHasError('newPassword', 'required')) {
-              <small>New password is required.</small>
-            } @else if (passwordControlHasError('newPassword', 'minlength')) {
-              <small>Password must be at least 8 characters.</small>
+
+            <span>{{ 'profile.fields.newPassword' | translate }}</span>
+
+            <input
+              type="password"
+              formControlName="newPassword"
+              [placeholder]="'profile.fields.newPassword' | translate" />
+
+            @if (passwordControlHasError('newPassword','required')) {
+
+              <small>{{ 'profile.validation.newPasswordRequired' | translate }}</small>
+
+            } @else if (passwordControlHasError('newPassword','minlength')) {
+
+              <small>{{ 'profile.validation.passwordMinLength' | translate }}</small>
+
             }
+
           </label>
 
           <label class="field">
-            <span>Confirm new password</span>
-            <input type="password" formControlName="confirmNewPassword" placeholder="Repeat new password" />
-            @if (passwordControlHasError('confirmNewPassword', 'required')) {
-              <small>Please confirm your new password.</small>
+
+            <span>{{ 'profile.fields.confirmPassword' | translate }}</span>
+
+            <input
+              type="password"
+              formControlName="confirmNewPassword"
+              [placeholder]="'profile.fields.confirmPassword' | translate" />
+
+            @if (passwordControlHasError('confirmNewPassword','required')) {
+
+              <small>{{ 'profile.validation.confirmPasswordRequired' | translate }}</small>
+
             } @else if (passwordMismatch) {
-              <small>Passwords do not match.</small>
+
+              <small>{{ 'profile.validation.passwordMismatch' | translate }}</small>
+
             }
+
           </label>
 
           <div class="profile-form__actions">
-            <button class="btn btn-primary" type="submit" [disabled]="isSavingPassword()">
-              {{ isSavingPassword() ? 'Updating…' : 'Update password' }}
+
+            <button
+              class="btn btn-primary"
+              type="submit"
+              [disabled]="isSavingPassword()">
+
+              {{
+                isSavingPassword()
+                ? ('profile.updatingPassword' | translate)
+                : ('profile.updatePassword' | translate)
+              }}
+
             </button>
-            <button class="btn btn-outline" type="button" (click)="cancelChangePassword()">Cancel</button>
+
+            <button
+              class="btn btn-outline"
+              type="button"
+              (click)="cancelChangePassword()">
+
+              {{ 'profile.cancel' | translate }}
+
+            </button>
+
           </div>
+
         </form>
+
       }
+
     </div>
+
   </div>
+
 </section>

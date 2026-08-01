@@ -2,10 +2,12 @@ import { Component, Input, OnInit, computed, inject, signal } from '@angular/cor
 import { ReviewService } from '../../../../core/services/review.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { ReviewResponse } from '../../../../core/models/domain.models';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-review-list',
   standalone: true,
+  imports: [TranslatePipe],
   templateUrl: './review-list.component.html',
   styleUrl: './review-list.component.css',
 })

@@ -1,39 +1,77 @@
 <section class="orders-page">
+
   @if (justPlaced()) {
-    <div class="orders-page__success">Your order was placed successfully! 🎉</div>
+    <div class="orders-page__success">
+      {{ 'orders.orderPlacedSuccessfully' | translate }}
+    </div>
   }
 
   <header class="orders-page__hero">
+
     <div>
-      <p class="section-kicker">Account</p>
-      <h1 class="section-title">Your orders</h1>
+      <p class="section-kicker">
+        {{ 'profile.kicker' | translate }}
+      </p>
+
+      <h1 class="section-title">
+        {{ 'orders.title' | translate }}
+      </h1>
     </div>
 
-    <select class="orders-page__filter" [value]="selectedStatus()" (change)="onStatusChange($any($event.target).value)">
-      <option value="">All statuses</option>
+    <select
+      class="orders-page__filter"
+      [value]="selectedStatus()"
+      (change)="onStatusChange($any($event.target).value)">
+
+      <option value="">
+        {{ 'orders.allStatuses' | translate }}
+      </option>
+
       @for (status of statusOptions; track status) {
-        <option [value]="status">{{ status }}</option>
+        <option [value]="status">
+          {{ status | translate }}
+        </option>
       }
+
     </select>
+
   </header>
 
   @if (isLoading()) {
+
     <div class="orders-page__list">
-      @for (i of [1, 2, 3]; track i) {
+
+      @for (i of [1,2,3]; track i) {
         <div class="orders-page__skeleton"></div>
       }
+
     </div>
+
   } @else if (orders().length === 0) {
+
     <div class="orders-page__empty">
-      <p class="section-copy">No orders found.</p>
+
+      <p class="section-copy">
+        {{ 'orders.noOrders' | translate }}
+      </p>
+
     </div>
+
   } @else {
+
     <div class="orders-page__list">
+
       @for (order of orders(); track order.id) {
         <app-order-card [order]="order" />
       }
+
     </div>
 
-    <app-pagination [currentPage]="pageIndex()" [totalPages]="totalPages()" (pageChange)="onPageChange($event)" />
+    <app-pagination
+      [currentPage]="pageIndex()"
+      [totalPages]="totalPages()"
+      (pageChange)="onPageChange($event)" />
+
   }
+
 </section>

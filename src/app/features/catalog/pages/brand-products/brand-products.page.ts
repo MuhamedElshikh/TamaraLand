@@ -7,13 +7,15 @@ import { PaginationComponent } from '../../../../shared/pagination/pagination';
 import { BreadcrumbsComponent } from '../../../../shared/breadcrumbs.component/breadcrumbs.component';
 import { CatalogService } from '../../../../core/services/catalog.service';
 import { ProductCardResponse, BrandResponse, ProductFilterRequest } from '../../../../core/models/catalog.models';
+import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 const PAGE_SIZE = 20;
 
 @Component({
   selector: 'app-brand-products',
   standalone: true,
-  imports: [ProductCardComponent, ProductFiltersComponent, PaginationComponent, BreadcrumbsComponent],
+  imports: [ProductCardComponent, ProductFiltersComponent, PaginationComponent, BreadcrumbsComponent,TranslatePipe,LocalizedNamePipe],
   templateUrl: './brand-products.page.html',
   styleUrl: './brand-products.page.css',
 })

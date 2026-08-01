@@ -1,5 +1,8 @@
 <form class="address-form" [formGroup]="form" (ngSubmit)="submit()">
-  <h3 class="address-form__title">{{ existingAddress ? 'Edit address' : 'Add a new address' }}</h3>
+  <h3 class="address-form__title">{{ existingAddress
+    ? ('addressForm.editTitle' | translate)
+    : ('addressForm.addTitle' | translate)
+}}</h3>
 
   @if (errorMessage()) {
     <p class="address-form__error">{{ errorMessage() }}</p>
@@ -7,89 +10,95 @@
 
   <div class="field-grid">
     <label class="field">
-      <span>Full name</span>
-      <input type="text" formControlName="fullName" placeholder="Full name" />
+      <span><span>{{ 'addressForm.fullName' | translate }}</span></span>
+      <input type="text" formControlName="fullName" placeholder="{{ 'addressForm.placeholder.fullName' | translate }}" />
       @if (controlHasError('fullName', 'required')) {
-        <small>Full name is required.</small>
+        <small>{{ 'addressForm.validation.fullNameRequired' | translate }}</small>
       }
     </label>
 
     <label class="field">
-      <span>Phone number</span>
-      <input type="tel" formControlName="phoneNumber" placeholder="01xxxxxxxxx" />
+      <span>{{ 'addressForm.phoneNumber' | translate }}</span>
+      <input type="tel" formControlName="phoneNumber" placeholder="{{ 'addressForm.placeholder.phone' | translate }}" />
       @if (controlHasError('phoneNumber', 'required')) {
-        <small>Phone number is required.</small>
+        <small>{{ 'addressForm.validation.phoneRequired' | translate }}</small>
       } @else if (controlHasError('phoneNumber', 'pattern')) {
-        <small>Enter a valid phone number.</small>
+        <small>{{ 'addressForm.validation.phoneInvalid' | translate }}</small>
       }
     </label>
   </div>
 
   <div class="field-grid">
     <label class="field">
-      <span>Governorate</span>
+      <span>{{ 'addressForm.governorate' | translate }}</span>
       <select formControlName="governorate">
-        <option value="" disabled>Select governorate</option>
+        <option value="" disabled>{{ 'addressForm.selectGovernorate' | translate }} </option>
         @for (gov of governorates(); track gov) {
           <option [value]="gov">{{ gov }}</option>
         }
       </select>
       @if (controlHasError('governorate', 'required')) {
-        <small>Please select a governorate.</small>
+        <small>{{ 'addressForm.validation.governorateRequired' | translate }}</small>
       }
     </label>
 
     <label class="field">
-      <span>Area</span>
+      <span>{{ 'addressForm.area' | translate }}</span>
       <select formControlName="area" [disabled]="!form.get('governorate')?.value">
-        <option value="" disabled>Select area</option>
+        <option value="" disabled>{{ 'addressForm.selectArea' | translate }}</option>
         @for (area of areasForSelectedGovernorate(); track area.id) {
           <option [value]="area.name">{{ area.name }} (+{{ area.shippingCost | number }} EGP shipping)</option>
         }
       </select>
-      @if (controlHasError('Area', 'required')) {
-        <small>Please select an area.</small>
+      @if (controlHasError('area', 'required')) {
+        <small>{{ 'addressForm.validation.areaRequired' | translate }}</small>
       }
     </label>
   </div>
 
   <label class="field">
-    <span>Street</span>
-    <input type="text" formControlName="street" placeholder="Street name" />
+    <span>{{ 'addressForm.street' | translate }}</span>
+    <input type="text" formControlName="street" placeholder="{{ 'addressForm.placeholder.street' | translate }}" />
     @if (controlHasError('street', 'required')) {
-      <small>Street is required.</small>
+      <small>{{ 'addressForm.validation.streetRequired' | translate }}</small>
     }
   </label>
 
   <div class="field-grid field-grid--three">
     <label class="field">
-      <span>Building</span>
-      <input type="text" formControlName="building" placeholder="Optional" />
+      <span>{{ 'addressForm.building' | translate }}</span>
+      <input type="text" formControlName="building" placeholder="{{ 'addressForm.placeholder.building' | translate }}" />
     </label>
     <label class="field">
-      <span>Floor</span>
-      <input type="text" formControlName="floor" placeholder="Optional" />
+      <span>{{ 'addressForm.floor' | translate }}</span>
+      <input type="text" formControlName="floor" placeholder="{{ 'addressForm.placeholder.floor' | translate }}" />
     </label>
     <label class="field">
-      <span>Apartment</span>
-      <input type="text" formControlName="apartment" placeholder="Optional" />
+      <span>{{ 'addressForm.apartment' | translate }}</span>
+      <input type="text" formControlName="apartment" placeholder="{{ 'addressForm.placeholder.apartment' | translate }}" />
     </label>
   </div>
 
   <label class="field">
-    <span>Notes (optional)</span>
-    <textarea formControlName="notes" rows="2" placeholder="Delivery instructions..."></textarea>
+    <span>{{ 'addressForm.notes' | translate }}</span>
+    <textarea formControlName="notes" rows="2" placeholder="{{ 'addressForm.placeholder.notes' | translate }}"></textarea>
   </label>
 
   <label class="address-form__checkbox">
     <input type="checkbox" formControlName="isDefault" />
-    <span>Set as default address</span>
+    <span>{{ 'addressForm.setDefault' | translate }}</span>
   </label>
 
   <div class="address-form__actions">
     <button type="submit" class="btn btn-primary" [disabled]="isSubmitting()">
-      {{ isSubmitting() ? 'Saving…' : (existingAddress ? 'Save changes' : 'Add address') }}
-    </button>
-    <button type="button" class="btn btn-outline" (click)="cancel()">Cancel</button>
+{{ isSubmitting()
+    ? ('addressForm.saving' | translate)
+    : (
+        existingAddress
+          ? ('addressForm.saveChanges' | translate)
+          : ('addressForm.addAddress' | translate)
+      )
+}}    </button>
+    <button type="button" class="btn btn-outline" (click)="cancel()">{{ 'addressForm.cancel' | translate }}</button>
   </div>
 </form>

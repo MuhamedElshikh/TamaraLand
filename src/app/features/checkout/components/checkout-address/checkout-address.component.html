@@ -1,51 +1,138 @@
 <section class="checkout-block">
+
   <div class="checkout-block__header">
+
     <div>
-      <p class="section-kicker">Step 1</p>
-      <h3>Delivery address</h3>
+
+      <p class="section-kicker">
+        {{ 'checkout.address.step' | translate }}
+      </p>
+
+      <h3>
+        {{ 'checkout.address.title' | translate }}
+      </h3>
+
     </div>
-    <a routerLink="/addresses" class="checkout-block__manage-link">Manage addresses</a>
+
+    <a
+      routerLink="/addresses"
+      class="checkout-block__manage-link">
+
+      {{ 'checkout.address.manageAddresses' | translate }}
+
+    </a>
+
   </div>
 
   @if (isLoading()) {
-    <p class="section-copy">Loading your addresses…</p>
+
+    <p class="section-copy">
+      {{ 'checkout.address.loading' | translate }}
+    </p>
+
   } @else if (addresses().length === 0) {
+
     <div class="checkout-block__empty">
-      <p class="section-copy">You don't have any saved addresses yet.</p>
-      <a routerLink="/addresses" class="btn btn-primary">Add an address</a>
+
+      <p class="section-copy">
+        {{ 'checkout.address.empty' | translate }}
+      </p>
+
+      <a
+        routerLink="/addresses"
+        class="btn btn-primary">
+
+        {{ 'checkout.address.addAddress' | translate }}
+
+      </a>
+
     </div>
+
   } @else {
+
     <div class="checkout-address__list">
+
       @for (address of addresses(); track address.id) {
-        <label class="checkout-address__option" [class.checkout-address__option--active]="selectedId() === address.id">
-          <input type="radio" name="checkout-address" [checked]="selectedId() === address.id" (change)="select(address)" />
+
+        <label
+          class="checkout-address__option"
+          [class.checkout-address__option--active]="selectedId() === address.id">
+
+          <input
+            type="radio"
+            name="checkout-address"
+            [checked]="selectedId() === address.id"
+            (change)="select(address)" />
+
           <div class="checkout-address__body">
+
             <p class="checkout-address__name">
+
               {{ address.fullName }}
-              @if (address.isDefault) { <span class="checkout-address__default-tag">Default</span> }
+
+              @if (address.isDefault) {
+
+                <span class="checkout-address__default-tag">
+                  {{ 'checkout.address.default' | translate }}
+                </span>
+
+              }
+
             </p>
-            <p class="checkout-address__lines">{{ address.phoneNumber }}</p>
-            <p class="checkout-address__lines">{{ address.street }}, {{ address.area }}, {{ address.governorate }}</p>
+
+            <p class="checkout-address__lines">
+              {{ address.phoneNumber }}
+            </p>
+
+            <p class="checkout-address__lines">
+              {{ address.street }},
+              {{ address.area }},
+              {{ address.governorate }}
+            </p>
 
             @if (isVerified(address)) {
-              <p class="checkout-address__verified">✔ Verified</p>
+
+              <p class="checkout-address__verified">
+                ✔ {{ 'checkout.address.verified' | translate }}
+              </p>
+
             } @else {
+
               <div class="checkout-address__unverified">
-                <span>⚠ Phone number not verified</span>
-                <button type="button" (click)="openVerifyDialog(address, $event)">Verify Now</button>
+
+                <span>
+                  ⚠ {{ 'checkout.address.notVerified' | translate }}
+                </span>
+
+                <button
+                  type="button"
+                  (click)="openVerifyDialog(address, $event)">
+
+                  {{ 'checkout.address.verifyNow' | translate }}
+
+                </button>
+
               </div>
+
             }
+
           </div>
+
         </label>
+
       }
+
     </div>
+
   }
+
 </section>
 
 @if (verifyingAddress(); as address) {
+
   <app-phone-verify-dialog
     [phoneNumber]="address.phoneNumber"
     (closed)="closeVerifyDialog()"
-    (verified)="onVerified()"
-  />
+    (verified)="onVerified()" />
+
 }

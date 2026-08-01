@@ -1,6 +1,6 @@
-<article class="address-card" [class.address-card--busy]="isDeleting()">
+<article class="address-card" [class.address-card--busy]="isDeleting()" [attr.dir]="currentLang() === 'ar' ? 'rtl' : 'ltr'">
   @if (address.isDefault) {
-    <span class="address-card__badge">Default</span>
+    <span class="address-card__badge">{{ 'address.default' | translate }}</span>
   }
 
   <p class="address-card__name">{{ address.fullName }}</p>
@@ -8,9 +8,9 @@
 
   <p class="address-card__lines">
     {{ address.street }}
-    @if (address.building) {, Bldg {{ address.building }} }
-    @if (address.floor) {, Fl {{ address.floor }} }
-    @if (address.apartment) {, Apt {{ address.apartment }} }
+    @if (address.building) {, {{ 'address.building' | translate }} {{ address.building }} }
+    @if (address.floor) {, {{ 'address.floor' | translate }} {{ address.floor }} }
+    @if (address.apartment) {, {{ 'address.apartment' | translate }} {{ address.apartment }} }
   </p>
   <p class="address-card__lines">{{ address.area }}, {{ address.governorate }}</p>
 
@@ -21,12 +21,13 @@
   <div class="address-card__actions">
     @if (!address.isDefault) {
       <button type="button" (click)="setDefault()" [disabled]="isSettingDefault()">
-        {{ isSettingDefault() ? 'Setting…' : 'Set as default' }}
-      </button>
-    }
-    <button type="button" (click)="onEdit()">Edit</button>
+{{ isSettingDefault() ? ('address.settingDefault' | translate) : ('address.setDefault' | translate)}}</button>}
+    <button type="button" (click)="onEdit()">{{ 'address.edit' | translate }}</button>
     <button type="button" class="address-card__delete" (click)="delete()" [disabled]="isDeleting()">
-      {{ isDeleting() ? 'Deleting…' : 'Delete' }}
+    {{ isDeleting()
+    ? ('address.deleting' | translate)
+    : ('address.delete' | translate)
+}}
     </button>
   </div>
 </article>

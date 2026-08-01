@@ -1,9 +1,11 @@
 import { Component, Input, OnChanges, SimpleChanges, signal } from '@angular/core';
 import { ProductImageResponse } from '../../../../core/models/catalog.models';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-product-gallery',
   standalone: true,
+  imports: [TranslatePipe],
   templateUrl: './product-gallery.component.html',
   styleUrl: './product-gallery.component.css'
 })

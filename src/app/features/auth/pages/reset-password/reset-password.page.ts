@@ -7,12 +7,13 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { ResetPasswordRequest } from '../../../../core/models/auth.models';
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 import { finalize } from 'rxjs';
+import { TranslatePipe } from '@ngx-translate/core';
 
 /** Reset password page. */
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [AuthFormShellComponent, ReactiveFormsModule, RouterLink, ErrorMessageComponent],
+  imports: [AuthFormShellComponent, ReactiveFormsModule, RouterLink, ErrorMessageComponent, TranslatePipe],
   templateUrl: './reset-password.page.html',
   styleUrl: './reset-password.page.css'
 })

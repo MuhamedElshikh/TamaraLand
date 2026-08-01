@@ -4,13 +4,20 @@ import { OrderCardComponent } from '../../components/order-card/order-card.compo
 import { PaginationComponent } from '../../../../../app/shared/pagination/pagination'; // عدّل المسار
 import { OrderService } from '../../../../core/services/order.service';
 import {OrderResponse,OrderStatusName,orderStatus,} from '../../../../core/models/domain.models';
+import { TranslatePipe } from '@ngx-translate/core';
 const PAGE_SIZE = 10;
-const STATUS_OPTIONS: OrderStatusName[] = ['Pending', 'Confirmed', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+const STATUS_OPTIONS:  OrderStatusName[] = [
+  'orders.status.pending',
+  'orders.status.confirmed',
+  'orders.status.processing',
+  'orders.status.shipped',
+  'orders.status.delivered',
+  'orders.status.cancelled'];
 
 @Component({
   selector: 'app-order-list-page',
   standalone: true,
-  imports: [OrderCardComponent, PaginationComponent],
+  imports: [OrderCardComponent, PaginationComponent,TranslatePipe],
   templateUrl: './order-list.page.html',
   styleUrl: './order-list.page.css',
 })

@@ -1,13 +1,13 @@
 <section class="product-details-page">
   @if (!product()) {
-    <p class="section-copy">This product doesn't exist or is no longer available.</p>
+    <p class="section-copy">{{ 'productDetails.productNotFound' | translate }}</p>
   } @else {
     <header class="product-details-page__hero">
       <app-breadcrumbs [items]="breadcrumbs()" />
       <div>
-        <p class="section-kicker">{{ product()?.categoryName || 'Catalog' }}</p>
-        <h1 class="section-title">{{ product()?.name }}</h1>
-        <p class="section-copy">{{ product()?.brandName || 'Premium selection' }} • {{ product()?.categoryName || 'Featured item' }}</p>
+        <p class="section-kicker">{{ product()?.CategoryArabicName || product()?.categoryName || ('productDetails.catalog' | translate) }}</p>
+        <h1 class="section-title">{{ product() | localizedName }} </h1>
+        <p class="section-copy">{{product()?.BrandArabicName || product()?.brandName  || 'Premium selection' }} • {{ product()?.categoryName || 'Featured item' }}</p>
       </div>
 
       <button
@@ -15,8 +15,8 @@
         class="wishlist-toggle"
         [class.wishlist-toggle--active]="isInWishlist()"
         (click)="toggleWishlist()"
-        [attr.aria-label]="isInWishlist() ? 'Remove from wishlist' : 'Add to wishlist'"
-      >
+[attr.aria-label]="isInWishlist()? ('productDetails.removeWishlist' | translate): ('productDetails.addWishlist' | translate)
+"      >
         <svg width="22" height="22" viewBox="0 0 24 24" [attr.fill]="isInWishlist() ? 'currentColor' : 'none'">
           <path d="M12 20s-7-4.35-9.5-8.5C.8 8 2.4 4.5 6 4.5c2 0 3.4 1.1 6 3.6 2.6-2.5 4-3.6 6-3.6 3.6 0 5.2 3.5 3.5 7-2.5 4.15-9.5 8.5-9.5 8.5z" stroke="currentColor" stroke-width="1.8"/>
         </svg>
@@ -25,18 +25,17 @@
 
     <div class="product-details-page__content">
       <div class="product-details-page__gallery">
-        <app-product-gallery [images]="product()?.images || []" [title]="product()?.name || 'Product images'" [fallbackImage]="product()?.imageUrl || ''" />
+        <app-product-gallery [images]="product()?.images || []" [title]="product() ? (product() | localizedName) : ('productDetails.productImages' | translate)"     [fallbackImage]="product()?.imageUrl || ''" />
       </div>
 
       <div class="product-details-page__aside">
       <div class="product-details-page__summary">
 
   <span class="product-details-page__brand">
-    {{ product()?.brandName }}
-  </span>
+{{ product()?.BrandArabicName || product()?.brandName }}  </span>
 
   <h2 class="product-details-page__title">
-    {{ product()?.name }}
+    {{ product() | localizedName }}
   </h2>
 
   <div class="product-details-page__price-wrapper">
@@ -55,16 +54,14 @@
       (click)="addToCart()"
       [disabled]="isAddingToCart()">
 
-      {{ isAddingToCart() ? 'Adding...' : 'Add to cart' }}
-
+{{ isAddingToCart()? ('productDetails.adding' | translate): ('productDetails.addToCart' | translate)}}
   </button>
 
   @if(cartMessage()){
 
       <p class="product-details-page__cart-msg">
 
-          {{cartMessage()}}
-
+{{ cartMessage() | translate }}
       </p>
 
   }
@@ -76,14 +73,12 @@
 
       <div class="stat-card__value">
 
-        ⭐ {{ ratingLabel() }}
-
+⭐ {{ rating().toFixed(1) }}/5
       </div>
 
       <div class="stat-card__label">
 
-        Rating
-
+{{ 'productDetails.rating' | translate }}
       </div>
 
     </div>
@@ -98,7 +93,7 @@
 
       <div class="stat-card__label">
 
-        Views
+        {{ 'productDetails.views' | translate }}
 
       </div>
 
@@ -114,7 +109,7 @@
 
       <div class="stat-card__label">
 
-        Reviews
+        {{ 'productDetails.reviews' | translate }}
 
       </div>
 
@@ -124,14 +119,17 @@
 
       <div class="stat-card__value">
 
-        {{ stockLabel() }}
+     @if (stock() > 0) {
+  {{ stock() }} {{ 'product.inStock' | translate }}
+} @else {
+  {{ 'product.outOfStock' | translate }}
+}
 
       </div>
 
       <div class="stat-card__label">
 
-        Availability
-
+{{ 'productDetails.availability' | translate }}
       </div>
 
     </div>
@@ -142,7 +140,7 @@
 
     <div class="product-selected-variant">
 
-      Selected
+      {{ 'productDetails.selected' | translate }}
 
       <strong>
 
@@ -176,7 +174,7 @@
 
     @if (product()?.relatedProducts?.length) {
       <div class="product-details-page__related">
-        <h3 class="product-details-page__related-title">You might also like</h3>
+        <h3 class="product-details-page__related-title">{{ 'productDetails.relatedProducts' | translate }}</h3>
         <div class="product-details-page__related-grid">
           @for (related of product()!.relatedProducts; track related.id) {
             <app-product-card [product]="related" />

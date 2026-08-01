@@ -4,11 +4,12 @@ import { CartItemComponent } from '../../components/cart-item/cart-item.componen
 import { CartSummaryComponent } from '../../components/cart-summary/cart-summary.component';
 import { CouponFormComponent } from '../../components/coupon-form/coupon-form.component';
 import { CartService } from '../../../../core/services/cart.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-cart-page',
   standalone: true,
-  imports: [RouterLink, CartItemComponent, CartSummaryComponent, CouponFormComponent],
+  imports: [RouterLink, CartItemComponent, CartSummaryComponent, CouponFormComponent,TranslatePipe],
   templateUrl: './cart.page.html',
   styleUrl: './cart.page.css',
 })

@@ -1,12 +1,17 @@
 <section class="collection-page">
   @if (notFound()) {
-    <p class="section-copy">This brand doesn't exist or is no longer available.</p>
+    <p class="section-copy">{{ 'brandPage.notFound' | translate }}</p>
   } @else {
     <header class="collection-page__hero">
-      <app-breadcrumbs [items]="[{ label: 'Home', link: '/' }, { label: 'Brands', link: '/brands' }, { label: brand()?.name || 'Brand' }]" />
-      <div>
-        <p class="section-kicker">Brand</p>
-        <h1 class="section-title">{{ brand()?.name || 'Loading…' }}</h1>
+<app-breadcrumbs
+  [items]="[
+    { label: ('brandPage.home' | translate), link: '/' },
+    { label: ('brandPage.brands' | translate), link: '/brands' },
+    { label: brand() ? (brand() | localizedName) : ('brandPage.brand' | translate) }
+  ]"
+/>      <div>
+        <p class="section-kicker">{{ 'brandPage.brand' | translate }}</p>
+        <h1 class="section-title">{{ brand() ? (brand() | localizedName) : ('brandPage.loading' | translate) }}</h1>
         @if (brand()?.description) {
           <p class="section-copy">{{ brand()?.description }}</p>
         }
@@ -22,11 +27,15 @@
       <div class="collection-page__content">
         <!-- Toolbar with mobile filter toggle -->
         <div class="collection-page__toolbar">
-          <p class="collection-page__summary">{{ totalCount() }} product{{ totalCount() === 1 ? '' : 's' }}</p>
+          <p class="collection-page__summary">@if (totalCount() === 1) {
+  {{ 'brandPage.productCount' | translate:{ count: totalCount() } }}
+} @else {
+  {{ 'brandPage.productsCount' | translate:{ count: totalCount() } }}
+}p>
 
           <button class="filters-toggle" (click)="openFilters()">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-            Filters
+            {{ 'brandPage.filters' | translate }}
           </button>
         </div>
 
@@ -34,7 +43,7 @@
         <div class="filters-backdrop" [class.filters-backdrop--visible]="filtersOpen()" (click)="closeFilters()"></div>
         <div class="filters-drawer" [class.filters-drawer--open]="filtersOpen()">
           <div class="filters-drawer__header">
-            <span class="filters-drawer__title">Filters</span>
+            <span class="filters-drawer__title">{{ 'brandPage.filters' | translate }}</span>
             <button class="filters-drawer__close" (click)="closeFilters()">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
@@ -43,8 +52,8 @@
             <app-product-filters [hideBrandFilter]="true" (filtersChanged)="onFiltersChanged($event)" />
           </div>
           <div class="filters-drawer__footer">
-            <button class="btn btn-outline" (click)="clearFilters()">Clear All</button>
-            <button class="btn btn-primary" (click)="closeFilters()">Show Results</button>
+            <button class="btn btn-outline" (click)="clearFilters()">{{ 'brandPage.clearAll' | translate }}</button>
+            <button class="btn btn-primary" (click)="closeFilters()">{{ 'brandPage.showResults' | translate }}</button>
           </div>
         </div>
 
@@ -55,7 +64,7 @@
             }
           </div>
         } @else if (products().length === 0) {
-          <p class="section-copy">No products match your current filters.</p>
+          <p class="section-copy">{{ 'brandPage.noProducts' | translate }}</p>
         } @else {
           <div class="collection-page__grid">
             @for (product of products(); track product.id) {

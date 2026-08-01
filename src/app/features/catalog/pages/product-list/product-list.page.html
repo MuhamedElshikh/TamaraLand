@@ -20,7 +20,7 @@
         <!-- Mobile filter toggle -->
         <button class="filters-toggle" (click)="openFilters()">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-          Filters
+          {{ 'catalog.filters' | translate }}
         </button>
       </div>
 
@@ -28,7 +28,7 @@
       <div class="filters-backdrop" [class.filters-backdrop--visible]="filtersOpen()" (click)="closeFilters()"></div>
       <div class="filters-drawer" [class.filters-drawer--open]="filtersOpen()">
         <div class="filters-drawer__header">
-          <span class="filters-drawer__title">Filters</span>
+          <span class="filters-drawer__title">{{ 'catalog.filters' | translate }}</span>
           <button class="filters-drawer__close" (click)="closeFilters()">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </button>
@@ -37,8 +37,8 @@
           <app-product-filters (filtersChanged)="onFiltersChanged($event)" />
         </div>
         <div class="filters-drawer__footer">
-          <button class="btn btn-outline" (click)="clearFilters()">Clear All</button>
-          <button class="btn btn-primary" (click)="closeFilters()">Show Results</button>
+          <button class="btn btn-outline" (click)="clearFilters()">{{ 'catalog.clearAll' | translate }}</button>
+          <button class="btn btn-primary" (click)="closeFilters()">{{ 'catalog.showResults' | translate }}</button>
         </div>
       </div>
 
@@ -49,7 +49,7 @@
           }
         </div>
       } @else if (products().length === 0) {
-        <p class="section-copy">No products match your current filters.</p>
+        <p class="section-copy">{{ 'catalog.noProducts' | translate }}</p>
       } @else {
         <div class="catalog-page__grid">
           @for (product of products(); track product.id) {

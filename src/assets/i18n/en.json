@@ -81,8 +81,617 @@
     "removeFromWishlist": "Remove from Wishlist",
 
     "currency": "EGP"
+  },
+  "filters": {
+    "title": "Refine Your Selection",
+    "subtitle": "Discover pieces tailored to your style with elegant filtering.",
+
+    "filters": "Filters",
+    "active": "active",
+
+    "search": "Search",
+    "searchPlaceholder": "Search products...",
+
+    "categories": "Categories",
+    "allCategories": "All Categories",
+
+    "brands": "Brands",
+    "allBrands": "All Brands",
+
+    "priceRange": "Price Range",
+    "min": "Min",
+    "max": "Max",
+    "applyPrice": "Apply Price",
+
+    "availability": "Availability",
+    "inStockOnly": "In Stock Only",
+
+    "sortBy": "Sort By",
+
+    "featured": "Featured",
+    "newest": "Newest",
+    "priceLowHigh": "Price: Low → High",
+    "priceHighLow": "Price: High → Low",
+    "bestDiscount": "Best Discount",
+
+    "clearAll": "Clear All"
+  },
+  
+  "gallery": {
+    "noImage": "No Image"
+  },
+  "variant": {
+    "color": "Color",
+    "size": "Size",
+    "sku": "SKU",
+    "stock": "Stock",
+    "cm": "cm",
+
+    "bust": "Bust",
+    "waist": "Waist",
+    "hip": "Hip",
+    "length": "Length"
+  },
+  "reviews": {
+    "leaveReview": "Leave a Review",
+    "shareThoughts": "Share your thoughts",
+
+    "signIn": "Sign In",
+    "loginPrompt": "to leave a review for this product.",
+
+    "rating": "Rating",
+    "comment": "Comment",
+    "commentPlaceholder": "Tell us what you loved...",
+
+    "submit": "Submit Review",
+    "submitting": "Submitting...",
+
+    "thankYou": "Thanks for sharing your feedback."
+  },
+  "reviewList": {
+    "reviews": "Reviews",
+    "customerReviews": "Customer Reviews",
+
+    "review": "review",
+    "reviewsPlural": "reviews",
+
+    "loading": "Loading reviews...",
+
+    "saving": "Saving...",
+    "save": "Save",
+    "cancel": "Cancel",
+
+    "edit": "Edit",
+    "delete": "Delete",
+
+    "emptyComment": "A thoughtful review from a happy customer.",
+
+    "noReviews": "No reviews yet. Be the first to share your experience."
+  },
+  "catalog": {
+    "filters": "Filters",
+
+    "clearAll": "Clear All",
+    "showResults": "Show Results",
+
+    "noProducts": "No products match your current filters."
+  },
+  "productDetails": {
+    "catalog": "Catalog",
+    "premiumSelection": "Premium Selection",
+    "featuredItem": "Featured Item",
+
+    "productImages": "Product Images",
+
+    "addToCart": "Add to Cart",
+    "adding": "Adding...",
+
+    "rating": "Rating",
+    "views": "Views",
+    "reviews": "Reviews",
+    "availability": "Availability",
+
+    "selected": "Selected",
+
+    "removeWishlist": "Remove from Wishlist",
+    "addWishlist": "Add to Wishlist",
+
+    "productNotFound": "This product doesn't exist or is no longer available.",
+
+    "relatedProducts": "You Might Also Like"
+  },
+  
+  "categoryPage": {
+    "notFound": "This category doesn't exist or is no longer available.",
+    "home": "Home",
+    "categories": "Categories",
+    "category": "Category",
+    "loading": "Loading...",
+
+    "filters": "Filters",
+    "clearAll": "Clear All",
+    "showResults": "Show Results",
+
+    "noProducts": "No products match your current filters.",
+
+    "productsCount": "{{count}} products",
+    "productCount": "{{count}} product"
+  },
+  "categories": {
+    "kicker": "Browse",
+    "title": "Shop by Category",
+    "subtitle": "Explore every corner of Tamara Land, from everyday essentials to statement pieces.",
+
+    "empty": "No categories available yet."
+  },
+  
+  "brands": {
+    "kicker": "Browse",
+    "title": "Shop by Brand",
+    "subtitle": "Discover the labels behind every Tamara Land piece.",
+
+    "empty": "No brands available yet."
+  },
+  "brandPage": {
+    "notFound": "This brand doesn't exist or is no longer available.",
+
+    "home": "Home",
+    "brands": "Brands",
+    "brand": "Brand",
+
+    "loading": "Loading...",
+
+    "filters": "Filters",
+    "clearAll": "Clear All",
+    "showResults": "Show Results",
+
+    "productCount": "{{count}} product",
+    "productsCount": "{{count}} products",
+
+    "noProducts": "No products match your current filters."
+  },
+  "address": {
+    "default": "Default",
+
+    "building": "Bldg",
+    "floor": "Fl",
+    "apartment": "Apt",
+
+    "settingDefault": "Setting...",
+    "setDefault": "Set as Default",
+
+    "edit": "Edit",
+
+    "deleting": "Deleting...",
+    "delete": "Delete"
+  },
+  "addressForm": {
+    "editTitle": "Edit Address",
+    "addTitle": "Add a New Address",
+
+    "fullName": "Full Name",
+    "phoneNumber": "Phone Number",
+    "governorate": "Governorate",
+    "area": "Area",
+    "street": "Street",
+    "building": "Building",
+    "floor": "Floor",
+    "apartment": "Apartment",
+    "notes": "Notes (Optional)",
+
+    "placeholder": {
+      "fullName": "Full name",
+      "phone": "01xxxxxxxxx",
+      "street": "Street name",
+      "building": "Optional",
+      "floor": "Optional",
+      "apartment": "Optional",
+      "notes": "Delivery instructions..."
+    },
+
+    "selectGovernorate": "Select Governorate",
+    "selectArea": "Select Area",
+
+    "shipping": "{{cost}} EGP shipping",
+
+    "setDefault": "Set as Default Address",
+
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "addAddress": "Add Address",
+    "cancel": "Cancel",
+
+    "validation": {
+      "fullNameRequired": "Full name is required.",
+      "phoneRequired": "Phone number is required.",
+      "phoneInvalid": "Enter a valid phone number.",
+      "governorateRequired": "Please select a governorate.",
+      "areaRequired": "Please select an area.",
+      "streetRequired": "Street is required."
+    }
+  },
+  "addresses": {
+    "kicker": "Delivery",
+    "title": "Your Addresses",
+
+    "addAddress": "Add Address",
+    "addFirstAddress": "Add Your First Address",
+
+    "empty": "You haven't saved any addresses yet.",
+
+    "loading": "Loading addresses..."
+  },
+  "auth": {
+    "brand": "Tamara Land",
+    "headline": "Be Proud to Be a Woman.",
+
+    "description": "Curated pieces for the woman who knows her worth. Sign in to keep your cart, wishlist, and orders exactly where you left them.",
+
+    "features": {
+      "collections": {
+        "title": "Handpicked Collections",
+        "subtitle": "New arrivals selected for every occasion"
+      },
+      "sizes": {
+        "title": "Your Size, Your Fit",
+        "subtitle": "Saved sizes and preferences for faster checkout"
+      },
+      "security": {
+        "title": "Secure & Private",
+        "subtitle": "Your data is protected with encrypted, token-based access"
+      }
+    }
+  },
+  "forgotPassword": {
+    "kicker": "Need Help",
+    "title": "Forgot Your Password?",
+    "description": "Enter your email and we'll send a reset link if an account exists.",
+
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+
+    "requestFailed": "Request Failed",
+
+    "validation": {
+      "required": "Email is required.",
+      "invalid": "Please enter a valid email address."
+    },
+
+    "buttons": {
+      "send": "Send Reset Link",
+      "sending": "Sending Link..."
+    },
+
+    "footer": {
+      "backToLogin": "Back to Login",
+      "createAccount": "Create Account"
+    }
+  },
+  "login": {
+    "kicker": "Welcome Back",
+    "title": "Sign in to Tamara Land",
+
+    "loginFailed": "Login Failed",
+
+    "social": {
+      "google": "Continue with Google",
+      "googleLoading": "Connecting Google...",
+      "facebook": "Continue with Facebook",
+      "facebookLoading": "Connecting Facebook...",
+      "divider": "or sign in with email"
+    },
+
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+
+    "password": "Password",
+    "passwordPlaceholder": "Your password",
+
+    "validation": {
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Please enter a valid email address.",
+      "passwordRequired": "Password is required.",
+      "passwordMin": "Password must be at least 8 characters."
+    },
+
+    "buttons": {
+      "login": "Sign In",
+      "loading": "Signing In..."
+    },
+
+    "footer": {
+      "forgotPassword": "Forgot Password?",
+      "newHere": "New here?",
+      "createAccount": "Create an Account"
+    }
+  },
+  "profile": {
+    "kicker": "Account",
+    "title": "Profile Settings",
+
+    "personalInformation": "Personal Information",
+    "password": "Password",
+
+    "edit": "Edit",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+
+    "changePassword": "Change Password",
+    "updatePassword": "Update Password",
+    "updatingPassword": "Updating...",
+
+    "passwordChanged": "Your password was changed successfully.",
+
+    "fields": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phoneNumber": "Phone Number",
+
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password"
+    },
+
+    "placeholders": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "phoneNumber": "01xxxxxxxxx",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmPassword": "Repeat new password"
+    },
+
+    "validation": {
+      "firstNameRequired": "First name is required.",
+      "lastNameRequired": "Last name is required.",
+
+      "currentPasswordRequired": "Current password is required.",
+      "newPasswordRequired": "New password is required.",
+      "passwordMinLength": "Password must be at least 8 characters.",
+      "confirmPasswordRequired": "Please confirm your new password.",
+      "passwordMismatch": "Passwords do not match."
+    }
+  },
+  "register": {
+  "kicker": "Get Started",
+  "title": "Create Your Account",
+
+  "registrationFailed": "Registration Failed",
+
+  "fields": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password"
+  },
+
+  "placeholders": {
+    "firstName": "Ahmed",
+    "lastName": "Ali",
+    "email": "you@example.com",
+    "password": "Create a password",
+    "confirmPassword": "Repeat password"
+  },
+
+  "validation": {
+    "firstNameRequired": "First name is required.",
+    "firstNameMinLength": "First name should be at least 2 characters.",
+    "lastNameRequired": "Last name is required.",
+    "lastNameMinLength": "Last name should be at least 2 characters.",
+    "emailRequired": "Email is required.",
+    "emailInvalid": "Please enter a valid email address.",
+    "passwordRequired": "Password is required.",
+    "passwordMinLength": "Password must be at least 8 characters.",
+    "confirmPasswordRequired": "Please confirm your password.",
+    "passwordMismatch": "Passwords do not match."
+  },
+
+  "buttons": {
+    "createAccount": "Create Account",
+    "creating": "Creating Account..."
+  },
+
+  "footer": {
+    "alreadyHaveAccount": "Already have an account?",
+    "signIn": "Sign In",
+    "terms": "By continuing you agree to the store policies and terms."
   }
+},
+"resetPassword": {
+  "kicker": "Reset Access",
+  "title": "Choose a New Password",
+  "subtitle": "Use the token from your email to securely update your password.",
+
+  "resetFailed": "Reset Failed",
+
+  "fields": {
+    "email": "Email",
+    "token": "Reset Token",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm New Password"
+  },
+
+  "placeholders": {
+    "email": "you@example.com",
+    "token": "Paste reset token",
+    "newPassword": "Create a new password",
+    "confirmPassword": "Repeat new password"
+  },
+
+  "validation": {
+    "emailRequired": "Email is required.",
+    "emailInvalid": "Please enter a valid email address.",
+    "tokenRequired": "Reset token is required.",
+    "passwordRequired": "New password is required.",
+    "passwordMinLength": "Password must be at least 8 characters.",
+    "confirmPasswordRequired": "Please confirm your new password.",
+    "passwordMismatch": "Passwords do not match."
+  },
+
+  "buttons": {
+    "resetPassword": "Reset Password",
+    "updating": "Updating Password..."
+  },
+
+  "footer": {
+    "backToLogin": "Back to Login",
+    "requestAnotherLink": "Request Another Link"
+  }
+},
+"cart": {
+  "sku": "SKU",
+  "each": "each",
+
+  "increaseQuantity": "Increase quantity",
+  "decreaseQuantity": "Decrease quantity",
+
+  "remove": "Remove",
+  "removing": "Removing..."
+  ,
+"summary": {
+  "title": "Order Summary",
+  "items": "Items",
+  "discount": "Discount",
+  "estimatedTotal": "Estimated Total",
+  "shippingNote": "Shipping is calculated at checkout.",
+  "proceedToCheckout": "Proceed to Checkout"
+},"page": {
+  "kicker": "Your Bag",
+  "title": "Shopping Cart",
+  "empty": "Your cart is empty right now.",
+  "startShopping": "Start Shopping"
 }
+},"coupon": {
+  "placeholder": "Coupon code",
+
+  "apply": "Apply",
+  "applying": "Applying...",
+
+  "applied": "Coupon",
+
+  "remove": "Remove",
+  "removing": "Removing..."
+},
+"checkout": {
+  "address": {
+    "step": "Step 1",
+    "title": "Delivery Address",
+    "manageAddresses": "Manage Addresses",
+    "loading": "Loading your addresses...",
+    "empty": "You don't have any saved addresses yet.",
+    "addAddress": "Add an Address",
+    "default": "Default",
+    "verified": "Verified",
+    "notVerified": "Phone number not verified",
+    "verifyNow": "Verify Now"
+  },
+ "shipping": {
+  "step": "Step 2",
+  "title": "Shipping Area",
+  "selectAddressFirst": "Select a delivery address first to see shipping options.",
+  "notAvailable": "Sorry, we don't deliver to",
+  "notAvailableSuffix": "yet. Please choose a different address.",
+  "governorate": "Governorate",
+  "area": "Area",
+  "selectArea": "Select area"
+},
+ "summary": {
+    "title": "Order Summary",
+    "items": "Items",
+    "discount": "Discount",
+    "shipping": "Shipping",
+    "selectArea": "Select Area",
+    "estimatedTotal": "Estimated Total",
+
+    "paymentMethod": "Payment Method",
+    "cashOnDelivery": "Cash on Delivery",
+    "onlinePaymentSoon": "Online payment is coming soon.",
+
+    "placeOrder": "Place Order",
+    "placingOrder": "Placing Order..."
+  },
+  "page": {
+  "kicker": "Almost There",
+  "title": "Checkout",
+  "loadingCart": "Loading your cart...",
+  "emptyCart": "Your cart is empty, so there's nothing to check out yet.",
+  "startShopping": "Start Shopping"
+}
+},
+"orders": {
+  "orderNumber": "Order",
+    "currency": "EGP",
+    "items": "Items",
+  "quantity": "Qty",
+  "cancelledMessage": "This order has been cancelled.",
+  "status": {
+    "pending": "Pending",
+    "confirmed": "Confirmed",
+    "shipped": "Shipped",
+    "delivered": "Delivered"
+  },
+  "loading": "Loading order...",
+  "notFound": "This order doesn't exist or you don't have access to it.",
+  "order": "Order",
+  "placedOn": "Placed on",
+  "deliveryAddress": "Delivery Address",
+  "payment": "Payment",
+  "summary": "Order Summary",
+  "subtotal": "Subtotal",
+  "discount": "Discount",
+  "shipping": "Shipping",
+  "total": "Total",
+  "title": "Your Orders",
+  "allStatuses": "All Statuses",
+  "noOrders": "No orders found.",
+  "orderPlacedSuccessfully": "Your order was placed successfully! 🎉"
+},
+"verifyPhone": {
+  "title": "Verify Phone Number",
+  "message": "We'll send a verification code via WhatsApp to",
+  "sendingCode": "Sending code...",
+  "enterCode": "Enter the 6-digit code",
+  "codePlaceholder": "123456",
+  "verify": "Verify",
+  "verifying": "Verifying...",
+  "resend": "Resend code",
+  "sending": "Sending...",
+  "resendIn": "Resend code in {{seconds}}s",
+    "close": "Close"
+
+},
+"wishlist": {
+  "review": "review",
+  "reviews": "reviews",
+  "outOfStock": "Out of stock",
+  "viewProduct": "View product",
+   "currency": "EGP",
+  "remove": "Remove",
+  "removing": "Removing...",
+   "kicker": "Saved",
+  "title": "Your Wishlist",
+  "empty": "You haven't saved anything yet.",
+  "discoverProducts": "Discover Products"
+}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

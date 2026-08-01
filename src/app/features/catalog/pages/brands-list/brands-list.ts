@@ -3,11 +3,13 @@ import { RouterLink } from '@angular/router';
 import { catchError, of } from 'rxjs';
 import { CatalogService } from '../../../../core/services/catalog.service';
 import { BrandResponse } from '../../../../core/models/catalog.models';
+import { TranslatePipe } from '@ngx-translate/core';
+import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe'; 
 
 @Component({
   selector: 'app-brands-list',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink,LocalizedNamePipe,TranslatePipe],
   templateUrl: './brands-list.html',
   styleUrl: './brands-list.css',
 })

@@ -4,11 +4,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { extractErrorMessage } from '../../../../core/utils/error-message.util'; // عدّل المسار
 import { ReviewService } from '../../../../core/services/review.service';
 import { AuthService } from '../../../../core/services/auth.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-review-form',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink,TranslatePipe],
   templateUrl: './review-form.component.html',
   styleUrl: './review-form.component.css',
 })

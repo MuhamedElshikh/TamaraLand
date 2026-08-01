@@ -99,7 +99,9 @@ export interface ProductResponse  {
   reviewsCount:number;
   imageUrl:string;
   categoryName: string;
+  CategoryArabicName: string;
   brandName: string;
+  BrandArabicName: string;
   viewsCount:number;
   variants: ProductVariantResponse[];
 }

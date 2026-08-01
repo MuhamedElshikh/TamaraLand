@@ -7,11 +7,12 @@ import { OrderItemsComponent } from '../../components/order-items/order-items.co
 import { OrderService } from '../../../../core/services/order.service';
 import { OrderDetailsResponse } from '../../../../core/models/domain.models';
 import {orderStatus,paymentStatus,paymentMethod} from '../../../../core/models/domain.models';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-order-details-page',
   standalone: true,
-  imports: [OrderStatusComponent, OrderItemsComponent, DatePipe, DecimalPipe],
+  imports: [OrderStatusComponent, OrderItemsComponent, DatePipe, DecimalPipe,TranslatePipe],
   templateUrl: './order-details.page.html',
   styleUrl: './order-details.page.css',
 })

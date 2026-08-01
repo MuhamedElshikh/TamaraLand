@@ -2,11 +2,12 @@ import { Component, Input, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CartResponse } from '../../../../core/models/domain.models';
 import { DecimalPipe } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-cart-summary',
   standalone: true,
-  imports: [RouterLink ,DecimalPipe],
+  imports: [RouterLink ,DecimalPipe,TranslatePipe],
   templateUrl: './cart-summary.component.html',
   styleUrl: './cart-summary.component.css',
 })

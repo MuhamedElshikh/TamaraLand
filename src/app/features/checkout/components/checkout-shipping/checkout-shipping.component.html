@@ -1,37 +1,95 @@
 <section class="checkout-block">
+
   <div class="checkout-block__header">
+
     <div>
-      <p class="section-kicker">Step 2</p>
-      <h3>Shipping area</h3>
+
+      <p class="section-kicker">
+        {{ 'checkout.shipping.step' | translate }}
+      </p>
+
+      <h3>
+        {{ 'checkout.shipping.title' | translate }}
+      </h3>
+
     </div>
+
   </div>
 
   @if (!governorate()) {
-    <p class="section-copy">Select a delivery address first to see shipping options.</p>
-  } @else if (noShippingAvailable()) {
-    <p class="checkout-shipping__error">
-      Sorry, we don't deliver to "{{ governorate() }}" yet. Please choose a different address.
+
+    <p class="section-copy">
+      {{ 'checkout.shipping.selectAddressFirst' | translate }}
     </p>
+
+  } @else if (noShippingAvailable()) {
+
+    <p class="checkout-shipping__error">
+
+      {{ 'checkout.shipping.notAvailable' | translate }}
+
+      "{{ governorate() }}"
+
+      {{ 'checkout.shipping.notAvailableSuffix' | translate }}
+
+    </p>
+
   } @else {
+
     <div class="field-grid">
+
       <label class="field">
-        <span>Governorate</span>
-        <input type="text" [value]="governorate()" disabled />
+
+        <span>
+          {{ 'checkout.shipping.governorate' | translate }}
+        </span>
+
+        <input
+          type="text"
+          [value]="governorate()"
+          disabled />
+
       </label>
 
       <label class="field">
-        <span>Area</span>
+
+        <span>
+          {{ 'checkout.shipping.area' | translate }}
+        </span>
+
         <select
           [ngModel]="selectedAreaId()"
           (ngModelChange)="onAreaChange($event)"
-          name="checkoutArea"
-        >
-          <option [ngValue]="null" disabled>Select area</option>
+          name="checkoutArea">
+
+          <option
+            [ngValue]="null"
+            disabled>
+
+            {{ 'checkout.shipping.selectArea' | translate }}
+
+          </option>
+
           @for (area of areasForGovernorate(); track area.id) {
-            <option [ngValue]="area.id">{{ area.name }} — {{ area.shippingCost | number }} EGP</option>
+
+            <option [ngValue]="area.id">
+
+              {{ area.name }}
+
+              —
+
+              {{ area.shippingCost | number }} EGP
+
+            </option>
+
           }
+
         </select>
+
       </label>
+
     </div>
+
   }
+
 </section>

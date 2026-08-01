@@ -1,40 +1,84 @@
 <section class="cart-page">
+
   <header class="cart-page__hero">
-    <p class="section-kicker">Your bag</p>
-    <h1 class="section-title">Shopping cart</h1>
+
+    <p class="section-kicker">
+      {{ 'cart.page.kicker' | translate }}
+    </p>
+
+    <h1 class="section-title">
+      {{ 'cart.page.title' | translate }}
+    </h1>
+
   </header>
 
   @if (isLoading()) {
+
     <div class="cart-page__loading">
-      @for (i of [1, 2, 3]; track i) {
+
+      @for (i of [1,2,3]; track i) {
         <div class="cart-page__skeleton"></div>
       }
+
     </div>
+
   } @else if (!cart() || cart()!.items.length === 0) {
+
     <div class="cart-page__empty">
-      <p class="section-copy">Your cart is empty right now.</p>
-      <a routerLink="/products" class="btn btn-primary">Start shopping</a>
+
+      <p class="section-copy">
+        {{ 'cart.page.empty' | translate }}
+      </p>
+
+      <a
+        routerLink="/products"
+        class="btn btn-primary">
+
+        {{ 'cart.page.startShopping' | translate }}
+
+      </a>
+
     </div>
+
   } @else {
+
     @if (cart()?.messages?.length) {
+
       <div class="cart-page__messages">
+
         @for (message of cart()!.messages; track message) {
           <p>{{ message }}</p>
         }
+
       </div>
+
     }
 
     <div class="cart-page__layout">
+
       <div class="cart-page__items">
+
         @for (item of cart()!.items; track item.productVariantId) {
-          <app-cart-item [item]="item" />
+
+          <app-cart-item
+            [item]="item" />
+
         }
+
       </div>
 
       <div class="cart-page__aside">
-        <app-cart-summary [cart]="cart()" />
-        <app-coupon-form [appliedCouponCode]="cart()?.couponCode" />
+
+        <app-cart-summary
+          [cart]="cart()" />
+
+        <app-coupon-form
+          [appliedCouponCode]="cart()?.couponCode" />
+
       </div>
+
     </div>
+
   }
+
 </section>

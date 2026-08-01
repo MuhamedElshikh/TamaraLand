@@ -4,11 +4,12 @@ import { CartService } from '../../../../core/services/cart.service';
 import { CartItemResponse } from '../../../../core/models/domain.models';
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 import { DecimalPipe } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-cart-item',
   standalone: true,
-  imports: [RouterLink ,DecimalPipe],
+  imports: [RouterLink ,DecimalPipe,TranslatePipe],
   templateUrl: './cart-item.component.html',
   styleUrl: './cart-item.component.css',
 })

@@ -78,8 +78,606 @@
     "removeFromWishlist": "إزالة من المفضلة",
 
     "currency": "ج.م"
+  },
+  "filters": {
+    "title": "خصص اختيارك",
+    "subtitle": "اكتشف المنتجات المناسبة لذوقك باستخدام خيارات التصفية.",
+
+    "filters": "التصفية",
+    "active": "نشط",
+
+    "search": "بحث",
+    "searchPlaceholder": "ابحث عن المنتجات...",
+
+    "categories": "الأقسام",
+    "allCategories": "كل الأقسام",
+
+    "brands": "العلامات التجارية",
+    "allBrands": "كل العلامات",
+
+    "priceRange": "نطاق السعر",
+    "min": "الحد الأدنى",
+    "max": "الحد الأقصى",
+    "applyPrice": "تطبيق السعر",
+
+    "availability": "التوفر",
+    "inStockOnly": "المتوفر فقط",
+
+    "sortBy": "ترتيب حسب",
+
+    "featured": "الأبرز",
+    "newest": "الأحدث",
+    "priceLowHigh": "السعر: من الأقل للأعلى",
+    "priceHighLow": "السعر: من الأعلى للأقل",
+    "bestDiscount": "أفضل خصم",
+
+    "clearAll": "مسح الكل"
+  },
+  "gallery": {
+    "noImage": "لا توجد صورة"
+  },
+  "variant": {
+    "color": "اللون",
+    "size": "المقاس",
+    "sku": "رمز المنتج",
+    "stock": "المخزون",
+    "cm": "سم",
+
+    "bust": "الصدر",
+    "waist": "الخصر",
+    "hip": "الأرداف",
+    "length": "الطول"
+  },
+  "reviews": {
+    "leaveReview": "أضف تقييمًا",
+    "shareThoughts": "شاركنا رأيك",
+
+    "signIn": "تسجيل الدخول",
+    "loginPrompt": "لإضافة تقييم لهذا المنتج.",
+
+    "rating": "التقييم",
+    "comment": "التعليق",
+    "commentPlaceholder": "أخبرنا برأيك في المنتج...",
+
+    "submit": "إرسال التقييم",
+    "submitting": "جارٍ الإرسال...",
+
+    "thankYou": "شكرًا لمشاركتك رأيك."
+  },
+  "reviewList": {
+    "reviews": "التقييمات",
+    "customerReviews": "آراء العملاء",
+
+    "review": "تقييم",
+    "reviewsPlural": "تقييم",
+
+    "loading": "جارٍ تحميل التقييمات...",
+
+    "saving": "جارٍ الحفظ...",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+
+    "edit": "تعديل",
+    "delete": "حذف",
+
+    "emptyComment": "رأي جميل من أحد عملائنا.",
+
+    "noReviews": "لا توجد تقييمات بعد. كن أول من يشارك تجربته."
+  },
+  "catalog": {
+    "filters": "التصفية",
+
+    "clearAll": "مسح الكل",
+    "showResults": "عرض النتائج",
+
+    "noProducts": "لا توجد منتجات تطابق عوامل التصفية الحالية."
+  },
+  "productDetails": {
+    "catalog": "المنتجات",
+    "premiumSelection": "مجموعة مميزة",
+    "featuredItem": "منتج مميز",
+
+    "productImages": "صور المنتج",
+
+    "addToCart": "أضف إلى السلة",
+    "adding": "جارٍ الإضافة...",
+
+    "rating": "التقييم",
+    "views": "المشاهدات",
+    "reviews": "التقييمات",
+    "availability": "التوفر",
+
+    "selected": "المحدد",
+
+    "removeWishlist": "إزالة من المفضلة",
+    "addWishlist": "إضافة إلى المفضلة",
+
+    "productNotFound": "هذا المنتج غير متوفر أو لم يعد موجودًا.",
+
+    "relatedProducts": "قد يعجبك أيضًا"
+  },
+  "categoryPage": {
+    "notFound": "هذا القسم غير موجود أو لم يعد متاحًا.",
+    "home": "الرئيسية",
+    "categories": "الأقسام",
+    "category": "القسم",
+    "loading": "جارٍ التحميل...",
+
+    "filters": "الفلاتر",
+    "clearAll": "مسح الكل",
+    "showResults": "عرض النتائج",
+
+    "noProducts": "لا توجد منتجات مطابقة للفلاتر الحالية.",
+
+    "productsCount": "{{count}} منتج",
+    "productCount": "{{count}} منتج"
+  },
+  "categories": {
+    "kicker": "تصفح",
+    "title": "تسوق حسب القسم",
+    "subtitle": "استكشف جميع أقسام تمارا لاند، من القطع اليومية الأساسية إلى أحدث صيحات الموضة.",
+
+    "empty": "لا توجد أقسام متاحة حاليًا."
+  },
+  "brands": {
+    "kicker": "تصفح",
+    "title": "تسوق حسب العلامة التجارية",
+    "subtitle": "اكتشف العلامات التجارية التي تقف وراء كل قطعة في تمارا لاند.",
+
+    "empty": "لا توجد علامات تجارية متاحة حاليًا."
+  },
+  "brandPage": {
+    "notFound": "هذه العلامة التجارية غير موجودة أو لم تعد متاحة.",
+
+    "home": "الرئيسية",
+    "brands": "العلامات التجارية",
+    "brand": "العلامة التجارية",
+
+    "loading": "جارٍ التحميل...",
+
+    "filters": "الفلاتر",
+    "clearAll": "مسح الكل",
+    "showResults": "عرض النتائج",
+
+    "productCount": "{{count}} منتج",
+    "productsCount": "{{count}} منتج",
+
+    "noProducts": "لا توجد منتجات مطابقة للفلاتر الحالية."
+  },
+  "address": {
+    "default": "الافتراضي",
+
+    "building": "مبنى",
+    "floor": "الدور",
+    "apartment": "شقة",
+
+    "settingDefault": "جارٍ التعيين...",
+    "setDefault": "تعيين كافتراضي",
+
+    "edit": "تعديل",
+
+    "deleting": "جارٍ الحذف...",
+    "delete": "حذف"
+  },
+  "addressForm": {
+    "editTitle": "تعديل العنوان",
+    "addTitle": "إضافة عنوان جديد",
+
+    "fullName": "الاسم بالكامل",
+    "phoneNumber": "رقم الهاتف",
+    "governorate": "المحافظة",
+    "area": "المنطقة",
+    "street": "الشارع",
+    "building": "المبنى",
+    "floor": "الدور",
+    "apartment": "الشقة",
+    "notes": "ملاحظات (اختياري)",
+
+    "placeholder": {
+      "fullName": "الاسم بالكامل",
+      "phone": "01xxxxxxxxx",
+      "street": "اسم الشارع",
+      "building": "اختياري",
+      "floor": "اختياري",
+      "apartment": "اختياري",
+      "notes": "تعليمات التوصيل..."
+    },
+
+    "selectGovernorate": "اختر المحافظة",
+    "selectArea": "اختر المنطقة",
+
+    "shipping": "تكلفة الشحن {{cost}} جنيه",
+
+    "setDefault": "تعيين كعنوان افتراضي",
+
+    "saving": "جارٍ الحفظ...",
+    "saveChanges": "حفظ التعديلات",
+    "addAddress": "إضافة العنوان",
+    "cancel": "إلغاء",
+
+    "validation": {
+      "fullNameRequired": "الاسم بالكامل مطلوب.",
+      "phoneRequired": "رقم الهاتف مطلوب.",
+      "phoneInvalid": "يرجى إدخال رقم هاتف صحيح.",
+      "governorateRequired": "يرجى اختيار المحافظة.",
+      "areaRequired": "يرجى اختيار المنطقة.",
+      "streetRequired": "الشارع مطلوب."
+    }
+  },
+  "addresses": {
+    "kicker": "التوصيل",
+    "title": "عناوينك",
+
+    "addAddress": "إضافة عنوان",
+    "addFirstAddress": "أضف أول عنوان",
+
+    "empty": "لم تقم بإضافة أي عنوان حتى الآن.",
+
+    "loading": "جارٍ تحميل العناوين..."
+  },
+  "auth": {
+    "brand": "تمارا لاند",
+    "headline": "كوني فخورة بكونك امرأة.",
+
+    "description": "اكتشفي قطعًا مختارة بعناية للمرأة التي تعرف قيمتها. سجلي الدخول للاحتفاظ بسلة التسوق، والمفضلة، وطلباتك كما تركتها.",
+
+    "features": {
+      "collections": {
+        "title": "تشكيلات مختارة بعناية",
+        "subtitle": "أحدث الإضافات المناسبة لكل مناسبة"
+      },
+      "sizes": {
+        "title": "مقاسك المثالي",
+        "subtitle": "احفظي مقاساتك وتفضيلاتك لتجربة شراء أسرع"
+      },
+      "security": {
+        "title": "آمن وخاص",
+        "subtitle": "بياناتك محمية بتشفير متقدم وتسجيل دخول آمن"
+      }
+    }
+  },
+  "forgotPassword": {
+    "kicker": "هل تحتاج إلى مساعدة؟",
+    "title": "هل نسيت كلمة المرور؟",
+    "description": "أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة تعيين كلمة المرور إذا كان الحساب موجودًا.",
+
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "you@example.com",
+
+    "requestFailed": "فشل الطلب",
+
+    "validation": {
+      "required": "البريد الإلكتروني مطلوب.",
+      "invalid": "يرجى إدخال بريد إلكتروني صحيح."
+    },
+
+    "buttons": {
+      "send": "إرسال رابط إعادة التعيين",
+      "sending": "جارٍ إرسال الرابط..."
+    },
+
+    "footer": {
+      "backToLogin": "العودة لتسجيل الدخول",
+      "createAccount": "إنشاء حساب"
+    }
+  },
+  "login": {
+    "kicker": "مرحبًا بعودتك",
+    "title": "تسجيل الدخول إلى تمارا لاند",
+
+    "loginFailed": "فشل تسجيل الدخول",
+
+    "social": {
+      "google": "المتابعة باستخدام Google",
+      "googleLoading": "جارٍ الاتصال بـ Google...",
+      "facebook": "المتابعة باستخدام Facebook",
+      "facebookLoading": "جارٍ الاتصال بـ Facebook...",
+      "divider": "أو سجّل الدخول باستخدام البريد الإلكتروني"
+    },
+
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "you@example.com",
+
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "كلمة المرور",
+
+    "validation": {
+      "emailRequired": "البريد الإلكتروني مطلوب.",
+      "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح.",
+      "passwordRequired": "كلمة المرور مطلوبة.",
+      "passwordMin": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل."
+    },
+
+    "buttons": {
+      "login": "تسجيل الدخول",
+      "loading": "جارٍ تسجيل الدخول..."
+    },
+
+    "footer": {
+      "forgotPassword": "نسيت كلمة المرور؟",
+      "newHere": "ليس لديك حساب؟",
+      "createAccount": "إنشاء حساب"
+    }
+  },"profile": {
+    "kicker": "الحساب",
+    "title": "إعدادات الحساب",
+
+    "personalInformation": "المعلومات الشخصية",
+    "password": "كلمة المرور",
+
+    "edit": "تعديل",
+    "saveChanges": "حفظ التعديلات",
+    "saving": "جارٍ الحفظ...",
+    "cancel": "إلغاء",
+
+    "changePassword": "تغيير كلمة المرور",
+    "updatePassword": "تحديث كلمة المرور",
+    "updatingPassword": "جارٍ التحديث...",
+
+    "passwordChanged": "تم تغيير كلمة المرور بنجاح.",
+
+    "fields": {
+      "firstName": "الاسم الأول",
+      "lastName": "اسم العائلة",
+      "email": "البريد الإلكتروني",
+      "phoneNumber": "رقم الهاتف",
+
+      "currentPassword": "كلمة المرور الحالية",
+      "newPassword": "كلمة المرور الجديدة",
+      "confirmPassword": "تأكيد كلمة المرور الجديدة"
+    },
+
+    "placeholders": {
+      "firstName": "الاسم الأول",
+      "lastName": "اسم العائلة",
+      "phoneNumber": "01xxxxxxxxx",
+      "currentPassword": "كلمة المرور الحالية",
+      "newPassword": "كلمة المرور الجديدة",
+      "confirmPassword": "أعد إدخال كلمة المرور الجديدة"
+    },
+
+    "validation": {
+      "firstNameRequired": "الاسم الأول مطلوب.",
+      "lastNameRequired": "اسم العائلة مطلوب.",
+
+      "currentPasswordRequired": "كلمة المرور الحالية مطلوبة.",
+      "newPasswordRequired": "كلمة المرور الجديدة مطلوبة.",
+      "passwordMinLength": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.",
+      "confirmPasswordRequired": "يرجى تأكيد كلمة المرور الجديدة.",
+      "passwordMismatch": "كلمتا المرور غير متطابقتين."
+    }
+  },"register": {
+  "kicker": "ابدأ الآن",
+  "title": "إنشاء حساب جديد",
+
+  "registrationFailed": "فشل إنشاء الحساب",
+
+  "fields": {
+    "firstName": "الاسم الأول",
+    "lastName": "اسم العائلة",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور"
+  },
+
+  "placeholders": {
+    "firstName": "أحمد",
+    "lastName": "علي",
+    "email": "you@example.com",
+    "password": "أنشئ كلمة مرور",
+    "confirmPassword": "أعد إدخال كلمة المرور"
+  },
+
+  "validation": {
+    "firstNameRequired": "الاسم الأول مطلوب.",
+    "firstNameMinLength": "يجب ألا يقل الاسم الأول عن حرفين.",
+    "lastNameRequired": "اسم العائلة مطلوب.",
+    "lastNameMinLength": "يجب ألا يقل اسم العائلة عن حرفين.",
+    "emailRequired": "البريد الإلكتروني مطلوب.",
+    "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح.",
+    "passwordRequired": "كلمة المرور مطلوبة.",
+    "passwordMinLength": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.",
+    "confirmPasswordRequired": "يرجى تأكيد كلمة المرور.",
+    "passwordMismatch": "كلمتا المرور غير متطابقتين."
+  },
+
+  "buttons": {
+    "createAccount": "إنشاء حساب",
+    "creating": "جارٍ إنشاء الحساب..."
+  },
+
+  "footer": {
+    "alreadyHaveAccount": "لديك حساب بالفعل؟",
+    "signIn": "تسجيل الدخول",
+    "terms": "بالمتابعة فإنك توافق على سياسات المتجر والشروط والأحكام."
   }
+},
+  "resetPassword": {
+  "kicker": "إعادة تعيين الوصول",
+  "title": "اختر كلمة مرور جديدة",
+  "subtitle": "استخدم رمز إعادة التعيين المرسل إلى بريدك الإلكتروني لتحديث كلمة المرور بأمان.",
+
+  "resetFailed": "فشل إعادة التعيين",
+
+  "fields": {
+    "email": "البريد الإلكتروني",
+    "token": "رمز إعادة التعيين",
+    "newPassword": "كلمة المرور الجديدة",
+    "confirmPassword": "تأكيد كلمة المرور الجديدة"
+  },
+
+  "placeholders": {
+    "email": "you@example.com",
+    "token": "الصق رمز إعادة التعيين",
+    "newPassword": "أنشئ كلمة مرور جديدة",
+    "confirmPassword": "أعد إدخال كلمة المرور الجديدة"
+  },
+
+  "validation": {
+    "emailRequired": "البريد الإلكتروني مطلوب.",
+    "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح.",
+    "tokenRequired": "رمز إعادة التعيين مطلوب.",
+    "passwordRequired": "كلمة المرور الجديدة مطلوبة.",
+    "passwordMinLength": "يجب ألا تقل كلمة المرور عن 8 أحرف.",
+    "confirmPasswordRequired": "يرجى تأكيد كلمة المرور الجديدة.",
+    "passwordMismatch": "كلمتا المرور غير متطابقتين."
+  },
+
+  "buttons": {
+    "resetPassword": "إعادة تعيين كلمة المرور",
+    "updating": "جارٍ تحديث كلمة المرور..."
+  },
+
+  "footer": {
+    "backToLogin": "العودة لتسجيل الدخول",
+    "requestAnotherLink": "طلب رابط جديد"
+  }
+},
+"cart": {
+  "sku": "رمز المنتج",
+  "each": "للوحدة",
+
+  "increaseQuantity": "زيادة الكمية",
+  "decreaseQuantity": "تقليل الكمية",
+
+  "remove": "حذف",
+  "removing": "جارٍ الحذف..."
+  ,
+  "summary": {
+  "title": "ملخص الطلب",
+  "items": "المنتجات",
+  "discount": "الخصم",
+  "estimatedTotal": "الإجمالي المتوقع",
+  "shippingNote": "سيتم احتساب تكلفة الشحن عند إتمام الطلب.",
+  "proceedToCheckout": "إتمام الشراء"
+},"page": {
+  "kicker": "سلة التسوق",
+  "title": "عربة التسوق",
+  "empty": "سلة التسوق فارغة حالياً.",
+  "startShopping": "ابدأ التسوق"
+}
+},
+"coupon": {
+  "placeholder": "كود الخصم",
+
+  "apply": "تطبيق",
+  "applying": "جارٍ التطبيق...",
+
+  "applied": "تم تطبيق الكوبون",
+
+  "remove": "إزالة",
+  "removing": "جارٍ الإزالة..."
+},
+"checkout": {
+  "address": {
+    "step": "الخطوة ١",
+    "title": "عنوان التوصيل",
+    "manageAddresses": "إدارة العناوين",
+    "loading": "جارٍ تحميل العناوين...",
+    "empty": "ليس لديك أي عناوين محفوظة حتى الآن.",
+    "addAddress": "إضافة عنوان",
+    "default": "الافتراضي",
+    "verified": "تم التحقق",
+    "notVerified": "رقم الهاتف غير مُحقق",
+    "verifyNow": "تحقق الآن"
+  },
+  "shipping": {
+  "step": "الخطوة ٢",
+  "title": "منطقة الشحن",
+  "selectAddressFirst": "اختر عنوان التوصيل أولاً لعرض خيارات الشحن.",
+  "notAvailable": "عذرًا، لا نقوم بالتوصيل إلى",
+  "notAvailableSuffix": "حتى الآن. يرجى اختيار عنوان آخر.",
+  "governorate": "المحافظة",
+  "area": "المنطقة",
+  "selectArea": "اختر المنطقة"
+},
+ "summary": {
+    "title": "ملخص الطلب",
+    "items": "المنتجات",
+    "discount": "الخصم",
+    "shipping": "الشحن",
+    "selectArea": "اختر المنطقة",
+    "estimatedTotal": "الإجمالي المتوقع",
+
+    "paymentMethod": "طريقة الدفع",
+    "cashOnDelivery": "الدفع عند الاستلام",
+    "onlinePaymentSoon": "الدفع الإلكتروني سيتوفر قريبًا.",
+
+    "placeOrder": "تأكيد الطلب",
+    "placingOrder": "جارٍ تأكيد الطلب..."
+  },
+  "page": {
+  "kicker": "الخطوة أخيرة",
+  "title": "إتمام الطلب",
+  "loadingCart": "جارٍ تحميل سلة التسوق...",
+  "emptyCart": "سلة التسوق فارغة، لا يوجد ما يمكن إتمام شرائه حالياً.",
+  "startShopping": "ابدأ التسوق"
+}
+},
+"orders": {
+  "orderNumber": "طلب",
+  "currency": "ج.م",
+  "items": "المنتجات",
+  "quantity": "الكمية",
+  "cancelledMessage": "تم إلغاء هذا الطلب.",
+  "status": {
+    "pending": "قيد الانتظار",
+    "confirmed": "تم التأكيد",
+    "shipped": "تم الشحن",
+    "delivered": "تم التسليم"
+  },
+  "loading": "جاري تحميل الطلب...",
+  "notFound": "هذا الطلب غير موجود أو ليس لديك صلاحية للوصول إليه.",
+  "order": "الطلب",
+  "placedOn": "تاريخ الطلب",
+  "deliveryAddress": "عنوان التوصيل",
+  "payment": "الدفع",
+  "summary": "ملخص الطلب",
+  "subtotal": "المجموع الفرعي",
+  "discount": "الخصم",
+  "shipping": "الشحن",
+  "total": "الإجمالي",
+  "title": "طلباتي",
+  "allStatuses": "كل الحالات",
+  "noOrders": "لا توجد طلبات.",
+  "orderPlacedSuccessfully": "تم إنشاء طلبك بنجاح! 🎉"
+},
+"verifyPhone": {
+  "title": "تأكيد رقم الهاتف",
+  "message": "سنرسل رمز التحقق عبر واتساب إلى",
+  "sendingCode": "جارٍ إرسال الرمز...",
+  "enterCode": "أدخل رمز التحقق المكون من 6 أرقام",
+  "codePlaceholder": "123456",
+  "verify": "تأكيد",
+  "verifying": "جارٍ التحقق...",
+  "resend": "إعادة إرسال الرمز",
+  "sending": "جارٍ الإرسال...",
+  "resendIn": "إعادة الإرسال خلال {{seconds}} ثانية",
+  "close": "إغلاق"
+},
+"wishlist": {
+  "review": "تقييم",
+  "reviews": "تقييم",
+  "outOfStock": "غير متوفر",
+  "viewProduct": "عرض المنتج",
+  "currency": "ج.م",
+  "remove": "إزالة",
+  "removing": "جارٍ الإزالة...",
+   "kicker": "المحفوظات",
+  "title": "المفضلة",
+  "empty": "لم تقم بحفظ أي منتجات بعد.",
+  "discoverProducts": "اكتشف المنتجات"
   
 }
+
+
+}
+
+
+
+
+
+  
+
 
 

@@ -3,11 +3,12 @@ import { RouterLink } from '@angular/router';
 import { AddressService } from '../../../../core/services/address.service';
 import { AddressResponse } from '../../../../core/models/domain.models';
 import { PhoneVerifyDialogComponent } from '../../../phone-verification/components/phone-verify-dialog/phone-verify-dialog'; // عدّل المسار
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-checkout-address',
   standalone: true,
-  imports: [RouterLink, PhoneVerifyDialogComponent],
+  imports: [RouterLink, PhoneVerifyDialogComponent,TranslatePipe],
   templateUrl: './checkout-address.component.html',
   styleUrl: './checkout-address.component.css',
 })

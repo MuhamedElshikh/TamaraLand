@@ -5,12 +5,13 @@ import { PaginationComponent } from '../../../../shared/pagination/pagination'; 
 import { CatalogService } from '../../../../core/services/catalog.service';
 import { ProductCardResponse, ProductFilterRequest,ProductCollection } from '../../../../core/models/catalog.models';
 import { ActivatedRoute } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 const PAGE_SIZE = 12;
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [ProductCardComponent, ProductFiltersComponent, PaginationComponent],
+  imports: [ProductCardComponent, ProductFiltersComponent, PaginationComponent,TranslatePipe],
   templateUrl: './product-list.page.html',
   styleUrl: './product-list.page.css',
 })

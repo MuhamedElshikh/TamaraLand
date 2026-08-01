@@ -11,6 +11,8 @@ import { ProductDetailsResponse } from '../../../../core/models/catalog.models';
 import { CartService } from '../../../../core/services/cart.service';
 import { WishlistService } from '../../../../core/services/wishlist.service';
 import { AnalyticsService } from '../../../../core/services/analytics.service';
+import { TranslatePipe } from '@ngx-translate/core';
+import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe';
 
 @Component({
   selector: 'app-product-details',
@@ -24,6 +26,8 @@ import { AnalyticsService } from '../../../../core/services/analytics.service';
     ReviewFormComponent,
     ReviewListComponent,
     BreadcrumbsComponent,
+    TranslatePipe,
+    LocalizedNamePipe
   ],
   templateUrl: './product-details.page.html',
   styleUrl: './product-details.page.css',
@@ -47,13 +51,19 @@ export class ProductDetailsPage {
     const items: BreadcrumbItem[] = [{ label: 'Home', link: '/' }];
 
     // ⚠️ مفيش categoryId في الموديل الجديد، فمينفعش نعمل لينك للفئة، بس نعرض اسمها كنص
-    if (current?.categoryName) {
-      items.push({ label: current.categoryName });
-    }
 
-    items.push({ label: current?.name || 'Product' });
-    return items;
-  });
+  if (current) {
+    items.push({
+      label: current.CategoryArabicName || current.categoryName
+    });
+
+    items.push({
+      label: current.BrandArabicName || current.brandName
+    });
+  }
+
+  return items;
+});
 
   readonly priceLabel = computed(() => {
     const current = this.product();
@@ -68,25 +78,22 @@ export class ProductDetailsPage {
     return `EGP ${Number(price || 0).toLocaleString()}`;
   });
 
-  readonly stockLabel = computed(() => {
-    const current = this.product();
-    const selected = this.selectedVariant();
-    const variant = current?.variants?.find((item) => item.id === selected?.variantId) ?? current?.variants?.[0];
-    const stock = variant?.stock ?? (current?.inStock ? 1 : 0);
+  readonly stock = computed(() => {
+  const current = this.product();
+  const selected = this.selectedVariant();
 
-    if (!current && !variant) {
-      return 'Availability pending';
-    }
+  const variant =
+    current?.variants?.find(item => item.id === selected?.variantId)
+    ?? current?.variants?.[0];
 
-    return stock > 0 ? `${stock} in stock` : 'Out of stock';
-  });
+  return Number(variant?.stock ?? (current?.inStock ? 1 : 0));
+});
 
-  readonly ratingLabel = computed(() => {
-    const current = this.product();
-    const rating = current?.rating ?? current?.rating ?? 0;
-    return `${Number(rating || 0).toFixed(1)}/5`;
-  });
+  readonly rating = computed(() =>
 
+Number(this.product()?.rating ?? 0)
+
+);
   constructor() {
     this.route.data.subscribe((data) => {
       const productData = data['product'] as ProductDetailsResponse | null;
@@ -111,7 +118,7 @@ export class ProductDetailsPage {
   addToCart(): void {
     const variantId = this.selectedVariant()?.variantId;
     if (!variantId) {
-      this.cartMessage.set('Please choose a valid variant first.');
+this.cartMessage.set('product.selectVariant');
       return;
     }
 

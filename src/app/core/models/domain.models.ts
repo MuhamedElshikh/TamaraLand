@@ -106,20 +106,20 @@ export interface ShippingLookupResponse {
 
 // ---- Orders ----
 export type OrderStatusName =
-  | 'Pending'
-  | 'Confirmed'
-  | 'Processing'
-  | 'Shipped'
-  | 'Delivered'
-  | 'Cancelled';
-
+  | 'orders.status.pending'
+  | 'orders.status.confirmed'
+  | 'orders.status.processing'
+  | 'orders.status.shipped'
+  | 'orders.status.delivered'
+  | 'orders.status.cancelled';
+  
 export const orderStatus: Record<number, OrderStatusName> = {
-  0: 'Pending',
-  1: 'Confirmed',
-  2: 'Processing',
-  3: 'Shipped',
-  4: 'Delivered',
-  5: 'Cancelled',
+  0: 'orders.status.pending',
+  1: 'orders.status.confirmed',
+  2: 'orders.status.processing',
+  3: 'orders.status.shipped',
+  4: 'orders.status.delivered',
+  5: 'orders.status.cancelled',
 };
 export type PaymentMethodName =
   | 'Cash'
@@ -346,7 +346,7 @@ export interface CreateCategoryRequest {
   name: string;
   description?: string;
   image?: string;
-    IsPublished:boolean;
+    isPublished:boolean;
 
 }
 
@@ -354,7 +354,7 @@ export interface UpdateCategoryRequest {
   name: string;
   description?: string;
   image?: string;
-  IsPublished:boolean;
+  isPublished:boolean;
 
 }
 
@@ -363,14 +363,14 @@ export interface CategoryUpsertResponse {
   name: string;
   description?: string;
   imageUrl?: string;
-    IsPublished:boolean;
+    isPublished:boolean;
 }
 
 export interface CreateBrandRequest {
   name: string;
   description?: string;
   image?: string;
- IsPublished:boolean;
+ isPublished:boolean;
 
 }
 
@@ -378,7 +378,7 @@ export interface UpdateBrandRequest {
   name: string;
   description?: string;
   image?: string;
-    IsPublished:boolean;
+    isPublished:boolean;
 }
 
 export interface BrandUpsertResponse {
@@ -386,7 +386,7 @@ export interface BrandUpsertResponse {
   name: string;
   description?: string;
   imageUrl?: string;
-    IsPublished:boolean;
+    isPublished:boolean;
 
 }
 export interface CreateProductVariantRequest {
@@ -448,7 +448,7 @@ export interface ProductVariantRequest {
   waist: number;
   hip: number;
   length: number;
-    IsPublished:boolean;
+    isPublished:boolean;
 }
 
 export interface AdminProductVariantResponse {

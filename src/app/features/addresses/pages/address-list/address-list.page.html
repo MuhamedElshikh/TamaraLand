@@ -1,12 +1,16 @@
 <section class="addresses-page">
   <header class="addresses-page__hero">
     <div>
-      <p class="section-kicker">Delivery</p>
-      <h1 class="section-title">Your addresses</h1>
+      <p class="section-kicker">    {{ 'addresses.kicker' | translate }}</p>
+      <h1 class="section-title">{{ 'addresses.title' | translate }}</h1>
     </div>
 
     @if (!isFormOpen()) {
-      <button type="button" class="btn btn-primary" (click)="openCreateForm()">+ Add address</button>
+      <button type="button" class="btn btn-primary" (click)="openCreateForm()">@if(currentLang() === 'ar'){
+    {{ 'addresses.addAddress' | translate }} +
+}@else{
+    + {{ 'addresses.addAddress' | translate }}
+}</button>
     }
   </header>
 
@@ -26,8 +30,8 @@
     </div>
   } @else if (addresses().length === 0 && !isFormOpen()) {
     <div class="addresses-page__empty">
-      <p class="section-copy">You haven't saved any addresses yet.</p>
-      <button type="button" class="btn btn-primary" (click)="openCreateForm()">Add your first address</button>
+      <p class="section-copy">    {{ 'addresses.empty' | translate }}</p>
+      <button type="button" class="btn btn-primary" (click)="openCreateForm()">{{ 'addresses.addFirstAddress' | translate }}</button>
     </div>
   } @else if (addresses().length > 0) {
     <div class="addresses-page__grid">

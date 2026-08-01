@@ -3,11 +3,12 @@ import { RouterLink } from '@angular/router';
 import { WishlistService } from '../../../../core/services/wishlist.service';
 import { WishlistItemResponse } from '../../../../core/models/domain.models';
 import { DecimalPipe } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-wishlist-item',
   standalone: true,
-  imports: [RouterLink,DecimalPipe],
+  imports: [RouterLink,DecimalPipe,TranslatePipe],
   templateUrl: './wishlist-item.component.html',
   styleUrl: './wishlist-item.component.css',
 })

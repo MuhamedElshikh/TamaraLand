@@ -1,11 +1,12 @@
 import { Component, Input, Output, EventEmitter, computed, input } from '@angular/core';
 import { CartResponse, ShippingAreaItem } from '../../../../core/models/domain.models';
 import { DecimalPipe } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-checkout-summary',
   standalone: true,
-    imports:[DecimalPipe],
+    imports:[DecimalPipe,TranslatePipe],
   templateUrl: './checkout-summary.component.html',
   styleUrl: './checkout-summary.component.css',
 })

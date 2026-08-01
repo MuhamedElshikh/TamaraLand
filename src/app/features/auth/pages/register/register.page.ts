@@ -9,12 +9,13 @@ import { ApiResponse } from '../../../../core/models/api-response.model';
 import { AuthResponse, RegisterRequest } from '../../../../core/models/auth.models';
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 import { finalize } from 'rxjs';
+import { TranslatePipe } from '@ngx-translate/core';
 
 /** Register page. */
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [AuthFormShellComponent, ReactiveFormsModule, RouterLink, ErrorMessageComponent],
+  imports: [AuthFormShellComponent, ReactiveFormsModule, RouterLink, ErrorMessageComponent,TranslatePipe],
   templateUrl: './register.page.html',
   styleUrl: './register.page.css'
 })

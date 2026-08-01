@@ -1,51 +1,116 @@
 <aside class="checkout-summary">
-  <h3 class="checkout-summary__title">Order summary</h3>
+
+  <h3 class="checkout-summary__title">
+    {{ 'checkout.summary.title' | translate }}
+  </h3>
 
   <div class="checkout-summary__row">
-    <span>Items ({{ cart()?.totalItems || 0 }})</span>
-    <span>{{ cart()?.subTotal || 0 | number }} EGP</span>
+
+    <span>
+      {{ 'checkout.summary.items' | translate }}
+      ({{ cart()?.totalItems || 0 }})
+    </span>
+
+    <span>
+      {{ cart()?.subTotal || 0 | number }} EGP
+    </span>
+
   </div>
 
   @if (cart() && cart()!.discount > 0) {
+
     <div class="checkout-summary__row checkout-summary__row--discount">
-      <span>Discount</span>
-      <span>−{{ cart()!.discount | number }} EGP</span>
+
+      <span>
+        {{ 'checkout.summary.discount' | translate }}
+      </span>
+
+      <span>
+        −{{ cart()!.discount | number }} EGP
+      </span>
+
     </div>
+
   }
 
   <div class="checkout-summary__row">
-    <span>Shipping</span>
+
+    <span>
+      {{ 'checkout.summary.shipping' | translate }}
+    </span>
+
     @if (shippingArea()) {
-      <span>{{ shippingArea()!.shippingCost | number }} EGP</span>
+
+      <span>
+        {{ shippingArea()!.shippingCost | number }} EGP
+      </span>
+
     } @else {
-      <span class="checkout-summary__pending">Select area</span>
+
+      <span class="checkout-summary__pending">
+        {{ 'checkout.summary.selectArea' | translate }}
+      </span>
+
     }
+
   </div>
 
   <div class="checkout-summary__row checkout-summary__row--total">
-    <span>Estimated total</span>
-    <span>{{ estimatedTotal() | number }} EGP</span>
+
+    <span>
+      {{ 'checkout.summary.estimatedTotal' | translate }}
+    </span>
+
+    <span>
+      {{ estimatedTotal() | number }} EGP
+    </span>
+
   </div>
 
   <div class="checkout-summary__payment">
-    <p class="checkout-summary__payment-label">Payment method</p>
+
+    <p class="checkout-summary__payment-label">
+      {{ 'checkout.summary.paymentMethod' | translate }}
+    </p>
+
     <label class="checkout-summary__payment-option checkout-summary__payment-option--active">
-      <input type="radio" name="payment-method" [checked]="true" disabled />
-      <span>Cash on delivery</span>
+
+      <input
+        type="radio"
+        name="payment-method"
+        [checked]="true"
+        disabled />
+
+      <span>
+        {{ 'checkout.summary.cashOnDelivery' | translate }}
+      </span>
+
     </label>
-    <p class="checkout-summary__payment-note">Online payment is coming soon.</p>
+
+    <p class="checkout-summary__payment-note">
+      {{ 'checkout.summary.onlinePaymentSoon' | translate }}
+    </p>
+
   </div>
 
   @if (errorMessage) {
-    <p class="checkout-summary__error">{{ errorMessage }}</p>
+    <p class="checkout-summary__error">
+      {{ errorMessage }}
+    </p>
   }
 
   <button
     type="button"
     class="btn btn-primary checkout-summary__submit"
     [disabled]="!canPlaceOrder || isSubmitting"
-    (click)="onPlaceOrder()"
-  >
-    {{ isSubmitting ? 'Placing order…' : 'Place order' }}
+    (click)="onPlaceOrder()">
+
+    {{
+      isSubmitting
+        ? ('checkout.summary.placingOrder' | translate)
+        : ('checkout.summary.placeOrder' | translate)
+    }}
+
   </button>
+
 </aside>

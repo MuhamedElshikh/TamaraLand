@@ -1,16 +1,17 @@
 import { Component, computed, input } from '@angular/core';
 import { OrderStatusName } from '../../../../core/models/domain.models';
+import { TranslatePipe } from '@ngx-translate/core';
 const STATUS_STEPS: OrderStatusName[] = [
-  'Pending',
-  'Confirmed',
-  'Processing',
-  'Shipped',
-  'Delivered',
+ 'orders.status.pending',
+  'orders.status.confirmed',
+  'orders.status.shipped',
+  'orders.status.delivered'
 ];
 
 @Component({
   selector: 'app-order-status',
   standalone: true,
+  imports: [TranslatePipe],
   templateUrl: './order-status.component.html',
   styleUrl: './order-status.component.css',
 })
@@ -19,7 +20,7 @@ export class OrderStatusComponent {
 
   readonly statusSteps = STATUS_STEPS;
 
-  readonly isCancelled = computed(() => this.status() === 'Cancelled');
+  readonly isCancelled = computed(  () => this.status() === 'orders.status.cancelled');
 
   readonly currentStepIndex = computed(() => STATUS_STEPS.indexOf(this.status()));
 

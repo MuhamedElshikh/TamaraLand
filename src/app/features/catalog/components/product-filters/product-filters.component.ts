@@ -12,12 +12,15 @@ import {
 
 import { CatalogService } from '../../../../core/services/catalog.service';
 import { BrandResponse, CategoryResponse, ProductFilterRequest } from '../../../../core/models/catalog.models';
+import { TranslatePipe } from '@ngx-translate/core';
+import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe';
 
 const SEARCH_DEBOUNCE_MS = 350;
 
 @Component({
   selector: 'app-product-filters',
   standalone: true,
+  imports: [TranslatePipe,LocalizedNamePipe],
   templateUrl: './product-filters.component.html',
   styleUrl: './product-filters.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

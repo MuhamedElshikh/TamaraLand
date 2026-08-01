@@ -137,7 +137,7 @@ export class AdminCategoriesPage implements OnInit {
       const updateData: UpdateCategoryRequest = {
         name: formVal.name.trim(),
         description: formVal.description ? formVal.description.trim() : undefined,
-        IsPublished: false
+        isPublished: true
       };
 
       this.adminCatalogService.updateCategory(this.editingCategoryId()!, updateData, this.selectedImageFile).subscribe({
@@ -159,7 +159,7 @@ export class AdminCategoriesPage implements OnInit {
       const createData: CreateCategoryRequest = {
         name: formVal.name.trim(),
         description: formVal.description ? formVal.description.trim() : undefined,
-        IsPublished: false
+        isPublished: true
       };
 
       this.adminCatalogService.createCategory(createData, this.selectedImageFile).subscribe({

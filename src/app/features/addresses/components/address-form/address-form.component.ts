@@ -4,11 +4,12 @@ import { AddressService } from '../../../../core/services/address.service';
 import { AddressResponse } from '../../../../core/models/domain.models';
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 import { DecimalPipe } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-address-form',
   standalone: true,
-  imports: [ReactiveFormsModule ,DecimalPipe],
+  imports: [ReactiveFormsModule ,DecimalPipe,TranslatePipe],
   templateUrl: './address-form.component.html',
   styleUrl: './address-form.component.css',
 })

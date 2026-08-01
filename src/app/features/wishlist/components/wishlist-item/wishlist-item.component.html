@@ -1,31 +1,74 @@
 <article class="wishlist-item" [class.wishlist-item--busy]="isRemoving()">
+
   <a [routerLink]="['/products', item.id]" class="wishlist-item__image">
     <img [src]="item.imageUrl || fallbackImage" [alt]="item.name" />
   </a>
 
   <div class="wishlist-item__info">
-    <a [routerLink]="['/products', item.id]" class="wishlist-item__name">{{ item.name }}</a>
+
+    <a [routerLink]="['/products', item.id]" class="wishlist-item__name">
+      {{ item.name }}
+    </a>
 
     <p class="wishlist-item__rating">
-      {{ (item.rating ?? 0).toFixed(1) }} ★ · {{ item.reviewsCount ?? 0 }} review{{ item.reviewsCount === 1 ? '' : 's' }}
+      {{ (item.rating ?? 0).toFixed(1) }}
+      ★ ·
+      {{ item.reviewsCount ?? 0 }}
+      {{
+        (item.reviewsCount === 1
+          ? 'wishlist.review'
+          : 'wishlist.reviews') | translate
+      }}
     </p>
 
     <div class="wishlist-item__price-row">
-      <p class="wishlist-item__price">{{ item.price | number }} EGP</p>
+
+      <p class="wishlist-item__price">
+        {{ item.price | number }}
+        {{ 'wishlist.currency' | translate }}
+      </p>
+
       @if (item.hasDiscount) {
-        <p class="wishlist-item__price-old">{{ item.originalPrice | number }} EGP</p>
+        <p class="wishlist-item__price-old">
+          {{ item.originalPrice | number }}
+          {{ 'wishlist.currency' | translate }}
+        </p>
       }
+
     </div>
 
     @if (!item.inStock) {
-      <p class="wishlist-item__out-of-stock">Out of stock</p>
+      <p class="wishlist-item__out-of-stock">
+        {{ 'wishlist.outOfStock' | translate }}
+      </p>
     }
+
   </div>
 
   <div class="wishlist-item__actions">
-    <a [routerLink]="['/products', item.id]" class="btn btn-primary wishlist-item__view-btn">View product</a>
-    <button type="button" class="wishlist-item__remove" (click)="remove()" [disabled]="isRemoving()">
-      {{ isRemoving() ? 'Removing…' : 'Remove' }}
+
+    <a
+      [routerLink]="['/products', item.id]"
+      class="btn btn-primary wishlist-item__view-btn">
+
+      {{ 'wishlist.viewProduct' | translate }}
+
+    </a>
+
+    <button
+      type="button"
+      class="wishlist-item__remove"
+      (click)="remove()"
+      [disabled]="isRemoving()">
+
+      {{
+        isRemoving()
+          ? ('wishlist.removing' | translate)
+          : ('wishlist.remove' | translate)
+      }}
+
     </button>
+
   </div>
+
 </article>

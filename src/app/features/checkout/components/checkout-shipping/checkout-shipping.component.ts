@@ -3,11 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
 import { AddressService } from '../../../../core/services/address.service';
 import { AddressResponse, ShippingAreaItem } from '../../../../core/models/domain.models';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-checkout-shipping',
   standalone: true,
-  imports: [FormsModule, DecimalPipe],
+  imports: [FormsModule, DecimalPipe,TranslatePipe],
   templateUrl: './checkout-shipping.component.html',
   styleUrl: './checkout-shipping.component.css',
 })

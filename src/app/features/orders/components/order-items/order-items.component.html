@@ -1,10 +1,19 @@
 <div class="order-items">
-  <h3 class="order-items__title">Items</h3>
+
+  <h3 class="order-items__title">
+    {{ 'orders.items' | translate }}
+  </h3>
 
   @for (item of items(); track item.productVariantId) {
+
     <div class="order-item">
+
       <div class="order-item__info">
-        <p class="order-item__name">{{ item.productName }}</p>
+
+        <p class="order-item__name">
+          {{ item.productName }}
+        </p>
+
         @if (item.color || item.size) {
           <p class="order-item__variant">
             @if (item.color) { {{ item.color }} }
@@ -12,10 +21,24 @@
             @if (item.size) { {{ item.size }} }
           </p>
         }
-       
-        <p class="order-item__qty">Qty: {{ item.quantity }} × {{ item.unitPrice | number }} EGP</p>
+
+        <p class="order-item__qty">
+          {{ 'orders.quantity' | translate }}:
+          {{ item.quantity }}
+          x
+          {{ item.unitPrice | number }}
+          {{ 'orders.currency' | translate }}
+        </p>
+
       </div>
-      <p class="order-item__price">{{ item.totalPrice | number }} EGP</p>
+
+      <p class="order-item__price">
+        {{ item.totalPrice | number }}
+        {{ 'orders.currency' | translate }}
+      </p>
+
     </div>
+
   }
+
 </div>

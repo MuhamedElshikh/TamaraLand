@@ -1,7 +1,7 @@
 <section class="variant-shell">
   @if (colors.length > 0) {
     <div class="variant-group">
-      <p class="variant-group__label">Color</p>
+<p class="variant-group__label">{{ 'variant.color' | translate }}</p>
       <div class="variant-options">
         @for (color of colors; track color) {
           <button
@@ -21,7 +21,7 @@
 
   @if (sizes.length > 0) {
     <div class="variant-group">
-      <p class="variant-group__label">Size</p>
+<p class="variant-group__label"> {{ 'variant.size' | translate }}</p>
       <div class="variant-options">
         @for (size of sizes; track size) {
           <button
@@ -43,17 +43,17 @@
 
   <p class="variant-status">
     @if (matchedVariant()?.sku) {
-      <strong>SKU:</strong> {{ matchedVariant()?.sku }} 
+      <strong>{{ 'variant.sku' | translate }}:</strong> {{ matchedVariant()?.sku }} 
       <span class="dot"></span>
     }
-      <strong>Stock:</strong> <strong>{{ stockStatusLabel() }}</strong>
+      <strong>{{ 'variant.stock' | translate }}:</strong> <strong>{{ stockStatusLabel() }}</strong>
   </p>
 
   @if (dimensionsLabel(); as dims) {
     <div class="variant-dimensions">
       @for (dim of dims; track dim.label) {
         <div class="variant-dimension">
-          <span class="variant-dimension__label">{{ dim.label }}</span>
+          <span class="variant-dimension__label">{{ dim.value }} {{ 'variant.cm' | translate }}</span>
           <span class="variant-dimension__value">{{ dim.value }} cm</span>
         </div>
       }

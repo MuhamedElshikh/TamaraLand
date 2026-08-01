@@ -7,11 +7,12 @@ import { CartService } from '../../../../core/services/cart.service';
 import { OrderService } from '../../../../core/services/order.service';
 import { AddressResponse, ShippingAreaItem } from '../../../../core/models/domain.models';
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-checkout-page',
   standalone: true,
-  imports: [RouterLink, CheckoutAddressComponent, CheckoutShippingComponent, CheckoutSummaryComponent],
+  imports: [RouterLink, CheckoutAddressComponent, CheckoutShippingComponent, CheckoutSummaryComponent,TranslatePipe],
   templateUrl: './checkout.page.html',
   styleUrl: './checkout.page.css',
 })

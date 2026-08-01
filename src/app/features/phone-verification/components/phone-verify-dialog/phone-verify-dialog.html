@@ -1,60 +1,109 @@
 <div class="verify-dialog-backdrop" (click)="close()">
+
   <div class="verify-dialog" (click)="$event.stopPropagation()">
+
     <div class="verify-dialog__header">
-      <h3>Verify phone number</h3>
-      <button type="button" class="verify-dialog__close" (click)="close()" aria-label="Close">×</button>
+
+      <h3>{{ 'verifyPhone.title' | translate }}</h3>
+
+      <button
+        type="button"
+        class="verify-dialog__close"
+        (click)="close()"
+        [attr.aria-label]="'verifyPhone.close' | translate">
+
+        ×
+
+      </button>
+
     </div>
 
     <p class="verify-dialog__phone">
-      We'll send a verification code via WhatsApp to <strong>{{ phoneNumber }}</strong>
+
+      {{ 'verifyPhone.message' | translate }}
+
+      <strong>{{ phoneNumber }}</strong>
+
     </p>
 
     @if (errorMessage()) {
-      <p class="verify-dialog__error">{{ errorMessage() }}</p>
+      <p class="verify-dialog__error">
+        {{ errorMessage() }}
+      </p>
     }
 
     @if (!codeSent()) {
+
       <div class="verify-dialog__loading">
+
         <span class="verify-dialog__spinner"></span>
-        <span>Sending code…</span>
+
+        <span>
+          {{ 'verifyPhone.sendingCode' | translate }}
+        </span>
+
       </div>
+
     } @else {
+
       <label class="verify-dialog__field">
-        <span>Enter the 6-digit code</span>
+
+        <span>
+          {{ 'verifyPhone.enterCode' | translate }}
+        </span>
+
         <input
           type="text"
           inputmode="numeric"
           maxlength="6"
-          placeholder="123456"
+          [placeholder]="'verifyPhone.codePlaceholder' | translate"
           class="verify-dialog__otp-input"
           [value]="code()"
-          (input)="onCodeInput($any($event.target).value)"
-        />
+          (input)="onCodeInput($any($event.target).value)" />
+
       </label>
 
       <button
         type="button"
         class="btn btn-primary verify-dialog__submit"
         [disabled]="code().length !== 6 || isVerifying()"
-        (click)="verify()"
-      >
-        {{ isVerifying() ? 'Verifying…' : 'Verify' }}
+        (click)="verify()">
+
+        {{
+          isVerifying()
+            ? ('verifyPhone.verifying' | translate)
+            : ('verifyPhone.verify' | translate)
+        }}
+
       </button>
 
       <button
         type="button"
         class="verify-dialog__resend"
         [disabled]="resendCountdown() > 0 || isSendingCode()"
-        (click)="sendCode()"
-      >
+        (click)="sendCode()">
+
         @if (resendCountdown() > 0) {
-          Resend code in {{ resendCountdown() }}s
+
+          {{
+            'verifyPhone.resendIn'
+              | translate:{ seconds: resendCountdown() }
+          }}
+
         } @else if (isSendingCode()) {
-          Sending…
+
+          {{ 'verifyPhone.sending' | translate }}
+
         } @else {
-          Resend code
+
+          {{ 'verifyPhone.resend' | translate }}
+
         }
+
       </button>
+
     }
+
   </div>
+
 </div>

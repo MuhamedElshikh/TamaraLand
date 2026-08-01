@@ -7,12 +7,13 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { ForgotPasswordRequest } from '../../../../core/models/auth.models';
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 import { finalize } from 'rxjs';
+import { TranslatePipe } from '@ngx-translate/core';
 
 /** Forgot password page. */
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [AuthFormShellComponent, ReactiveFormsModule, RouterLink, ErrorMessageComponent],
+  imports: [AuthFormShellComponent, ReactiveFormsModule, RouterLink, ErrorMessageComponent,TranslatePipe],
   templateUrl: './forgot-password.page.html',
   styleUrl: './forgot-password.page.css'
 })

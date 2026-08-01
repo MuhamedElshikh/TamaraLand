@@ -3,11 +3,13 @@ import { RouterLink } from '@angular/router';
 import { catchError, of } from 'rxjs';
 import { CatalogService } from '../../../../core/services/catalog.service';
 import { CategoryResponse } from '../../../../core/models/catalog.models';
+import { TranslatePipe } from '@ngx-translate/core';
+import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe';
 
 @Component({
   selector: 'app-categories-list',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink,TranslatePipe,LocalizedNamePipe],
   templateUrl: './categories-list.html',
   styleUrl: './categories-list.css',
 })

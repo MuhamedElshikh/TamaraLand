@@ -2,11 +2,12 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { WishlistItemComponent } from '../../components/wishlist-item/wishlist-item.component';
 import { WishlistService } from '../../../../core/services/wishlist.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-wishlist-page',
   standalone: true,
-  imports: [RouterLink, WishlistItemComponent],
+  imports: [RouterLink, WishlistItemComponent,TranslatePipe],
   templateUrl: './wishlist.page.html',
   styleUrl: './wishlist.page.css',
 })

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, computed, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { ProductVariantResponse } from '../../../../core/models/catalog.models';
+import { TranslatePipe } from '@ngx-translate/core';
 
 interface DimensionItem {
   label: string;
@@ -10,7 +11,7 @@ interface DimensionItem {
 @Component({
   selector: 'app-product-variant-selector',
   standalone: true,
-  imports: [DecimalPipe],
+  imports: [DecimalPipe,TranslatePipe],
   templateUrl: './product-variant-selector.component.html',
   styleUrl: './product-variant-selector.component.css',
 })
