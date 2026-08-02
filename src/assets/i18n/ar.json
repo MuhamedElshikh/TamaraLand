@@ -185,8 +185,9 @@
     "rating": "التقييم",
     "views": "المشاهدات",
     "reviews": "التقييمات",
+    "outOfStock": "غير متوفر",
+    "inStock": "متوفر",
     "availability": "التوفر",
-
     "selected": "المحدد",
 
     "removeWishlist": "إزالة من المفضلة",

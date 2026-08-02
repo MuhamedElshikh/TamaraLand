@@ -189,6 +189,8 @@
     "rating": "Rating",
     "views": "Views",
     "reviews": "Reviews",
+    "outOfStock": "Out of Stock",
+    "inStock": "In Stock",
     "availability": "Availability",
 
     "selected": "Selected",

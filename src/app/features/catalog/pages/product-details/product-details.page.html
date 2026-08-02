@@ -120,9 +120,9 @@
       <div class="stat-card__value">
 
      @if (stock() > 0) {
-  {{ stock() }} {{ 'product.inStock' | translate }}
+   {{ 'productDetails.inStock' | translate }}
 } @else {
-  {{ 'product.outOfStock' | translate }}
+  {{ 'productDetails.outOfStock' | translate }}
 }
 
       </div>
