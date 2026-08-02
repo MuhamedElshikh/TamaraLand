@@ -6,6 +6,7 @@ import { CartService } from '../../../../core/services/cart.service';
 import { WishlistService } from '../../../../core/services/wishlist.service';
 import { TranslatePipe } from '@ngx-translate/core';
 import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe';
+import { AnalyticsService } from '../../../../core/services/analytics.service';
 
 @Component({
   selector: 'app-product-card',
@@ -18,6 +19,7 @@ export class ProductCardComponent implements OnInit {
   private readonly cartService = inject(CartService);
   private readonly wishlistService = inject(WishlistService);
   private readonly router = inject(Router);
+  private readonly analytics = inject(AnalyticsService);
 
   @Input({ required: true }) product!: ProductCardResponse;
   @Input() fallbackImage = 'assets/placeholder-product.jpg';
@@ -86,7 +88,17 @@ export class ProductCardComponent implements OnInit {
     request$.subscribe({
       next: (res) => {
         this.isTogglingWishlist.set(false);
-        if (!res.success) this.isInWishlist.set(wasInWishlist);
+        if (!res.success) 
+          {
+            this.analytics.trackEvent('add_to_wishlist', {
+    items: [{
+      item_id: this.product.id,
+      item_name: this.product.name,
+      price: this.product.price
+    }]
+  });
+            this.isInWishlist.set(wasInWishlist);
+          }
       },
       error: () => {
         this.isTogglingWishlist.set(false);

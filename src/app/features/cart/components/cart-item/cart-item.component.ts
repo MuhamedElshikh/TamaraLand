@@ -5,6 +5,7 @@ import { CartItemResponse } from '../../../../core/models/domain.models';
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 import { DecimalPipe } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
+import { AnalyticsService } from '../../../../core/services/analytics.service';
 
 @Component({
   selector: 'app-cart-item',
@@ -22,7 +23,7 @@ export class CartItemComponent {
   readonly isRemoving = signal(false);
   readonly errorMessage = signal<string | null>(null);
   readonly fallbackImage = 'assets/placeholder-product.jpg';
-
+private readonly analytics = inject(AnalyticsService);
   increase(): void {
     this.updateQuantity(this.item.quantity + 1);
   }
@@ -51,12 +52,24 @@ export class CartItemComponent {
   }
 
   remove(): void {
-    if (this.isRemoving()) return;
+  if (this.isRemoving()) return;
 
-    this.isRemoving.set(true);
-    this.cartService.removeItem(this.item.productVariantId).subscribe({
-      next: () => this.isRemoving.set(false),
-      error: () => this.isRemoving.set(false),
-    });
-  }
+  this.isRemoving.set(true);
+
+  this.cartService.removeItem(this.item.productVariantId).subscribe({
+    next: (res) => {
+      this.isRemoving.set(false);
+
+      if (res.success) {
+        this.analytics.removeFromCart({
+          id: this.item.productId,
+          name: this.item.productName,
+          price: this.item.unitPrice,
+          quantity: this.item.quantity
+        });
+      }
+    },
+    error: () => this.isRemoving.set(false),
+  });
+}
 }

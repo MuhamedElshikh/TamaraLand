@@ -6,6 +6,7 @@ import { AnalyticsService } from './core/services/analytics.service';
 import {  ToastComponent } from './shared/toast/toast';
 import { LanguageService } from './core/services/language.service';
 import { GoogleTagManagerService } from './core/services/google-tag-manager.service';
+import { RouteAnalyticsService } from './core/services/route-analytics.service';
 
 
 
@@ -20,6 +21,7 @@ export class App {
   private readonly gtm = inject(GoogleTagManagerService);
 private readonly router = inject(Router);
 private readonly analytics = inject(AnalyticsService);
+private readonly routeAnalytics = inject(RouteAnalyticsService);
 
     constructor(private language: LanguageService) {
        

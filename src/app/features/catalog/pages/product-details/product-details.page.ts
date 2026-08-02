@@ -154,7 +154,16 @@ this.cartMessage.set('product.selectVariant');
 
     request$.subscribe({
       next: (response) => {
-        if (!response.success) this.isInWishlist.set(wasInWishlist); // رجّع الحالة لو فشل
+        if (!response.success){
+          this.analyticsService.trackEvent('add_to_wishlist', {
+    items: [{
+      item_id: productId,
+      item_name: this.product()?.name,
+      price: this.product()?.price
+    }]
+  });
+this.isInWishlist.set(wasInWishlist); // رجّع الحالة لو فشل
+        } 
         this.isTogglingWishlist.set(false);
       },
       error: () => {

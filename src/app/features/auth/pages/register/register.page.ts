@@ -10,8 +10,9 @@ import { AuthResponse, RegisterRequest } from '../../../../core/models/auth.mode
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 import { finalize } from 'rxjs';
 import { TranslatePipe } from '@ngx-translate/core';
+import { AnalyticsService } from '../../../../core/services/analytics.service';
 
-/** Register page. */
+/** Register page. */ 
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -23,7 +24,7 @@ export class RegisterPage {
   protected readonly isSubmitting = signal(false);
   protected readonly errorMessage = signal<string | null>(null);
   private readonly fb = inject(FormBuilder);
-
+private readonly analytics = inject(AnalyticsService);
   protected readonly form = this.fb.nonNullable.group(
     {
       firstName: ['', [Validators.required, Validators.minLength(2)]],
@@ -59,6 +60,7 @@ export class RegisterPage {
         const token = response.data?.accessToken ?? this.authService.token();
 
         if (token) {
+          this.analytics.signUp('email');
           void this.router.navigateByUrl(this.authService.isAdmin() ? '/admin' : '/');
           return;
         }

@@ -7,6 +7,7 @@ import { ProductCardResponse, ProductFilterRequest,ProductCollection } from '../
 import { ActivatedRoute } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { TranslateService } from '@ngx-translate/core';
+import { AnalyticsService } from '../../../../core/services/analytics.service';
 const PAGE_SIZE = 12;
 
 @Component({
@@ -36,6 +37,7 @@ clearFilters() {
   private currentFilter: ProductFilterRequest = {};
   private readonly route = inject(ActivatedRoute);
 private readonly translate = inject(TranslateService);
+private readonly AnalyticsService = inject(AnalyticsService);
   readonly products = signal<ProductCardResponse[]>([]);
   readonly isLoading = signal(false);
   readonly totalCount = signal(0);
@@ -82,7 +84,9 @@ this.translate.stream(data['subtitle']).subscribe(subtitle => {
     };
 
     this.currentFilter = filter;
-
+if (filter.search?.trim()) {
+  this.AnalyticsService.search(filter.search);
+}
     this.loadProducts(filter, filter.pageIndex);
 
   });
@@ -108,6 +112,14 @@ this.translate.stream(data['subtitle']).subscribe(subtitle => {
       next: (response) => {
         if (response.success && response.data) {
           this.products.set(response.data.items);
+          this.AnalyticsService.viewItemList(
+  response.data.items.map(item => ({
+    id: item.id,
+    name: item.name,
+    price: item.price,
+  })),
+  this.pageTitle()
+);
           this.totalCount.set(response.data.totalCount);
           this.totalPages.set(response.data.totalPages || 1);
         }

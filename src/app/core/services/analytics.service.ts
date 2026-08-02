@@ -91,6 +91,7 @@ export class AnalyticsService {
     });
 
   }
+  
 
   addToCart(item: AnalyticsItem): void {
 
@@ -286,8 +287,44 @@ export class AnalyticsService {
 
       }
 
-    });
+    });   
 
   }
+  removeWishlist(item: AnalyticsItem): void {
 
+  this.gtm.push({
+
+    event: 'remove_from_wishlist',
+
+    ecommerce: {
+
+      currency: 'EGP',
+
+      value: item.price ?? 0,
+
+      items: [
+
+        {
+
+          item_id: String(item.id),
+
+          item_name: item.name,
+
+          price: item.price ?? 0
+
+        }
+
+      ]
+
+    }
+
+  });
+
+}
+trackEvent(event: string, data: Record<string, any> = {}): void {
+  this.gtm.push({
+    event,
+    ...data
+  });
+}
 }

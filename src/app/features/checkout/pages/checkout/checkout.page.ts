@@ -8,6 +8,7 @@ import { OrderService } from '../../../../core/services/order.service';
 import { AddressResponse, ShippingAreaItem } from '../../../../core/models/domain.models';
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 import { TranslatePipe } from '@ngx-translate/core';
+import { AnalyticsService } from '../../../../core/services/analytics.service';
 
 @Component({
   selector: 'app-checkout-page',
@@ -20,7 +21,7 @@ export class CheckoutPage implements OnInit {
   private readonly cartService = inject(CartService);
   private readonly orderService = inject(OrderService);
   private readonly router = inject(Router);
-
+private readonly analyticsService = inject(AnalyticsService);
   readonly cart = this.cartService.cart;
   readonly isLoadingCart = signal(true);
 
@@ -42,7 +43,24 @@ export class CheckoutPage implements OnInit {
 
   ngOnInit(): void {
     this.cartService.getCart().subscribe({
-      next: () => this.isLoadingCart.set(false),
+     next: () => {
+  this.isLoadingCart.set(false);
+
+  const cart = this.cart();
+
+  if (cart) {
+    this.analyticsService.beginCheckout(
+      cart.items.map(item => ({
+        id: item.productVariantId,
+        name: item.productName,
+        price: item.unitPrice,
+        quantity: item.quantity
+      })),
+      cart.subTotal
+    );
+  }
+},
+
       error: () => this.isLoadingCart.set(false),
     });
   }
@@ -72,6 +90,25 @@ export class CheckoutPage implements OnInit {
       .subscribe({
         next: (res) => {
           this.isSubmitting.set(false);
+              const cart = this.cart();
+ if (cart) {
+
+      this.analyticsService.purchase(
+
+        res.data.toString(),
+
+        cart.subTotal,
+
+        cart.items.map(item => ({
+          id: item.productVariantId,
+          name: item.productName,
+          price: item.unitPrice,
+          quantity: item.quantity
+        }))
+
+      );
+
+    }
           if (res.success && res.data) {
             this.router.navigate(['/orders', res.data], { queryParams: { placed: '1' } });
           } else {

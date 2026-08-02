@@ -10,6 +10,7 @@ import { ApiResponse } from '../../../../core/models/api-response.model';
 import { AuthResponse, LoginRequest } from '../../../../core/models/auth.models';
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 import { TranslatePipe } from '@ngx-translate/core';
+import { AnalyticsService } from '../../../../core/services/analytics.service';
 
 /** Login page with form and social authentication. */
 @Component({
@@ -24,7 +25,7 @@ export class LoginPage {
   protected readonly isGoogleSubmitting = signal(false);
   protected readonly isFacebookSubmitting = signal(false);
   protected readonly errorMessage = signal<string | null>(null);
-
+private readonly analytics = inject(AnalyticsService);
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly socialAuthService = inject(SocialAuthService);
@@ -53,6 +54,7 @@ export class LoginPage {
         next: (response: ApiResponse<AuthResponse>) => {
           const token = response.data?.accessToken ?? this.authService.token();
           if (token) {
+            this.analytics.login('email');
             void this.router.navigateByUrl(this.authService.isAdmin() ? '/admin' : '/');
             return;
           }
@@ -80,6 +82,7 @@ export class LoginPage {
         next: (response: ApiResponse<AuthResponse>) => {
           const token = response.data?.accessToken ?? this.authService.token();
           if (token) {
+            this.analytics.login('google');
             void this.router.navigateByUrl(this.authService.isAdmin() ? '/admin' : '/');
             return;
           }
@@ -106,6 +109,7 @@ export class LoginPage {
         next: (response: ApiResponse<AuthResponse>) => {
           const token = response.data?.accessToken ?? this.authService.token();
           if (token) {
+            this.analytics.login('facebook');
             void this.router.navigateByUrl(this.authService.isAdmin() ? '/admin' : '/');
             return;
           }
