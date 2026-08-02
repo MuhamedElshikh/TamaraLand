@@ -3,9 +3,9 @@ export const environment = {
   apiBaseUrl: 'https://tamaraland.runasp.net',
   analytics: {
     enabled: true,
-    gaMeasurementId: 'G-XXXXXXXXXX', // Injected via environment or GTM
-    gadsConversionId: 'AW-XXXXXXXXX', // Injected via environment
-    gtmId: 'GTM-XXXXXXX', // Injected via environment
+    gaMeasurementId: 'G-5034LL8T94', // Injected via environment or GTM
+    gadsConversionId: '', // Injected via environment
+    gtmId: 'GTM-T8TMR38X', // Injected via environment
   },
   socialAuth: {
     googleClientId: '673486800223-gdcljglad4eiq8hldroa2m2qhc7emnf8.apps.googleusercontent.com',
