@@ -64,8 +64,12 @@
       <label class="field">
          <span>{{ 'login.email' | translate }}</span>
 
-        <input placeholder="{{ 'login.emailPlaceholder' | translate }}">
-        @if (controlHasError('email', 'required')) {
+<input
+  type="email"
+  formControlName="email"
+  placeholder="{{ 'login.emailPlaceholder' | translate }}"
+  autocomplete="email"
+/>        @if (controlHasError('email', 'required')) {
           <small>{{ 'login.validation.emailRequired' | translate }}</small>
         } @else if (controlHasError('email', 'email')) {
           <small>{{ 'login.validation.emailInvalid' | translate }}</small>
