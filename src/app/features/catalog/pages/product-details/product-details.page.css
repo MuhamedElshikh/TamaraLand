@@ -19,18 +19,23 @@
 
 .wishlist-toggle {
   position: absolute;
-  top: 0;
-  right: 0;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   width: 44px;
   height: 44px;
+
   border-radius: 50%;
   border: 1px solid var(--border-color);
   background: var(--bg-card);
+
   color: var(--text-secondary);
   cursor: pointer;
+
   transition: var(--transition-fast);
   z-index: 2;
 }
@@ -282,9 +287,9 @@
     gap: 1.25rem;
   }
 
-  .product-details-page__hero {
-    padding-right: 3rem;
-  }
+ .product-details-page__hero {
+  padding-inline-end: 3rem;
+}
 
   .wishlist-toggle {
     width: 40px;

@@ -6,11 +6,12 @@ import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 import { DecimalPipe } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AnalyticsService } from '../../../../core/services/analytics.service';
+import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe';
 
 @Component({
   selector: 'app-cart-item',
   standalone: true,
-  imports: [RouterLink ,DecimalPipe,TranslatePipe],
+  imports: [RouterLink ,DecimalPipe,TranslatePipe,LocalizedNamePipe],
   templateUrl: './cart-item.component.html',
   styleUrl: './cart-item.component.css',
 })

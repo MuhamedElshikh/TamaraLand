@@ -90,18 +90,44 @@
 .wishlist-item__remove:hover {
   text-decoration: underline;
 }
+@media (max-width:560px){
 
-@media (max-width: 560px) {
-  .wishlist-item {
-    grid-template-columns: 70px 1fr;
+  .wishlist-item{
+    grid-template-columns:80px 1fr;
+    gap:.85rem;
+    align-items:start;
   }
 
-  .wishlist-item__actions {
-    grid-column: span 2;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+  .wishlist-item__image{
+    width:80px;
+    height:80px;
   }
+
+  .wishlist-item__info{
+    gap:.35rem;
+  }
+
+  .wishlist-item__price-row{
+    margin-top:.4rem;
+  }
+
+  .wishlist-item__actions{
+    grid-column:1/-1;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-top:.75rem;
+    padding-top:.75rem;
+
+    border-top:1px solid var(--border-color);
+  }
+
+  .wishlist-item__view-btn{
+    padding:.65rem 1rem;
+  }
+
 }
 
 .wishlist-item__out-of-stock {

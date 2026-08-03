@@ -7,7 +7,7 @@
   <div class="cart-item__info">
 
     <a [routerLink]="['/products', item.productId]" class="cart-item__name">
-      {{ item.productName }}
+      {{ item |localizedName }}
     </a>
 
     @if (item.color || item.size) {
