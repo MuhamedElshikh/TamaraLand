@@ -121,6 +121,28 @@
               formControlName="name"
               placeholder="e.g. Perfumes & Fragrances"
             />
+            <div class="form-group">
+  <label class="form-label" for="cat-arabic-name">
+    Arabic Name *
+  </label>
+
+  <input
+    id="cat-arabic-name"
+    type="text"
+    class="form-control"
+    formControlName="arabicName"
+    placeholder="مثال: فساتين"
+  />
+
+  @if (categoryForm.get('arabicName')?.touched &&
+      categoryForm.get('arabicName')?.invalid) {
+
+    <span class="field-error">
+      Arabic name is required (minimum 2 characters).
+    </span>
+
+  }
+</div>
             @if (categoryForm.get('name')?.touched && categoryForm.get('name')?.invalid) {
               <span class="field-error">Category name is required (minimum 2 characters).</span>
             }
@@ -137,6 +159,15 @@
               placeholder="Category description..."
             ></textarea>
           </div>
+          <div class="form-group">
+  <label class="checkbox-label">
+    <input
+      type="checkbox"
+      formControlName="isPublished">
+
+    Published
+  </label>
+</div>
 
           <!-- Image Upload -->
           <div class="form-group">

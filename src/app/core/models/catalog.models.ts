@@ -15,14 +15,18 @@ export interface PagedResponse<T> {
 export interface CategoryResponse {
   id: number;
   name: string;
+  arabicName: string;
   description?: string;
   imageUrl?: string;
+    isPublished: boolean;
 }
 
 export interface BrandResponse {
   id: number;
   name: string;
+  arabicName: string;
   description?: string;
+  isPublished: boolean;
   imageUrl?: string;
 }
 
@@ -50,14 +54,19 @@ export interface ProductVariantResponse {
 export interface ProductCardResponse {
   id: number;
   name: string;
+  arabicName: string;
   imageUrl?: string;
-  viewsCount:number;
+  viewsCount: number;
   originalPrice: number;
   price: number;
   hasDiscount: boolean;
   rating: number;
   reviewsCount: number;
   inStock: boolean;
+  brandName: string;
+  arabicBrandName: string;
+  categoryName: string;
+  arabicCategoryName: string;
 }
 
 export interface ProductDetailsResponse extends ProductResponse {
@@ -99,9 +108,9 @@ export interface ProductResponse  {
   reviewsCount:number;
   imageUrl:string;
   categoryName: string;
-  CategoryArabicName: string;
+arabicCategoryName: string;
   brandName: string;
-  BrandArabicName: string;
+arabicBrandName: string;
   viewsCount:number;
   variants: ProductVariantResponse[];
 }
@@ -116,4 +125,19 @@ export interface BrandFilterRequest {
   search?: string;
   pageIndex?: number;
   pageSize?: number;
+}
+export interface AnalyticsItem {
+  id: string | number;
+  imageUrl?: string;
+  name: string;
+  category?: string;
+  brand?: string;
+  variant?: string;
+  sku?: string;
+  quantity?: number;
+  price?: number;
+  originalPrice?: number;
+  discount?: number;
+  coupon?: string;
+  currency?: string;
 }

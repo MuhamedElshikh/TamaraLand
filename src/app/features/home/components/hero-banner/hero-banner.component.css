@@ -169,11 +169,13 @@
    HERO SLIDER
 =========================== */
 
-.hero-slider{
-
-    background:#000;
-    touch-action: pan-y; /* بيسمح بالسكرول الرأسي العادي وميمنعش اللمس الأفقي بتاعنا */
-
+.hero-slider{ border-radius:12px ;
+     background:#000; 
+     touch-action: pan-y;
+     -webkit-border-radius:12px ;
+      -moz-border-radius:12px ;
+       -ms-border-radius:12px ;
+        -o-border-radius:12px ;
 }
 
 .hero-background{
@@ -194,7 +196,7 @@
 
     height:100%;
 
-    object-fit:fill;
+    object-fit:cover;
 
     transition:opacity .6s ease;
 

@@ -86,20 +86,41 @@ export class ProductCardComponent implements OnInit {
       : this.wishlistService.addToWishlist(this.product.id);
 
     request$.subscribe({
-      next: (res) => {
-        this.isTogglingWishlist.set(false);
-        if (!res.success) 
-          {
-            this.analytics.trackEvent('add_to_wishlist', {
-    items: [{
-      item_id: this.product.id,
-      item_name: this.product.name,
-      price: this.product.price
-    }]
-  });
-            this.isInWishlist.set(wasInWishlist);
-          }
-      },
+    next: (res) => {
+  this.isTogglingWishlist.set(false);
+
+  if (res.success) {
+
+    if (wasInWishlist) {
+      this.analytics.removeWishlist({
+        id: this.product.id,
+        name: this.product.name,
+        category: this.product.categoryName,
+        brand: this.product.brandName,
+        price: this.product.price,
+        originalPrice: this.product.originalPrice,
+        discount: Math.max(0,this.product.originalPrice - this.product.price
+)
+      });
+    } else {
+      this.analytics.wishlist({
+        id: this.product.id,
+        name: this.product.name,
+        category: this.product.categoryName,
+        brand: this.product.brandName,
+        price: this.product.price,
+        originalPrice: this.product.originalPrice,
+        discount:Math.max(0,this.product.originalPrice - this.product.price
+)
+      });
+    }
+
+  } else {
+
+    this.isInWishlist.set(wasInWishlist);
+
+  }
+},
       error: () => {
         this.isTogglingWishlist.set(false);
         this.isInWishlist.set(wasInWishlist);

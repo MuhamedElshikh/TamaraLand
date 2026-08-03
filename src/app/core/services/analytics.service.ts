@@ -1,13 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GoogleTagManagerService } from './google-tag-manager.service';
+import { AnalyticsItem } from '../models/catalog.models';
 
-export interface AnalyticsItem {
-  id: string | number;
-  name: string;
-  price?: number;
-  category?: string;
-  quantity?: number;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -43,20 +37,24 @@ export class AnalyticsService {
         value: item.price ?? 0,
 
         items: [
+  {
+    item_id: String(item.id),
 
-          {
+    item_name: item.name,
 
-            item_id: String(item.id),
+    item_brand: item.brand,
 
-            item_name: item.name,
+    item_category: item.category,
 
-            item_category: item.category,
+    item_variant: item.variant,
 
-            price: item.price ?? 0
+    item_sku: item.sku,
 
-          }
+    price: item.price ?? 0,
 
-        ]
+    discount: item.discount ?? 0
+  }
+]
 
       }
 
@@ -75,16 +73,15 @@ export class AnalyticsService {
         item_list_name: listName,
 
         items: items.map(x => ({
-
-          item_id: String(x.id),
-
-          item_name: x.name,
-
-          item_category: x.category,
-
-          price: x.price ?? 0
-
-        }))
+    item_id: String(x.id),
+    item_name: x.name,
+    item_brand: x.brand,
+    item_category: x.category,
+    item_variant: x.variant,
+    item_sku: x.sku,
+    price: x.price ?? 0,
+    discount: x.discount ?? 0
+}))
 
       }
 
@@ -106,20 +103,18 @@ export class AnalyticsService {
         value: (item.price ?? 0) * (item.quantity ?? 1),
 
         items: [
-
-          {
-
-            item_id: String(item.id),
-
-            item_name: item.name,
-
-            quantity: item.quantity ?? 1,
-
-            price: item.price ?? 0
-
-          }
-
-        ]
+  {
+  item_id: String(item.id),
+  item_name: item.name,
+  item_brand: item.brand,
+  item_category: item.category,
+  item_variant: item.variant,
+  item_sku: item.sku,
+  quantity: item.quantity ?? 1,
+  price: item.price ?? 0,
+  discount: item.discount ?? 0
+}
+]
 
       }
 
@@ -140,18 +135,23 @@ export class AnalyticsService {
         value: (item.price ?? 0) * (item.quantity ?? 1),
 
         items: [
+  {
+    item_id: String(item.id),
 
-          {
+    item_name: item.name,
 
-            item_id: String(item.id),
+    item_brand: item.brand,
 
-            item_name: item.name,
+    item_category: item.category,
 
-            quantity: item.quantity ?? 1,
+    item_variant: item.variant,
 
-            price: item.price ?? 0
+    item_sku: item.sku,
+    quantity: item.quantity ?? 1,
+    price: item.price ?? 0,
 
-          }
+    discount: item.discount ?? 0
+  }
 
         ]
 
@@ -173,17 +173,17 @@ export class AnalyticsService {
 
         value: total,
 
-        items: items.map(x => ({
-
-          item_id: String(x.id),
-
-          item_name: x.name,
-
-          quantity: x.quantity ?? 1,
-
-          price: x.price ?? 0
-
-        }))
+       items: items.map(x => ({
+    item_id: String(x.id),
+    item_name: x.name,
+    item_brand: x.brand,
+    item_category: x.category,
+    item_variant: x.variant,
+    item_sku: x.sku,
+    quantity: x.quantity ?? 1,
+    price: x.price ?? 0,
+    discount: x.discount ?? 0
+}))
 
       }
 
@@ -191,35 +191,36 @@ export class AnalyticsService {
 
   }
 
-  purchase(transactionId: string, total: number, items: AnalyticsItem[]): void {
-
+purchase(
+  transactionId: string,
+  total: number,
+  coupon: string | null,
+  shipping: number,
+  items: AnalyticsItem[]
+): void {
     this.gtm.push({
+  event: 'purchase',
+  ecommerce: {
+    transaction_id: transactionId,
+    currency: 'EGP',
+    value: total,
+    coupon: coupon ?? '',
+    shipping,
+    tax: 0,
 
-      event: 'purchase',
-
-      ecommerce: {
-
-        transaction_id: transactionId,
-
-        currency: 'EGP',
-
-        value: total,
-
-        items: items.map(x => ({
-
-          item_id: String(x.id),
-
-          item_name: x.name,
-
-          quantity: x.quantity ?? 1,
-
-          price: x.price ?? 0
-
-        }))
-
-      }
-
-    });
+    items: items.map(x => ({
+      item_id: String(x.id),
+      item_name: x.name,
+      item_brand: x.brand,
+      item_category: x.category,
+      item_variant: x.variant,
+      item_sku: x.sku,
+      quantity: x.quantity ?? 1,
+      price: x.price ?? 0,
+      discount: x.discount ?? 0
+    }))
+  }
+});
 
   }
 
@@ -272,16 +273,16 @@ export class AnalyticsService {
         value: item.price ?? 0,
 
         items: [
-
           {
-
-            item_id: String(item.id),
-
-            item_name: item.name,
-
-            price: item.price ?? 0
-
-          }
+ item_id: String(item.id),
+ item_name: item.name,
+ item_brand: item.brand,
+ item_category: item.category,
+ item_variant: item.variant,
+ item_sku: item.sku,
+ price: item.price ?? 0,
+ discount: item.discount ?? 0
+}
 
         ]
 
@@ -303,17 +304,16 @@ export class AnalyticsService {
       value: item.price ?? 0,
 
       items: [
-
-        {
-
-          item_id: String(item.id),
-
-          item_name: item.name,
-
-          price: item.price ?? 0
-
-        }
-
+{
+ item_id: String(item.id),
+ item_name: item.name,
+ item_brand: item.brand,
+ item_category: item.category,
+ item_variant: item.variant,
+ item_sku: item.sku,
+ price: item.price ?? 0,
+ discount: item.discount ?? 0
+}
       ]
 
     }
@@ -325,6 +325,28 @@ trackEvent(event: string, data: Record<string, any> = {}): void {
   this.gtm.push({
     event,
     ...data
+  });
+}
+setUser(userId: string): void {
+  this.gtm.push({
+    user_id: userId
+  });
+}
+setUserProperties(properties: Record<string, any>): void {
+
+  this.gtm.push({
+
+    event: 'set_user_properties',
+
+    user_properties: properties
+
+  });
+
+}
+
+clearUser(): void {
+  this.gtm.push({
+    user_id: null
   });
 }
 }

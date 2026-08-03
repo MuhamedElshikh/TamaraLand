@@ -42,20 +42,45 @@ export class AdminBrandsPage implements OnInit {
   currentImageUrl: string | null = null;
 
   brandForm: FormGroup = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(2)]],
-    description: [''],
-  });
+  name: ['', [Validators.required, Validators.minLength(2)]],
 
-  readonly columns: DataTableColumn<BrandResponse>[] = [
-    {
-      key: 'imageUrl',
-      header: 'Logo',
-      type: 'image',
-      accessor: (r) => (r as any).imageUrl || '',
-    },
-    { key: 'name', header: 'Brand Name' },
-    { key: 'description', header: 'Description', accessor: (r) => r.description || '—' },
-  ];
+  arabicName: ['', [Validators.required, Validators.minLength(2)]],
+
+  description: [''],
+
+  isPublished: [true]
+});
+
+readonly columns: DataTableColumn<BrandResponse>[] = [
+  {
+    key: 'imageUrl',
+    header: 'Logo',
+    type: 'image',
+    accessor: r => r.imageUrl || ''
+  },
+
+  {
+    key: 'name',
+    header: 'English Name'
+  },
+
+  {
+    key: 'arabicName',
+    header: 'Arabic Name'
+  },
+
+  {
+    key: 'isPublished',
+    header: 'Published',
+    type: 'boolean'
+  },
+
+  {
+    key: 'description',
+    header: 'Description',
+    accessor: r => r.description || '—'
+  }
+];
 
   ngOnInit(): void {
     this.load(1);
@@ -86,9 +111,11 @@ export class AdminBrandsPage implements OnInit {
     this.isEditing.set(true);
     this.editingBrandId.set(brand.id);
     this.brandForm.patchValue({
-      name: brand.name,
-      description: brand.description || '',
-    });
+  name: brand.name,
+  arabicName: brand.arabicName,
+  description: brand.description || '',
+  isPublished: brand.isPublished
+});
     this.formError.set(null);
     this.selectedImageFile = null;
     this.imagePreviewUrl = null;
@@ -134,11 +161,15 @@ export class AdminBrandsPage implements OnInit {
     const formVal = this.brandForm.value;
 
     if (this.isEditing() && this.editingBrandId()) {
-      const updateData: UpdateBrandRequest = {
-        name: formVal.name.trim(),
-        description: formVal.description ? formVal.description.trim() : undefined,
-        isPublished: true
-      };
+     const updateData: UpdateBrandRequest = {
+  name: formVal.name.trim(),
+
+  arabicName: formVal.arabicName.trim(),
+
+  description: formVal.description?.trim(),
+
+  isPublished: formVal.isPublished
+};
 
       this.adminCatalogService.updateBrand(this.editingBrandId()!, updateData, this.selectedImageFile).subscribe({
         next: (res) => {
@@ -157,10 +188,14 @@ export class AdminBrandsPage implements OnInit {
       });
     } else {
       const createData: CreateBrandRequest = {
-        name: formVal.name.trim(),
-        description: formVal.description ? formVal.description.trim() : undefined,
-        isPublished: true
-      };
+  name: formVal.name.trim(),
+
+  arabicName: formVal.arabicName.trim(),
+
+  description: formVal.description?.trim(),
+
+  isPublished: formVal.isPublished
+};
 
       this.adminCatalogService.createBrand(createData, this.selectedImageFile).subscribe({
         next: (res) => {

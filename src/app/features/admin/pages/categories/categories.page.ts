@@ -41,21 +41,45 @@ export class AdminCategoriesPage implements OnInit {
   imagePreviewUrl: string | null = null;
   currentImageUrl: string | null = null;
 
-  categoryForm: FormGroup = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(2)]],
-    description: [''],
-  });
+ categoryForm: FormGroup = this.fb.group({
+  name: ['', [Validators.required, Validators.minLength(2)]],
 
-  readonly columns: DataTableColumn<CategoryResponse>[] = [
-    {
-      key: 'imageUrl',
-      header: 'Image',
-      type: 'image',
-      accessor: (r) => (r as any).imageUrl || '',
-    },
-    { key: 'name', header: 'Category Name' },
-    { key: 'description', header: 'Description', accessor: (r) => r.description || '—' },
-  ];
+  arabicName: ['', [Validators.required, Validators.minLength(2)]],
+
+  description: [''],
+
+  isPublished: [true],
+});
+ readonly columns: DataTableColumn<CategoryResponse>[] = [
+  {
+    key: 'imageUrl',
+    header: 'Image',
+    type: 'image',
+    accessor: r => r.imageUrl || '',
+  },
+
+  {
+    key: 'name',
+    header: 'English Name',
+  },
+
+  {
+    key: 'arabicName',
+    header: 'Arabic Name',
+  },
+
+  {
+    key: 'isPublished',
+    header: 'Published',
+    type: 'boolean',
+  },
+
+  {
+    key: 'description',
+    header: 'Description',
+    accessor: r => r.description || '—',
+  },
+];
 
   ngOnInit(): void {
     this.load(1);
@@ -86,9 +110,11 @@ export class AdminCategoriesPage implements OnInit {
     this.isEditing.set(true);
     this.editingCategoryId.set(category.id);
     this.categoryForm.patchValue({
-      name: category.name,
-      description: category.description || '',
-    });
+  name: category.name,
+  arabicName: category.arabicName,
+  description: category.description || '',
+  isPublished: category.isPublished,
+});
     this.formError.set(null);
     this.selectedImageFile = null;
     this.imagePreviewUrl = null;
@@ -135,10 +161,11 @@ export class AdminCategoriesPage implements OnInit {
 
     if (this.isEditing() && this.editingCategoryId()) {
       const updateData: UpdateCategoryRequest = {
-        name: formVal.name.trim(),
-        description: formVal.description ? formVal.description.trim() : undefined,
-        isPublished: true
-      };
+  name: formVal.name.trim(),
+  arabicName: formVal.arabicName.trim(),
+  description: formVal.description?.trim() || undefined,
+  isPublished: formVal.isPublished
+};
 
       this.adminCatalogService.updateCategory(this.editingCategoryId()!, updateData, this.selectedImageFile).subscribe({
         next: (res) => {
@@ -157,10 +184,11 @@ export class AdminCategoriesPage implements OnInit {
       });
     } else {
       const createData: CreateCategoryRequest = {
-        name: formVal.name.trim(),
-        description: formVal.description ? formVal.description.trim() : undefined,
-        isPublished: true
-      };
+  name: formVal.name.trim(),
+  arabicName: formVal.arabicName.trim(),
+  description: formVal.description?.trim() || undefined,
+  isPublished: formVal.isPublished
+};
 
       this.adminCatalogService.createCategory(createData, this.selectedImageFile).subscribe({
         next: (res) => {

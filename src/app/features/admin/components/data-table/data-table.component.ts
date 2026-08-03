@@ -6,7 +6,7 @@ export interface DataTableColumn<T> {
   key: string;
   header: string;
   align?: 'left' | 'center' | 'right';
-  type?: 'text' | 'badge' | 'currency' | 'date' | 'image';
+  type?: 'text' | 'badge' | 'currency' | 'date' | 'image'|'boolean';
   /** لو مبعتش accessor، هياخد row[key] عادي */
   accessor?: (row: T) => unknown;
 }

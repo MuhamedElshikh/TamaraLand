@@ -2,11 +2,12 @@ import { Component, input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { OrderItemResponse } from '../../../../core/models/domain.models';
 import { TranslatePipe } from '@ngx-translate/core';
+import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe';
 
 @Component({
   selector: 'app-order-items',
   standalone: true,
-  imports: [DecimalPipe,TranslatePipe],
+  imports: [DecimalPipe,TranslatePipe,LocalizedNamePipe],
   templateUrl: './order-items.component.html',
   styleUrl: './order-items.component.css',
 })

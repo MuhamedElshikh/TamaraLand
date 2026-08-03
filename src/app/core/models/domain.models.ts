@@ -4,8 +4,12 @@
 export interface CartItemResponse {
   productVariantId: number;
   productId: number;
-  productName: string;
-  variantSku?: string;
+productName: string;
+arabicName: string;
+brandName: string;
+arabicBrandName: string;
+categoryName: string;
+arabicCategoryName: string;  variantSku?: string;
   color?: string;
   size?: string;
   imageUrl?: string;
@@ -44,6 +48,11 @@ export interface ApplyCouponRequest {
 export interface WishlistItemResponse {
   id: number;
   name: string;
+  arabicName: string;
+brandName: string;
+arabicBrandName: string;
+categoryName: string;
+arabicCategoryName: string;
   imageUrl?: string;
   price: number;
   originalPrice: number;
@@ -161,9 +170,14 @@ export interface CheckoutSummaryResponse {
 export interface OrderItemResponse {
   productVariantId: number;
   productName: string;
-  color: string;
-  size: string;
-  sku: string;
+productArabicName: string;
+brandName: string;
+arabicBrandName: string;
+categoryName: string;
+arabicCategoryName: string;
+color: string;
+size: string;
+sku: string;
   quantity: number;
   unitPrice: number;
   totalPrice: number;
@@ -344,6 +358,7 @@ export type UpdateCouponRequest = CreateCouponRequest;
 // ---- Create/Update for Admin catalog ----
 export interface CreateCategoryRequest {
   name: string;
+  arabicName: string;
   description?: string;
   image?: string;
     isPublished:boolean;
@@ -352,6 +367,7 @@ export interface CreateCategoryRequest {
 
 export interface UpdateCategoryRequest {
   name: string;
+  arabicName: string;
   description?: string;
   image?: string;
   isPublished:boolean;
@@ -361,6 +377,7 @@ export interface UpdateCategoryRequest {
 export interface CategoryUpsertResponse {
   id: number;
   name: string;
+  arabicName: string;
   description?: string;
   imageUrl?: string;
     isPublished:boolean;
@@ -368,6 +385,7 @@ export interface CategoryUpsertResponse {
 
 export interface CreateBrandRequest {
   name: string;
+  arabicName: string;
   description?: string;
   image?: string;
  isPublished:boolean;
@@ -376,6 +394,7 @@ export interface CreateBrandRequest {
 
 export interface UpdateBrandRequest {
   name: string;
+  arabicName: string;
   description?: string;
   image?: string;
     isPublished:boolean;
@@ -384,6 +403,7 @@ export interface UpdateBrandRequest {
 export interface BrandUpsertResponse {
   id: number;
   name: string;
+  arabicName: string;
   description?: string;
   imageUrl?: string;
     isPublished:boolean;
@@ -423,7 +443,6 @@ export interface UpdateProductVariantRequest {
   hip: number;
   length: number;
   sku: string;
-  isActive: boolean;
 }
 
 export interface UpdateProductRequest {
@@ -433,7 +452,6 @@ export interface UpdateProductRequest {
   slug?: string;
   categoryId: number;
   brandId: number;
-  isActive: boolean;
   isPublished: boolean;
   variants: UpdateProductVariantRequest[];
 }
@@ -545,6 +563,7 @@ export interface AdminOrderDetailsResponse extends OrderDetailsResponse {
 // ---- Store Settings ----
 export interface StoreSettings {
   storeName: string;
+  storeArabicName: string;
   logoUrl?: string;
   supportEmail: string;
   supportPhone: string;
@@ -558,6 +577,7 @@ export interface StoreSettings {
 
 export interface StoreSettingsRequest {
   storeName: string;
+  storeArabicName: string;
   logoUrl?: string;
   supportEmail: string;
   supportPhone: string;

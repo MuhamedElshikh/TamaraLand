@@ -5,11 +5,12 @@ import { WishlistItemResponse } from '../../../../core/models/domain.models';
 import { DecimalPipe } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AnalyticsService } from '../../../../core/services/analytics.service';
+import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe';
 
 @Component({
   selector: 'app-wishlist-item',
   standalone: true,
-  imports: [RouterLink,DecimalPipe,TranslatePipe],
+  imports: [RouterLink,DecimalPipe,TranslatePipe,LocalizedNamePipe],
   templateUrl: './wishlist-item.component.html',
   styleUrl: './wishlist-item.component.css',
 })
@@ -35,7 +36,14 @@ private readonly analytics = inject(AnalyticsService);
   this.analytics.removeWishlist({
     id: this.item.id,
     name: this.item.name,
-    price: this.item.price
+    category: this.item.categoryName,
+    brand: this.item.brandName,
+    price: this.item.price,
+    originalPrice: this.item.originalPrice,
+    discount: Math.max(
+        0,
+        this.item.originalPrice - this.item.price
+    )
 });
 
   this.removed.emit(this.item.id);

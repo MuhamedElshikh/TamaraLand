@@ -11,8 +11,9 @@
       <div class="order-item__info">
 
         <p class="order-item__name">
-          {{ item.productName }}
+          {{ item | localizedName }}
         </p>
+        
 
         @if (item.color || item.size) {
           <p class="order-item__variant">

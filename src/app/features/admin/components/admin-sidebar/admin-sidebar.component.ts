@@ -40,6 +40,11 @@ export class AdminSidebarComponent {
     { label: 'Shipping Areas', link: '/admin/shipping-areas', icon: 'truck' },
     { label: 'Banners', link: '/admin/banners', icon: 'image' },
     { label: 'WhatsApp', link: '/admin/whatsapp', icon: 'whatsapp' },
+    {
+  label: 'Store Settings',
+  link: '/admin/store-settings',
+  icon: 'settings'
+},
   ];
 
   closeSidebar(): void {

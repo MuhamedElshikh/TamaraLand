@@ -1,13 +1,13 @@
 <article class="wishlist-item" [class.wishlist-item--busy]="isRemoving()">
 
   <a [routerLink]="['/products', item.id]" class="wishlist-item__image">
-    <img [src]="item.imageUrl || fallbackImage" [alt]="item.name" />
+    <img [src]="item.imageUrl || fallbackImage" [alt]="item | localizedName" />
   </a>
 
   <div class="wishlist-item__info">
 
     <a [routerLink]="['/products', item.id]" class="wishlist-item__name">
-      {{ item.name }}
+{{ item | localizedName }}
     </a>
 
     <p class="wishlist-item__rating">

@@ -85,4 +85,8 @@ export const ADMIN_ROUTES: Routes = [
     path: 'whatsapp',
     loadComponent: () => import('./pages/whatsapp/whatsapp.page/whatsapp.page').then((m) => m.WhatsAppPage),
   },
+  {
+    path: 'store-settings',
+    loadComponent: () => import('./pages/store-settings/store-settings.page').then((m) => m.AdminStoreSettingsPage),
+  }
 ];

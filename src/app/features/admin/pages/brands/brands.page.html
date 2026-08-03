@@ -113,6 +113,28 @@
         <form [formGroup]="brandForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
             <label class="form-label" for="brand-name">Brand Name *</label>
+            <div class="form-group">
+  <label class="form-label" for="brand-arabic-name">
+    Arabic Name *
+  </label>
+
+  <input
+    id="brand-arabic-name"
+    type="text"
+    class="form-control"
+    formControlName="arabicName"
+    placeholder="مثال: تمارا"
+  />
+
+  @if (brandForm.get('arabicName')?.touched &&
+      brandForm.get('arabicName')?.invalid) {
+
+    <span class="field-error">
+      Arabic name is required.
+    </span>
+
+  }
+</div>
             <input
               id="brand-name"
               type="text"
@@ -135,6 +157,17 @@
               placeholder="Brand description..."
             ></textarea>
           </div>
+          <div class="form-group">
+  <label class="checkbox">
+
+    <input
+      type="checkbox"
+      formControlName="isPublished">
+
+    Published
+
+  </label>
+</div>
 
           <!-- Image Upload -->
           <div class="form-group">

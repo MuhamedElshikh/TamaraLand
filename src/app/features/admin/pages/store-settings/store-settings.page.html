@@ -1,7 +1,263 @@
-<section class="scaffold-page">
-  <div class="scaffold-card">
-    <p class="section-kicker">Admin</p>
-    <h1 class="section-title">Store settings</h1>
-    <p class="section-copy">Store identity, contact data, and social links will render here.</p>
-  </div>
-</section>
+<div class="admin-page">
+
+  <header class="admin-page__header">
+    <div>
+      <h1 class="admin-page__title">
+        Store Settings
+      </h1>
+
+      <p class="admin-page__subtitle">
+        Configure your store information.
+      </p>
+    </div>
+  </header>
+
+  @if (error()) {
+    <div class="alert alert-danger">
+      {{ error() }}
+    </div>
+  }
+
+  @if (success()) {
+    <div class="alert alert-success">
+      {{ success() }}
+    </div>
+  }
+
+  @if (isLoading()) {
+
+    <div class="loading-placeholder">
+
+      Loading...
+
+    </div>
+
+  } @else {
+
+<form
+  [formGroup]="form"
+  (ngSubmit)="save()">
+
+<div class="scaffold-card">
+
+<h2 class="card-title">
+General
+</h2>
+
+<div class="form-grid">
+
+<div class="form-group">
+<label class="form-label">
+Store Name
+</label>
+
+<input
+class="form-control"
+formControlName="storeName">
+</div>
+
+<div class="form-group">
+<label class="form-label">
+Arabic Name
+</label>
+
+<input
+class="form-control"
+dir="rtl"
+formControlName="storeArabicName">
+</div>
+
+<div class="form-group">
+<label class="form-label">
+Support Email
+</label>
+
+<input
+type="email"
+class="form-control"
+formControlName="supportEmail">
+</div>
+
+<div class="form-group">
+<label class="form-label">
+Support Phone
+</label>
+
+<input
+class="form-control"
+formControlName="supportPhone">
+</div>
+
+<div class="form-group form-group--full">
+
+<label class="form-label">
+
+Address
+
+</label>
+
+<input
+class="form-control"
+formControlName="address">
+
+</div>
+
+</div>
+
+</div>
+
+<div class="scaffold-card">
+
+<h2 class="card-title">
+
+Store Configuration
+
+</h2>
+
+<div class="form-grid">
+
+<div class="form-group">
+<label class="form-label">
+Currency
+</label>
+
+<input
+class="form-control"
+formControlName="currency">
+</div>
+
+<div class="form-group">
+<label class="form-label">
+Currency Symbol
+</label>
+
+<input
+class="form-control"
+formControlName="currencySymbol">
+</div>
+
+<div class="form-group">
+<label class="form-label">
+Shipping Cost
+</label>
+
+<input
+type="number"
+class="form-control"
+formControlName="shippingCost">
+</div>
+
+<div class="form-group">
+<label class="form-label">
+Free Shipping
+</label>
+
+<input
+type="number"
+class="form-control"
+formControlName="freeShippingThreshold">
+</div>
+
+<div class="form-group">
+<label class="form-label">
+Tax %
+</label>
+
+<input
+type="number"
+class="form-control"
+formControlName="taxPercentage">
+</div>
+
+<div class="form-group">
+
+<label class="checkbox-label">
+
+<input
+type="checkbox"
+formControlName="maintenanceMode">
+
+<span>
+
+Maintenance Mode
+
+</span>
+
+</label>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="scaffold-card">
+
+<h2 class="card-title">
+
+Social Links
+
+</h2>
+
+<div class="form-grid">
+
+<div class="form-group">
+<label class="form-label">
+Facebook
+</label>
+
+<input
+class="form-control"
+formControlName="facebookUrl">
+</div>
+
+<div class="form-group">
+<label class="form-label">
+Instagram
+</label>
+
+<input
+class="form-control"
+formControlName="instagramUrl">
+</div>
+
+<div class="form-group">
+<label class="form-label">
+WhatsApp
+</label>
+
+<input
+class="form-control"
+formControlName="whatsAppNumber">
+</div>
+
+</div>
+
+</div>
+
+<div class="form-actions">
+
+<button
+class="btn btn-primary"
+type="submit"
+[disabled]="isSubmitting()">
+
+@if (isSubmitting()) {
+
+Saving...
+
+} @else {
+
+Save Settings
+
+}
+
+</button>
+
+</div>
+
+</form>
+
+  }
+
+</div>

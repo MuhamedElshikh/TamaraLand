@@ -54,11 +54,11 @@ export class ProductDetailsPage {
 
   if (current) {
     items.push({
-      label: current.CategoryArabicName || current.categoryName
+      label: current.arabicCategoryName || current.categoryName
     });
 
     items.push({
-      label: current.BrandArabicName || current.brandName
+      label: current.arabicBrandName || current.brandName
     });
   }
 
@@ -101,12 +101,22 @@ Number(this.product()?.rating ?? 0)
       this.isInWishlist.set(Boolean(productData?.isInWishlist));
 
       if (productData) {
-        this.analyticsService.viewItem({
-          id: productData.id,
-          name: productData.name,
-          price: productData.price,
-          category: productData.categoryName,
-        });
+       this.analyticsService.viewItem({
+  id: productData.id,
+
+  name: productData.name,
+
+  category: productData.categoryName,
+
+  brand: productData.brandName,
+
+  price: productData.price,
+
+  originalPrice: productData.originalPrice,
+
+  discount:
+    productData.originalPrice - productData.price
+});
       }
     });
   }
@@ -126,15 +136,43 @@ this.cartMessage.set('product.selectVariant');
     this.cartMessage.set(null);
     this.cartService.addItem({ productVariantId: variantId, quantity: 1 }).subscribe((response) => {
       this.isAddingToCart.set(false);
-      this.cartMessage.set(response.success ? 'Added to cart successfully.' : 'Could not add to cart right now.');
+      this.cartMessage.set(response.success ? 'productDetails.successToadd' : 'productDetails.faildToAdd');
       if (response.success && this.product()) {
         const prod = this.product()!;
-        this.analyticsService.addToCart({
-          id: prod.id,
-          name: prod.name,
-          price: this.selectedVariant()?.price ?? prod.price ?? 0,
-          quantity: 1,
-        });
+        const variant = prod.variants.find(
+    x => x.id === variantId
+);
+
+this.analyticsService.addToCart({
+
+    id: prod.id,
+
+    name: prod.name,
+
+    category: prod.categoryName,
+
+    brand: prod.brandName,
+
+    variant:
+        `${variant?.color} / ${variant?.size}`,
+
+    sku: variant?.sku,
+
+    quantity: 1,
+
+    price:
+        this.selectedVariant()?.price ??
+        prod.price,
+
+    originalPrice:
+        variant?.originalPrice ??
+        prod.originalPrice,
+
+    discount:
+        (variant?.originalPrice ?? prod.originalPrice) -
+        (this.selectedVariant()?.price ?? prod.price)
+
+});
       }
     });
   }
@@ -154,14 +192,23 @@ this.cartMessage.set('product.selectVariant');
 
     request$.subscribe({
       next: (response) => {
-        if (!response.success){
-          this.analyticsService.trackEvent('add_to_wishlist', {
-    items: [{
-      item_id: productId,
-      item_name: this.product()?.name,
-      price: this.product()?.price
-    }]
-  });
+        if (response.success){
+     const product = this.product();
+
+if (!product) return;
+
+this.analyticsService.wishlist({
+  id: product.id,
+  name: product.name,
+
+  category: product.categoryName,
+  brand: product.brandName,
+
+  price: product.price,
+  originalPrice: product.originalPrice,
+
+  discount: product.originalPrice - product.price
+});
 this.isInWishlist.set(wasInWishlist); // رجّع الحالة لو فشل
         } 
         this.isTogglingWishlist.set(false);

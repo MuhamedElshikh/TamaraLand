@@ -37,6 +37,7 @@
   },
   "footer": {
     "tagline": "Be proud to be a woman.",
+  "contact": "Contact",
 
     "shop": "Shop",
     "newIn": "New In",
@@ -185,7 +186,8 @@
 
     "addToCart": "Add to Cart",
     "adding": "Adding...",
-
+"successToadd": "Added to cart successfully",
+    "faildToAdd": "Could not add to cart right now.",
     "rating": "Rating",
     "views": "Views",
     "reviews": "Reviews",

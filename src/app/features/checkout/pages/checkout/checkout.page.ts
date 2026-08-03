@@ -49,15 +49,20 @@ private readonly analyticsService = inject(AnalyticsService);
   const cart = this.cart();
 
   if (cart) {
-    this.analyticsService.beginCheckout(
-      cart.items.map(item => ({
-        id: item.productVariantId,
-        name: item.productName,
-        price: item.unitPrice,
-        quantity: item.quantity
-      })),
-      cart.subTotal
-    );
+   this.analyticsService.beginCheckout(
+  cart.items.map(item => ({
+    id: item.productVariantId,
+    name: item.productName,
+    category: item.categoryName,
+    brand: item.brandName,
+    sku: item.variantSku,
+    variant: `${item.color} / ${item.size}`,
+    price: item.unitPrice,
+    originalPrice: item.unitPrice / item.quantity,
+    quantity: item.quantity
+  })),
+  cart.subTotal
+);
   }
 },
 
@@ -98,14 +103,18 @@ private readonly analyticsService = inject(AnalyticsService);
         res.data.toString(),
 
         cart.subTotal,
-
+        cart.couponCode ?? null,
+        this.selectedShippingArea()!.shippingCost,
         cart.items.map(item => ({
           id: item.productVariantId,
           name: item.productName,
           price: item.unitPrice,
-          quantity: item.quantity
+          quantity: item.quantity,
+          category: item.categoryName,
+          brand: item.brandName,
+          variant: `${item.color} / ${item.size}`,
+          sku: item.variantSku
         }))
-
       );
 
     }

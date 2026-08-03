@@ -46,4 +46,5 @@ export class GoogleTagManagerService {
     (window as any).dataLayer.push(event);
 
   }
+  
 }

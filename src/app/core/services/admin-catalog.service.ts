@@ -117,7 +117,17 @@ export class AdminCatalogService {
 
   createCategory(data: CreateCategoryRequest, image?: File | null): Observable<ApiResponse<CategoryResponse>> {
     const formData = new FormData();
-    formData.append('name', data.name);
+
+formData.append('name', data.name);
+formData.append('arabicName', data.arabicName);
+
+if (data.description)
+    formData.append('description', data.description);
+
+formData.append('isPublished', String(data.isPublished));
+
+if (image)
+    formData.append('image', image);
     if (data.description) formData.append('description', data.description);
     if (image) formData.append('image', image);
     return this.http.post<ApiResponse<CategoryResponse>>(this.categoryUrl, formData);
@@ -125,7 +135,17 @@ export class AdminCatalogService {
 
   updateCategory(id: number, data: UpdateCategoryRequest, image?: File | null): Observable<ApiResponse<void>> {
     const formData = new FormData();
-    formData.append('name', data.name);
+
+formData.append('name', data.name);
+formData.append('arabicName', data.arabicName);
+
+if (data.description)
+    formData.append('description', data.description);
+
+formData.append('isPublished', String(data.isPublished));
+
+if (image)
+    formData.append('image', image);
     if (data.description) formData.append('description', data.description);
     if (image) formData.append('image', image);
     return this.http.put<ApiResponse<void>>(`${this.categoryUrl}/${id}`, formData);
@@ -153,17 +173,40 @@ export class AdminCatalogService {
 
   createBrand(data: CreateBrandRequest, image?: File | null): Observable<ApiResponse<BrandResponse>> {
     const formData = new FormData();
-    formData.append('name', data.name);
+
+formData.append('name', data.name);
+formData.append('arabicName', data.arabicName);
+
+if (data.description)
+    formData.append('description', data.description);
+
+formData.append('isPublished', String(data.isPublished));
+
+if (image)
+    formData.append('image', image);
     if (data.description) formData.append('description', data.description);
     if (image) formData.append('image', image);
     return this.http.post<ApiResponse<BrandResponse>>(this.brandUrl, formData);
   }
 
   updateBrand(id: number, data: UpdateBrandRequest, image?: File | null): Observable<ApiResponse<void>> {
-    const formData = new FormData();
-    formData.append('name', data.name);
-    if (data.description) formData.append('description', data.description);
-    if (image) formData.append('image', image);
+   const formData = new FormData();
+
+formData.append('name', data.name);
+formData.append('arabicName', data.arabicName);
+
+if (data.description)
+    formData.append('description', data.description);
+
+formData.append('isPublished', String(data.isPublished));
+
+if (image)
+    formData.append('image', image);
+
+return this.http.put<ApiResponse<void>>(
+    `${this.brandUrl}/${id}`,
+    formData
+);
     return this.http.put<ApiResponse<void>>(`${this.brandUrl}/${id}`, formData);
   }
 

@@ -8,13 +8,35 @@ import { LanguageService } from '../../core/services/language.service';
 })
 export class LocalizedNamePipe implements PipeTransform {
 
-  private languageService = inject(LanguageService);
+  private readonly languageService = inject(LanguageService);
 
-  transform(value: { name?: string; arabicName?: string } | null | undefined): string {
+  transform(
+    value:
+      | {
+          name?: string;
+          arabicName?: string;
+
+          productName?: string;
+          productArabicName?: string;
+        }
+      | null
+      | undefined
+  ): string {
+
     if (!value) return '';
 
+    const english =
+      value.name ??
+      value.productName ??
+      '';
+
+    const arabic =
+      value.arabicName ??
+      value.productArabicName ??
+      '';
+
     return this.languageService.isArabic()
-      ? (value.arabicName || value.name || '')
-      : (value.name || value.arabicName || '');
+      ? (arabic || english)
+      : (english || arabic);
   }
 }

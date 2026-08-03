@@ -48,7 +48,7 @@ export class AdminProductFormPage implements OnInit {
     brandId: ['', [Validators.required]],
     description: [''],
     slug: [''],
-    isPublished:true
+    isPublished:[true]
   });
 
   readonly variants = signal<UpdateProductVariantRequest[]>([]);
@@ -63,8 +63,6 @@ export class AdminProductFormPage implements OnInit {
   size: [''],
   stock: [0, [Validators.required, Validators.min(0)]],
   price: [0, [Validators.required, Validators.min(0.01)]],
-  costPrice: [0],
-  compareAtPrice: [0],
   bust: [0],
   waist: [0],
   hip: [0],
@@ -137,7 +135,6 @@ export class AdminProductFormPage implements OnInit {
       slug: formVal.slug || this.productSlug() || this.slugify(formVal.name),
       categoryId: Number(formVal.categoryId),
       brandId: Number(formVal.brandId),
-      isActive: true,
       isPublished: formVal.isPublished,
       variants: this.variants().map((v) => ({
         id: v.id || 0,
@@ -160,7 +157,7 @@ export class AdminProductFormPage implements OnInit {
       next: (res) => {
         this.isSubmitting.set(false);
         if (res.success) {
-          this.successMessage.set('Product updated successfully!');
+          this.router.navigate(['/admin/products']);
         } else {
           this.errorMessage.set(res.message || 'Failed to update product.');
         }
@@ -181,6 +178,7 @@ export class AdminProductFormPage implements OnInit {
       waist: Number(v.waist || 0),
       hip: Number(v.hip || 0),
       length: Number(v.length || 0),
+      isActive: true
     }));
 
     const createData: CreateProductRequest = {
@@ -225,7 +223,6 @@ export class AdminProductFormPage implements OnInit {
       waist: 0,
       hip: 0,
       length: 0,
-      isPublished:true
     });
     this.variantError.set(null);
   }
@@ -269,7 +266,6 @@ export class AdminProductFormPage implements OnInit {
       bust: Number(val.bust || 0),
       waist: Number(val.waist || 0),
       hip: Number(val.hip || 0),
-      isActive:true,
       length: Number(val.length || 0),
     };
 
@@ -302,7 +298,6 @@ export class AdminProductFormPage implements OnInit {
       waist: 0,
       hip: 0,
       length: 0,
-      isPublished:true
     });
     this.variantError.set(null);
   }
@@ -427,7 +422,7 @@ export class AdminProductFormPage implements OnInit {
             waist: v.waist || 0,
             hip: v.hip || 0,
             length: v.length || 0,
-            isActive: true
+            isActive: v.isActive ?? true
           }));
           this.variants.set(mappedVariants);
         }
