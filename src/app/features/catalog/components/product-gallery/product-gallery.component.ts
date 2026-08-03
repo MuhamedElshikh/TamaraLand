@@ -12,7 +12,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 export class ProductGalleryComponent implements OnChanges {
   @Input() images: ProductImageResponse[] = [];
   @Input() title = 'Product images';
-  @Input() fallbackImage = '';
+  @Input() fallbackImage = '/src/assets/placeholder-product.jpg';
 
   selectedImage = signal<ProductImageResponse | null>(null);
 

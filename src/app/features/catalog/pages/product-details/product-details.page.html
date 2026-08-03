@@ -5,9 +5,13 @@
     <header class="product-details-page__hero">
       <app-breadcrumbs [items]="breadcrumbs()" />
       <div>
-        <p class="section-kicker">{{ product()?.arabicCategoryName || product()?.categoryName || ('productDetails.catalog' | translate) }}</p>
-        <h1 class="section-title">{{ product() | localizedName }} </h1>
-        <p class="section-copy">{{product()?.arabicBrandName || product()?.brandName  || 'Premium selection' }} • {{ product()?.categoryName || 'Featured item' }}</p>
+<p class="section-kicker">
+  {{ product()?.arabicCategoryName | localizedField:product()?.categoryName }} . <span class="product-details-page__brand">
+  {{ product()?.arabicBrandName | localizedField:product()?.brandName }}
+</span>
+</p>        
+
+<h1 class="section-title">{{ product() | localizedName }} </h1>
       </div>
 
       <button
@@ -25,7 +29,7 @@
 
     <div class="product-details-page__content">
       <div class="product-details-page__gallery">
-        <app-product-gallery [images]="product()?.images || []" [title]="product() ? (product() | localizedName) : ('productDetails.productImages' | translate)"     [fallbackImage]="product()?.imageUrl || ''" />
+        <app-product-gallery [images]="product()?.images || []" [title]="product() ? (product() | localizedName) : ('productDetails.productImages' | translate)"     [fallbackImage]="product()?.imageUrl || '/assets/placeholder-product.jpg'" />
       </div>
 
       <div class="product-details-page__aside">

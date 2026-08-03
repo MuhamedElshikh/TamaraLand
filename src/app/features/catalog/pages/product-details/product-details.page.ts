@@ -13,6 +13,7 @@ import { WishlistService } from '../../../../core/services/wishlist.service';
 import { AnalyticsService } from '../../../../core/services/analytics.service';
 import { TranslatePipe } from '@ngx-translate/core';
 import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe';
+import { LocalizedFieldPipe } from '../../../../shared/pipes/localized-field.pipe';
 
 @Component({
   selector: 'app-product-details',
@@ -20,6 +21,7 @@ import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe'
   imports: [
     CommonModule,
     RouterLink,
+    LocalizedFieldPipe,
     ProductGalleryComponent,
     ProductVariantSelectorComponent,
     ProductCardComponent,
@@ -47,24 +49,25 @@ export class ProductDetailsPage {
   readonly isTogglingWishlist = signal(false);
 
   readonly breadcrumbs = computed<BreadcrumbItem[]>(() => {
-    const current = this.product();
-    const items: BreadcrumbItem[] = [{ label: 'Home', link: '/' }];
-
-    // ⚠️ مفيش categoryId في الموديل الجديد، فمينفعش نعمل لينك للفئة، بس نعرض اسمها كنص
+  const current = this.product();
+  const items: BreadcrumbItem[] = [
+    { label: 'Home', arabicLabel: 'الرئيسية', link: '/' }
+  ];
 
   if (current) {
     items.push({
-      label: current.arabicCategoryName || current.categoryName
+      label: current.categoryName,
+      arabicLabel: current.arabicCategoryName
     });
 
     items.push({
-      label: current.arabicBrandName || current.brandName
+      label: current.brandName,
+      arabicLabel: current.arabicBrandName
     });
   }
 
   return items;
 });
-
   readonly priceLabel = computed(() => {
     const current = this.product();
     const selected = this.selectedVariant();
