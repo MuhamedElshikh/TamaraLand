@@ -1,6 +1,4 @@
-.product-grid {
-  grid-template-columns: repeat(4, 1fr);
-}
+
 
 @keyframes skeletonPulse {
   0%, 100% { opacity: 0.5; }
@@ -13,6 +11,71 @@
   background: var(--secondary-light);
   border: 1px solid var(--border-color);
   animation: skeletonPulse 1.4s ease-in-out infinite;
+}
+.slider-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.product-slider {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-bottom: 8px;
+
+  /* نخفي السكرول بار */
+  scrollbar-width: none;
+}
+
+.product-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.slider-item {
+  flex: 0 0 auto;
+  width: 240px;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 640px) {
+  .product-slider {
+    scroll-padding-inline: 12px;
+  }
+
+  .slider-item {
+    width: calc(50% - 8px); /* كارتين بالظبط في العرض مع الـ gap */
+    scroll-snap-align: start;
+  }
+}
+
+.slider-nav {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color, #ddd);
+  background: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+  z-index: 2;
+}
+
+.slider-nav:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.slider-nav:hover:not(:disabled) {
+  background: #f5f5f5;
 }
 
 @media (max-width: 900px) {

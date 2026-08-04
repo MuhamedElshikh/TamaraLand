@@ -8,18 +8,40 @@
   </div>
 
   @if (loading()) {
-    <div class="page-grid two-up product-grid">
+    <div class="product-slider">
       @for (i of [1, 2, 3, 4]; track i) {
-        <div class="product-card--skeleton"></div>
+        <div class="product-card--skeleton slider-item"></div>
       }
     </div>
   } @else if (products().length === 0) {
     <p class="muted">{{ 'featuredProducts.noProducts' | translate }}</p>
   } @else {
-    <div class="page-grid two-up product-grid">
-      @for (product of products(); track product.id) {
-        <app-product-card [product]="product" />
-      }
+    <div class="slider-wrapper">
+      <button
+        type="button"
+        class="slider-nav slider-nav--prev"
+        (click)="scrollSlider(-1)"
+        [disabled]="!canScrollPrev()"
+        aria-label="Previous">
+        ‹
+      </button>
+
+      <div class="product-slider" #sliderTrack (scroll)="onSliderScroll()">
+        @for (product of products(); track product.id) {
+          <div class="slider-item">
+            <app-product-card [product]="product" />
+          </div>
+        }
+      </div>
+
+      <button
+        type="button"
+        class="slider-nav slider-nav--next"
+        (click)="scrollSlider(1)"
+        [disabled]="!canScrollNext()"
+        aria-label="Next">
+        ›
+      </button>
     </div>
   }
 </section>

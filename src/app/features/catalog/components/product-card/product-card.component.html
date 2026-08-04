@@ -10,7 +10,7 @@
       class="product-card__wishlist-btn"
       [class.product-card__wishlist-btn--active]="isInWishlist()"
       (click)="toggleWishlist($event)"
-      [attr.aria-label]="isInWishlist()? ('productCard.removeFromWishlist' | translate): ('productCard.addToWishlist' | translate)">
+      [attr.aria-label]="isInWishlist() ? ('productCard.removeFromWishlist' | translate) : ('productCard.addToWishlist' | translate)">
       <svg width="16" height="16" viewBox="0 0 24 24" [attr.fill]="isInWishlist() ? 'currentColor' : 'none'">
         <path d="M12 20s-7-4.35-9.5-8.5C.8 8 2.4 4.5 6 4.5c2 0 3.4 1.1 6 3.6 2.6-2.5 4-3.6 6-3.6 3.6 0 5.2 3.5 3.5 7-2.5 4.15-9.5 8.5-9.5 8.5z" stroke="currentColor" stroke-width="1.8"/>
       </svg>
@@ -21,60 +21,36 @@
       class="product-card__add-btn"
       [class.product-card__add-btn--added]="addState() === 'added'"
       [disabled]="isAdding()"
-      (click)="addToCart($event)"
-    >
-     @if (isAdding()) {
-
-{{ 'productCard.adding' | translate }}
-
-}
-@else if (addState() === 'added') {
-
-{{ 'productCard.added' | translate }}
-
-}
-@else if (addState() === 'error') {
-
-{{ 'productCard.tryAgain' | translate }}
-
-}
-@else {
-
-{{ 'productCard.addToCart' | translate }}
-
-}
+      (click)="addToCart($event)">
+      @if (isAdding()) {
+        {{ 'productCard.adding' | translate }}
+      } @else if (addState() === 'added') {
+        {{ 'productCard.added' | translate }}
+      } @else if (addState() === 'error') {
+        {{ 'productCard.tryAgain' | translate }}
+      } @else {
+        {{ 'productCard.addToCart' | translate }}
+      }
     </button>
   </div>
+
   <div class="product-card__info">
     <p class="product-card__name">{{ product | localizedName }}</p>
     <div class="product-card__price-row">
-      <p class="product-card__price">{{ finalPrice | number }}{{ 'productCard.currency' | translate }}</p>
+      <p class="product-card__price">{{ finalPrice | number }} {{ 'productCard.currency' | translate }}</p>
       @if (hasDiscount && originalPrice !== null) {
-        <p class="product-card__price-old">{{ originalPrice | number }}{{ 'productCard.currency' | translate }}</p>
+        <p class="product-card__price-old">{{ originalPrice | number }} {{ 'productCard.currency' | translate }}</p>
       }
     </div>
-   <div class="product-card__footer">
 
-    <div class="product-card__rating">
+    <div class="product-card__footer">
+      <div class="product-card__rating">
         ⭐ {{ ratingValue.toFixed(1) }}
+      </div>
+      <div class="product-card__analytics">
+        <span>👁 {{ product.viewsCount }}</span>
+        <span>💬 {{ reviewCount }}</span>
+      </div>
     </div>
-
-    <div class="product-card__analytics">
-
-        <span>
-
-            👁 {{ product.viewsCount }}
-
-        </span>
-
-        <span>
-
-            💬 {{ reviewCount }}
-
-        </span>
-
-    </div>
-
-</div>
   </div>
 </a>
