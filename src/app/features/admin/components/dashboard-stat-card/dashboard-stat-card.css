@@ -1,0 +1,162 @@
+.dashboard-stat {
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    min-height: 110px;
+
+    padding: 1.2rem;
+
+    border-radius: 18px;
+
+    border: 1px solid var(--border-color);
+
+    background: var(--bg-card);
+
+    box-shadow: var(--shadow-sm);
+
+    transition: .25s;
+
+}
+
+.dashboard-stat:hover {
+
+    transform: translateY(-4px);
+
+    border-color: var(--primary);
+
+    box-shadow: 0 12px 30px rgba(0,0,0,.12);
+
+}
+
+.dashboard-stat__header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 1rem;
+
+}
+
+.dashboard-stat__title {
+
+    font-size: .72rem;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .08em;
+
+    color: var(--text-muted);
+
+    margin-bottom: .65rem;
+
+}
+
+.dashboard-stat__value {
+
+    font-size: 2rem;
+
+    font-weight: 700;
+
+    line-height: 1.1;
+
+    color: var(--text-primary);
+
+    font-family: 'Cormorant Garamond', serif;
+
+}
+
+.dashboard-stat__icon {
+
+    width: 48px;
+
+    height: 48px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: rgba(201,162,75,.12);
+
+    color: var(--primary);
+
+    font-size: 1.4rem;
+
+    flex-shrink: 0;
+
+}
+
+.dashboard-stat--accent {
+
+    background: var(--gold-gradient);
+
+    border-color: transparent;
+
+}
+
+.dashboard-stat--accent .dashboard-stat__title,
+.dashboard-stat--accent .dashboard-stat__value {
+
+    color: var(--secondary-dark);
+
+}
+
+.dashboard-stat--accent .dashboard-stat__icon {
+
+    background: rgba(255,255,255,.25);
+
+    color: var(--secondary-dark);
+
+}
+
+.dashboard-stat--warning {
+
+    border-color: rgba(230,90,90,.35);
+
+}
+
+.dashboard-stat--warning .dashboard-stat__icon {
+
+    background: rgba(230,90,90,.12);
+
+}
+
+@media (max-width:768px){
+
+    .dashboard-stat{
+
+        min-height:95px;
+
+        padding:1rem;
+
+    }
+
+    .dashboard-stat__value{
+
+        font-size:1.7rem;
+
+    }
+
+    .dashboard-stat__icon{
+
+        width:42px;
+
+        height:42px;
+
+        font-size:1.2rem;
+
+    }
+
+}

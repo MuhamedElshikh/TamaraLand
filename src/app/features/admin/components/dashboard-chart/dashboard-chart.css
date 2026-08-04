@@ -1,0 +1,15 @@
+:host{
+
+display:block;
+
+background:var(--bg-card);
+
+padding:1rem;
+
+border-radius:18px;
+
+border:1px solid var(--border-color);
+
+box-shadow:var(--shadow-sm);
+
+}

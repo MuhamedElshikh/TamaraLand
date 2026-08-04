@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection,inject, provideAppInitializer } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
@@ -17,7 +17,7 @@ import {
   TranslateHttpLoader,
   provideTranslateHttpLoader
 } from '@ngx-translate/http-loader';
-
+import { StoreSettingsService } from './core/services/store-settings.service';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({
@@ -45,6 +45,10 @@ export const appConfig: ApplicationConfig = {
       loader: provideTranslateLoader(TranslateHttpLoader),
       fallbackLang: 'en',
       lang: 'en'
-    })
+    }),
+     provideAppInitializer(() => {
+      const storeSettingsService = inject(StoreSettingsService);
+      return storeSettingsService.load();
+    }),
   ]
 };

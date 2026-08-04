@@ -1,0 +1,23 @@
+@if (chartOptions) {
+
+<apx-chart
+    [series]="chartOptions.series"
+    [chart]="chartOptions.chart"
+
+    [xaxis]="chartOptions.xaxis!"
+    [yaxis]="chartOptions.yaxis!"
+
+    [stroke]="chartOptions.stroke!"
+    [dataLabels]="chartOptions.dataLabels!"
+    [grid]="chartOptions.grid!"
+    [tooltip]="chartOptions.tooltip!"
+[labels]="chartOptions.labels ?? []"
+    [legend]="chartOptions.legend!"
+    [fill]="chartOptions.fill!"
+    [markers]="chartOptions.markers!"
+    [plotOptions]="chartOptions.plotOptions!"
+
+    [colors]="chartOptions.colors!">
+</apx-chart>
+
+}

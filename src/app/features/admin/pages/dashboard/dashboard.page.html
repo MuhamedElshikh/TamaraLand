@@ -1,83 +1,313 @@
 <section class="dashboard-page">
+
   <header class="dashboard-page__hero">
     <p class="section-kicker">Overview</p>
     <h1 class="section-title">Dashboard</h1>
   </header>
 
   @if (loadError()) {
-    <p class="section-copy">Couldn't load dashboard data right now.</p>
-  } @else {
+
+    <p class="section-copy">
+      Couldn't load dashboard data right now.
+    </p>
+
+  } @else if (isLoading()) {
+
     <div class="dashboard-stats">
-      @if (isLoading()) {
-        @for (i of [1,2,3,4,5,6,7,8,9]; track i) {
-          <div class="stat-card stat-card--skeleton"></div>
-        }
-      } @else {
-        <div class="stat-card">
-          <p class="stat-card__label">Total revenue</p>
-          <p class="stat-card__value">{{ data()?.totalRevenue | number }} EGP</p>
-        </div>
-        <div class="stat-card stat-card--accent">
-          <p class="stat-card__label">Today's revenue</p>
-          <p class="stat-card__value">{{ data()?.todayRevenue | number }} EGP</p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-card__label">Total orders</p>
-          <p class="stat-card__value">{{ data()?.totalOrders | number }}</p>
-        </div>
-        <div class="stat-card" [class.stat-card--warning]="(data()?.pendingOrders ?? 0) > 0">
-          <p class="stat-card__label">Pending orders</p>
-          <p class="stat-card__value">{{ data()?.pendingOrders | number }}</p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-card__label">Total products</p>
-          <p class="stat-card__value">{{ data()?.totalProducts | number }}</p>
-        </div>
-        <div class="stat-card" [class.stat-card--warning]="(data()?.lowStockProducts ?? 0) > 0">
-          <p class="stat-card__label">Low stock products</p>
-          <p class="stat-card__value">{{ data()?.lowStockProducts | number }}</p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-card__label">Total customers</p>
-          <p class="stat-card__value">{{ data()?.totalCustomers | number }}</p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-card__label">Active coupons</p>
-          <p class="stat-card__value">{{ data()?.activeCoupons | number }}</p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-card__label">Active discounts</p>
-          <p class="stat-card__value">{{ data()?.activeDiscounts | number }}</p>
-        </div>
+      @for (i of [1,2,3,4,5,6,7,8]; track i) {
+        <div class="stat-card stat-card--skeleton"></div>
       }
     </div>
 
-    <div class="dashboard-tables">
-      <div class="dashboard-tables__block">
-        <div class="dashboard-tables__header">
-          <h3>Latest orders</h3>
-          <a routerLink="/admin/orders" class="dashboard-tables__link">View all</a>
-        </div>
-        <app-data-table
-          [columns]="ordersColumns"
-          [rows]="data()?.latestOrders || []"
-          [isLoading]="isLoading()"
-          emptyMessage="No orders yet."
-        />
+  } @else {
+
+    <!-- ================= Revenue ================= -->
+
+    <section class="dashboard-section">
+
+      <div class="dashboard-section__header">
+        <h2>Revenue</h2>
       </div>
 
-      <div class="dashboard-tables__block">
+      <div class="dashboard-stats">
+
+        <app-dashboard-stat-card
+          title="Total Revenue"
+          icon="💰"
+          [value]="((data()?.totalRevenue ?? 0) | number:'1.2-2') + ' EGP'">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+          title="Today's Revenue"
+          icon="📈"
+          [value]="((data()?.todayRevenue ?? 0) | number:'1.2-2') + ' EGP'"
+          [accent]="true">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+          title="This Month Revenue"
+          icon="📅"
+          [value]="((data()?.monthRevenue ?? 0) | number:'1.2-2') + ' EGP'">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+          title="This Year Revenue"
+          icon="🗓️"
+          [value]="((data()?.yearRevenue ?? 0) | number:'1.2-2') + ' EGP'">
+        </app-dashboard-stat-card>
+
+      </div>
+<div class="dashboard-chart-card">
+
+    <app-dashboard-chart
+        [chartOptions]="revenueChart()">
+    </app-dashboard-chart>
+
+</div>
+    </section>
+
+
+    <!-- ================= Orders ================= -->
+
+    <section class="dashboard-section">
+
+      <div class="dashboard-section__header">
+        <h2>Orders</h2>
+      </div>
+
+      <div class="dashboard-stats">
+
+        <app-dashboard-stat-card
+          title="Orders"
+          icon="📦"
+          [value]="data()?.totalOrders ?? 0">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+          title="Pending"
+          icon="⏳"
+          [value]="data()?.pendingOrders ?? 0"
+          [warning]="true">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+          title="Delivered"
+          icon="✅"
+          [value]="data()?.deliveredOrders ?? 0">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+          title="Cancelled"
+          icon="❌"
+          [value]="data()?.cancelledOrders ?? 0"
+          [warning]="true">
+        </app-dashboard-stat-card>
+
+      </div>
+<div class="dashboard-chart-card">
+
+    <h3>Monthly Orders</h3>
+
+    <app-dashboard-chart
+        [chartOptions]="ordersChart()">
+    </app-dashboard-chart>
+
+</div>
+    </section>
+
+    <!-- ================= Latest Orders ================= -->
+
+    <section class="dashboard-section">
+
+      <div class="dashboard-tables__header">
+
+        <h3>Latest Orders</h3>
+
+        <a
+          routerLink="/admin/orders"
+          class="dashboard-tables__link">
+
+          View all
+
+        </a>
+
+      </div>
+
+      <app-data-table
+        [columns]="ordersColumns"
+        [rows]="data()?.latestOrders || []"
+        [isLoading]="false"
+        emptyMessage="No orders yet.">
+      </app-data-table>
+
+    </section>
+
+    <!-- ================= Catalog ================= -->
+
+    <section class="dashboard-section">
+
+      <div class="dashboard-section__header">
+        <h2>Catalog</h2>
+      </div>
+
+      <div class="dashboard-stats">
+
+        <app-dashboard-stat-card
+          title="Products"
+          icon="📦"
+          [value]="data()?.totalProducts ?? 0">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+          title="Brands"
+          icon="🏷️"
+          [value]="data()?.totalBrands ?? 0">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+          title="Categories"
+          icon="📂"
+          [value]="data()?.totalCategories ?? 0">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+          title="Discounts"
+          icon="🏷️"
+          [value]="data()?.activeDiscounts ?? 0">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+          title="Low Stock"
+          icon="⚠️"
+          [value]="data()?.lowStockProducts ?? 0"
+          [warning]="true">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+          title="Out Of Stock"
+          icon="🚫"
+          [value]="data()?.outOfStockProducts ?? 0"
+          [warning]="true">
+        </app-dashboard-stat-card>
+
+      </div>
+<div class="dashboard-grid">
+
+    <div class="dashboard-chart-card">
+
+        <h3>Top Categories</h3>
+
+        <app-dashboard-chart
+            [chartOptions]="categoriesChart()">
+        </app-dashboard-chart>
+
+    </div>
+
+    <div class="dashboard-chart-card">
+
+        <h3>Top Brands</h3>
+
+        <app-dashboard-chart
+            [chartOptions]="brandsChart()">
+        </app-dashboard-chart>
+
+    </div>
+
+</div>
+    </section>
+
+    <!-- ================= Tables ================= -->
+
+    <section class="dashboard-grid">
+
+      <div class="dashboard-card">
+
         <div class="dashboard-tables__header">
-          <h3>Top selling products</h3>
-          <a routerLink="/admin/products" class="dashboard-tables__link">View all</a>
+          <h3>Top Selling Products</h3>
         </div>
+
         <app-data-table
           [columns]="topProductsColumns"
           [rows]="topProductsRows"
-          [isLoading]="isLoading()"
-          emptyMessage="No sales data yet."
-        />
+          [isLoading]="false"
+          emptyMessage="No sales yet.">
+        </app-data-table>
+
       </div>
-    </div>
+
+      <div class="dashboard-card">
+
+        <div class="dashboard-tables__header">
+          <h3>Most Viewed Products</h3>
+        </div>
+
+        <app-data-table
+          [columns]="mostViewedColumns"
+          [rows]="mostViewedRows"
+          [isLoading]="false"
+          emptyMessage="No data.">
+        </app-data-table>
+
+      </div>
+
+    </section>
+
+    <!-- ================= Customer Engagement ================= -->
+
+    <section class="dashboard-section">
+
+      <div class="dashboard-section__header">
+        <h2>Customer Engagement</h2>
+      </div>
+
+      <div class="dashboard-stats">
+
+        <app-dashboard-stat-card
+          title="Customers"
+          icon="👥"
+          [value]="data()?.totalCustomers ?? 0">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+          title="Coupons"
+          icon="🎟️"
+          [value]="data()?.activeCoupons ?? 0">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+          title="Wishlist"
+          icon="❤️"
+          [value]="data()?.wishlistItems ?? 0">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+          title="Reviews"
+          icon="⭐"
+          [value]="data()?.totalReviews ?? 0">
+        </app-dashboard-stat-card>
+
+      </div>
+
+    </section>
+
+    <!-- ================= Most Wishlisted ================= -->
+
+    <section class="dashboard-section">
+
+      <div class="dashboard-tables__header">
+        <h3></h3>
+      </div>
+
+      <app-data-table
+      [title]=""
+        [columns]="mostWishlistedColumns"
+        [rows]="mostWishlistedRows"
+        [isLoading]="false"
+        emptyMessage="No data.">
+      </app-data-table>
+
+    </section>
+
   }
+
 </section>

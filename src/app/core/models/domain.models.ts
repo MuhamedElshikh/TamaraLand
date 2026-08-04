@@ -270,11 +270,35 @@ export interface DashboardResponse {
   pendingOrders: number;
   totalRevenue: number;
   todayRevenue: number;
+
   lowStockProducts: number;
   activeCoupons: number;
   activeDiscounts: number;
+
+  wishlistItems: number;
+  totalReviews: number;
+
+  totalCategories: number;
+  totalBrands: number;
+
+  outOfStockProducts: number;
+  deliveredOrders: number;
+  cancelledOrders: number;
+
+  monthRevenue: number;
+  yearRevenue: number;
+
   latestOrders: LatestOrder[];
   topSellingProducts: TopSellingProduct[];
+
+  mostViewedProducts: MostViewedProduct[];
+  mostWishlistedProducts: MostWishlistedProduct[];
+
+  monthlyRevenue: MonthlyChartItem[];
+  monthlyOrders: MonthlyChartItem[];
+
+  topCategories: DashboardChartPoint[];
+  topBrands: DashboardChartPoint[];
 }
 
 export interface TopSellingProduct {
@@ -293,6 +317,25 @@ export interface LatestOrder {
   createdAt: string;
 }
 
+export interface MostViewedProduct {
+  productId: number;
+  productName: string;
+  viewsCount: number;
+}
+
+export interface MostWishlistedProduct {
+  productId: number;
+  productName: string;
+  wishlistCount: number;
+}
+export interface MonthlyChartItem {
+  label: string;
+  value: number;
+}
+export interface DashboardChartPoint {
+  label: string;
+  value: number;
+}
 
 // ---- Discounts ----
 export interface DiscountResponse {

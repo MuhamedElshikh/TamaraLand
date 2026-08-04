@@ -1,0 +1,28 @@
+<div
+  class="dashboard-stat"
+  [class.dashboard-stat--accent]="accent()"
+  [class.dashboard-stat--warning]="warning()">
+
+  <div class="dashboard-stat__header">
+
+    <div>
+
+      <div class="dashboard-stat__title">
+        {{ title() }}
+      </div>
+
+      <div class="dashboard-stat__value">
+        {{ value() }}
+      </div>
+
+    </div>
+
+    <div class="dashboard-stat__icon">
+
+      {{ icon() }}
+
+    </div>
+
+  </div>
+
+</div>

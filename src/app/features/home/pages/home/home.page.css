@@ -65,7 +65,7 @@
   text-align: center;
   padding: 5rem 1.5rem;
   margin: 2rem 0;
-  background: var(--secondary-dark);
+  background: var(--secondary-light);
   border-top: 1px solid var(--border-color);
   border-bottom: 1px solid var(--border-color);
 }
@@ -91,7 +91,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.25em;
-  color: var(--primary-light);
+  color: var(--text-secondary);
   margin-bottom: 1rem;
 }
 
@@ -105,7 +105,7 @@
   font-style: italic;
   font-weight: 600;
   line-height: 1.5;
-  color: var(--text-primary);
+  color: var(--text-secondary);
 }
 
 /* ---- Trust strip ---- */
