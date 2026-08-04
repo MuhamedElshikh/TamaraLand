@@ -36,20 +36,42 @@
     "secureCheckoutDescription": "Encrypted payments, always"
   },
   "footer": {
-    "tagline": "Be proud to be a woman.",
-  "contact": "Contact",
+    "tagline": "Be Proud To Be A Woman",
 
-    "shop": "Shop",
-    "newIn": "New In",
-    "collections": "Collections",
-    "brands": "Brands",
-    "sale": "Sale",
+    "newsletter": {
+      "title": "Join The Tamara Community",
+      "description": "Get exclusive offers, new arrivals and premium collections.",
+      "placeholder": "Your email address",
+      "subscribe": "Subscribe"
+    },
 
-    "allRightsReserved": "All rights reserved.",
+    "shop": {
+      "title": "Shop",
+      "newIn": "New In",
+      "collections": "Collections",
+      "brands": "Brands",
+      "sale": "Sale"
+    },
 
-    "privacyPolicy": "Privacy Policy",
-    "termsOfService": "Terms of Service"
-  },
+    "support": {
+      "title": "Support",
+      "contact": "Contact",
+      "shipping": "Shipping",
+      "returns": "Returns",
+      "faq": "FAQ"
+    },
+
+    "contact": {
+      "title": "Contact"
+    },
+
+    "bottom": {
+      "rights": "All Rights Reserved.",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    }
+  }
+,
   
   "featuredProducts": {
     "justLanded": "Just landed",

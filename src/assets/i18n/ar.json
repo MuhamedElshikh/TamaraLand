@@ -34,20 +34,42 @@
     "secureCheckoutDescription": "مدفوعات مشفرة وآمنة دائماً"
   },
   "footer": {
-    "tagline": "كوني فخورة بكونك امرأة.",
-  "contact": "تواصل معنا",
+    "tagline": "كوني فخورة بكونك امرأة",
 
-    "shop": "تسوق",
-    "newIn": "وصل حديثًا",
-    "collections": "المجموعات",
-    "brands": "العلامات التجارية",
-    "sale": "العروض",
+    "newsletter": {
+      "title": "انضمي إلى مجتمع تمارا لاند",
+      "description": "احصلي على أحدث المجموعات والعروض الحصرية والخصومات المميزة.",
+      "placeholder": "أدخل بريدك الإلكتروني",
+      "subscribe": "اشترك"
+    },
 
-    "allRightsReserved": "جميع الحقوق محفوظة.",
+    "shop": {
+      "title": "التسوق",
+      "newIn": "وصل حديثًا",
+      "collections": "المجموعات",
+      "brands": "العلامات التجارية",
+      "sale": "التخفيضات"
+    },
 
-    "privacyPolicy": "سياسة الخصوصية",
-    "termsOfService": "شروط الاستخدام"
-  },
+    "support": {
+      "title": "الدعم",
+      "contact": "تواصل معنا",
+      "shipping": "الشحن",
+      "returns": "الاسترجاع",
+      "faq": "الأسئلة الشائعة"
+    },
+
+    "contact": {
+      "title": "بيانات التواصل"
+    },
+
+    "bottom": {
+      "rights": "جميع الحقوق محفوظة.",
+      "privacy": "سياسة الخصوصية",
+      "terms": "الشروط والأحكام"
+    }
+  }
+,
   
   "featuredProducts": {
     "justLanded": "وصل حديثًا",
