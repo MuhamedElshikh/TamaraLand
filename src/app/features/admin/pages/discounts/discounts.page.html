@@ -71,12 +71,21 @@
 
         <label class="field">
           <span>Select {{ targetLabels[form.get('target')?.value ?? 0] }}</span>
-          <select formControlName="targetId">
-            <option [value]="0" disabled>Select one</option>
-            @for (opt of targetOptions(); track opt.id) {
-              <option [value]="opt.id">{{ opt.name }}</option>
-            }
-          </select>
+         <select formControlName="targetId">
+
+  <option [ngValue]="0" disabled>
+    Select one
+  </option>
+
+  @for (opt of targetOptions(); track opt.id) {
+
+    <option [ngValue]="opt.id">
+      {{ opt.name }}
+    </option>
+
+  }
+
+</select>
         </label>
       </div>
 

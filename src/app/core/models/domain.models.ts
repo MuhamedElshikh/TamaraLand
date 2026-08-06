@@ -370,29 +370,52 @@ export type UpdateDiscountRequest = CreateDiscountRequest;
 // ---- Coupons ----
 export interface CouponResponse {
   id: number;
+
   code: string;
+
   discountType: number;
+
   discountValue: number;
+
   minimumOrder: number;
-  maximumDiscount: number;
+
+  maximumDiscount?: number;
+
+  startDate: string;
+
+  endDate: string;
+
   usageLimit: number;
+
   usedCount: number;
+
+  userUsageLimit: number;
+
   isActive: boolean;
-  expiresAt: string;
-  startDate:string;
-  endDate:string;
 }
 
 export interface CreateCouponRequest {
+
   code: string;
+
   discountType: number;
+
   discountValue: number;
+
   minimumOrder: number;
-  maximumDiscount: number;
+
+  maximumDiscount?: number;
+
   startDate: string;
+
   endDate: string;
+
   usageLimit: number;
+
+  userUsageLimit: number;
+
   isActive: boolean;
+
 }
 
 export type UpdateCouponRequest = CreateCouponRequest;
@@ -636,3 +659,31 @@ export interface StoreSettingsResponse extends StoreSettings { }
 
 export type UpdateStoreSettingsRequest = StoreSettingsRequest;
 
+export interface GoogleAnalyticsDashboardResponse {
+  activeUsers: number;
+  newUsers: number;
+  sessions: number;
+  views: number;
+
+  bounceRate: number;
+  engagementRate: number;
+  averageSessionDuration: number;
+
+  dailyUsers: AnalyticsChartPoint[];
+  dailySessions: AnalyticsChartPoint[];
+
+  topCountries: AnalyticsChartPoint[];
+  topDevices: AnalyticsChartPoint[];
+topPages: AnalyticsPage[];
+  trafficSources: AnalyticsChartPoint[];
+}
+
+export interface AnalyticsChartPoint {
+  label: string;
+  value: number;
+}
+export interface AnalyticsPage {
+    path: string;
+    label: string;
+    value: number;
+}

@@ -42,18 +42,12 @@ export class DiscountsPage implements OnInit {
   readonly products = signal<{ id: number; name: string }[]>([]);
   readonly categories = signal<{ id: number; name: string }[]>([]);
   readonly brands = signal<{ id: number; name: string }[]>([]);
-
-  readonly targetOptions = computed(() => {
-    const targetType = this.form.get('target')?.value;
-    if (targetType === 0) return this.products();
-    if (targetType === 1) return this.categories();
-    if (targetType === 2) return this.brands();
-    return [];
-  });
+readonly targetOptions = signal<{ id:number; name:string }[]>([]);
 
   readonly rows = computed<DiscountRow[]>(() => {
     return this.discounts().map((d) => ({ ...d, targetName: this.resolveTargetName(d) }));
   });
+
 
   readonly columns: DataTableColumn<DiscountRow>[] = [
     { key: 'name', header: 'Name' },
@@ -92,12 +86,30 @@ export class DiscountsPage implements OnInit {
     });
     this.catalogService.getBrands({ pageSize: 200 }).subscribe((res) => {
       if (res.success && res.data) this.brands.set(res.data.items.map((b) => ({ id: b.id, name: b.name })));
+      
     });
 
     // لما نغيّر نوع الهدف، نصفّر الـ targetId عشان مايفضلش رقم من نوع تاني
-    this.form.get('target')?.valueChanges.subscribe(() => {
-      this.form.get('targetId')?.setValue(0);
-    });
+    this.form.controls.target.valueChanges.subscribe(target => {
+
+  this.form.controls.targetId.setValue(0);
+
+  switch (target) {
+
+    case 0:
+      this.targetOptions.set(this.products());
+      break;
+
+    case 1:
+      this.targetOptions.set(this.categories());
+      break;
+
+    case 2:
+      this.targetOptions.set(this.brands());
+      break;
+  }
+
+});
 
     this.load();
   }
@@ -156,6 +168,7 @@ export class DiscountsPage implements OnInit {
   submit(): void {
     if (this.form.invalid || this.isSubmitting()) {
       this.form.markAllAsTouched();
+      
       return;
     }
 
