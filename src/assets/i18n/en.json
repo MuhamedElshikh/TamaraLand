@@ -719,7 +719,203 @@
     "subtitle": "Shop premium styles at exclusive prices for a limited time."
   }
 }
-
+,
+"contact": {
+  "kicker": "Get In Touch",
+  "title": "Contact Us",
+  "subtitle": "We'd love to hear from you. Reach out and our team will respond as soon as possible.",
+  "info": {
+    "email": "Email",
+    "phone": "Phone",
+    "whatsapp": "WhatsApp",
+    "address": "Address"
+  },
+  "form": {
+    "title": "Send Us a Message",
+    "name": "Full Name",
+    "namePlaceholder": "Your name",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "subject": "Subject",
+    "subjectPlaceholder": "How can we help?",
+    "message": "Message",
+    "messagePlaceholder": "Write your message here...",
+    "send": "Send Message",
+    "sending": "Sending..."
+  },
+  "validation": {
+    "nameRequired": "Please enter your name.",
+    "emailInvalid": "Please enter a valid email address.",
+    "subjectRequired": "Please enter a subject.",
+    "messageRequired": "Message must be at least 10 characters."
+  },
+  "success": {
+    "title": "Message Sent!",
+    "message": "Thank you for reaching out. We'll get back to you within 24 hours.",
+    "another": "Send Another Message"
+  }
+},
+"shipping": {
+  "kicker": "Delivery Info",
+  "title": "Shipping Policy",
+  "subtitle": "We work hard to get your order to you as quickly and safely as possible.",
+  "stats": {
+    "days": "Business Days",
+    "governorates": "Governorates",
+    "safeValue": "100%",
+    "safe": "Insured Orders"
+  },
+  "sections": {
+    "time": {
+      "title": "Delivery Time",
+      "body": "Orders are typically delivered within 2–4 business days from the time of confirmation. Remote governorates may take an additional 1–2 days."
+    },
+    "cost": {
+      "title": "Shipping Cost",
+      "body": "Shipping fees are calculated based on your delivery area and are displayed at checkout before you place your order."
+    },
+    "areas": {
+      "title": "Delivery Areas",
+      "body": "We currently deliver to all 27 Egyptian governorates. If your area is not available, please contact us and we'll do our best to help."
+    },
+    "tracking": {
+      "title": "Order Tracking",
+      "body": "Once your order is confirmed, you'll receive updates via WhatsApp. You can also track your order status from the My Orders section."
+    }
+  }
+},
+"returns": {
+  "kicker": "Hassle-Free Returns",
+  "title": "Returns & Exchanges",
+  "subtitle": "Not happy with your order? We'll make it right. Here's how our returns process works.",
+  "steps": {
+    "contact": {
+      "title": "Contact Support",
+      "body": "Reach out via WhatsApp or email within the return window."
+    },
+    "pack": {
+      "title": "Pack Your Items",
+      "body": "Return items in their original packaging with all tags attached."
+    },
+    "refund": {
+      "title": "Receive Your Refund",
+      "body": "Once received and inspected, your refund or exchange is processed."
+    }
+  },
+  "sections": {
+    "window": {
+      "title": "Return Window",
+      "body": "You may return or exchange items within 14 days from the date of delivery. Items must be unused and in their original condition."
+    },
+    "conditions": {
+      "title": "Return Conditions",
+      "body": "Items must be unworn, unwashed, and undamaged with all original tags attached. Items returned in poor condition will not be accepted."
+    },
+    "refund": {
+      "title": "Refund Method",
+      "body": "Approved refunds are issued as store credit or via the original payment method within 5–7 business days of receiving the returned item."
+    },
+    "nonReturnable": {
+      "title": "Non-Returnable Items",
+      "body": "Intimate apparel, swimwear, jewellery, and sale items are final sale and cannot be returned or exchanged for hygiene and safety reasons."
+    }
+  }
+},
+"faq": {
+  "kicker": "Help Center",
+  "title": "Frequently Asked Questions",
+  "subtitle": "Find quick answers to the most common questions about shopping at Tamara Land.",
+  "items": {
+    "order": {
+      "q": "How do I place an order?",
+      "a": "Browse our catalog, select your size and color, then add items to your cart. When you're ready, proceed to checkout, enter your delivery address and confirm your order."
+    },
+    "shipping": {
+      "q": "How long does delivery take?",
+      "a": "Most orders are delivered within 2–4 business days. Delivery time may vary based on your location and courier availability."
+    },
+    "returns": {
+      "q": "Can I return an item?",
+      "a": "Yes. Items can be returned within 14 days of delivery, provided they are unused, unwashed, and in original packaging. Some items like swimwear are non-returnable."
+    },
+    "sizes": {
+      "q": "How do I find the right size?",
+      "a": "Each product page includes a detailed size guide with measurements in centimeters. If you're between sizes, we recommend sizing up for comfort."
+    },
+    "payment": {
+      "q": "What payment methods are accepted?",
+      "a": "We currently accept Cash on Delivery. Online payment options will be available soon."
+    },
+    "cancel": {
+      "q": "Can I cancel my order?",
+      "a": "Orders can be cancelled before they are shipped. Please contact us as soon as possible via WhatsApp if you need to cancel."
+    },
+    "track": {
+      "q": "How do I track my order?",
+      "a": "You'll receive WhatsApp updates at each stage of your order. You can also view your order status in real time from the My Orders page."
+    },
+    "gift": {
+      "q": "Do you offer gift wrapping?",
+      "a": "We currently do not offer gift wrapping, but all Tamara Land orders are packed with care and elegance."
+    }
+  }
+},
+"privacy": {
+  "kicker": "Your Privacy",
+  "title": "Privacy Policy",
+  "subtitle": "We are committed to protecting your personal information and your right to privacy.",
+  "notice": "This policy was last updated in 2025 and applies to all users of the Tamara Land platform.",
+  "sections": {
+    "collect": {
+      "title": "Information We Collect",
+      "body": "We collect information you provide directly to us, such as your name, email address, phone number, and delivery address when you register or place an order."
+    },
+    "use": {
+      "title": "How We Use Your Information",
+      "body": "Your information is used to process your orders, send delivery updates, and improve our services. We do not sell your data to third parties."
+    },
+    "security": {
+      "title": "Data Security",
+      "body": "We implement industry-standard security measures including encrypted data storage and secure HTTPS connections to protect your personal information."
+    },
+    "rights": {
+      "title": "Your Rights",
+      "body": "You have the right to access, correct, or delete your personal data at any time. To exercise these rights, please contact our support team."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "body": "If you have any questions about this privacy policy or how we handle your data, please reach out to our support team via email or WhatsApp."
+    }
+  }
+},
+"terms": {
+  "kicker": "Legal",
+  "title": "Terms of Service",
+  "subtitle": "Please read these terms carefully before using the Tamara Land platform.",
+  "notice": "By using our website and placing orders, you agree to be bound by these terms and conditions.",
+  "sections": {
+    "acceptance": {
+      "title": "Acceptance of Terms",
+      "body": "By accessing and using the Tamara Land website or app, you accept and agree to be bound by these terms and our Privacy Policy."
+    },
+    "orders": {
+      "title": "Orders & Availability",
+      "body": "All orders are subject to product availability. We reserve the right to refuse or cancel an order if a product is out of stock or if we suspect fraudulent activity."
+    },
+    "pricing": {
+      "title": "Pricing & Payments",
+      "body": "All prices are listed in Egyptian Pounds (EGP) and are inclusive of applicable taxes. Prices are subject to change without notice."
+    },
+    "intellectual": {
+      "title": "Intellectual Property",
+      "body": "All content on this website, including images, text, and branding, is the property of Tamara Land and may not be reproduced without written permission."
+    },
+    "changes": {
+      "title": "Changes to Terms",
+      "body": "We reserve the right to update these terms at any time. Continued use of our platform after changes are posted constitutes acceptance of the new terms."
+    }
+  }
+}
 }
 
 

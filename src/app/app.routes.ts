@@ -45,6 +45,11 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/addresses/addresses.routes').then((m) => m.ADDRESSES_ROUTES),
       },
+      {
+        path: '',
+        loadChildren: () =>
+          import('./features/info-pages/info-pages.routes').then((m) => m.INFO_ROUTES),
+      },
     ],
   },
   {

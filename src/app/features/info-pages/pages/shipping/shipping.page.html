@@ -1,0 +1,127 @@
+<section class="info-page shipping-page">
+
+  <header class="info-page__hero">
+    <div class="header">
+      <p class="section-kicker">{{ 'shipping.kicker' | translate }}</p>
+      <h1 class="section-title">{{ 'shipping.title' | translate }}</h1>
+      <p class="section-copy">{{ 'shipping.subtitle' | translate }}</p>
+    </div>
+  </header>
+
+  <div class="static-page-content">
+
+    <!-- Quick stats -->
+    <div class="info-stats">
+      <div class="info-stat">
+        <div class="info-stat__icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 18H3c-.6 0-1-.4-1-1V7c0-.6.4-1 1-1h10c.6 0 1 .4 1 1v11"/>
+            <path d="M14 9h4l4 4v4h-8V9z"/>
+            <circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>
+          </svg>
+        </div>
+        <div>
+          <span class="info-stat__value">2–4</span>
+          <span class="info-stat__label">{{ 'shipping.stats.days' | translate }}</span>
+        </div>
+      </div>
+
+      <div class="info-stat">
+        <div class="info-stat__icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </div>
+        <div>
+          <span class="info-stat__value">27</span>
+          <span class="info-stat__label">{{ 'shipping.stats.governorates' | translate }}</span>
+        </div>
+      </div>
+
+      <div class="info-stat">
+        <div class="info-stat__icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <div>
+          <span class="info-stat__value">{{ 'shipping.stats.safeValue' | translate }}</span>
+          <span class="info-stat__label">{{ 'shipping.stats.safe' | translate }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content sections -->
+    <div class="static-sections">
+
+      <div class="static-section">
+        <div class="static-section__icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div class="static-section__body">
+          <h2>{{ 'shipping.sections.time.title' | translate }}</h2>
+          <p>{{ 'shipping.sections.time.body' | translate }}</p>
+        </div>
+      </div>
+
+      <div class="static-section">
+        <div class="static-section__icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <div class="static-section__body">
+          <h2>{{ 'shipping.sections.cost.title' | translate }}</h2>
+          <p>{{ 'shipping.sections.cost.body' | translate }}</p>
+        </div>
+      </div>
+
+      <div class="static-section">
+        <div class="static-section__icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </div>
+        <div class="static-section__body">
+          <h2>{{ 'shipping.sections.areas.title' | translate }}</h2>
+          <p>{{ 'shipping.sections.areas.body' | translate }}</p>
+        </div>
+      </div>
+
+      <div class="static-section">
+        <div class="static-section__icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13 19.79 19.79 0 0 1 1.61 4.27 2 2 0 0 1 3.59 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.16 6.16l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+        </div>
+        <div class="static-section__body">
+          <h2>{{ 'shipping.sections.tracking.title' | translate }}</h2>
+          <p>{{ 'shipping.sections.tracking.body' | translate }}</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>

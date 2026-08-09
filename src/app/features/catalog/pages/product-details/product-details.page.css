@@ -210,12 +210,15 @@
 
 }/* ---- Related Products ---- */
 
+/* ---- Related Products Slider ---- */
+
 .product-details-page__related {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--border-color);
+  width: 100%;
 }
 
 .product-details-page__related-title {
@@ -226,10 +229,93 @@
   margin: 0;
 }
 
-.product-details-page__related-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+.product-details-page__related .slider-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.product-details-page__related .product-slider {
+  display: flex;
   gap: 1.25rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 0.5rem 0.25rem;
+}
+
+.product-details-page__related .product-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.product-details-page__related .slider-item {
+  flex: 0 0 auto;
+  width: 240px;
+  scroll-snap-align: start;
+}
+
+.product-details-page__related .slider-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-fast);
+}
+
+.product-details-page__related .slider-nav:hover:not(:disabled) {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--bg-secondary);
+  box-shadow: var(--shadow-glow);
+}
+
+.product-details-page__related .slider-nav:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.product-details-page__related .slider-nav--prev {
+  inset-inline-start: -16px;
+}
+
+.product-details-page__related .slider-nav--next {
+  inset-inline-end: -16px;
+}
+
+@media (max-width: 768px) {
+  .product-details-page__related .slider-nav {
+    display: none;
+  }
+
+  .product-details-page__related .product-slider {
+    gap: 0.85rem;
+    padding-inline: 0.25rem;
+    scroll-padding-inline: 0.25rem;
+  }
+
+  .product-details-page__related .slider-item {
+    width: 210px;
+    scroll-snap-align: start;
+  }
+}
+
+@media (max-width: 420px) {
+  .product-details-page__related .slider-item {
+    width: 185px;
+  }
 }
 
 /* ---- Responsive ---- */
@@ -238,10 +324,6 @@
   .product-details-page__content {
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
-  }
-
-  .product-details-page__related-grid {
-    grid-template-columns: repeat(3, 1fr);
   }
 }
 

@@ -1,0 +1,34 @@
+<section class="info-page faq-page">
+
+  <header class="info-page__hero">
+    <div class="header">
+      <p class="section-kicker">{{ 'faq.kicker' | translate }}</p>
+      <h1 class="section-title">{{ 'faq.title' | translate }}</h1>
+      <p class="section-copy">{{ 'faq.subtitle' | translate }}</p>
+    </div>
+  </header>
+
+  <div class="static-page-content">
+    <div class="faq-accordion">
+      @for (item of faqs(); track item.question; let i = $index) {
+        <div class="faq-item" [class.faq-item--open]="item.open">
+          <button class="faq-item__trigger" (click)="toggle(i)" [id]="'faq-btn-' + i"
+                  [attr.aria-expanded]="item.open">
+            <span class="faq-item__question">{{ item.question | translate }}</span>
+            <span class="faq-item__chevron">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                   viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m6 9 6 6 6-6"/>
+              </svg>
+            </span>
+          </button>
+          <div class="faq-item__body">
+            <p class="faq-item__answer">{{ item.answer | translate }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+</section>

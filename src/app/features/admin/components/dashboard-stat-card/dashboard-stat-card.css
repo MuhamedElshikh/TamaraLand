@@ -163,30 +163,29 @@
         'opsz' 24;
 
 }
-@media (max-width:768px){
+@media (max-width: 768px) {
+  .dashboard-stat {
+    min-height: 85px;
+    padding: 0.85rem 1rem;
+    border-radius: 14px;
+  }
 
-    .dashboard-stat{
+  .dashboard-stat__title {
+    font-size: 0.68rem;
+    margin-bottom: 0.35rem;
+    letter-spacing: 0.05em;
+  }
 
-        min-height:95px;
+  .dashboard-stat__value {
+    font-size: 1.45rem;
+  }
 
-        padding:1rem;
+  .dashboard-stat__icon {
+    width: 40px;
+    height: 40px;
+  }
 
-    }
-
-    .dashboard-stat__value{
-
-        font-size:1.7rem;
-
-    }
-
-    .dashboard-stat__icon{
-
-        width:42px;
-
-        height:42px;
-
-        font-size:1.2rem;
-
-    }
-
+  .dashboard-stat__icon .material-symbols-rounded {
+    font-size: 22px;
+  }
 }

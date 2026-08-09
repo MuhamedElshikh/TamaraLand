@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ProductGalleryComponent } from '../../components/product-gallery/product-gallery.component';
@@ -34,11 +34,42 @@ import { LocalizedFieldPipe } from '../../../../shared/pipes/localized-field.pip
   templateUrl: './product-details.page.html',
   styleUrl: './product-details.page.css',
 })
-export class ProductDetailsPage {
+export class ProductDetailsPage implements AfterViewInit {
   private readonly route = inject(ActivatedRoute);
   private readonly cartService = inject(CartService);
   private readonly wishlistService = inject(WishlistService);
   private readonly analyticsService = inject(AnalyticsService);
+
+  @ViewChild('relatedSliderTrack') relatedSliderTrack?: ElementRef<HTMLDivElement>;
+
+  readonly canScrollPrev = signal(false);
+  readonly canScrollNext = signal(true);
+
+  ngAfterViewInit(): void {
+    setTimeout(() => this.onRelatedSliderScroll(), 0);
+  }
+
+  scrollRelatedSlider(direction: 1 | -1): void {
+    const track = this.relatedSliderTrack?.nativeElement;
+    if (!track) return;
+
+    const isRtl = document.dir === 'rtl' || document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
+    const cardWidth = track.querySelector('.slider-item')?.clientWidth ?? 240;
+    const gap = 16;
+    const scrollAmount = (cardWidth + gap) * direction * (isRtl ? -1 : 1);
+
+    track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  }
+
+  onRelatedSliderScroll(): void {
+    const track = this.relatedSliderTrack?.nativeElement;
+    if (!track) return;
+
+    const scrollLeft = Math.abs(track.scrollLeft);
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    this.canScrollPrev.set(scrollLeft > 5);
+    this.canScrollNext.set(scrollLeft < maxScroll - 5);
+  }
 
   readonly product = signal<ProductDetailsResponse | null>(null);
   readonly selectedVariant = signal<{ color: string; size: string; variantId?: number; price?: number } | null>(null);

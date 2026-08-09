@@ -179,10 +179,33 @@
     @if (product()?.relatedProducts?.length) {
       <div class="product-details-page__related">
         <h3 class="product-details-page__related-title">{{ 'productDetails.relatedProducts' | translate }}</h3>
-        <div class="product-details-page__related-grid">
-          @for (related of product()!.relatedProducts; track related.id) {
-            <app-product-card [product]="related" />
-          }
+
+        <div class="slider-wrapper">
+          <button
+            type="button"
+            class="slider-nav slider-nav--prev"
+            (click)="scrollRelatedSlider(-1)"
+            [disabled]="!canScrollPrev()"
+            aria-label="Previous">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+
+          <div class="product-slider" #relatedSliderTrack (scroll)="onRelatedSliderScroll()">
+            @for (related of product()!.relatedProducts; track related.id) {
+              <div class="slider-item">
+                <app-product-card [product]="related" />
+              </div>
+            }
+          </div>
+
+          <button
+            type="button"
+            class="slider-nav slider-nav--next"
+            (click)="scrollRelatedSlider(1)"
+            [disabled]="!canScrollNext()"
+            aria-label="Next">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
         </div>
       </div>
     }

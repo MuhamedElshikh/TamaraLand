@@ -35,13 +35,14 @@ export class FeaturedProductsComponent implements OnInit , AfterViewInit  {
     // نتأكد من حالة الأزرار بعد ما البيانات تتحمل
     setTimeout(() => this.onSliderScroll(), 0);
   }
-   scrollSlider(direction: 1 | -1) {
+  scrollSlider(direction: 1 | -1) {
     const track = this.sliderTrack?.nativeElement;
     if (!track) return;
 
-    const cardWidth = track.querySelector('.slider-item')?.clientWidth ?? 280;
-    const gap = 16; // نفس الـ gap اللي في الـ SCSS
-    const scrollAmount = (cardWidth + gap) * direction;
+    const isRtl = document.dir === 'rtl' || document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
+    const cardWidth = track.querySelector('.slider-item')?.clientWidth ?? 240;
+    const gap = 16;
+    const scrollAmount = (cardWidth + gap) * direction * (isRtl ? -1 : 1);
 
     track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
   }
@@ -50,9 +51,9 @@ export class FeaturedProductsComponent implements OnInit , AfterViewInit  {
     const track = this.sliderTrack?.nativeElement;
     if (!track) return;
 
-    this.canScrollPrev.set(track.scrollLeft > 5);
-    this.canScrollNext.set(
-      track.scrollLeft < track.scrollWidth - track.clientWidth - 5
-    );
+    const scrollLeft = Math.abs(track.scrollLeft);
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    this.canScrollPrev.set(scrollLeft > 5);
+    this.canScrollNext.set(scrollLeft < maxScroll - 5);
   }
 }
