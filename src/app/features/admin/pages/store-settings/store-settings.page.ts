@@ -8,13 +8,15 @@ import {
   UpdateStoreSettingsRequest
 } from '../../../../core/models/domain.models';
 import { Router  } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-admin-store-settings',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule, 
+    ReactiveFormsModule,
+    TranslatePipe 
   ],
   templateUrl: './store-settings.page.html',
   styleUrl: './store-settings.page.css'

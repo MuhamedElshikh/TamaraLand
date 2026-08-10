@@ -1,344 +1,438 @@
-<form
-  class="banner-form"
-  [formGroup]="form"
-  (ngSubmit)="submit()">
+<!-- ========================================================= -->
+<!-- Banner Images -->
+<!-- ========================================================= -->
 
-  <section class="form-card">
+<div class="card-header">
+  <div>
+    <h2>
+      {{ 'banners.form.images.title' | translate }}
+    </h2>
 
-    <div class="card-header">
-      <div>
-        <h2>Banner Images</h2>
-        <p>Upload desktop and optional mobile banner images.</p>
-      </div>
-    </div>
+    <p>
+      {{ 'banners.form.images.description' | translate }}
+    </p>
+  </div>
+</div>
 
-    <div class="image-grid">
 
-      <!-- Desktop -->
+<div class="image-grid">
 
-      <div class="upload-container">
+  <!-- ========================= -->
+  <!-- Desktop Image -->
+  <!-- ========================= -->
 
-        <label class="upload-title">
-          Desktop Image
-        </label>
+  <div class="upload-container">
 
-        @if(desktopPreview()){
+    <label class="upload-title">
+      {{ 'banners.form.images.desktop' | translate }}
+    </label>
 
-        <div class="image-preview">
 
-          <img
-            [src]="desktopPreview()!"
-            alt="Desktop Banner">
+    @if (desktopPreview()) {
 
-          <div class="image-actions">
+      <div class="image-preview">
 
-            <label class="btn btn-outline">
+        <img
+          [src]="desktopPreview()!"
+          [alt]="'banners.form.images.desktopAlt' | translate"
+        >
 
-              Replace
 
-              <input
-                hidden
-                type="file"
-                accept="image/*"
-                (change)="desktopSelected($event)">
+        <div class="image-actions">
 
-            </label>
+          <!-- Replace -->
+          <label class="btn btn-outline">
 
-            <button
-              type="button"
-              class="btn btn-danger"
-              (click)="removeDesktopImage()">
+            {{ 'common.replace' | translate }}
 
-              Remove
+            <input
+              hidden
+              type="file"
+              accept="image/*"
+              (change)="desktopSelected($event)"
+            >
 
-            </button>
+          </label>
 
-          </div>
+
+          <!-- Remove -->
+          <button
+            type="button"
+            class="btn btn-danger"
+            (click)="removeDesktopImage()"
+          >
+
+            {{ 'common.remove' | translate }}
+
+          </button>
 
         </div>
 
-        }@else{
-
-        <label
-          class="upload-box"
-          (drop)="desktopDrop($event)"
-          (dragover)="$event.preventDefault()">
-
-          <input
-            hidden
-            type="file"
-            accept="image/*"
-            (change)="desktopSelected($event)">
-
-          <i class="fa-solid fa-cloud-arrow-up"></i>
-
-          <span>Click to upload</span>
-
-          <small>PNG, JPG or WEBP</small>
-
-        </label>
-
-        }
-
       </div>
 
-      <!-- Mobile -->
+    } @else {
 
-      <div class="upload-container">
+      <!-- Upload Desktop -->
+      <label
+        class="upload-box"
+        (drop)="desktopDrop($event)"
+        (dragover)="$event.preventDefault()"
+      >
 
-        <label class="upload-title">
+        <input
+          hidden
+          type="file"
+          accept="image/*"
+          (change)="desktopSelected($event)"
+        >
 
-          Mobile Image (Optional)
 
-        </label>
+        <i
+          class="fa-solid fa-cloud-arrow-up"
+          aria-hidden="true"
+        ></i>
 
-        @if(mobilePreview()){
 
-        <div class="image-preview">
+        <span>
+          {{ 'banners.form.images.clickToUpload' | translate }}
+        </span>
 
-          <img
-            [src]="mobilePreview()!"
-            alt="Mobile Banner">
 
-          <div class="image-actions">
+        <small>
+          {{ 'banners.form.images.formats' | translate }}
+        </small>
 
-            <label class="btn btn-outline">
+      </label>
 
-              Replace
+    }
 
-              <input
-                hidden
-                type="file"
-                accept="image/*"
-                (change)="mobileSelected($event)">
+  </div>
 
-            </label>
 
-            <button
-              type="button"
-              class="btn btn-danger"
-              (click)="removeMobileImage()">
 
-              Remove
+  <!-- ========================= -->
+  <!-- Mobile Image -->
+  <!-- ========================= -->
 
-            </button>
+  <div class="upload-container">
 
-          </div>
+    <label class="upload-title">
+      {{ 'banners.form.images.mobile' | translate }}
+    </label>
+
+
+    @if (mobilePreview()) {
+
+      <div class="image-preview">
+
+        <img
+          [src]="mobilePreview()!"
+          [alt]="'banners.form.images.mobileAlt' | translate"
+        >
+
+
+        <div class="image-actions">
+
+          <!-- Replace -->
+          <label class="btn btn-outline">
+
+            {{ 'common.replace' | translate }}
+
+            <input
+              hidden
+              type="file"
+              accept="image/*"
+              (change)="mobileSelected($event)"
+            >
+
+          </label>
+
+
+          <!-- Remove -->
+          <button
+            type="button"
+            class="btn btn-danger"
+            (click)="removeMobileImage()"
+          >
+
+            {{ 'common.remove' | translate }}
+
+          </button>
 
         </div>
 
-        }@else{
-
-        <label
-          class="upload-box"
-          (drop)="mobileDrop($event)"
-          (dragover)="$event.preventDefault()">
-
-          <input
-            hidden
-            type="file"
-            accept="image/*"
-            (change)="mobileSelected($event)">
-
-          <i class="fa-solid fa-mobile-screen"></i>
-
-          <span>Upload Mobile Banner</span>
-
-          <small>Optional</small>
-
-        </label>
-
-        }
-
       </div>
 
-    </div>
+    } @else {
 
-  </section>
-  <section class="form-card">
+      <!-- Upload Mobile -->
+      <label
+        class="upload-box"
+        (drop)="mobileDrop($event)"
+        (dragover)="$event.preventDefault()"
+      >
 
-  <div class="card-header">
+        <input
+          hidden
+          type="file"
+          accept="image/*"
+          (change)="mobileSelected($event)"
+        >
 
-    <div>
 
-      <h2>Banner Content</h2>
+        <i
+          class="fa-solid fa-mobile-screen"
+          aria-hidden="true"
+        ></i>
 
-      <p>
-        Configure what customers will see.
-      </p>
 
-    </div>
+        <span>
+          {{ 'banners.form.images.uploadMobile' | translate }}
+        </span>
+
+
+        <small>
+          {{ 'banners.form.images.optional' | translate }}
+        </small>
+
+      </label>
+
+    }
 
   </div>
 
-  <div class="form-grid">
+</div>
 
-    <div class="form-group full">
 
-      <label>
 
-        Title
+<!-- ========================================================= -->
+<!-- Banner Content -->
+<!-- ========================================================= -->
 
-      </label>
+<div>
 
-      <input
-        type="text"
-        formControlName="title">
+  <h2>
+    {{ 'banners.form.content.title' | translate }}
+  </h2>
 
-    </div>
+  <p>
+    {{ 'banners.form.content.description' | translate }}
+  </p>
 
-    <div class="form-group full">
+</div>
 
-      <label>
 
-        Description
 
-      </label>
+<!-- ========================================================= -->
+<!-- Banner Content Fields -->
+<!-- ========================================================= -->
 
-      <textarea
-        rows="5"
-        formControlName="description">
-      </textarea>
+<div class="form-group full">
 
-    </div>
-
-    <div class="form-group full">
-
-      <label>
-
-        Link
-
-      </label>
-
-      <input
-        type="text"
-        formControlName="link">
-
-    </div>
-
-  </div>
-
-</section>
-<section class="form-card">
-
-  <div class="card-header">
-
-    <div>
-
-      <h2>Display Settings</h2>
-
-      <p>
-        Control where and when this banner appears.
-      </p>
-
-    </div>
-
-  </div>
-
-  <div class="settings-grid">
-
-    <div class="form-group">
-
-      <label>
-
-        Banner Type
-
-      </label>
-
-      <select formControlName="type">
-
-        @for(item of bannerTypes;track item.value){
-
-        <option [ngValue]="item.value">
-
-          {{item.text}}
-
-        </option>
-
-        }
-
-      </select>
-
-    </div>
-
-    <div class="form-group">
-
-      <label>
-
-        Display Order
-
-      </label>
-
-      <input
-        type="number"
-        formControlName="displayOrder">
-
-    </div>
-
-    <div class="form-group">
-
-      <label>
-
-        Start Date
-
-      </label>
-
-      <input
-        type="date"
-        formControlName="startDate">
-
-    </div>
-
-    <div class="form-group">
-
-      <label>
-
-        End Date
-
-      </label>
-
-      <input
-        type="date"
-        formControlName="endDate">
-
-    </div>
-
-  </div>
-
-  <label class="switch">
-
-    <input
-      type="checkbox"
-      formControlName="isActive">
-
-    <span>
-
-      Active Banner
-
-    </span>
-
+  <label>
+    {{ 'banners.form.fields.title' | translate }}
   </label>
 
-</section>
-<div class="form-footer">
 
+  <input
+    type="text"
+    formControlName="title"
+  >
+
+</div>
+
+
+
+<div class="form-group full">
+
+  <label>
+    {{ 'banners.form.fields.description' | translate }}
+  </label>
+
+
+  <textarea
+    rows="5"
+    formControlName="description"
+  ></textarea>
+
+</div>
+
+
+
+<div class="form-group full">
+
+  <label>
+    {{ 'banners.form.fields.link' | translate }}
+  </label>
+
+
+  <input
+    type="text"
+    formControlName="link"
+  >
+
+</div>
+
+
+
+<!-- ========================================================= -->
+<!-- Display Settings -->
+<!-- ========================================================= -->
+
+<div>
+
+  <h2>
+    {{ 'banners.form.display.title' | translate }}
+  </h2>
+
+  <p>
+    {{ 'banners.form.display.description' | translate }}
+  </p>
+
+</div>
+
+
+
+<!-- ========================================================= -->
+<!-- Banner Type -->
+<!-- ========================================================= -->
+
+<div class="form-group">
+
+  <label>
+    {{ 'banners.form.fields.bannerType' | translate }}
+  </label>
+
+
+  <select formControlName="type">
+
+    @for (item of bannerTypes; track item.value) {
+
+      <option [ngValue]="item.value">
+        {{ item.textKey | translate }}
+      </option>
+
+    }
+
+  </select>
+
+</div>
+
+
+
+<!-- ========================================================= -->
+<!-- Display Order -->
+<!-- ========================================================= -->
+
+<div class="form-group">
+
+  <label>
+    {{ 'banners.form.fields.displayOrder' | translate }}
+  </label>
+
+
+  <input
+    type="number"
+    formControlName="displayOrder"
+  >
+
+</div>
+
+
+
+<!-- ========================================================= -->
+<!-- Start Date -->
+<!-- ========================================================= -->
+
+<div class="form-group">
+
+  <label>
+    {{ 'banners.form.fields.startDate' | translate }}
+  </label>
+
+
+  <input
+    type="date"
+    formControlName="startDate"
+  >
+
+</div>
+
+
+
+<!-- ========================================================= -->
+<!-- End Date -->
+<!-- ========================================================= -->
+
+<div class="form-group">
+
+  <label>
+    {{ 'banners.form.fields.endDate' | translate }}
+  </label>
+
+
+  <input
+    type="date"
+    formControlName="endDate"
+  >
+
+</div>
+
+
+
+<!-- ========================================================= -->
+<!-- Active -->
+<!-- ========================================================= -->
+
+<label class="checkbox-group">
+
+  <input
+    type="checkbox"
+    formControlName="isActive"
+  >
+
+
+  <span>
+    {{ 'banners.form.fields.active' | translate }}
+  </span>
+
+</label>
+
+
+
+<!-- ========================================================= -->
+<!-- Actions -->
+<!-- ========================================================= -->
+
+<div class="form-actions">
+
+  <!-- Cancel -->
   <button
     type="button"
     class="btn btn-outline"
-    (click)="router.navigate(['/admin/banners'])">
+    (click)="router.navigate(['/admin/banners'])"
+  >
 
-    Cancel
+    {{ 'common.cancel' | translate }}
 
   </button>
 
-  <button
-    class="btn btn-primary"
-    type="submit">
 
-    {{isEdit() ? 'Update Banner' : 'Create Banner'}}
+
+  <!-- Submit -->
+  <button
+    type="submit"
+    class="btn btn-primary"
+  >
+
+    {{
+      (
+        isEdit()
+          ? 'banners.form.actions.update'
+          : 'banners.form.actions.create'
+      ) | translate
+    }}
 
   </button>
 
 </div>
-
-</form>

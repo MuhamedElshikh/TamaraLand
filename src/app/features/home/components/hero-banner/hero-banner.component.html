@@ -8,7 +8,7 @@
 
     <img
       src="assets/logo.png"
-      alt="Tamara Land"
+      [alt]="'sidebar.logoAlt' | translate"
       class="hero-intro__logo">
 
     <p class="hero-intro__eyebrow">
@@ -67,10 +67,10 @@
     [routerLink]="currentBanner()?.link">
 
     <img
-      class="hero-image current"
-      [class.hidden]="!showCurrent()"
-      [src]="currentImage()"
-      alt="Banner">
+    class="hero-image current"
+    [class.hidden]="!showCurrent()"
+    [src]="currentImage()"
+    [alt]="'hero.bannerAlt' | translate">
 
   </a>
 
@@ -82,7 +82,7 @@
       class="hero-image next"
       [class.visible]="!showCurrent()"
       [src]="nextImage()"
-      alt="Banner">
+      [alt]="'hero.bannerAlt' | translate">
 
   </a>
 

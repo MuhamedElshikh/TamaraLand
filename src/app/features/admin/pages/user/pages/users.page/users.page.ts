@@ -8,10 +8,11 @@ import {UserFilterRequest,UserResponse,} from '../../../../../../core/models/use
 import { UserDetailsDrawerComponent } from '../../component/user-details-drawer.component/user-details-drawer.component';
 import { ChangeUserRoleDialogComponent } from '../../component/change-user-role-dialog.component/change-user-role-dialog.component';
 import { ConfirmUserStatusDialogComponent } from '../../component/confirm-user-status-dialog.component/confirm-user-status-dialog.component';
+import { TranslatePipe } from '@ngx-translate/core';
 @Component({
   selector: 'app-users-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, DataTableComponent, PaginationComponent, UserDetailsDrawerComponent, ChangeUserRoleDialogComponent, ConfirmUserStatusDialogComponent],
+  imports: [CommonModule, FormsModule, DataTableComponent, PaginationComponent, UserDetailsDrawerComponent, ChangeUserRoleDialogComponent, ConfirmUserStatusDialogComponent,TranslatePipe],
   templateUrl: './users.page.html',
   styleUrl: './users.page.css',
 })

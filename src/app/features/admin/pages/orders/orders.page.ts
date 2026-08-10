@@ -6,13 +6,14 @@ import { DataTableComponent, DataTableColumn } from '../../components/data-table
 import { PaginationComponent } from '../../../../shared/pagination/pagination';
 import { AdminOrderService } from '../../../../core/services/admin-order.service';
 import { OrderSummaryResponse, orderStatus, paymentStatus } from '../../../../core/models/domain.models';
+import { TranslateModule, TranslatePipe } from '@ngx-translate/core';
 
 const PAGE_SIZE = 10;
 
 @Component({
   selector: 'app-admin-orders',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, DataTableComponent, PaginationComponent],
+  imports: [CommonModule, FormsModule, RouterLink, DataTableComponent, PaginationComponent, TranslatePipe],
   templateUrl: './orders.page.html',
   styleUrl: './orders.page.css'
 })

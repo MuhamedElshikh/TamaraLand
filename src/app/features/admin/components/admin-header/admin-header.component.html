@@ -1,34 +1,218 @@
 <header class="admin-header">
 
+  <!-- Menu -->
   <button
     type="button"
     class="admin-header__menu"
     (click)="openMenu()"
-    aria-label="Open menu">
+    [attr.aria-label]="'header.openMenu' | translate"
+  >
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M4 6H20"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+      />
 
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <path d="M4 6H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      <path d="M4 12H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      <path d="M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path
+        d="M4 12H20"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+      />
+
+      <path
+        d="M4 18H20"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+      />
     </svg>
-
   </button>
 
-  <div class="admin-header__spacer"></div>
 
-  <div class="admin-header__profile">
+  <div class="admin-header__actions">
 
+    <!-- Theme -->
+    <button
+      type="button"
+      class="admin-header__action"
+      (click)="toggleTheme()"
+      [attr.aria-label]="
+        (themeService.theme() === 'dark'
+          ? 'header.switchToLight'
+          : 'header.switchToDark') | translate
+      "
+      [title]="
+        (themeService.theme() === 'dark'
+          ? 'header.switchToLight'
+          : 'header.switchToDark') | translate
+      "
+    >
+
+      @if (themeService.theme() === 'dark') {
+
+        <!-- Sun -->
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden="true"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="4"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+
+          <path
+            d="M12 2V4"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+
+          <path
+            d="M12 20V22"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+
+          <path
+            d="M4.93 4.93L6.34 6.34"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+
+          <path
+            d="M17.66 17.66L19.07 19.07"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+
+          <path
+            d="M2 12H4"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+
+          <path
+            d="M20 12H22"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+
+      } @else {
+
+        <!-- Moon -->
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M21 12.79A9 9 0 1 1 11.21 3
+               7 7 0 0 0 21 12.79Z"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+
+      }
+
+    </button>
+
+
+    <!-- Language -->
+    <button
+      type="button"
+      class="admin-header__language"
+      (click)="toggleLanguage()"
+      [attr.aria-label]="'header.changeLanguage' | translate"
+      [title]="'header.changeLanguage' | translate"
+    >
+
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        aria-hidden="true"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="9"
+          stroke="currentColor"
+          stroke-width="2"
+        />
+
+        <path
+          d="M3 12H21"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+        />
+
+        <path
+          d="M12 3C14.5 5.5 15.5 8.5 15.5 12C15.5 15.5 14.5 18.5 12 21"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+        />
+
+        <path
+          d="M12 3C9.5 5.5 8.5 8.5 8.5 12C8.5 15.5 9.5 18.5 12 21"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+        />
+      </svg>
+
+      <span>
+        {{
+          languageService.currentLanguage === 'ar'
+            ? 'EN'
+            : 'AR'
+        }}
+      </span>
+
+    </button>
+
+
+    <!-- User name -->
     <span class="admin-header__name">
       {{ fullName() }}
     </span>
 
+
+    <!-- Logout -->
     <button
       type="button"
       class="admin-header__logout"
-      (click)="logout()">
-
-      Sign out
-
+      (click)="logout()"
+    >
+      {{ 'header.signOut' | translate }}
     </button>
 
   </div>

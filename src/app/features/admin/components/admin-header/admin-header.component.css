@@ -3,13 +3,21 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+
   padding: 1rem 1.5rem;
+
   border-bottom: 1px solid var(--border-color);
   background: var(--bg-secondary);
+
   position: sticky;
   top: 0;
   z-index: 50;
 }
+
+
+/* ============================= */
+/* Profile */
+/* ============================= */
 
 .admin-header__profile {
   display: flex;
@@ -23,14 +31,116 @@
   color: var(--text-primary);
 }
 
+
+/* ============================= */
+/* Header Actions */
+/* ============================= */
+
+.admin-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+
+/* ============================= */
+/* Theme Button */
+/* ============================= */
+
+.admin-header__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+
+  padding: 0;
+
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+
+  background: transparent;
+  color: var(--text-primary);
+
+  cursor: pointer;
+
+  transition: var(--transition-fast);
+}
+
+.admin-header__action:hover {
+  border-color: var(--gold-primary);
+  color: var(--gold-primary);
+  background: rgba(201, 162, 75, 0.08);
+}
+
+.admin-header__action:active {
+  transform: scale(0.96);
+}
+
+
+/* ============================= */
+/* Language Button */
+/* ============================= */
+
+.admin-header__language {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+
+  min-width: 58px;
+  height: 40px;
+
+  padding: 0 0.7rem;
+
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+
+  background: transparent;
+  color: var(--text-primary);
+
+  cursor: pointer;
+
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+
+  transition: var(--transition-fast);
+}
+
+.admin-header__language:hover {
+  border-color: var(--gold-primary);
+  color: var(--gold-primary);
+  background: rgba(201, 162, 75, 0.08);
+}
+
+.admin-header__language:active {
+  transform: scale(0.96);
+}
+
+.admin-header__language svg {
+  flex-shrink: 0;
+}
+
+
+/* ============================= */
+/* Logout */
+/* ============================= */
+
 .admin-header__logout {
   padding: 0.4rem 0.9rem;
+
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-color);
+
   background: transparent;
   color: var(--text-secondary);
+
   font-size: 0.8rem;
+
   cursor: pointer;
+
   transition: var(--transition-fast);
 }
 
@@ -38,63 +148,115 @@
   border-color: #e08484;
   color: #e08484;
 }
+
+
 /* ============================= */
 /* Mobile Menu */
 /* ============================= */
 
-.admin-header__menu{
+.admin-header__menu {
+  display: none;
 
-    display:none;
+  align-items: center;
+  justify-content: center;
 
-    align-items:center;
-    justify-content:center;
+  width: 44px;
+  height: 44px;
 
-    width:44px;
-    height:44px;
+  padding: 0;
 
-    border:none;
+  border: none;
+  border-radius: 12px;
 
-    border-radius:12px;
+  background: rgba(201, 162, 75, 0.08);
+  color: var(--text-primary);
 
-    background:rgba(201,162,75,.08);
+  cursor: pointer;
 
-    color:var(--text-primary);
-
-    cursor:pointer;
-
-    transition:.25s;
+  transition: var(--transition-fast);
 }
 
-.admin-header__menu:hover{
+.admin-header__menu:hover {
+  background: rgba(201, 162, 75, 0.16);
+}
 
-    background:rgba(201,162,75,.16);
+
+/* ============================= */
+/* Focus */
+/* ============================= */
+
+.admin-header__action:focus-visible,
+.admin-header__language:focus-visible,
+.admin-header__logout:focus-visible,
+.admin-header__menu:focus-visible {
+  outline: 2px solid var(--gold-primary);
+  outline-offset: 2px;
+}
+
+
+/* ============================= */
+/* Mobile */
+/* ============================= */
+
+@media (max-width: 992px) {
+
+  .admin-header {
+    padding: 1rem;
+  }
+
+  .admin-header__menu {
+    display: flex;
+  }
+
+  .admin-header__spacer {
+    display: none;
+  }
+
+  .admin-header__name {
+    display: none;
+  }
+
+  .admin-header__actions {
+    gap: 0.4rem;
+  }
 
 }
 
-@media(max-width:992px){
 
-.admin-header{
+/* ============================= */
+/* Small Mobile */
+/* ============================= */
 
-padding:1rem;
+@media (max-width: 480px) {
 
-}
+  .admin-header {
+    gap: 0.5rem;
+  }
 
-.admin-header__menu{
+  .admin-header__actions {
+    gap: 0.3rem;
+  }
 
-display:flex;
+  .admin-header__action {
+    width: 38px;
+    height: 38px;
+  }
 
-}
+  .admin-header__language {
+    min-width: 52px;
+    height: 38px;
 
-.admin-header__spacer{
+    padding: 0 0.5rem;
+  }
 
-display:none;
+  .admin-header__language svg {
+    width: 18px;
+    height: 18px;
+  }
 
-}
-
-.admin-header__name{
-
-display:none;
-
-}
+  .admin-header__logout {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.75rem;
+  }
 
 }

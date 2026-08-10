@@ -6,13 +6,14 @@ import { PaginationComponent } from '../../../../shared/pagination/pagination';
 import { AdminCatalogService } from '../../../../core/services/admin-catalog.service';
 import { ProductAdminResponse } from '../../../../core/models/domain.models';
 import { ProductFilterRequest, CategoryResponse, BrandResponse } from '../../../../core/models/catalog.models';
+import { TranslateModule } from '@ngx-translate/core';
 
 const PAGE_SIZE = 10;
 
 @Component({
   selector: 'app-admin-products-page',
   standalone: true,
-  imports: [RouterLink, FormsModule, DataTableComponent, PaginationComponent],
+  imports: [RouterLink, FormsModule, DataTableComponent, PaginationComponent, TranslateModule],
   templateUrl: './products.page.html',
   styleUrl: './products.page.css',
 })

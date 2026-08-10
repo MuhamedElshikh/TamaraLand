@@ -2,15 +2,15 @@
   <!-- Page Header -->
   <header class="admin-page__header">
     <div>
-      <h1 class="admin-page__title">Products Management</h1>
-      <p class="admin-page__subtitle">Manage catalog items, variants, and product media</p>
+      <h1 class="admin-page__title">{{ 'admin.products.title' | translate }}</h1>
+      <p class="admin-page__subtitle">{{ 'admin.products.subtitle' | translate }}</p>
     </div>
     <a routerLink="/admin/product-form" class="btn btn-primary">
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="12" y1="5" x2="12" y2="19"></line>
         <line x1="5" y1="12" x2="19" y2="12"></line>
       </svg>
-      Add Product
+      {{ 'admin.products.add' | translate }}
     </a>
   </header>
 
@@ -26,7 +26,7 @@
     <div class="filters-grid">
       <!-- Search Input -->
       <div class="filter-group filter-group--search">
-        <label class="form-label" for="product-search">Search Product</label>
+        <label class="form-label" for="product-search">{{ 'admin.products.search' | translate }}</label>
         <div class="input-with-icon">
           <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="11" cy="11" r="8"></circle>
@@ -36,7 +36,7 @@
             id="product-search"
             type="text"
             class="form-control"
-            placeholder="Search by name..."
+            [placeholder]="'admin.products.searchPlaceholder' | translate"
             [ngModel]="search()"
             (ngModelChange)="onSearchChange($event)"
           />
@@ -45,14 +45,14 @@
 
       <!-- Category Filter -->
       <div class="filter-group">
-        <label class="form-label" for="category-filter">Category</label>
+        <label class="form-label" for="category-filter">{{ 'admin.products.category' | translate }}</label>
         <select
           id="category-filter"
           class="form-control form-select"
           [ngModel]="categoryId() ?? ''"
           (ngModelChange)="onCategoryChange($event)"
         >
-          <option value="">All Categories</option>
+          <option value="">{{ 'admin.products.allCategories' | translate }}</option>
           @for (cat of categories(); track cat.id) {
             <option [value]="cat.id">{{ cat.name }}</option>
           }
@@ -61,14 +61,14 @@
 
       <!-- Brand Filter -->
       <div class="filter-group">
-        <label class="form-label" for="brand-filter">Brand</label>
+        <label class="form-label" for="brand-filter">{{ 'admin.products.brand' | translate }}</label>
         <select
           id="brand-filter"
           class="form-control form-select"
           [ngModel]="brandId() ?? ''"
           (ngModelChange)="onBrandChange($event)"
         >
-          <option value="">All Brands</option>
+          <option value="">{{ 'admin.products.allBrands' | translate }}</option>
           @for (brand of brands(); track brand.id) {
             <option [value]="brand.id">{{ brand.name }}</option>
           }
@@ -82,14 +82,14 @@
     [columns]="columns"
     [rows]="products()"
     [isLoading]="isLoading()"
-    emptyMessage="No products found matching your search criteria."
+    [emptyMessage]="'admin.products.empty' | translate"
   >
     <ng-template #actions let-row>
       <div class="action-buttons">
         <button
           type="button"
           class="btn-icon btn-icon--edit"
-          title="Edit Product"
+          [title]="'admin.products.edit' | translate"
           (click)="editProduct(row)"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -101,7 +101,7 @@
         <button
           type="button"
           class="btn-icon btn-icon--delete"
-          title="Delete Product"
+          [title]="'admin.products.delete' | translate"
           [disabled]="isDeleting() === row.id"
           (click)="deleteProduct(row)"
         >

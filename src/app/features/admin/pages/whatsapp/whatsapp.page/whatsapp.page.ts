@@ -5,11 +5,12 @@ import { WhatsAppConfigurationResponse } from '../../../../../core/models/whatsa
 import { ToastService } from '../../../../../shared/toast/toast.service'; // عدّل المسار
 import { extractErrorMessage } from '../../../../../core/utils/error-message.util'; // عدّل المسار
 import { DatePipe } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-admin-whatsapp-page',
   standalone: true,
-  imports: [ReactiveFormsModule,DatePipe],
+  imports: [ReactiveFormsModule,DatePipe,TranslatePipe],
   templateUrl: './whatsapp.page.html',
   styleUrl: './whatsapp.page.css',
 })

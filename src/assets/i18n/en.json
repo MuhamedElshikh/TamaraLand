@@ -70,8 +70,7 @@
       "privacy": "Privacy Policy",
       "terms": "Terms of Service"
     }
-  }
-,
+  },
   
   "featuredProducts": {
     "justLanded": "Just landed",
@@ -91,13 +90,14 @@
 
     "exploreCollections": "Explore Collections",
 
-    "bannerLoadError": "Couldn't load the banners right now."
+    "bannerLoadError": "Couldn't load the banners right now.",
+    "bannerAlt": "Banner"
   },
   
   "productCard": {
     "addToCart": "Add to Cart",
     "adding": "Adding...",
-    "added": "Added ✓",
+    "added": "Added \u2713",
     "tryAgain": "Try Again",
 
     "addToWishlist": "Add to Wishlist",
@@ -133,8 +133,8 @@
 
     "featured": "Featured",
     "newest": "Newest",
-    "priceLowHigh": "Price: Low → High",
-    "priceHighLow": "Price: High → Low",
+    "priceLowHigh": "Price: Low \u2192 High",
+    "priceHighLow": "Price: High \u2192 Low",
     "bestDiscount": "Best Discount",
 
     "clearAll": "Clear All"
@@ -208,7 +208,7 @@
 
     "addToCart": "Add to Cart",
     "adding": "Adding...",
-"successToadd": "Added to cart successfully",
+    "successToadd": "Added to cart successfully",
     "faildToAdd": "Could not add to cart right now.",
     "rating": "Rating",
     "views": "Views",
@@ -481,457 +481,800 @@
     }
   },
   "register": {
-  "kicker": "Get Started",
-  "title": "Create Your Account",
+    "kicker": "Get Started",
+    "title": "Create Your Account",
 
-  "registrationFailed": "Registration Failed",
+    "registrationFailed": "Registration Failed",
 
-  "fields": {
-    "firstName": "First Name",
-    "lastName": "Last Name",
-    "email": "Email",
-    "password": "Password",
-    "confirmPassword": "Confirm Password"
-  },
-
-  "placeholders": {
-    "firstName": "Ahmed",
-    "lastName": "Ali",
-    "email": "you@example.com",
-    "password": "Create a password",
-    "confirmPassword": "Repeat password"
-  },
-
-  "validation": {
-    "firstNameRequired": "First name is required.",
-    "firstNameMinLength": "First name should be at least 2 characters.",
-    "lastNameRequired": "Last name is required.",
-    "lastNameMinLength": "Last name should be at least 2 characters.",
-    "emailRequired": "Email is required.",
-    "emailInvalid": "Please enter a valid email address.",
-    "passwordRequired": "Password is required.",
-    "passwordMinLength": "Password must be at least 8 characters.",
-    "confirmPasswordRequired": "Please confirm your password.",
-    "passwordMismatch": "Passwords do not match."
-  },
-
-  "buttons": {
-    "createAccount": "Create Account",
-    "creating": "Creating Account..."
-  },
-
-  "footer": {
-    "alreadyHaveAccount": "Already have an account?",
-    "signIn": "Sign In",
-    "terms": "By continuing you agree to the store policies and terms."
-  }
-},
-"resetPassword": {
-  "kicker": "Reset Access",
-  "title": "Choose a New Password",
-  "subtitle": "Use the token from your email to securely update your password.",
-
-  "resetFailed": "Reset Failed",
-
-  "fields": {
-    "email": "Email",
-    "token": "Reset Token",
-    "newPassword": "New Password",
-    "confirmPassword": "Confirm New Password"
-  },
-
-  "placeholders": {
-    "email": "you@example.com",
-    "token": "Paste reset token",
-    "newPassword": "Create a new password",
-    "confirmPassword": "Repeat new password"
-  },
-
-  "validation": {
-    "emailRequired": "Email is required.",
-    "emailInvalid": "Please enter a valid email address.",
-    "tokenRequired": "Reset token is required.",
-    "passwordRequired": "New password is required.",
-    "passwordMinLength": "Password must be at least 8 characters.",
-    "confirmPasswordRequired": "Please confirm your new password.",
-    "passwordMismatch": "Passwords do not match."
-  },
-
-  "buttons": {
-    "resetPassword": "Reset Password",
-    "updating": "Updating Password..."
-  },
-
-  "footer": {
-    "backToLogin": "Back to Login",
-    "requestAnotherLink": "Request Another Link"
-  }
-},
-"cart": {
-  "sku": "SKU",
-  "each": "each",
-
-  "increaseQuantity": "Increase quantity",
-  "decreaseQuantity": "Decrease quantity",
-
-  "remove": "Remove",
-  "removing": "Removing..."
-  ,
-"summary": {
-  "title": "Order Summary",
-  "items": "Items",
-  "discount": "Discount",
-  "estimatedTotal": "Estimated Total",
-  "shippingNote": "Shipping is calculated at checkout.",
-  "proceedToCheckout": "Proceed to Checkout"
-},"page": {
-  "kicker": "Your Bag",
-  "title": "Shopping Cart",
-  "empty": "Your cart is empty right now.",
-  "startShopping": "Start Shopping"
-}
-},"coupon": {
-  "placeholder": "Coupon code",
-
-  "apply": "Apply",
-  "applying": "Applying...",
-
-  "applied": "Coupon",
-
-  "remove": "Remove",
-  "removing": "Removing..."
-},
-"checkout": {
-  "address": {
-    "step": "Step 1",
-    "title": "Delivery Address",
-    "manageAddresses": "Manage Addresses",
-    "loading": "Loading your addresses...",
-    "empty": "You don't have any saved addresses yet.",
-    "addAddress": "Add an Address",
-    "default": "Default",
-    "verified": "Verified",
-    "notVerified": "Phone number not verified",
-    "verifyNow": "Verify Now"
-  },
- "shipping": {
-  "step": "Step 2",
-  "title": "Shipping Area",
-  "selectAddressFirst": "Select a delivery address first to see shipping options.",
-  "notAvailable": "Sorry, we don't deliver to",
-  "notAvailableSuffix": "yet. Please choose a different address.",
-  "governorate": "Governorate",
-  "area": "Area",
-  "selectArea": "Select area"
-},
- "summary": {
-    "title": "Order Summary",
-    "items": "Items",
-    "discount": "Discount",
-    "shipping": "Shipping",
-    "selectArea": "Select Area",
-    "estimatedTotal": "Estimated Total",
-
-    "paymentMethod": "Payment Method",
-    "cashOnDelivery": "Cash on Delivery",
-    "onlinePaymentSoon": "Online payment is coming soon.",
-
-    "placeOrder": "Place Order",
-    "placingOrder": "Placing Order..."
-  },
-  "page": {
-  "kicker": "Almost There",
-  "title": "Checkout",
-  "loadingCart": "Loading your cart...",
-  "emptyCart": "Your cart is empty, so there's nothing to check out yet.",
-  "startShopping": "Start Shopping"
-}
-},
-"orders": {
-  "orderNumber": "Order",
-    "currency": "EGP",
-    "items": "Items",
-  "quantity": "Qty",
-  "cancelledMessage": "This order has been cancelled.",
-  "status": {
-    "pending": "Pending",
-    "confirmed": "Confirmed",
-    "shipped": "Shipped",
-    "delivered": "Delivered"
-  },
-  "loading": "Loading order...",
-  "notFound": "This order doesn't exist or you don't have access to it.",
-  "order": "Order",
-  "placedOn": "Placed on",
-  "deliveryAddress": "Delivery Address",
-  "payment": "Payment",
-  "summary": "Order Summary",
-  "subtotal": "Subtotal",
-  "discount": "Discount",
-  "shipping": "Shipping",
-  "total": "Total",
-  "title": "Your Orders",
-  "allStatuses": "All Statuses",
-  "noOrders": "No orders found.",
-  "orderPlacedSuccessfully": "Your order was placed successfully! 🎉"
-},
-"verifyPhone": {
-  "title": "Verify Phone Number",
-  "message": "We'll send a verification code via WhatsApp to",
-  "sendingCode": "Sending code...",
-  "enterCode": "Enter the 6-digit code",
-  "codePlaceholder": "123456",
-  "verify": "Verify",
-  "verifying": "Verifying...",
-  "resend": "Resend code",
-  "sending": "Sending...",
-  "resendIn": "Resend code in {{seconds}}s",
-    "close": "Close"
-
-},
-"wishlist": {
-  "review": "review",
-  "reviews": "reviews",
-  "outOfStock": "Out of stock",
-  "viewProduct": "View product",
-   "currency": "EGP",
-  "remove": "Remove",
-  "removing": "Removing...",
-   "kicker": "Saved",
-  "title": "Your Wishlist",
-  "empty": "You haven't saved anything yet.",
-  "discoverProducts": "Discover Products"
-},
-"catalogs": {
-  "products": {
-    "title": "All Products",
-    "kicker": "Catalog",
-    "subtitle": "Explore curated pieces with refined filters and elegant browsing."
-  },
-  "newIn": {
-    "title": "New In",
-    "kicker": "Latest Arrivals",
-    "subtitle": "Discover the newest pieces added to the Tamara Land collection."
-  },
-  "sale": {
-    "title": "Sale",
-    "kicker": "Exclusive Offers",
-    "subtitle": "Shop premium styles at exclusive prices for a limited time."
-  }
-}
-,
-"contact": {
-  "kicker": "Get In Touch",
-  "title": "Contact Us",
-  "subtitle": "We'd love to hear from you. Reach out and our team will respond as soon as possible.",
-  "info": {
-    "email": "Email",
-    "phone": "Phone",
-    "whatsapp": "WhatsApp",
-    "address": "Address"
-  },
-  "form": {
-    "title": "Send Us a Message",
-    "name": "Full Name",
-    "namePlaceholder": "Your name",
-    "email": "Email",
-    "emailPlaceholder": "you@example.com",
-    "subject": "Subject",
-    "subjectPlaceholder": "How can we help?",
-    "message": "Message",
-    "messagePlaceholder": "Write your message here...",
-    "send": "Send Message",
-    "sending": "Sending..."
-  },
-  "validation": {
-    "nameRequired": "Please enter your name.",
-    "emailInvalid": "Please enter a valid email address.",
-    "subjectRequired": "Please enter a subject.",
-    "messageRequired": "Message must be at least 10 characters."
-  },
-  "success": {
-    "title": "Message Sent!",
-    "message": "Thank you for reaching out. We'll get back to you within 24 hours.",
-    "another": "Send Another Message"
-  }
-},
-"shipping": {
-  "kicker": "Delivery Info",
-  "title": "Shipping Policy",
-  "subtitle": "We work hard to get your order to you as quickly and safely as possible.",
-  "stats": {
-    "days": "Business Days",
-    "governorates": "Governorates",
-    "safeValue": "100%",
-    "safe": "Insured Orders"
-  },
-  "sections": {
-    "time": {
-      "title": "Delivery Time",
-      "body": "Orders are typically delivered within 2–4 business days from the time of confirmation. Remote governorates may take an additional 1–2 days."
+    "fields": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password"
     },
-    "cost": {
-      "title": "Shipping Cost",
-      "body": "Shipping fees are calculated based on your delivery area and are displayed at checkout before you place your order."
+
+    "placeholders": {
+      "firstName": "Ahmed",
+      "lastName": "Ali",
+      "email": "you@example.com",
+      "password": "Create a password",
+      "confirmPassword": "Repeat password"
     },
-    "areas": {
-      "title": "Delivery Areas",
-      "body": "We currently deliver to all 27 Egyptian governorates. If your area is not available, please contact us and we'll do our best to help."
+
+    "validation": {
+      "firstNameRequired": "First name is required.",
+      "firstNameMinLength": "First name should be at least 2 characters.",
+      "lastNameRequired": "Last name is required.",
+      "lastNameMinLength": "Last name should be at least 2 characters.",
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Please enter a valid email address.",
+      "passwordRequired": "Password is required.",
+      "passwordMinLength": "Password must be at least 8 characters.",
+      "confirmPasswordRequired": "Please confirm your password.",
+      "passwordMismatch": "Passwords do not match."
     },
-    "tracking": {
-      "title": "Order Tracking",
-      "body": "Once your order is confirmed, you'll receive updates via WhatsApp. You can also track your order status from the My Orders section."
-    }
-  }
-},
-"returns": {
-  "kicker": "Hassle-Free Returns",
-  "title": "Returns & Exchanges",
-  "subtitle": "Not happy with your order? We'll make it right. Here's how our returns process works.",
-  "steps": {
-    "contact": {
-      "title": "Contact Support",
-      "body": "Reach out via WhatsApp or email within the return window."
+
+    "buttons": {
+      "createAccount": "Create Account",
+      "creating": "Creating Account..."
     },
-    "pack": {
-      "title": "Pack Your Items",
-      "body": "Return items in their original packaging with all tags attached."
-    },
-    "refund": {
-      "title": "Receive Your Refund",
-      "body": "Once received and inspected, your refund or exchange is processed."
+
+    "footer": {
+      "alreadyHaveAccount": "Already have an account?",
+      "signIn": "Sign In",
+      "terms": "By continuing you agree to the store policies and terms."
     }
   },
-  "sections": {
-    "window": {
-      "title": "Return Window",
-      "body": "You may return or exchange items within 14 days from the date of delivery. Items must be unused and in their original condition."
+  "resetPassword": {
+    "kicker": "Reset Access",
+    "title": "Choose a New Password",
+    "subtitle": "Use the token from your email to securely update your password.",
+
+    "resetFailed": "Reset Failed",
+
+    "fields": {
+      "email": "Email",
+      "token": "Reset Token",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password"
     },
-    "conditions": {
-      "title": "Return Conditions",
-      "body": "Items must be unworn, unwashed, and undamaged with all original tags attached. Items returned in poor condition will not be accepted."
+
+    "placeholders": {
+      "email": "you@example.com",
+      "token": "Paste reset token",
+      "newPassword": "Create a new password",
+      "confirmPassword": "Repeat new password"
     },
-    "refund": {
-      "title": "Refund Method",
-      "body": "Approved refunds are issued as store credit or via the original payment method within 5–7 business days of receiving the returned item."
+
+    "validation": {
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Please enter a valid email address.",
+      "tokenRequired": "Reset token is required.",
+      "passwordRequired": "New password is required.",
+      "passwordMinLength": "Password must be at least 8 characters.",
+      "confirmPasswordRequired": "Please confirm your new password.",
+      "passwordMismatch": "Passwords do not match."
     },
-    "nonReturnable": {
-      "title": "Non-Returnable Items",
-      "body": "Intimate apparel, swimwear, jewellery, and sale items are final sale and cannot be returned or exchanged for hygiene and safety reasons."
+
+    "buttons": {
+      "resetPassword": "Reset Password",
+      "updating": "Updating Password..."
+    },
+
+    "footer": {
+      "backToLogin": "Back to Login",
+      "requestAnotherLink": "Request Another Link"
     }
-  }
-},
-"faq": {
-  "kicker": "Help Center",
-  "title": "Frequently Asked Questions",
-  "subtitle": "Find quick answers to the most common questions about shopping at Tamara Land.",
-  "items": {
-    "order": {
-      "q": "How do I place an order?",
-      "a": "Browse our catalog, select your size and color, then add items to your cart. When you're ready, proceed to checkout, enter your delivery address and confirm your order."
+  },
+  "cart": {
+    "sku": "SKU",
+    "each": "each",
+
+    "increaseQuantity": "Increase quantity",
+    "decreaseQuantity": "Decrease quantity",
+
+    "remove": "Remove",
+    "removing": "Removing...",
+
+    "summary": {
+      "title": "Order Summary",
+      "items": "Items",
+      "discount": "Discount",
+      "estimatedTotal": "Estimated Total",
+      "shippingNote": "Shipping is calculated at checkout.",
+      "proceedToCheckout": "Proceed to Checkout"
+    },
+    "page": {
+      "kicker": "Your Bag",
+      "title": "Shopping Cart",
+      "empty": "Your cart is empty right now.",
+      "startShopping": "Start Shopping"
+    }
+  },
+  "coupon": {
+    "placeholder": "Coupon code",
+
+    "apply": "Apply",
+    "applying": "Applying...",
+
+    "applied": "Coupon",
+
+    "remove": "Remove",
+    "removing": "Removing..."
+  },
+  "checkout": {
+    "address": {
+      "step": "Step 1",
+      "title": "Delivery Address",
+      "manageAddresses": "Manage Addresses",
+      "loading": "Loading your addresses...",
+      "empty": "You don't have any saved addresses yet.",
+      "addAddress": "Add an Address",
+      "default": "Default",
+      "verified": "Verified",
+      "notVerified": "Phone number not verified",
+      "verifyNow": "Verify Now"
     },
     "shipping": {
-      "q": "How long does delivery take?",
-      "a": "Most orders are delivered within 2–4 business days. Delivery time may vary based on your location and courier availability."
+      "step": "Step 2",
+      "title": "Shipping Area",
+      "selectAddressFirst": "Select a delivery address first to see shipping options.",
+      "notAvailable": "Sorry, we don't deliver to",
+      "notAvailableSuffix": "yet. Please choose a different address.",
+      "governorate": "Governorate",
+      "area": "Area",
+      "selectArea": "Select area"
     },
-    "returns": {
-      "q": "Can I return an item?",
-      "a": "Yes. Items can be returned within 14 days of delivery, provided they are unused, unwashed, and in original packaging. Some items like swimwear are non-returnable."
+    "summary": {
+      "title": "Order Summary",
+      "items": "Items",
+      "discount": "Discount",
+      "shipping": "Shipping",
+      "selectArea": "Select Area",
+      "estimatedTotal": "Estimated Total",
+
+      "paymentMethod": "Payment Method",
+      "cashOnDelivery": "Cash on Delivery",
+      "onlinePaymentSoon": "Online payment is coming soon.",
+
+      "placeOrder": "Place Order",
+      "placingOrder": "Placing Order..."
     },
-    "sizes": {
-      "q": "How do I find the right size?",
-      "a": "Each product page includes a detailed size guide with measurements in centimeters. If you're between sizes, we recommend sizing up for comfort."
-    },
-    "payment": {
-      "q": "What payment methods are accepted?",
-      "a": "We currently accept Cash on Delivery. Online payment options will be available soon."
-    },
-    "cancel": {
-      "q": "Can I cancel my order?",
-      "a": "Orders can be cancelled before they are shipped. Please contact us as soon as possible via WhatsApp if you need to cancel."
-    },
-    "track": {
-      "q": "How do I track my order?",
-      "a": "You'll receive WhatsApp updates at each stage of your order. You can also view your order status in real time from the My Orders page."
-    },
-    "gift": {
-      "q": "Do you offer gift wrapping?",
-      "a": "We currently do not offer gift wrapping, but all Tamara Land orders are packed with care and elegance."
+    "page": {
+      "kicker": "Almost There",
+      "title": "Checkout",
+      "loadingCart": "Loading your cart...",
+      "emptyCart": "Your cart is empty, so there's nothing to check out yet.",
+      "startShopping": "Start Shopping"
     }
-  }
-},
-"privacy": {
-  "kicker": "Your Privacy",
-  "title": "Privacy Policy",
-  "subtitle": "We are committed to protecting your personal information and your right to privacy.",
-  "notice": "This policy was last updated in 2025 and applies to all users of the Tamara Land platform.",
-  "sections": {
-    "collect": {
-      "title": "Information We Collect",
-      "body": "We collect information you provide directly to us, such as your name, email address, phone number, and delivery address when you register or place an order."
+  },
+  "orders": {
+    "orderNumber": "Order",
+    "currency": "EGP",
+    "items": "Items",
+    "quantity": "Qty",
+    "cancelledMessage": "This order has been cancelled.",
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "shipped": "Shipped",
+      "delivered": "Delivered"
     },
-    "use": {
-      "title": "How We Use Your Information",
-      "body": "Your information is used to process your orders, send delivery updates, and improve our services. We do not sell your data to third parties."
+    "loading": "Loading order...",
+    "notFound": "This order doesn't exist or you don't have access to it.",
+    "order": "Order",
+    "placedOn": "Placed on",
+    "deliveryAddress": "Delivery Address",
+    "payment": "Payment",
+    "summary": "Order Summary",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "shipping": "Shipping",
+    "total": "Total",
+    "title": "Your Orders",
+    "allStatuses": "All Statuses",
+    "noOrders": "No orders found.",
+    "orderPlacedSuccessfully": "Your order was placed successfully! \ud83c\udf89"
+  },
+  "verifyPhone": {
+    "title": "Verify Phone Number",
+    "message": "We'll send a verification code via WhatsApp to",
+    "sendingCode": "Sending code...",
+    "enterCode": "Enter the 6-digit code",
+    "codePlaceholder": "123456",
+    "verify": "Verify",
+    "verifying": "Verifying...",
+    "resend": "Resend code",
+    "sending": "Sending...",
+    "resendIn": "Resend code in {{seconds}}s",
+    "close": "Close"
+  },
+  "wishlist": {
+    "review": "review",
+    "reviews": "reviews",
+    "outOfStock": "Out of stock",
+    "viewProduct": "View product",
+    "currency": "EGP",
+    "remove": "Remove",
+    "removing": "Removing...",
+    "kicker": "Saved",
+    "title": "Your Wishlist",
+    "empty": "You haven't saved anything yet.",
+    "discoverProducts": "Discover Products"
+  },
+  "catalogs": {
+    "products": {
+      "title": "All Products",
+      "kicker": "Catalog",
+      "subtitle": "Explore curated pieces with refined filters and elegant browsing."
     },
-    "security": {
-      "title": "Data Security",
-      "body": "We implement industry-standard security measures including encrypted data storage and secure HTTPS connections to protect your personal information."
+    "newIn": {
+      "title": "New In",
+      "kicker": "Latest Arrivals",
+      "subtitle": "Discover the newest pieces added to the Tamara Land collection."
     },
-    "rights": {
-      "title": "Your Rights",
-      "body": "You have the right to access, correct, or delete your personal data at any time. To exercise these rights, please contact our support team."
-    },
-    "contact": {
-      "title": "Contact Us",
-      "body": "If you have any questions about this privacy policy or how we handle your data, please reach out to our support team via email or WhatsApp."
+    "sale": {
+      "title": "Sale",
+      "kicker": "Exclusive Offers",
+      "subtitle": "Shop premium styles at exclusive prices for a limited time."
     }
-  }
-},
-"terms": {
-  "kicker": "Legal",
-  "title": "Terms of Service",
-  "subtitle": "Please read these terms carefully before using the Tamara Land platform.",
-  "notice": "By using our website and placing orders, you agree to be bound by these terms and conditions.",
-  "sections": {
-    "acceptance": {
-      "title": "Acceptance of Terms",
-      "body": "By accessing and using the Tamara Land website or app, you accept and agree to be bound by these terms and our Privacy Policy."
+  },
+  "contact": {
+    "kicker": "Get In Touch",
+    "title": "Contact Us",
+    "subtitle": "We'd love to hear from you. Reach out and our team will respond as soon as possible.",
+    "info": {
+      "email": "Email",
+      "phone": "Phone",
+      "whatsapp": "WhatsApp",
+      "address": "Address"
+    },
+    "form": {
+      "title": "Send Us a Message",
+      "name": "Full Name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "subject": "Subject",
+      "subjectPlaceholder": "How can we help?",
+      "message": "Message",
+      "messagePlaceholder": "Write your message here...",
+      "send": "Send Message",
+      "sending": "Sending..."
+    },
+    "validation": {
+      "nameRequired": "Please enter your name.",
+      "emailInvalid": "Please enter a valid email address.",
+      "subjectRequired": "Please enter a subject.",
+      "messageRequired": "Message must be at least 10 characters."
+    },
+    "success": {
+      "title": "Message Sent!",
+      "message": "Thank you for reaching out. We'll get back to you within 24 hours.",
+      "another": "Send Another Message"
+    }
+  },
+  "shipping": {
+    "kicker": "Delivery Info",
+    "title": "Shipping Policy",
+    "subtitle": "We work hard to get your order to you as quickly and safely as possible.",
+    "stats": {
+      "days": "Business Days",
+      "governorates": "Governorates",
+      "safeValue": "100%",
+      "safe": "Insured Orders"
+    },
+    "sections": {
+      "time": {
+        "title": "Delivery Time",
+        "body": "Orders are typically delivered within 2\u20134 business days from the time of confirmation. Remote governorates may take an additional 1\u20132 days."
+      },
+      "cost": {
+        "title": "Shipping Cost",
+        "body": "Shipping fees are calculated based on your delivery area and are displayed at checkout before you place your order."
+      },
+      "areas": {
+        "title": "Delivery Areas",
+        "body": "We currently deliver to all 27 Egyptian governorates. If your area is not available, please contact us and we'll do our best to help."
+      },
+      "tracking": {
+        "title": "Order Tracking",
+        "body": "Once your order is confirmed, you'll receive updates via WhatsApp. You can also track your order status from the My Orders section."
+      }
+    }
+  },
+  "returns": {
+    "kicker": "Hassle-Free Returns",
+    "title": "Returns & Exchanges",
+    "subtitle": "Not happy with your order? We'll make it right. Here's how our returns process works.",
+    "steps": {
+      "contact": {
+        "title": "Contact Support",
+        "body": "Reach out via WhatsApp or email within the return window."
+      },
+      "pack": {
+        "title": "Pack Your Items",
+        "body": "Return items in their original packaging with all tags attached."
+      },
+      "refund": {
+        "title": "Receive Your Refund",
+        "body": "Once received and inspected, your refund or exchange is processed."
+      }
+    },
+    "sections": {
+      "window": {
+        "title": "Return Window",
+        "body": "You may return or exchange items within 14 days from the date of delivery. Items must be unused and in their original condition."
+      },
+      "conditions": {
+        "title": "Return Conditions",
+        "body": "Items must be unworn, unwashed, and undamaged with all original tags attached. Items returned in poor condition will not be accepted."
+      },
+      "refund": {
+        "title": "Refund Method",
+        "body": "Approved refunds are issued as store credit or via the original payment method within 5\u20137 business days of receiving the returned item."
+      },
+      "nonReturnable": {
+        "title": "Non-Returnable Items",
+        "body": "Intimate apparel, swimwear, jewellery, and sale items are final sale and cannot be returned or exchanged for hygiene and safety reasons."
+      }
+    }
+  },
+  "faq": {
+    "kicker": "Help Center",
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find quick answers to the most common questions about shopping at Tamara Land.",
+    "items": {
+      "order": {
+        "q": "How do I place an order?",
+        "a": "Browse our catalog, select your size and color, then add items to your cart. When you're ready, proceed to checkout, enter your delivery address and confirm your order."
+      },
+      "shipping": {
+        "q": "How long does delivery take?",
+        "a": "Most orders are delivered within 2\u20134 business days. Delivery time may vary based on your location and courier availability."
+      },
+      "returns": {
+        "q": "Can I return an item?",
+        "a": "Yes. Items can be returned within 14 days of delivery, provided they are unused, unwashed, and in original packaging. Some items like swimwear are non-returnable."
+      },
+      "sizes": {
+        "q": "How do I find the right size?",
+        "a": "Each product page includes a detailed size guide with measurements in centimeters. If you're between sizes, we recommend sizing up for comfort."
+      },
+      "payment": {
+        "q": "What payment methods are accepted?",
+        "a": "We currently accept Cash on Delivery. Online payment options will be available soon."
+      },
+      "cancel": {
+        "q": "Can I cancel my order?",
+        "a": "Orders can be cancelled before they are shipped. Please contact us as soon as possible via WhatsApp if you need to cancel."
+      },
+      "track": {
+        "q": "How do I track my order?",
+        "a": "You'll receive WhatsApp updates at each stage of your order. You can also view your order status in real time from the My Orders page."
+      },
+      "gift": {
+        "q": "Do you offer gift wrapping?",
+        "a": "We currently do not offer gift wrapping, but all Tamara Land orders are packed with care and elegance."
+      }
+    }
+  },
+  "privacy": {
+    "kicker": "Your Privacy",
+    "title": "Privacy Policy",
+    "subtitle": "We are committed to protecting your personal information and your right to privacy.",
+    "notice": "This policy was last updated in 2025 and applies to all users of the Tamara Land platform.",
+    "sections": {
+      "collect": {
+        "title": "Information We Collect",
+        "body": "We collect information you provide directly to us, such as your name, email address, phone number, and delivery address when you register or place an order."
+      },
+      "use": {
+        "title": "How We Use Your Information",
+        "body": "Your information is used to process your orders, send delivery updates, and improve our services. We do not sell your data to third parties."
+      },
+      "security": {
+        "title": "Data Security",
+        "body": "We implement industry-standard security measures including encrypted data storage and secure HTTPS connections to protect your personal information."
+      },
+      "rights": {
+        "title": "Your Rights",
+        "body": "You have the right to access, correct, or delete your personal data at any time. To exercise these rights, please contact our support team."
+      },
+      "contact": {
+        "title": "Contact Us",
+        "body": "If you have any questions about this privacy policy or how we handle your data, please reach out to our support team via email or WhatsApp."
+      }
+    }
+  },
+  "terms": {
+    "kicker": "Legal",
+    "title": "Terms of Service",
+    "subtitle": "Please read these terms carefully before using the Tamara Land platform.",
+    "notice": "By using our website and placing orders, you agree to be bound by these terms and conditions.",
+    "sections": {
+      "acceptance": {
+        "title": "Acceptance of Terms",
+        "body": "By accessing and using the Tamara Land website or app, you accept and agree to be bound by these terms and our Privacy Policy."
+      },
+      "orders": {
+        "title": "Orders & Availability",
+        "body": "All orders are subject to product availability. We reserve the right to refuse or cancel an order if a product is out of stock or if we suspect fraudulent activity."
+      },
+      "pricing": {
+        "title": "Pricing & Payments",
+        "body": "All prices are listed in Egyptian Pounds (EGP) and are inclusive of applicable taxes. Prices are subject to change without notice."
+      },
+      "intellectual": {
+        "title": "Intellectual Property",
+        "body": "All content on this website, including images, text, and branding, is the property of Tamara Land and may not be reproduced without written permission."
+      },
+      "changes": {
+        "title": "Changes to Terms",
+        "body": "We reserve the right to update these terms at any time. Continued use of our platform after changes are posted constitutes acceptance of the new terms."
+      }
+    }
+  },
+  "header": {
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "signOut": "Sign out",
+    "changeLanguage": "Change language",
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode"
+  },
+  "sidebar": {
+    "logoAlt": "Tamara Land logo",
+    "adminPanel": "Admin panel",
+
+    "dashboard": "Dashboard",
+    "products": "Products",
+    "categories": "Categories",
+    "brands": "Brands",
+    "orders": "Orders",
+    "users": "Users",
+    "coupons": "Coupons",
+    "discounts": "Discounts",
+    "shippingAreas": "Shipping Areas",
+    "banners": "Banners",
+    "whatsapp": "WhatsApp",
+    "storeSettings": "Store Settings",
+
+    "backToStore": "Back to store"
+  },
+  "common": {
+    "replace": "Replace",
+    "remove": "Remove",
+    "cancel": "Cancel",
+    "active": "Active",
+    "inactive": "Inactive",
+    "edit": "Edit",
+    "delete": "Delete",
+    "refresh": "Refresh"
+  },
+
+  "admin": {
+    "labels": {
+      "marketing": "Marketing", "logistics": "Logistics", "name": "Name", "edit": "Edit", "delete": "Delete", "cancel": "Cancel", "saveChanges": "Save changes", "saving": "Saving...", "deleting": "Deleting...", "percentage": "Percentage (%)", "fixedAmount": "Fixed amount (EGP)", "startDate": "Start date", "endDate": "End date", "value": "Value", "priority": "Priority", "product": "Product", "category": "Category", "brand": "Brand", "selectOne": "Select one"
+    },
+    "shipping": { "title": "Shipping areas", "new": "New area", "newTitle": "New shipping area", "editTitle": "Edit shipping area", "governorate": "Governorate", "area": "Area name", "cost": "Shipping cost (EGP)", "areaActive": "Area is active", "searchPlaceholder": "Search governorate or area...", "empty": "No shipping areas found.", "governorateRequired": "Governorate is required.", "areaRequired": "Area name is required.", "costRequired": "Shipping cost is required.", "add": "Add area" },
+    "discounts": { "title": "Discounts", "new": "New discount", "newTitle": "New discount", "editTitle": "Edit discount", "nameRequired": "Name is required.", "type": "Discount type", "maximum": "Maximum discount (EGP)", "appliesTo": "Applies to", "selectTarget": "Select", "startRequired": "Start date is required.", "endRequired": "End date is required.", "active": "Discount is active", "create": "Create discount", "empty": "No discounts found." },
+    "products": {
+      "title": "Products Management", "subtitle": "Manage catalog items, variants, and product media", "add": "Add Product", "search": "Search Product", "searchPlaceholder": "Search by name...", "category": "Category", "brand": "Brand", "allCategories": "All Categories", "allBrands": "All Brands", "empty": "No products found matching your search criteria.", "edit": "Edit Product", "delete": "Delete Product",
+      "backToList": "Back to Products", "setMainImage": "Set as Main Image", "savingProduct": "Saving product..."
     },
     "orders": {
-      "title": "Orders & Availability",
-      "body": "All orders are subject to product availability. We reserve the right to refuse or cancel an order if a product is out of stock or if we suspect fraudulent activity."
+      "title": "Orders Management", "subtitle": "Track customer orders, manage order workflow statuses, and view complete details", "search": "Search Order", "searchPlaceholder": "Search by order number...", "status": "Order Status", "newStatus": "New Order Status", "allStatuses": "All Statuses", "pending": "Pending", "confirmed": "Confirmed", "processing": "Processing", "shipped": "Shipped", "delivered": "Delivered", "cancelled": "Cancelled", "empty": "No orders found matching your criteria.", "viewDetails": "View Order Details", "updateStatus": "Update Status", "updating": "Updating...", "updateTitle": "Update Order Status"
     },
-    "pricing": {
-      "title": "Pricing & Payments",
-      "body": "All prices are listed in Egyptian Pounds (EGP) and are inclusive of applicable taxes. Prices are subject to change without notice."
+    "brands": {
+      "title": "Brands Management",
+      "subtitle": "Manage store brands and manufacturers",
+      "add": "Add Brand",
+      "search": "Search Brand",
+      "searchPlaceholder": "Search by brand name...",
+      "empty": "No brands found."
     },
-    "intellectual": {
-      "title": "Intellectual Property",
-      "body": "All content on this website, including images, text, and branding, is the property of Tamara Land and may not be reproduced without written permission."
+    "categories": {
+      "title": "Categories Management",
+      "subtitle": "Organize and manage product categories",
+      "search": "Search Category",
+      "searchPlaceholder": "Search by category name...",
+      "empty": "No categories found.",
+        "add": "Add Category",
+  "editTooltip": "Edit Category",
+  "deleteTooltip": "Delete Category",
+  "editTitle": "Edit Category",
+  "createTitle": "Create Category",
+  "name": "Category Name",
+  "namePlaceholder": "e.g. Perfumes & Fragrances",
+  "nameRequired": "Category name is required (minimum 2 characters).",
+  "arabicName": "Arabic Name",
+  "arabicNamePlaceholder": "مثال: فساتين",
+  "arabicNameRequired": "Arabic name is required (minimum 2 characters).",
+  "description": "Description",
+  "descriptionPlaceholder": "Category description...",
+  "published": "Published",
+  "image": "Category Image",
+  "currentImage": "Current image",
+  "currentImageAlt": "Current category image",
+  "newImageAlt": "New category image preview",
+  "removeImage": "Remove selected image",
+  "changeImage": "Change Image",
+  "uploadImage": "Upload Image",
+  "update": "Update Category",
+  "save": "Save Category",
+  "columns": {
+    "image": "Image",
+    "englishName": "English Name",
+    "arabicName": "Arabic Name",
+    "published": "Published",
+    "description": "Description"
+  }
     },
-    "changes": {
-      "title": "Changes to Terms",
-      "body": "We reserve the right to update these terms at any time. Continued use of our platform after changes are posted constitutes acceptance of the new terms."
+    "users": {
+      "title": "Users",
+      "subtitle": "Manage admins and customers",
+      "searchPlaceholder": "Search by name or email...",
+      "roles": { "all": "All Roles", "admin": "Admin", "customer": "Customer" },
+      "status": { "all": "All Statuses" },
+      "view": "View",
+      "changeRoleButton": "Change Role",
+      "disable": "Disable",
+      "activate": "Activate",
+      "empty": "No users found.",
+      "changeRoleTitle": "Change User Role",
+      "selectRoleFor": "Select a new role for",
+      "roleLabel": "Role",
+      "deactivateUserTitle": "Disable User",
+      "activateUserTitle": "Activate User",
+      "confirmAction": "Are you sure you want to",
+      "rolesLabels": {
+        "admin": "Admin",
+        "customer": "Customer"
+      },
+      "drawer": {
+    "role": "Role",
+    "status": "Status",
+    "phone": "Phone",
+    "joined": "Joined"
+  }
+    },
+    "storeSettings": {
+      "title": "Store Settings",
+      "subtitle": "Configure store information",
+      "save": "Save Settings",
+      "saving": "Saving...",
+      "loading": "Loading...",
+  "sections": {
+    "general": { "title": "General" },
+    "config": { "title": "Store Configuration" },
+    "social": { "title": "Social Links" }
+  },
+  "fields": {
+    "storeName": "Store Name",
+    "arabicName": "Arabic Name",
+    "supportEmail": "Support Email",
+    "supportPhone": "Support Phone",
+    "address": "Address",
+    "currency": "Currency",
+    "currencySymbol": "Currency Symbol",
+    "shippingCost": "Shipping Cost",
+    "freeShippingThreshold": "Free Shipping",
+    "taxPercentage": "Tax %",
+    "maintenanceMode": "Maintenance Mode",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "whatsapp": "WhatsApp"
+
+    }},
+    "whatsapp": {
+      "title": "WhatsApp",
+      "subtitle": "Manage WhatsApp integration",
+      "connect": "Connect",
+      "disconnect": "Disconnect",
+      "connected": "Connected",
+      "disconnected": "Disconnected",
+      "sendMessage": "Send Message",
+      "sending": "Sending...",
+      "loading": "Loading WhatsApp status...",
+      "connection": "Status",
+      "connectedSince": "Connected since",
+      "phoneNumber": "Phone Number",
+      "scanQr": "Scan the QR code below with WhatsApp on your phone to connect.",
+      "qrAlt": "WhatsApp QR code",
+      "connecting": "Connecting...",
+      "connectingLabel": "Connecting",
+      "disconnectingLabel": "Disconnecting",
+      "disconnecting": "Disconnecting...",
+      "refresh": "Refresh Status",
+      "refreshing": "Refreshing...",
+      "messageQuota": "Message Quota",
+      "remaining": "Remaining",
+      "used": "Used",
+      "packageSize": "Package Size",
+      "lastSent": "Last Sent",
+      "message": "Message",
+      "messagePlaceholder": "Write your message..."
+    },
+    "dashboard": {
+      "kicker": "Admin dashboard",
+      "welcome": "Welcome back \ud83d\udc4b",
+      "subtitle": "Track your store performance, customer activity, and visitor analytics in one place.",
+      "today": "Today",
+      "lastSync": "Last sync",
+      "justNow": "Just now",
+      "status": "Status",
+      "online": "Online",
+      "tabs": {
+        "overview": "Overview",
+        "store": "Store",
+        "analytics": "Analytics"
+      },
+      "section": {
+        "store": { "kicker": "Store performance", "title": "Store overview" },
+        "visitors": { "kicker": "Visitors", "title": "Visitor trends" },
+        "revenue": { "kicker": "Revenue insights" },
+        "orders": { "kicker": "Orders", "latest": "Latest orders" },
+        "products": { "kicker": "Product stats", "topSelling": "Top selling products", "mostViewed": "Most viewed products", "mostWishlisted": "Most wishlisted products" },
+        "recent": { "kicker": "Recent activity" },
+        "customers": { "kicker": "Customers", "title": "Customer overview" },
+        "sessions": { "kicker": "Sessions" },
+        "audience": { "kicker": "Audience", "topCountries": "Top countries" },
+        "devices": { "kicker": "Devices", "categories": "Device categories" },
+        "traffic": { "kicker": "Traffic", "sources": "Traffic sources" },
+        "content": { "kicker": "Content", "topPages": "Top pages" },
+        "catalog": {
+          "kicker": "Catalog",
+          "title": "Products & Inventory"
+        },
+        "categories": {
+          "kicker": "Categories",
+          "top": "Top Categories"
+        },
+        "brands": {
+          "kicker": "Brands",
+          "top": "Top Brands"
+        }
+      },
+      "chart": {
+        "revenueTrend": "Revenue trend",
+        "dailyUsers": "Daily users",
+        "dailySessions": "Daily sessions",
+        "ordersTrend": "Orders trend"
+      },
+      "store": {
+        "revenueOverview": "Revenue overview",
+        "totalRevenue": "Total revenue",
+        "todaysRevenue": "Today's revenue",
+        "thisMonth": "This month",
+        "thisYear": "This year",
+        "ordersOverview": "Orders overview",
+        "totalOrders": "Total orders",
+        "pending": "Pending",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled",
+        "activeCoupons": "Active coupons",
+        "wishlistItems": "Wishlist items",
+        "reviews": "Reviews"
+      },
+      "metric": {
+        "revenue": "Revenue",
+        "orders": "Orders",
+        "customers": "Customers",
+        "products": "Products",
+        "brands": "Brands",
+        "categories": "Categories",
+        "discounts": "Discounts",
+        "lowStock": "Low stock",
+        "outOfStock": "Out of stock",
+        "activeUsers": "Active users",
+        "sessions": "Sessions",
+        "views": "Views",
+        "bounceRate": "Bounce rate",
+        "newUsers": "New users",
+        "engagement": "Engagement",
+        "avgSession": "Avg. session"
+      },
+      "analytics": {
+        "kicker": "Google Analytics",
+        "title": "Visitor Insights"
+      },
+      "columns": {
+        "order": "Order #",
+        "customer": "Customer",
+        "total": "Total",
+        "status": "Status",
+        "date": "Date",
+        "product": "Product",
+        "unitsSold": "Units sold",
+        "revenue": "Revenue",
+        "views": "Views",
+        "wishlist": "Wishlist",
+        "country": "Country",
+        "users": "Users",
+        "device": "Device",
+        "source": "Source",
+        "sessions": "Sessions",
+        "page": "Page"
+      },
+      "viewAll": "View all",
+      "noOrders": "No recent orders available.",
+      "noSales": "No sales data available.",
+      "noDataFound": "No data found.",
+      "noDataAvailable": "No data available."
+    }
+  },
+  "banners": {
+    "form": {
+      "images": {
+        "title": "Banner Images",
+        "description": "Upload desktop and optional mobile banner images.",
+
+        "desktop": "Desktop Image",
+        "desktopAlt": "Desktop Banner",
+
+        "mobile": "Mobile Image (Optional)",
+        "mobileAlt": "Mobile Banner",
+
+        "clickToUpload": "Click to upload",
+        "uploadMobile": "Upload Mobile Banner",
+
+        "formats": "PNG, JPG or WEBP",
+        "optional": "Optional"
+      },
+
+      "content": {
+        "title": "Banner Content",
+        "description": "Configure what customers will see."
+      },
+
+      "display": {
+        "title": "Display Settings",
+        "description": "Control where and when this banner appears."
+      },
+
+      "fields": {
+        "title": "Title",
+        "description": "Description",
+        "link": "Link",
+        "bannerType": "Banner Type",
+        "displayOrder": "Display Order",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "active": "Active Banner"
+      },
+
+      "actions": {
+        "create": "Create Banner",
+        "update": "Update Banner"
+      }
+    },
+
+    "types": {
+      "heroSlider": "Hero Slider",
+      "homeBanner": "Home Banner",
+      "offerBanner": "Offer Banner",
+      "categoryBanner": "Category Banner"
+    },
+
+    "errors": {
+      "update": "Failed to update banner.",
+      "create": "Failed to create banner.",
+      "invalidImageType": "Only JPG, PNG and WEBP images are allowed.",
+      "imageTooLarge": "Maximum image size is 5 MB."
+    },
+    "management": {
+      "title": "Banner Management",
+      "subtitle": "Manage homepage banners, hero sliders and promotional campaigns.",
+      "addBanner": "Add Banner",
+      "noBanners": "No banners found."
+    },
+    "filters": {
+      "bannerType": "Banner Type",
+      "allTypes": "All Types",
+      "status": "Status",
+      "allStatus": "All Status"
     }
   }
 }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

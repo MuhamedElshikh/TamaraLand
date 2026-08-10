@@ -12,15 +12,15 @@
       type="button"
       class="admin-sidebar__close"
       (click)="closeSidebar()"
-      aria-label="Close menu">
+      [attr.aria-label]="'header.closeMenu' | translate">
       ✕
     </button>
 
-    <span class="admin-sidebar__logo"><img src="../../../../../assets/logo.png" alt="logo"></span>
+    <span class="admin-sidebar__logo"><img src="../../../../../assets/logo.png" [alt]="'sidebar.logoAlt' | translate"></span>
 
     <div>
-      <p class="admin-sidebar__title">Tamara Land</p>
-      <p class="admin-sidebar__subtitle">Admin panel</p>
+      <p class="admin-sidebar__title">{{ 'auth.brand' | translate }}</p>
+      <p class="admin-sidebar__subtitle"> {{ 'sidebar.adminPanel' | translate }}</p>
     </div>
   </div>
 
@@ -163,7 +163,7 @@
 
         </span>
 
-        <span>{{ item.label }}</span>
+        <span>{{ item.labelKey | translate }}</span>
 
       </a>
 
@@ -171,11 +171,18 @@
 
   </nav>
 
-  <a
-    routerLink="/"
-    class="admin-sidebar__back"
-    (click)="closeSidebar()">
-    ← Back to store
-  </a>
+ <a
+  routerLink="/"
+  class="admin-sidebar__back"
+  (click)="closeSidebar()"
+>
+  <span class="admin-sidebar__back-icon" aria-hidden="true">
+    →
+  </span>
+
+  <span>
+    {{ 'sidebar.backToStore' | translate }}
+  </span>
+</a>
 
 </aside>

@@ -6,13 +6,14 @@ import { PaginationComponent } from '../../../../shared/pagination/pagination';
 import { AdminCatalogService } from '../../../../core/services/admin-catalog.service';
 import { BrandResponse, BrandFilterRequest } from '../../../../core/models/catalog.models';
 import { CreateBrandRequest, UpdateBrandRequest } from '../../../../core/models/domain.models';
+import { TranslatePipe } from '@ngx-translate/core';
 
 const PAGE_SIZE = 10;
 
 @Component({
   selector: 'app-admin-brands',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, DataTableComponent, PaginationComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, DataTableComponent, PaginationComponent,TranslatePipe],
   templateUrl: './brands.page.html',
   styleUrl: './brands.page.css',
 })

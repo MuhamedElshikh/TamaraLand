@@ -3,8 +3,8 @@
   <header class="users-page__header">
 
     <div>
-      <h1>Users</h1>
-      <p>Manage administrators and customers.</p>
+      <h1>{{ 'admin.users.title' | translate }}</h1>
+      <p>{{ 'admin.users.subtitle' | translate }}</p>
     </div>
 
     <button
@@ -12,7 +12,7 @@
       class="users-page__refresh"
       (click)="refresh()">
 
-      Refresh
+      {{ 'common.refresh' | translate }}
 
     </button>
 
@@ -24,7 +24,7 @@
 
       <input
         type="text"
-        placeholder="Search by name or email..."
+        placeholder="{{ 'admin.users.searchPlaceholder' | translate }}"
         [ngModel]="search()"
         (ngModelChange)="search.set($event); onSearch()">
 
@@ -34,9 +34,9 @@
       [ngModel]="selectedRole()"
       (ngModelChange)="onRoleChanged($event)">
 
-      <option value="">All Roles</option>
-      <option value="Admin">Admin</option>
-      <option value="Customer">Customer</option>
+      <option value="">{{ 'admin.users.roles.all' | translate }}</option>
+      <option value="Admin">{{ 'admin.users.roles.admin' | translate }}</option>
+      <option value="Customer">{{ 'admin.users.roles.customer' | translate }}</option>
 
     </select>
 
@@ -44,9 +44,9 @@
       [ngModel]="selectedStatus()"
       (ngModelChange)="onStatusChanged($event)">
 
-      <option value="">All Status</option>
-      <option value="true">Active</option>
-      <option value="false">Inactive</option>
+      <option value="">{{ 'admin.users.status.all' | translate }}</option>
+      <option value="true">{{ 'common.active' | translate }}</option>
+      <option value="false">{{ 'common.inactive' | translate }}</option>
 
     </select>
 
@@ -56,29 +56,29 @@
     [columns]="columns"
     [rows]="users()"
     [isLoading]="loading()"
-    emptyMessage="No users found.">
+    emptyMessage="admin.users.empty">
 
     <ng-template #actions let-user>
 
       <div class="users-page__actions">
 
-        <button
+          <button
           type="button"
           class="users-page__action users-page__action--view"
           (click)="viewUser(user)"
-          title="View">
+          [title]="'admin.users.view' | translate">
 
-          View
+          {{ 'admin.users.view' | translate }}
 
         </button>
 
-        <button
+          <button
           type="button"
           class="users-page__action users-page__action--edit"
           (click)="editRole(user)"
-          title="Change Role">
+          [title]="'admin.users.changeRoleButton' | translate">
 
-          Role
+          {{ 'admin.users.changeRoleButton' | translate }}
 
         </button>
 
@@ -92,7 +92,7 @@
 
           (click)="toggleStatus(user)">
 
-          {{ user.isActive ? 'Disable' : 'Activate' }}
+          {{ (user.isActive ? 'admin.users.disable' : 'admin.users.activate') | translate }}
 
         </button>
 

@@ -6,15 +6,15 @@
     <div class="dashboard-hero__content">
 
         <p class="section-kicker">
-            Admin Dashboard
+            {{ 'admin.dashboard.kicker' | translate }}
         </p>
 
         <h1 class="section-title">
-            Welcome Back 👋
+            {{ 'admin.dashboard.welcome' | translate }}
         </h1>
 
         <p class="dashboard-hero__subtitle">
-            Monitor your store performance, customer activity and visitor analytics from one place.
+            {{ 'admin.dashboard.subtitle' | translate }}
         </p>
 
     </div>
@@ -29,7 +29,7 @@
 
             <div>
 
-                <small>Today</small>
+                <small>{{ 'admin.dashboard.today' | translate }}</small>
 
                 <strong>{{ today }}</strong>
 
@@ -45,9 +45,9 @@
 
             <div>
 
-                <small>Last Sync</small>
+                <small>{{ 'admin.dashboard.lastSync' | translate }}</small>
 
-                <strong>Just now</strong>
+                <strong>{{ 'admin.dashboard.justNow' | translate }}</strong>
 
             </div>
 
@@ -61,9 +61,9 @@
 
             <div>
 
-                <small>Status</small>
+                <small>{{ 'admin.dashboard.status' | translate }}</small>
 
-                <strong>Online</strong>
+                <strong>{{ 'admin.dashboard.online' | translate }}</strong>
 
             </div>
 
@@ -84,7 +84,7 @@
             [class.active]="activeTab() === 'overview'"
             (click)="selectTab('overview')">
 
-            Overview
+            {{ 'admin.dashboard.tabs.overview' | translate }}
 
         </button>
 
@@ -94,7 +94,7 @@
             [class.active]="activeTab() === 'store'"
             (click)="selectTab('store')">
 
-            Store
+            {{ 'admin.dashboard.tabs.store' | translate }}
 
         </button>
 
@@ -104,7 +104,7 @@
             [class.active]="activeTab() === 'analytics'"
             (click)="selectTab('analytics')">
 
-            Analytics
+            {{ 'admin.dashboard.tabs.analytics' | translate }}
 
         </button>
 
@@ -119,11 +119,11 @@
         <div>
 
             <p class="section-kicker">
-                Store
+                {{ 'admin.dashboard.section.store.kicker' | translate }}
             </p>
 
             <h2>
-                Store Performance
+                {{ 'admin.dashboard.section.store.title' | translate }}
             </h2>
 
         </div>
@@ -132,26 +132,26 @@
 
     <div class="dashboard-stats">
 
-        <app-dashboard-stat-card
-            title="Revenue"
+                <app-dashboard-stat-card
+            title="{{ 'admin.dashboard.metric.revenue' | translate }}"
             icon="payments"
             [value]="data()?.totalRevenue ?? 0">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="Orders"
+            title="{{ 'admin.dashboard.metric.orders' | translate }}"
             icon="shopping_bag"
             [value]="data()?.totalOrders ?? 0">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="Customers"
+            title="{{ 'admin.dashboard.metric.customers' | translate }}"
             icon="groups"
             [value]="data()?.totalCustomers ?? 0">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="Products"
+            title="{{ 'admin.dashboard.metric.products' | translate }}"
             icon="inventory_2"
             [value]="data()?.totalProducts ?? 0">
         </app-dashboard-stat-card>
@@ -164,11 +164,11 @@
         <div>
 
             <p class="section-kicker">
-                Visitors
+                {{ 'admin.dashboard.section.visitors.kicker' | translate }}
             </p>
 
             <h2>
-                Visitor Analytics
+                {{ 'admin.dashboard.section.visitors.title' | translate }}
             </h2>
 
         </div>
@@ -177,26 +177,26 @@
 
     <div class="dashboard-stats">
 
-        <app-dashboard-stat-card
-            title="Active Users"
+            <app-dashboard-stat-card
+            title="{{ 'admin.dashboard.metric.activeUsers' | translate }}"
             icon="groups"
             [value]="analytics()?.activeUsers ?? 0">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="Sessions"
+            title="{{ 'admin.dashboard.metric.sessions' | translate }}"
             icon="analytics"
             [value]="analytics()?.sessions ?? 0">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="Views"
+            title="{{ 'admin.dashboard.metric.views' | translate }}"
             icon="visibility"
             [value]="analytics()?.views ?? 0">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="Bounce Rate"
+            title="{{ 'admin.dashboard.metric.bounceRate' | translate }}"
             icon="trending_down"
             [value]="((analytics()?.bounceRate ?? 0) * 100).toFixed(1) + '%'">
         </app-dashboard-stat-card>
@@ -213,11 +213,11 @@
             <div>
 
                 <p class="section-kicker">
-                    Revenue
+                    {{ 'admin.dashboard.section.revenue.kicker' | translate }}
                 </p>
 
                 <h3>
-                    Revenue Trend
+                    {{ 'admin.dashboard.chart.revenueTrend' | translate }}
                 </h3>
 
             </div>
@@ -237,11 +237,11 @@
             <div>
 
                 <p class="section-kicker">
-                    Visitors
+                    {{ 'admin.dashboard.section.visitors.kicker' | translate }}
                 </p>
 
                 <h3>
-                    Daily Users
+                    {{ 'admin.dashboard.chart.dailyUsers' | translate }}
                 </h3>
 
             </div>
@@ -266,11 +266,11 @@
             <div>
 
                 <p class="section-kicker">
-                    Orders
+                    {{ 'admin.dashboard.section.orders.kicker' | translate }}
                 </p>
 
                 <h3>
-                    Latest Orders
+                    {{ 'admin.dashboard.section.orders.latest' | translate }}
                 </h3>
 
             </div>
@@ -279,7 +279,7 @@
                 routerLink="/admin/orders"
                 class="dashboard-link">
 
-                View All
+                {{ 'admin.dashboard.viewAll' | translate }}
 
             </a>
 
@@ -289,7 +289,7 @@
             [columns]="ordersColumns"
             [rows]="data()?.latestOrders || []"
             [isLoading]="false"
-            emptyMessage="No orders yet.">
+            emptyMessage="{{ 'admin.dashboard.noOrders' | translate }}">
         </app-data-table>
 
     </section>
@@ -303,11 +303,11 @@
             <div>
 
                 <p class="section-kicker">
-                    Products
+                    {{ 'admin.dashboard.section.products.kicker' | translate }}
                 </p>
 
                 <h3>
-                    Top Selling Products
+                    {{ 'admin.dashboard.section.products.topSelling' | translate }}
                 </h3>
 
             </div>
@@ -318,7 +318,7 @@
             [columns]="topProductsColumns"
             [rows]="topProductsRows"
             [isLoading]="false"
-            emptyMessage="No sales yet.">
+            emptyMessage="{{ 'admin.dashboard.noSales' | translate }}">
         </app-data-table>
 
     </section>
@@ -338,11 +338,11 @@
         <div>
 
             <p class="section-kicker">
-                Revenue
+                {{ 'admin.dashboard.section.revenue.kicker' | translate }}
             </p>
 
             <h2>
-                Revenue Overview
+                {{ 'admin.dashboard.store.revenueOverview' | translate }}
             </h2>
 
         </div>
@@ -352,26 +352,26 @@
     <div class="dashboard-stats">
 
         <app-dashboard-stat-card
-            title="Total Revenue"
+            title="{{ 'admin.dashboard.store.totalRevenue' | translate }}"
             icon="payments"
             [value]="((data()?.totalRevenue ?? 0) | number:'1.2-2') + ' EGP'">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="Today's Revenue"
+            title="{{ 'admin.dashboard.store.todaysRevenue' | translate }}"
             icon="today"
             [value]="((data()?.todayRevenue ?? 0) | number:'1.2-2') + ' EGP'"
             [accent]="true">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="This Month"
+            title="{{ 'admin.dashboard.store.thisMonth' | translate }}"
             icon="calendar_month"
             [value]="((data()?.monthRevenue ?? 0) | number:'1.2-2') + ' EGP'">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="This Year"
+            title="{{ 'admin.dashboard.store.thisYear' | translate }}"
             icon="event"
             [value]="((data()?.yearRevenue ?? 0) | number:'1.2-2') + ' EGP'">
         </app-dashboard-stat-card>
@@ -385,11 +385,11 @@
             <div>
 
                 <p class="section-kicker">
-                    Revenue
+                    {{ 'admin.dashboard.section.revenue.kicker' | translate }}
                 </p>
 
                 <h3>
-                    Monthly Revenue Trend
+                    {{ 'admin.dashboard.chart.revenueTrend' | translate }}
                 </h3>
 
             </div>
@@ -410,11 +410,11 @@
         <div>
 
             <p class="section-kicker">
-                Orders
+                {{ 'admin.dashboard.section.orders.kicker' | translate }}
             </p>
 
             <h2>
-                Orders Overview
+                {{ 'admin.dashboard.store.ordersOverview' | translate }}
             </h2>
 
         </div>
@@ -424,26 +424,26 @@
     <div class="dashboard-stats">
 
         <app-dashboard-stat-card
-            title="Total Orders"
+            title="{{ 'admin.dashboard.store.totalOrders' | translate }}"
             icon="shopping_bag"
             [value]="data()?.totalOrders ?? 0">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="Pending"
+            title="{{ 'admin.dashboard.store.pending' | translate }}"
             icon="hourglass_top"
             [value]="data()?.pendingOrders ?? 0"
             [warning]="true">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="Delivered"
+            title="{{ 'admin.dashboard.store.delivered' | translate }}"
             icon="task_alt"
             [value]="data()?.deliveredOrders ?? 0">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="Cancelled"
+            title="{{ 'admin.dashboard.store.cancelled' | translate }}"
             icon="cancel"
             [value]="data()?.cancelledOrders ?? 0"
             [warning]="true">
@@ -458,11 +458,11 @@
             <div>
 
                 <p class="section-kicker">
-                    Orders
+                    {{ 'admin.dashboard.section.orders.kicker' | translate }}
                 </p>
 
                 <h3>
-                    Monthly Orders Trend
+                    {{ 'admin.dashboard.chart.ordersTrend' | translate }}
                 </h3>
 
             </div>
@@ -481,12 +481,13 @@
 
             <div>
 
+
                 <p class="section-kicker">
-                    Recent
+                    {{ 'admin.dashboard.section.recent.kicker' | translate }}
                 </p>
 
                 <h3>
-                    Latest Orders
+                    {{ 'admin.dashboard.section.orders.latest' | translate }}
                 </h3>
 
             </div>
@@ -495,7 +496,7 @@
                 routerLink="/admin/orders"
                 class="dashboard-link">
 
-                View All
+                {{ 'admin.dashboard.viewAll' | translate }}
 
             </a>
 
@@ -505,7 +506,7 @@
             [columns]="ordersColumns"
             [rows]="data()?.latestOrders || []"
             [isLoading]="false"
-            emptyMessage="No orders yet.">
+            emptyMessage="{{ 'admin.dashboard.noOrders' | translate }}">
         </app-data-table>
 
     </div>
@@ -518,11 +519,11 @@
         <div>
 
             <p class="section-kicker">
-                Catalog
+                  {{ 'admin.dashboard.section.catalog.kicker' | translate }}
             </p>
 
             <h2>
-                Products & Inventory
+{{ 'admin.dashboard.section.catalog.title' | translate }}
             </h2>
 
         </div>
@@ -530,44 +531,43 @@
     </div>
 
     <div class="dashboard-stats">
+<app-dashboard-stat-card
+    title="{{ 'admin.dashboard.metric.products' | translate }}"
+    icon="inventory_2"
+    [value]="data()?.totalProducts ?? 0">
+</app-dashboard-stat-card>
 
-        <app-dashboard-stat-card
-            title="Products"
-            icon="inventory_2"
-            [value]="data()?.totalProducts ?? 0">
-        </app-dashboard-stat-card>
+<app-dashboard-stat-card
+    title="{{ 'admin.dashboard.metric.brands' | translate }}"
+    icon="sell"
+    [value]="data()?.totalBrands ?? 0">
+</app-dashboard-stat-card>
 
-        <app-dashboard-stat-card
-            title="Brands"
-            icon="sell"
-            [value]="data()?.totalBrands ?? 0">
-        </app-dashboard-stat-card>
+<app-dashboard-stat-card
+    title="{{ 'admin.dashboard.metric.categories' | translate }}"
+    icon="category"
+    [value]="data()?.totalCategories ?? 0">
+</app-dashboard-stat-card>
 
-        <app-dashboard-stat-card
-            title="Categories"
-            icon="category"
-            [value]="data()?.totalCategories ?? 0">
-        </app-dashboard-stat-card>
+<app-dashboard-stat-card
+    title="{{ 'admin.dashboard.metric.discounts' | translate }}"
+    icon="local_offer"
+    [value]="data()?.activeDiscounts ?? 0">
+</app-dashboard-stat-card>
 
-        <app-dashboard-stat-card
-            title="Discounts"
-            icon="local_offer"
-            [value]="data()?.activeDiscounts ?? 0">
-        </app-dashboard-stat-card>
+<app-dashboard-stat-card
+    title="{{ 'admin.dashboard.metric.lowStock' | translate }}"
+    icon="warning"
+    [value]="data()?.lowStockProducts ?? 0"
+    [warning]="true">
+</app-dashboard-stat-card>
 
-        <app-dashboard-stat-card
-            title="Low Stock"
-            icon="warning"
-            [value]="data()?.lowStockProducts ?? 0"
-            [warning]="true">
-        </app-dashboard-stat-card>
-
-        <app-dashboard-stat-card
-            title="Out Of Stock"
-            icon="remove_shopping_cart"
-            [value]="data()?.outOfStockProducts ?? 0"
-            [warning]="true">
-        </app-dashboard-stat-card>
+<app-dashboard-stat-card
+    title="{{ 'admin.dashboard.metric.outOfStock' | translate }}"
+    icon="remove_shopping_cart"
+    [value]="data()?.outOfStockProducts ?? 0"
+    [warning]="true">
+</app-dashboard-stat-card>
 
     </div>
 
@@ -580,11 +580,11 @@
                 <div>
 
                     <p class="section-kicker">
-                        Categories
+    {{ 'admin.dashboard.section.categories.kicker' | translate }}
                     </p>
 
                     <h3>
-                        Top Categories
+    {{ 'admin.dashboard.section.categories.top' | translate }}
                     </h3>
 
                 </div>
@@ -604,12 +604,12 @@
                 <div>
 
                     <p class="section-kicker">
-                        Brands
-                    </p>
+    {{ 'admin.dashboard.section.brands.kicker' | translate }}
+</p>
 
-                    <h3>
-                        Top Brands
-                    </h3>
+<h3>
+    {{ 'admin.dashboard.section.brands.top' | translate }}
+</h3>
 
                 </div>
 
@@ -631,11 +631,11 @@
         <div>
 
             <p class="section-kicker">
-                Customers
+                {{ 'admin.dashboard.section.customers.kicker' | translate }}
             </p>
 
             <h2>
-                Customer Engagement
+                {{ 'admin.dashboard.section.customers.title' | translate }}
             </h2>
 
         </div>
@@ -647,25 +647,25 @@
     <div class="dashboard-stats">
 
         <app-dashboard-stat-card
-            title="Customers"
+            title="{{ 'admin.dashboard.metric.customers' | translate }}"
             icon="groups"
             [value]="data()?.totalCustomers ?? 0">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="Active Coupons"
+            title="{{ 'admin.dashboard.store.activeCoupons' | translate }}"
             icon="confirmation_number"
             [value]="data()?.activeCoupons ?? 0">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="Wishlist Items"
+            title="{{ 'admin.dashboard.store.wishlistItems' | translate }}"
             icon="favorite"
             [value]="data()?.wishlistItems ?? 0">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="Reviews"
+            title="{{ 'admin.dashboard.store.reviews' | translate }}"
             icon="star"
             [value]="data()?.totalReviews ?? 0">
         </app-dashboard-stat-card>
@@ -683,11 +683,11 @@
                 <div>
 
                     <p class="section-kicker">
-                        Products
+                        {{ 'admin.dashboard.section.products.kicker' | translate }}
                     </p>
 
                     <h3>
-                        Most Viewed
+                        {{ 'admin.dashboard.section.products.mostViewed' | translate }}
                     </h3>
 
                 </div>
@@ -698,7 +698,7 @@
                 [columns]="mostViewedColumns"
                 [rows]="mostViewedRows"
                 [isLoading]="false"
-                emptyMessage="No data found.">
+                emptyMessage="{{ 'admin.dashboard.noDataFound' | translate }}">
             </app-data-table>
 
         </div>
@@ -710,11 +710,11 @@
                 <div>
 
                     <p class="section-kicker">
-                        Products
+                        {{ 'admin.dashboard.section.products.kicker' | translate }}
                     </p>
 
                     <h3>
-                        Most Wishlisted
+                        {{ 'admin.dashboard.section.products.mostWishlisted' | translate }}
                     </h3>
 
                 </div>
@@ -725,7 +725,7 @@
                 [columns]="mostWishlistedColumns"
                 [rows]="mostWishlistedRows"
                 [isLoading]="false"
-                emptyMessage="No data found.">
+                emptyMessage="{{ 'admin.dashboard.noDataFound' | translate }}">
             </app-data-table>
 
         </div>
@@ -746,11 +746,11 @@
         <div>
 
             <p class="section-kicker">
-                Google Analytics
+                {{ 'admin.dashboard.analytics.kicker' | translate }}
             </p>
 
             <h2>
-                Visitor Insights
+                {{ 'admin.dashboard.analytics.title' | translate }}
             </h2>
 
         </div>
@@ -760,43 +760,43 @@
     <div class="dashboard-stats">
 
         <app-dashboard-stat-card
-            title="Active Users"
+            title="{{ 'admin.dashboard.metric.activeUsers' | translate }}"
             icon="groups"
             [value]="analytics()?.activeUsers ?? 0">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="New Users"
+            title="{{ 'admin.dashboard.metric.newUsers' | translate }}"
             icon="person_add"
             [value]="analytics()?.newUsers ?? 0">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="Sessions"
+            title="{{ 'admin.dashboard.metric.sessions' | translate }}"
             icon="analytics"
             [value]="analytics()?.sessions ?? 0">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="Views"
+            title="{{ 'admin.dashboard.metric.views' | translate }}"
             icon="visibility"
             [value]="analytics()?.views ?? 0">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="Bounce Rate"
+            title="{{ 'admin.dashboard.metric.bounceRate' | translate }}"
             icon="trending_down"
             [value]="((analytics()?.bounceRate ?? 0) * 100).toFixed(1) + '%'">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="Engagement"
+            title="{{ 'admin.dashboard.metric.engagement' | translate }}"
             icon="monitoring"
             [value]="((analytics()?.engagementRate ?? 0) * 100).toFixed(1) + '%'">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
-            title="Avg Session"
+            title="{{ 'admin.dashboard.metric.avgSession' | translate }}"
             icon="schedule"
             [value]="formatDuration(analytics()?.averageSessionDuration ?? 0)">
         </app-dashboard-stat-card>
@@ -811,11 +811,11 @@
             <div>
 
                 <p class="section-kicker">
-                    Visitors
+                    {{ 'admin.dashboard.section.visitors.kicker' | translate }}
                 </p>
 
                 <h3>
-                    Daily Users
+                    {{ 'admin.dashboard.chart.dailyUsers' | translate }}
                 </h3>
 
             </div>
@@ -835,11 +835,11 @@
             <div>
 
                 <p class="section-kicker">
-                    Sessions
+                    {{ 'admin.dashboard.section.sessions.kicker' | translate }}
                 </p>
 
                 <h3>
-                    Daily Sessions
+                    {{ 'admin.dashboard.chart.dailySessions' | translate }}
                 </h3>
 
             </div>
@@ -864,11 +864,11 @@
             <div>
 
                 <p class="section-kicker">
-                    Audience
+                    {{ 'admin.dashboard.section.audience.kicker' | translate }}
                 </p>
 
                 <h3>
-                    Top Countries
+                    {{ 'admin.dashboard.section.audience.topCountries' | translate }}
                 </h3>
 
             </div>
@@ -879,7 +879,7 @@
             [columns]="countriesColumns"
             [rows]="countriesRows"
             [isLoading]="false"
-            emptyMessage="No data available.">
+            emptyMessage="{{ 'admin.dashboard.noDataAvailable' | translate }}">
         </app-data-table>
 
     </div>
@@ -893,11 +893,11 @@
             <div>
 
                 <p class="section-kicker">
-                    Devices
+                    {{ 'admin.dashboard.section.devices.kicker' | translate }}
                 </p>
 
                 <h3>
-                    Device Categories
+                    {{ 'admin.dashboard.section.devices.categories' | translate }}
                 </h3>
 
             </div>
@@ -908,7 +908,7 @@
             [columns]="devicesColumns"
             [rows]="devicesRows"
             [isLoading]="false"
-            emptyMessage="No data available.">
+            emptyMessage="{{ 'admin.dashboard.noDataAvailable' | translate }}">
         </app-data-table>
 
     </div>
@@ -925,11 +925,11 @@
             <div>
 
                 <p class="section-kicker">
-                    Traffic
+                    {{ 'admin.dashboard.section.traffic.kicker' | translate }}
                 </p>
 
                 <h3>
-                    Traffic Sources
+                    {{ 'admin.dashboard.section.traffic.sources' | translate }}
                 </h3>
 
             </div>
@@ -940,7 +940,7 @@
             [columns]="trafficColumns"
             [rows]="trafficRows"
             [isLoading]="false"
-            emptyMessage="No data available.">
+            emptyMessage="{{ 'admin.dashboard.noDataAvailable' | translate }}">
         </app-data-table>
 
     </div>
@@ -954,11 +954,11 @@
             <div>
 
                 <p class="section-kicker">
-                    Content
+                    {{ 'admin.dashboard.section.content.kicker' | translate }}
                 </p>
 
                 <h3>
-                    Top Pages
+                    {{ 'admin.dashboard.section.content.topPages' | translate }}
                 </h3>
 
             </div>
@@ -969,7 +969,7 @@
             [columns]="pagesColumns"
             [rows]="pagesRows"
             [isLoading]="false"
-            emptyMessage="No data available.">
+            emptyMessage="{{ 'admin.dashboard.noDataAvailable' | translate }}">
         </app-data-table>
 
     </div>

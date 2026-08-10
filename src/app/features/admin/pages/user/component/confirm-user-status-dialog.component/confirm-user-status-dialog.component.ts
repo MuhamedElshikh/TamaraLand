@@ -1,11 +1,12 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserResponse } from '../../../../../../core/models/user.models';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-confirm-user-status-dialog',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,TranslatePipe],
   templateUrl: './confirm-user-status-dialog.component.html',
   styleUrl: './confirm-user-status-dialog.component.css',
 })

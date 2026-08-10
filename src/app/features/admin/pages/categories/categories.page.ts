@@ -6,13 +6,14 @@ import { PaginationComponent } from '../../../../shared/pagination/pagination';
 import { AdminCatalogService } from '../../../../core/services/admin-catalog.service';
 import { CategoryResponse, CategoryFilterRequest } from '../../../../core/models/catalog.models';
 import { CreateCategoryRequest, UpdateCategoryRequest } from '../../../../core/models/domain.models';
+import { TranslatePipe } from '@ngx-translate/core';
 
 const PAGE_SIZE = 10;
 
 @Component({
   selector: 'app-admin-categories',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, DataTableComponent, PaginationComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, DataTableComponent, PaginationComponent,TranslatePipe],
   templateUrl: './categories.page.html',
   styleUrl: './categories.page.css',
 })
@@ -53,30 +54,30 @@ export class AdminCategoriesPage implements OnInit {
  readonly columns: DataTableColumn<CategoryResponse>[] = [
   {
     key: 'imageUrl',
-    header: 'Image',
+    header: 'admin.categories.columns.image',
     type: 'image',
     accessor: r => r.imageUrl || '',
   },
 
   {
     key: 'name',
-    header: 'English Name',
+    header: 'admin.categories.columns.englishName',
   },
 
   {
     key: 'arabicName',
-    header: 'Arabic Name',
+    header: 'admin.categories.columns.arabicName',
   },
 
   {
     key: 'isPublished',
-    header: 'Published',
+    header: 'admin.categories.columns.published',
     type: 'boolean',
   },
 
   {
     key: 'description',
-    header: 'Description',
+    header: 'admin.categories.columns.description',
     accessor: r => r.description || '—',
   },
 ];

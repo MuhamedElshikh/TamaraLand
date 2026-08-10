@@ -1,7 +1,7 @@
 <div class="admin-page">
   <header class="admin-page__header">
     <div class="header-title-group">
-      <a routerLink="/admin/products" class="btn-back" title="Back to Products">
+      <a routerLink="/admin/products" class="btn-back" [title]="'admin.products.backToList' | translate">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="19" y1="12" x2="5" y2="12"></line>
           <polyline points="12 19 5 12 12 5"></polyline>
@@ -9,10 +9,10 @@
       </a>
       <div>
         <h1 class="admin-page__title">
-          {{ isEditMode() ? 'Edit Product' : 'Create New Product' }}
+          {{ isEditMode() ? ('admin.products.edit' | translate) : ('admin.products.add' | translate) }}
         </h1>
         <p class="admin-page__subtitle">
-          {{ isEditMode() ? 'Update product details, variants and gallery images' : 'Fill in product info and add variants before saving' }}
+          {{ 'admin.products.subtitle' | translate }}
         </p>
       </div>
     </div>
@@ -240,12 +240,12 @@
     <div class="form-actions mb-4">
       <button type="submit" class="btn btn-primary" [disabled]="isSubmitting()">
         @if (isSubmitting()) {
-          <span class="spinner-sm"></span> Saving Product...
+          <span class="spinner-sm"></span> {{ 'admin.products.savingProduct' | translate }}
         } @else {
-          {{ isEditMode() ? 'Update Product' : 'Create Product' }}
+          {{ isEditMode() ? ('admin.products.edit' | translate) : ('admin.products.add' | translate) }}
         }
       </button>
-      <a routerLink="/admin/products" class="btn btn-secondary">Cancel</a>
+      <a routerLink="/admin/products" class="btn btn-secondary">{{ 'admin.labels.cancel' | translate }}</a>
     </div>
   </form>
 

@@ -1503,3 +1503,89 @@ app-error-message .error-message {
     margin-top: 0;
   }
 }
+
+/* ---- Admin RTL ---- */
+
+html[dir='rtl'] .admin-layout,
+html[dir='rtl'] .admin-layout input,
+html[dir='rtl'] .admin-layout select,
+html[dir='rtl'] .admin-layout textarea {
+  direction: rtl;
+}
+
+html[dir='rtl'] .admin-layout .admin-page__header,
+html[dir='rtl'] .admin-layout .admin-page__hero,
+html[dir='rtl'] .admin-layout .filters-grid,
+html[dir='rtl'] .admin-layout .field-grid,
+html[dir='rtl'] .admin-layout .modal-actions,
+html[dir='rtl'] .admin-layout .admin-page__row-actions {
+  text-align: start;
+}
+
+html[dir='rtl'] .admin-layout .input-with-icon .input-icon {
+  left: auto;
+  right: 14px;
+}
+
+html[dir='rtl'] .admin-layout .input-with-icon .form-control {
+  padding-left: 0.875rem;
+  padding-right: 42px;
+}
+
+html[dir='rtl'] .admin-layout .data-table__align-left { text-align: right; }
+
+/* Admin sidebar RTL fixes */
+html[dir='rtl'] .admin-sidebar {
+  right: 0;
+  left: auto;
+  border-left: 1px solid var(--border-color);
+  border-right: none;
+}
+
+html[dir='rtl'] .admin-sidebar__brand { padding-right: 1.1rem; padding-left: 0; }
+
+html[dir='rtl'] .admin-sidebar__link { direction: rtl; }
+
+html[dir='rtl'] .admin-sidebar__link::before {
+  left: auto;
+  right: 0;
+}
+
+html[dir='rtl'] .admin-sidebar__link:hover .admin-sidebar__icon{
+  transform: translateX(-5px);
+}
+
+/* Mobile variants: slide from right */
+@media (max-width: 992px) {
+  html[dir='rtl'] .admin-sidebar {
+    transform: translateX(100%);
+    left: auto;
+    right: 0;
+  }
+
+  html[dir='rtl'] .admin-sidebar--open {
+    transform: translateX(0);
+  }
+
+  html[dir='rtl'] .admin-sidebar__close {
+    right: auto;
+    left: 0;
+  }
+}
+
+/* Dashboard card header and layout logical alignment */
+html[dir='rtl'] .dashboard-card__header,
+html[dir='rtl'] .dashboard-section__header {
+  justify-content: space-between;
+}
+
+html[dir='rtl'] .admin-layout .data-table__align-right { text-align: left; }
+
+html[dir='rtl'] .admin-layout .admin-sidebar {
+  border-left: 1px solid var(--border-color);
+  border-right: 0;
+}
+
+@media (max-width: 980px) {
+  html[dir='rtl'] .admin-layout .admin-sidebar { right: 0; left: auto; }
+}

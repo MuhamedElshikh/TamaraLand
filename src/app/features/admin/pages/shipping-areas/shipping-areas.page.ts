@@ -6,12 +6,14 @@ import { AdminShippingAreaService } from '../../../../core/services/AdminShippin
 import { ShippingAreaAdminResponse } from '../../../../core/models/domain.models';
 import { extractErrorMessage } from '../../../../core/utils/error-message.util'; // عدّل المسار
 
+import { TranslateModule, TranslatePipe } from '@ngx-translate/core';
+
 const PAGE_SIZE = 15;
 
 @Component({
   selector: 'app-admin-shipping-areas-page',
   standalone: true,
-  imports: [ReactiveFormsModule, DataTableComponent, PaginationComponent],
+  imports: [ReactiveFormsModule, DataTableComponent, PaginationComponent, TranslatePipe],
   templateUrl: './shipping-areas.page.html',
   styleUrl: './shipping-areas.page.css',
 })

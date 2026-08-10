@@ -3,11 +3,11 @@
   <header class="admin-page__header">
     <div>
       <h1 class="admin-page__title">
-        Store Settings
+        {{ 'admin.storeSettings.title' | translate }}
       </h1>
 
       <p class="admin-page__subtitle">
-        Configure your store information.
+        {{ 'admin.storeSettings.subtitle' | translate }}
       </p>
     </div>
   </header>
@@ -28,7 +28,7 @@
 
     <div class="loading-placeholder">
 
-      Loading...
+      {{ 'admin.storeSettings.loading' | translate }}
 
     </div>
 
@@ -41,14 +41,14 @@
 <div class="scaffold-card">
 
 <h2 class="card-title">
-General
+{{ 'admin.storeSettings.sections.general.title' | translate }}
 </h2>
 
 <div class="form-grid">
 
 <div class="form-group">
 <label class="form-label">
-Store Name
+{{ 'admin.storeSettings.fields.storeName' | translate }}
 </label>
 
 <input
@@ -58,7 +58,7 @@ formControlName="storeName">
 
 <div class="form-group">
 <label class="form-label">
-Arabic Name
+{{ 'admin.storeSettings.fields.arabicName' | translate }}
 </label>
 
 <input
@@ -69,7 +69,7 @@ formControlName="storeArabicName">
 
 <div class="form-group">
 <label class="form-label">
-Support Email
+{{ 'admin.storeSettings.fields.supportEmail' | translate }}
 </label>
 
 <input
@@ -80,7 +80,7 @@ formControlName="supportEmail">
 
 <div class="form-group">
 <label class="form-label">
-Support Phone
+{{ 'admin.storeSettings.fields.supportPhone' | translate }}
 </label>
 
 <input
@@ -92,7 +92,7 @@ formControlName="supportPhone">
 
 <label class="form-label">
 
-Address
+{{ 'admin.storeSettings.fields.address' | translate }}
 
 </label>
 
@@ -110,7 +110,7 @@ formControlName="address">
 
 <h2 class="card-title">
 
-Store Configuration
+{{ 'admin.storeSettings.sections.config.title' | translate }}
 
 </h2>
 
@@ -118,7 +118,7 @@ Store Configuration
 
 <div class="form-group">
 <label class="form-label">
-Currency
+{{ 'admin.storeSettings.fields.currency' | translate }}
 </label>
 
 <input
@@ -128,7 +128,7 @@ formControlName="currency">
 
 <div class="form-group">
 <label class="form-label">
-Currency Symbol
+{{ 'admin.storeSettings.fields.currencySymbol' | translate }}
 </label>
 
 <input
@@ -138,7 +138,7 @@ formControlName="currencySymbol">
 
 <div class="form-group">
 <label class="form-label">
-Shipping Cost
+{{ 'admin.storeSettings.fields.shippingCost' | translate }}
 </label>
 
 <input
@@ -149,7 +149,7 @@ formControlName="shippingCost">
 
 <div class="form-group">
 <label class="form-label">
-Free Shipping
+{{ 'admin.storeSettings.fields.freeShippingThreshold' | translate }}
 </label>
 
 <input
@@ -160,7 +160,7 @@ formControlName="freeShippingThreshold">
 
 <div class="form-group">
 <label class="form-label">
-Tax %
+{{ 'admin.storeSettings.fields.taxPercentage' | translate }}
 </label>
 
 <input
@@ -179,7 +179,7 @@ formControlName="maintenanceMode">
 
 <span>
 
-Maintenance Mode
+{{ 'admin.storeSettings.fields.maintenanceMode' | translate }}
 
 </span>
 
@@ -195,7 +195,7 @@ Maintenance Mode
 
 <h2 class="card-title">
 
-Social Links
+{{ 'admin.storeSettings.sections.social.title' | translate }}
 
 </h2>
 
@@ -203,7 +203,7 @@ Social Links
 
 <div class="form-group">
 <label class="form-label">
-Facebook
+{{ 'admin.storeSettings.fields.facebook' | translate }}
 </label>
 
 <input
@@ -213,7 +213,7 @@ formControlName="facebookUrl">
 
 <div class="form-group">
 <label class="form-label">
-Instagram
+{{ 'admin.storeSettings.fields.instagram' | translate }}
 </label>
 
 <input
@@ -223,7 +223,7 @@ formControlName="instagramUrl">
 
 <div class="form-group">
 <label class="form-label">
-WhatsApp
+{{ 'admin.storeSettings.fields.whatsapp' | translate }}
 </label>
 
 <input
@@ -244,11 +244,11 @@ type="submit"
 
 @if (isSubmitting()) {
 
-Saving...
+{{ 'admin.storeSettings.saving' | translate }}
 
 } @else {
 
-Save Settings
+{{ 'admin.storeSettings.save' | translate }}
 
 }
 

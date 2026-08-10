@@ -10,28 +10,21 @@
 
   @if (user(); as u) {
 
-    <h2>Change User Role</h2>
+    <h2>{{ 'admin.users.changeRoleTitle' | translate }}</h2>
 
     <p>
-      Select a new role for
+      {{ 'admin.users.selectRoleFor' | translate }}
       <strong>{{ u.fullName }}</strong>.
     </p>
 
     <label>
-
-      Role
-
+      {{ 'admin.users.roleLabel' | translate }}
       <select
         [ngModel]="role()"
         (ngModelChange)="role.set($event)">
 
-        <option value="Admin">
-          Admin
-        </option>
-
-        <option value="Customer">
-          Customer
-        </option>
+        <option value="Admin">{{ 'admin.users.roles.admin' | translate }}</option>
+        <option value="Customer">{{ 'admin.users.roles.customer' | translate }}</option>
 
       </select>
 
@@ -43,7 +36,7 @@
         class="btn btn-secondary"
         (click)="close.emit()">
 
-        Cancel
+        {{ 'admin.labels.cancel' | translate }}
 
       </button>
 
@@ -51,7 +44,7 @@
         class="btn btn-primary"
         (click)="submit()">
 
-        Save
+        {{ 'admin.labels.saveChanges' | translate }}
 
       </button>
 

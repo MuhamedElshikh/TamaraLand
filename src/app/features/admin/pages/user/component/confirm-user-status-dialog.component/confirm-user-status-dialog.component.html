@@ -11,15 +11,15 @@
   @if (user(); as u) {
 
     <h2>
-      {{ u.isActive ? 'Deactivate User' : 'Activate User' }}
+      {{ u.isActive ? ('admin.users.deactivateUserTitle' | translate) : ('admin.users.activateUserTitle' | translate) }}
     </h2>
 
     <p>
 
-      Are you sure you want to
+      {{ 'admin.users.confirmAction' | translate }}
 
       <strong>
-        {{ u.isActive ? 'deactivate' : 'activate' }}
+        {{ u.isActive ? ('admin.users.disable' | translate) : ('admin.users.activate' | translate) }}
       </strong>
 
       <strong>{{ u.fullName }}</strong>?
@@ -32,7 +32,7 @@
         class="btn btn-secondary"
         (click)="close.emit()">
 
-        Cancel
+        {{ 'admin.labels.cancel' | translate }}
 
       </button>
 
@@ -42,7 +42,7 @@
         [class.btn-success]="!u.isActive"
         (click)="submit()">
 
-        {{ u.isActive ? 'Deactivate' : 'Activate' }}
+        {{ u.isActive ? ('admin.users.disable' | translate) : ('admin.users.activate' | translate) }}
 
       </button>
 

@@ -35,7 +35,7 @@
 
       <div class="drawer__item">
 
-        <span>Role</span>
+        <span>{{ 'admin.users.drawer.role' | translate }}</span>
 
         <app-status-badge
           [label]="u.role">
@@ -45,17 +45,17 @@
 
       <div class="drawer__item">
 
-        <span>Status</span>
+        <span>{{ 'admin.users.drawer.status' | translate }}</span>
 
         <app-status-badge
-          [label]="u.isActive ? 'Active' : 'Inactive'">
+          [label]="u.isActive ? ('common.active' | translate) : ('common.inactive' | translate)">
         </app-status-badge>
 
       </div>
 
       <div class="drawer__item">
 
-        <span>Phone</span>
+        <span>{{ 'admin.users.drawer.phone' | translate }}</span>
 
         <strong>{{ u.phoneNumber || '-' }}</strong>
 
@@ -63,7 +63,7 @@
 
       <div class="drawer__item">
 
-        <span>Joined</span>
+        <span>{{ 'admin.users.drawer.joined' | translate }}</span>
 
         <strong>{{ u.createdAt | date:'mediumDate' }}</strong>
 
@@ -77,7 +77,7 @@
         class="btn btn-primary"
         (click)="changeRole.emit(u)">
 
-        Change Role
+        {{ 'admin.users.changeRoleButton' | translate }}
 
       </button>
 
@@ -90,7 +90,7 @@
 
         (click)="toggleStatus.emit(u)">
 
-        {{ u.isActive ? 'Deactivate' : 'Activate' }}
+        {{ (u.isActive ? 'admin.users.disable' : 'admin.users.activate') | translate }}
 
       </button>
 

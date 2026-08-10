@@ -39,16 +39,22 @@
     width:30px;
 
     height:30px;
+    
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
 
 }
 
 @media(min-width:768px){
 
     .floating-whatsapp{
+   
+        display:none;
 
-               display:none;
-
-    }
+                      }
 
 }
 @keyframes whatsappPulse{

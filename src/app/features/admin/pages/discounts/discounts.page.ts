@@ -6,6 +6,8 @@ import { CatalogService } from '../../../../core/services/catalog.service';
 import { DiscountResponse } from '../../../../core/models/domain.models';
 import { extractErrorMessage } from '../../../../core/utils/error-message.util'; // عدّل المسار
 
+import { TranslateModule, TranslatePipe } from '@ngx-translate/core';
+
 const DISCOUNT_TYPE_LABELS: Record<number, string> = { 0: 'Percentage', 1: 'Fixed amount' };
 const TARGET_LABELS: Record<number, string> = { 0: 'Product', 1: 'Category', 2: 'Brand' };
 
@@ -16,7 +18,7 @@ interface DiscountRow extends DiscountResponse {
 @Component({
   selector: 'app-admin-discounts-page',
   standalone: true,
-  imports: [ReactiveFormsModule, DataTableComponent],
+  imports: [ReactiveFormsModule, DataTableComponent, TranslatePipe],
   templateUrl: './discounts.page.html',
   styleUrl: './discounts.page.css',
 })

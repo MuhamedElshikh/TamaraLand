@@ -1,340 +1,670 @@
-import {Component,computed,effect,inject,signal} from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
+
 import { CommonModule } from '@angular/common';
-import {NonNullableFormBuilder ,ReactiveFormsModule,Validators,AbstractControl,ValidationErrors} from '@angular/forms';
-import {BannerResponse,BannerType,UpsertBannerRequest} from '../../../../core/models/banner.models';
+
+import {
+  AbstractControl,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
+
+import {
+  BannerResponse,
+  BannerType,
+  UpsertBannerRequest,
+} from '../../../../core/models/banner.models';
+
 import { AdminBannerService } from '../../../../core/services/admn-banner.service';
-import { ActivatedRoute, Router } from '@angular/router';
+
+import {
+  ActivatedRoute,
+  Router,
+} from '@angular/router';
+
+import { TranslatePipe } from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-banner-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslatePipe,
+  ],
+
   templateUrl: './banner-form.component.html',
   styleUrl: './banner-form.component.css',
 })
 export class BannerFormComponent {
-private readonly fb = inject(NonNullableFormBuilder);
-private readonly bannerService = inject(AdminBannerService);
- readonly router = inject(Router);
-private readonly route = inject(ActivatedRoute);
-readonly banner = signal<BannerResponse | null>(null);
 
-readonly isSaving = signal(false);
+  private readonly fb = inject(NonNullableFormBuilder);
 
-readonly errorMessage = signal<string | null>(null);
-  readonly desktopPreview = signal<string | null>(null);
+  private readonly bannerService =
+    inject(AdminBannerService);
 
-  readonly mobilePreview = signal<string | null>(null);
+  readonly router = inject(Router);
 
-  readonly desktopDragging = signal(false);
+  private readonly route =
+    inject(ActivatedRoute);
 
-  readonly mobileDragging = signal(false);
+
+  // =========================================================
+  // State
+  // =========================================================
+
+  readonly banner =
+    signal<BannerResponse | null>(null);
+
+  readonly isSaving =
+    signal(false);
+
+  readonly errorMessage =
+    signal<string | null>(null);
+
+  readonly desktopPreview =
+    signal<string | null>(null);
+
+  readonly mobilePreview =
+    signal<string | null>(null);
+
+  readonly desktopDragging =
+    signal(false);
+
+  readonly mobileDragging =
+    signal(false);
+
+
+  // =========================================================
+  // Files
+  // =========================================================
 
   private desktopImage?: File;
 
   private mobileImage?: File;
 
-  readonly isEdit = computed(() => this.banner() !== null);
+
+  // =========================================================
+  // Computed
+  // =========================================================
+
+  readonly isEdit = computed(
+    () => this.banner() !== null
+  );
+
+
+  // =========================================================
+  // Banner Types
+  // =========================================================
 
   readonly bannerTypes = [
+
     {
       value: BannerType.HeroSlider,
-      text: 'Hero Slider',
+      textKey: 'banners.types.heroSlider',
     },
+
     {
       value: BannerType.HomeBanner,
-      text: 'Home Banner',
+      textKey: 'banners.types.homeBanner',
     },
+
     {
       value: BannerType.OfferBanner,
-      text: 'Offer Banner',
+      textKey: 'banners.types.offerBanner',
     },
+
     {
       value: BannerType.CategoryBanner,
-      text: 'Category Banner',
+      textKey: 'banners.types.categoryBanner',
     },
+
   ];
-private loadBanner(id: number): void {
 
-  this.bannerService.getById(id).subscribe({
 
-    next: (res) => {
+  // =========================================================
+  // Form
+  // =========================================================
 
-      if (!res.success || !res.data) {
-        this.router.navigate(['/admin/banners']);
+  readonly form = this.fb.group(
+
+    {
+      title: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(150),
+        ],
+      ],
+
+      description: [
+        '',
+        Validators.maxLength(1000),
+      ],
+
+      link: [
+        '',
+      ],
+
+      type: [
+        BannerType.HeroSlider,
+        Validators.required,
+      ],
+
+      displayOrder: [
+        1,
+        [
+          Validators.required,
+          Validators.min(1),
+        ],
+      ],
+
+      isActive: [
+        true,
+      ],
+
+      startDate: [
+        '',
+      ],
+
+      endDate: [
+        '',
+      ],
+    },
+
+    {
+      validators: this.dateValidator,
+    }
+
+  );
+
+
+  // =========================================================
+  // Constructor
+  // =========================================================
+
+  constructor() {
+
+    const id =
+      Number(
+        this.route.snapshot.paramMap.get('id')
+      );
+
+
+    if (id) {
+      this.loadBanner(id);
+    }
+
+
+    effect(() => {
+
+      const banner = this.banner();
+
+      if (!banner) {
         return;
       }
 
-      this.banner.set(res.data);
 
-    },
+      this.form.patchValue({
 
-    error: () => {
+        title: banner.title,
 
-      this.router.navigate(['/admin/banners']);
+        description:
+          banner.description ?? '',
 
-    },
+        link:
+          banner.link ?? '',
 
-  });
+        type:
+          banner.type,
 
-}
- readonly form = this.fb.group(
-  {
-    title: ['', [Validators.required, Validators.maxLength(150)]],
-    description: ['', Validators.maxLength(1000)],
-    link: [''],
-    type: [BannerType.HeroSlider, Validators.required],
-    displayOrder: [1, [Validators.required, Validators.min(1)]],
-    isActive: [true],
-    startDate: [''],
-    endDate: [''],
-  },
-  {
-    validators: this.dateValidator,
-  }
-);
+        displayOrder:
+          banner.displayOrder,
 
- constructor() {
+        isActive:
+          banner.isActive,
 
-  const id = Number(this.route.snapshot.paramMap.get('id'));
+        startDate:
+          banner.startDate?.substring(0, 10) ?? '',
 
-  if (id) {
+        endDate:
+          banner.endDate?.substring(0, 10) ?? '',
 
-    this.loadBanner(id);
+      });
 
-  }
 
-  effect(() => {
+      this.desktopPreview.set(
+        banner.imageUrl
+      );
 
-    const banner = this.banner();
 
-    if (!banner) return;
-
-    this.form.patchValue({
-
-      title: banner.title,
-      description: banner.description ?? '',
-      link: banner.link ?? '',
-      type: banner.type,
-      displayOrder: banner.displayOrder,
-      isActive: banner.isActive,
-      startDate: banner.startDate?.substring(0, 10) ?? '',
-      endDate: banner.endDate?.substring(0, 10) ?? '',
+      this.mobilePreview.set(
+        banner.mobileImageUrl ?? null
+      );
 
     });
 
-    this.desktopPreview.set(banner.imageUrl);
-
-    this.mobilePreview.set(banner.mobileImageUrl ?? null);
-
-  });
-
-}
-
-  // =========================
-  // Desktop Image
-  // =========================
-
-  desktopSelected(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-
-    this.setDesktopImage(file);
   }
 
-  desktopDrop(event: DragEvent) {
+
+  // =========================================================
+  // Load Banner
+  // =========================================================
+
+  private loadBanner(id: number): void {
+
+    this.bannerService
+      .getById(id)
+      .subscribe({
+
+        next: (res) => {
+
+          if (!res.success || !res.data) {
+
+            this.router.navigate(
+              ['/admin/banners']
+            );
+
+            return;
+          }
+
+
+          this.banner.set(
+            res.data
+          );
+
+        },
+
+
+        error: () => {
+
+          this.router.navigate(
+            ['/admin/banners']
+          );
+
+        },
+
+      });
+
+  }
+
+
+  // =========================================================
+  // Desktop Image
+  // =========================================================
+
+  desktopSelected(event: Event): void {
+
+    const file =
+      (event.target as HTMLInputElement)
+        .files?.[0];
+
+
+    this.setDesktopImage(file);
+
+  }
+
+
+  desktopDrop(event: DragEvent): void {
+
     event.preventDefault();
 
     this.desktopDragging.set(false);
 
-    const file = event.dataTransfer?.files?.[0];
+
+    const file =
+      event.dataTransfer?.files?.[0];
+
 
     this.setDesktopImage(file);
+
   }
 
-  removeDesktopImage() {
-  this.desktopImage = undefined;
-  this.desktopPreview.set(null);
-}
 
-  // =========================
+  removeDesktopImage(): void {
+
+    this.desktopImage =
+      undefined;
+
+    this.desktopPreview.set(
+      null
+    );
+
+  }
+
+
+  // =========================================================
   // Mobile Image
-  // =========================
+  // =========================================================
 
-  mobileSelected(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
+  mobileSelected(event: Event): void {
+
+    const file =
+      (event.target as HTMLInputElement)
+        .files?.[0];
+
 
     this.setMobileImage(file);
+
   }
 
-  mobileDrop(event: DragEvent) {
+
+  mobileDrop(event: DragEvent): void {
+
     event.preventDefault();
 
     this.mobileDragging.set(false);
 
-    const file = event.dataTransfer?.files?.[0];
+
+    const file =
+      event.dataTransfer?.files?.[0];
+
 
     this.setMobileImage(file);
+
   }
 
- removeMobileImage(): void {
-  this.mobileImage = undefined;
-  this.mobilePreview.set(null);
-}
 
-  // =========================
+  removeMobileImage(): void {
+
+    this.mobileImage =
+      undefined;
+
+    this.mobilePreview.set(
+      null
+    );
+
+  }
+
+
+  // =========================================================
+  // Submit
+  // =========================================================
 
   submit(): void {
 
-  if (this.form.invalid) {
+    if (this.form.invalid) {
 
-    this.form.markAllAsTouched();
+      this.form.markAllAsTouched();
 
-    return;
+      return;
+    }
 
-  }
 
-  this.errorMessage.set(null);
+    this.errorMessage.set(
+      null
+    );
 
-  this.isSaving.set(true);
+    this.isSaving.set(
+      true
+    );
 
-  const request: UpsertBannerRequest = {
 
-    ...this.form.getRawValue(),
+    const request: UpsertBannerRequest = {
 
-    image: this.desktopImage,
+      ...this.form.getRawValue(),
 
-    mobileImage: this.mobileImage,
+      image:
+        this.desktopImage,
 
-  };
+      mobileImage:
+        this.mobileImage,
 
-  if (this.isEdit()) {
+    };
 
-    const id = this.banner()!.id;
 
-    this.bannerService.update(id, request).subscribe({
+    // =======================================================
+    // Update
+    // =======================================================
 
-      next: (res) => {
+    if (this.isEdit()) {
 
-        this.isSaving.set(false);
+      const id =
+        this.banner()!.id;
 
-        if (res.success) {
 
-          this.router.navigate(['/admin/banners']);
+      this.bannerService
+        .update(id, request)
+        .subscribe({
 
-        } else {
+          next: (res) => {
 
-          this.errorMessage.set(
-            res.message ?? 'Failed to update banner.'
+            this.isSaving.set(
+              false
+            );
+
+
+            if (res.success) {
+
+              this.router.navigate(
+                ['/admin/banners']
+              );
+
+              return;
+            }
+
+
+            this.errorMessage.set(
+              res.message ??
+              'banners.errors.update'
+            );
+
+          },
+
+
+          error: (err) => {
+
+            this.isSaving.set(
+              false
+            );
+
+
+            this.errorMessage.set(
+              err?.error?.message ??
+              'banners.errors.update'
+            );
+
+          },
+
+        });
+
+
+      return;
+    }
+
+
+    // =======================================================
+    // Create
+    // =======================================================
+
+    this.bannerService
+      .create(request)
+      .subscribe({
+
+        next: (res) => {
+
+          this.isSaving.set(
+            false
           );
 
-        }
 
-      },
+          if (res.success) {
 
-      error: (err) => {
+            this.router.navigate(
+              ['/admin/banners']
+            );
 
-        this.isSaving.set(false);
+            return;
+          }
 
-        this.errorMessage.set(
-          err?.error?.message ?? 'Failed to update banner.'
-        );
-
-      },
-
-    });
-
-  } else {
-
-    this.bannerService.create(request).subscribe({
-
-      next: (res) => {
-
-        this.isSaving.set(false);
-
-        if (res.success) {
-
-          this.router.navigate(['/admin/banners']);
-
-        } else {
 
           this.errorMessage.set(
-            res.message ?? 'Failed to create banner.'
+            res.message ??
+            'banners.errors.create'
           );
 
-        }
+        },
 
-      },
 
-      error: (err) => {
+        error: (err) => {
 
-        this.isSaving.set(false);
+          this.isSaving.set(
+            false
+          );
 
-        this.errorMessage.set(
-          err?.error?.message ?? 'Failed to create banner.'
-        );
 
-      },
+          this.errorMessage.set(
+            err?.error?.message ??
+            'banners.errors.create'
+          );
 
-    });
+        },
+
+      });
 
   }
 
-}
-  // =========================
 
-  private setDesktopImage(file?: File) {
-    if (!file) return;
+  // =========================================================
+  // Set Desktop Image
+  // =========================================================
 
-    if (!this.validateImage(file)) return;
+  private setDesktopImage(
+    file?: File
+  ): void {
 
-    this.desktopImage = file;
+    if (!file) {
+      return;
+    }
 
-    this.desktopPreview.set(URL.createObjectURL(file));
+
+    if (!this.validateImage(file)) {
+      return;
+    }
+
+
+    this.desktopImage =
+      file;
+
+
+    this.desktopPreview.set(
+      URL.createObjectURL(file)
+    );
+
   }
 
-  private setMobileImage(file?: File) {
-    if (!file) return;
 
-    if (!this.validateImage(file)) return;
+  // =========================================================
+  // Set Mobile Image
+  // =========================================================
 
-    this.mobileImage = file;
+  private setMobileImage(
+    file?: File
+  ): void {
 
-    this.mobilePreview.set(URL.createObjectURL(file));
+    if (!file) {
+      return;
+    }
+
+
+    if (!this.validateImage(file)) {
+      return;
+    }
+
+
+    this.mobileImage =
+      file;
+
+
+    this.mobilePreview.set(
+      URL.createObjectURL(file)
+    );
+
   }
 
-  private validateImage(file: File): boolean {
+
+  // =========================================================
+  // Validate Image
+  // =========================================================
+
+  private validateImage(
+    file: File
+  ): boolean {
+
     const allowed = [
+
       'image/jpeg',
+
       'image/png',
+
       'image/webp',
+
     ];
 
+
     if (!allowed.includes(file.type)) {
-      alert('Only JPG, PNG and WEBP images are allowed.');
+
+      alert(
+        'banners.errors.invalidImageType'
+      );
 
       return false;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      alert('Maximum image size is 5 MB.');
+
+    if (
+      file.size >
+      5 * 1024 * 1024
+    ) {
+
+      alert(
+        'banners.errors.imageTooLarge'
+      );
 
       return false;
     }
+
 
     return true;
+
   }
+
+
+  // =========================================================
+  // Date Validator
+  // =========================================================
 
   private dateValidator(
     control: AbstractControl
   ): ValidationErrors | null {
-    const start = control.get('startDate')?.value;
 
-    const end = control.get('endDate')?.value;
+    const start =
+      control.get('startDate')?.value;
 
-    if (!start || !end) return null;
+    const end =
+      control.get('endDate')?.value;
+
+
+    if (!start || !end) {
+      return null;
+    }
+
 
     return new Date(start) <= new Date(end)
       ? null
-      : { invalidDateRange: true };
+      : {
+          invalidDateRange: true,
+        };
+
   }
+
 }

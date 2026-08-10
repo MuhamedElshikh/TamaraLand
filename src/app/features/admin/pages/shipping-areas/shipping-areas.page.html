@@ -1,11 +1,11 @@
 <section class="admin-shipping-page">
   <header class="admin-page__hero">
     <div>
-      <p class="section-kicker">Logistics</p>
-      <h1 class="section-title">Shipping areas</h1>
+      <p class="section-kicker">{{ 'admin.labels.logistics' | translate }}</p>
+      <h1 class="section-title">{{ 'admin.shipping.title' | translate }}</h1>
     </div>
     @if (!isFormOpen()) {
-      <button type="button" class="btn btn-primary" (click)="openCreateForm()">+ New area</button>
+      <button type="button" class="btn btn-primary" (click)="openCreateForm()">+ {{ 'admin.shipping.new' | translate }}</button>
     }
   </header>
 
@@ -15,7 +15,7 @@
 
   @if (isFormOpen()) {
     <form class="scaffold-card shipping-form" [formGroup]="form" (ngSubmit)="submit()">
-      <h3 class="shipping-form__title">{{ editingArea() ? 'Edit shipping area' : 'New shipping area' }}</h3>
+      <h3 class="shipping-form__title">{{ (editingArea() ? 'admin.shipping.editTitle' : 'admin.shipping.newTitle') | translate }}</h3>
 
       @if (formError()) {
         <p class="admin-page__error">{{ formError() }}</p>
@@ -23,40 +23,40 @@
 
       <div class="field-grid">
         <label class="field">
-          <span>Governorate</span>
+          <span>{{ 'admin.shipping.governorate' | translate }}</span>
           <input type="text" formControlName="governorate" placeholder="القاهرة" />
           @if (controlHasError('governorate', 'required')) {
-            <small>Governorate is required.</small>
+            <small>{{ 'admin.shipping.governorateRequired' | translate }}</small>
           }
         </label>
 
         <label class="field">
-          <span>Area name</span>
+          <span>{{ 'admin.shipping.area' | translate }}</span>
           <input type="text" formControlName="area" placeholder="مدينة نصر" />
           @if (controlHasError('area', 'required')) {
-            <small>Area name is required.</small>
+            <small>{{ 'admin.shipping.areaRequired' | translate }}</small>
           }
         </label>
       </div>
 
       <label class="field">
-        <span>Shipping cost (EGP)</span>
+        <span>{{ 'admin.shipping.cost' | translate }}</span>
         <input type="number" formControlName="shippingCost" min="0" step="0.01" />
         @if (controlHasError('shippingCost', 'required')) {
-          <small>Shipping cost is required.</small>
+          <small>{{ 'admin.shipping.costRequired' | translate }}</small>
         }
       </label>
 
       <label class="shipping-form__checkbox">
         <input type="checkbox" formControlName="isActive" />
-        <span>Area is active</span>
+        <span>{{ 'admin.shipping.areaActive' | translate }}</span>
       </label>
 
       <div class="shipping-form__actions">
         <button class="btn btn-primary" type="submit" [disabled]="isSubmitting()">
-          {{ isSubmitting() ? 'Saving…' : (editingArea() ? 'Save changes' : 'Add area') }}
+          {{ (isSubmitting() ? 'admin.labels.saving' : (editingArea() ? 'admin.labels.saveChanges' : 'admin.shipping.add')) | translate }}
         </button>
-        <button class="btn btn-outline" type="button" (click)="closeForm()">Cancel</button>
+        <button class="btn btn-outline" type="button" (click)="closeForm()">{{ 'admin.labels.cancel' | translate }}</button>
       </div>
     </form>
   }
@@ -65,23 +65,23 @@
     <input
       type="text"
       class="admin-page__search"
-      placeholder="Search governorate or area..."
+      [placeholder]="'admin.shipping.searchPlaceholder' | translate"
       [value]="search()"
       (input)="onSearch($any($event.target).value)"
     />
   </div>
 
-  <app-data-table [columns]="columns" [rows]="areas()" [isLoading]="isLoading()" emptyMessage="No shipping areas found.">
+  <app-data-table [columns]="columns" [rows]="areas()" [isLoading]="isLoading()" [emptyMessage]="'admin.shipping.empty' | translate">
     <ng-template #actions let-row>
       <div class="admin-page__row-actions">
-        <button type="button" (click)="openEditForm(row)">Edit</button>
+        <button type="button" (click)="openEditForm(row)">{{ 'admin.labels.edit' | translate }}</button>
         <button
           type="button"
           class="admin-page__delete"
           (click)="deleteArea(row)"
           [disabled]="isDeleting() === row.id"
         >
-          {{ isDeleting() === row.id ? 'Deleting…' : 'Delete' }}
+          {{ (isDeleting() === row.id ? 'admin.labels.deleting' : 'admin.labels.delete') | translate }}
         </button>
       </div>
     </ng-template>

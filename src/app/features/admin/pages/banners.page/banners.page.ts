@@ -16,6 +16,7 @@ import {
 } from '../../../../core/models/banner.models';
 
 import { AdminBannerService } from '../../../../core/services/admn-banner.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 const PAGE_SIZE = 10;
 
@@ -27,6 +28,7 @@ const PAGE_SIZE = 10;
     FormsModule,
     DataTableComponent,
     PaginationComponent,
+    TranslatePipe
   ],
   templateUrl: './banners.page.html',
   styleUrl: './banners.page.css',

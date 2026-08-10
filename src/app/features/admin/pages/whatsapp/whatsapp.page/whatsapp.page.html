@@ -1,94 +1,94 @@
 <section class="whatsapp-page">
   <header class="admin-page__hero">
     <div>
-      <p class="section-kicker">Integrations</p>
-      <h1 class="section-title">WhatsApp</h1>
+      <p class="section-kicker">{{ 'admin.whatsapp.subtitle' | translate }}</p>
+      <h1 class="section-title">{{ 'admin.whatsapp.title' | translate }}</h1>
     </div>
   </header>
 
   @if (isLoadingConfig()) {
-    <div class="whatsapp-page__loading">Loading WhatsApp status…</div>
+    <div class="whatsapp-page__loading">{{ 'admin.whatsapp.loading' | translate }}</div>
   } @else {
     <div class="whatsapp-page__grid">
       <!-- Connection card -->
       <div class="scaffold-card whatsapp-card">
         <div class="whatsapp-card__header">
-          <h3>Connection</h3>
+          <h3>{{ 'admin.whatsapp.connection' | translate }}</h3>
           <span class="whatsapp-status" [class.whatsapp-status--connected]="config()?.isConnected">
-            {{ config()?.isConnected ? 'Connected' : 'Disconnected' }}
+            {{ config()?.isConnected ? ('admin.whatsapp.connected' | translate) : ('admin.whatsapp.disconnected' | translate) }}
           </span>
         </div>
 
         @if (config()?.isConnected) {
           <div class="whatsapp-card__info">
             <div class="whatsapp-card__row">
-              <span>Phone number</span>
-              <strong>{{ config()?.phoneNumber || '—' }}</strong>
-            </div>
+                <span>{{ 'admin.whatsapp.phoneNumber' | translate }}</span>
+                <strong>{{ config()?.phoneNumber || '—' }}</strong>
+              </div>
             @if (config()?.lastConnectedAt) {
               <div class="whatsapp-card__row">
-                <span>Connected since</span>
+                <span>{{ 'admin.whatsapp.connectedSince' | translate }}</span>
                 <strong>{{ config()?.lastConnectedAt | date: 'medium' }}</strong>
               </div>
             }
           </div>
 
           <button type="button" class="btn btn-outline" [disabled]="isDisconnecting()" (click)="disconnect()">
-            {{ isDisconnecting() ? 'Disconnecting…' : 'Disconnect' }}
+            {{ isDisconnecting() ? ('admin.whatsapp.disconnecting' | translate) : ('admin.whatsapp.disconnect' | translate) }}
           </button>
         } @else {
-          <p class="whatsapp-card__hint">Scan the QR code below with WhatsApp on your phone to connect.</p>
+          <p class="whatsapp-card__hint">{{ 'admin.whatsapp.scanQr' | translate }}</p>
 
           <div class="whatsapp-qr">
             @if (isLoadingQr()) {
               <div class="whatsapp-qr__skeleton"></div>
             } @else if (qrImageUrl()) {
-              <img [src]="qrImageUrl()" alt="WhatsApp QR code" />
+              <img [src]="qrImageUrl()" [alt]="'admin.whatsapp.qrAlt' | translate" />
             } @else {
               <p class="whatsapp-card__hint">Could not load QR code. Try connecting again.</p>
             }
           </div>
 
           <button type="button" class="btn btn-primary" [disabled]="isConnecting()" (click)="connect()">
-            {{ isConnecting() ? 'Connecting…' : 'Connect' }}
+            {{ isConnecting() ? ('admin.whatsapp.connecting' | translate) : ('admin.whatsapp.connect' | translate) }}
           </button>
         }
 
         <button type="button" class="whatsapp-card__refresh" [disabled]="isRefreshing()" (click)="refreshStatus()">
-          {{ isRefreshing() ? 'Refreshing…' : '↻ Refresh status' }}
+          {{ isRefreshing() ? ('admin.whatsapp.refreshing' | translate) : ('admin.whatsapp.refresh' | translate) }}
         </button>
       </div>
 
       <!-- Stats card -->
       <div class="scaffold-card whatsapp-card">
         <div class="whatsapp-card__header">
-          <h3>Message quota</h3>
+          <h3>{{ 'admin.whatsapp.messageQuota' | translate }}</h3>
         </div>
 
         <div class="whatsapp-stats">
           <div class="whatsapp-stats__item">
             <p class="whatsapp-stats__value">{{ config()?.remainingMessages ?? '—' }}</p>
-            <p class="whatsapp-stats__label">Remaining</p>
+            <p class="whatsapp-stats__label">{{ 'admin.whatsapp.remaining' | translate }}</p>
           </div>
           <div class="whatsapp-stats__item">
             <p class="whatsapp-stats__value">{{ config()?.usedMessages ?? '—' }}</p>
-            <p class="whatsapp-stats__label">Used</p>
+            <p class="whatsapp-stats__label">{{ 'admin.whatsapp.used' | translate }}</p>
           </div>
           <div class="whatsapp-stats__item">
             <p class="whatsapp-stats__value">{{ config()?.packageSize ?? '—' }}</p>
-            <p class="whatsapp-stats__label">Package size</p>
+            <p class="whatsapp-stats__label">{{ 'admin.whatsapp.packageSize' | translate }}</p>
           </div>
         </div>
 
         @if (config()?.lastMessageSentAt) {
-          <p class="whatsapp-card__hint">Last message sent {{ config()?.lastMessageSentAt | date: 'medium' }}</p>
+          <p class="whatsapp-card__hint">{{ 'admin.whatsapp.lastSent' | translate }} {{ config()?.lastMessageSentAt | date: 'medium' }}</p>
         }
       </div>
     </div>
 
     <!-- Send message -->
     <div class="scaffold-card whatsapp-send">
-      <h3>Send a message</h3>
+      <h3>{{ 'admin.whatsapp.sendMessage' | translate }}</h3>
 
       @if (sendError()) {
         <p class="admin-page__error">{{ sendError() }}</p>
@@ -96,7 +96,7 @@
 
       <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
         <label class="field">
-          <span>Phone number</span>
+          <span>{{ 'admin.whatsapp.phoneNumber' | translate }}</span>
           <input type="text" formControlName="phoneNumber" placeholder="201001234567" />
           @if (controlHasError('phoneNumber', 'required')) {
             <small>Phone number is required.</small>
@@ -104,15 +104,15 @@
         </label>
 
         <label class="field">
-          <span>Message</span>
-          <textarea formControlName="message" rows="4" placeholder="Type your message..."></textarea>
+          <span>{{ 'admin.whatsapp.message' | translate }}</span>
+          <textarea formControlName="message" rows="4" placeholder="{{ 'admin.whatsapp.messagePlaceholder' | translate }}"></textarea>
           @if (controlHasError('message', 'required')) {
             <small>Message is required.</small>
           }
         </label>
 
         <button class="btn btn-primary" type="submit" [disabled]="isSendingMessage()">
-          {{ isSendingMessage() ? 'Sending…' : 'Send message' }}
+          {{ isSendingMessage() ? ('admin.whatsapp.sending' | translate) : ('admin.whatsapp.sendMessage' | translate) }}
         </button>
       </form>
     </div>

@@ -15,11 +15,12 @@ import {
   CreateProductVariantRequest,
   UpdateProductVariantRequest,
 } from '../../../../core/models/domain.models';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-admin-product-form',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, ReactiveFormsModule,TranslatePipe],
   templateUrl: './product-form.page.html',
   styleUrl: './product-form.page.css',
 })

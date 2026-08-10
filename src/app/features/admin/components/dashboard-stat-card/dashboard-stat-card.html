@@ -1,31 +1,21 @@
-<div
-  class="dashboard-stat"
-  [class.dashboard-stat--accent]="accent()"
-  [class.dashboard-stat--warning]="warning()">
+<div class="dashboard-stat">
 
   <div class="dashboard-stat__header">
 
-    <div>
-
-      <div class="dashboard-stat__title">
-        {{ title() }}
-      </div>
-
-      <div class="dashboard-stat__value">
-        {{ value() }}
-      </div>
-
+    <div class="dashboard-stat__title">
+      {{ title() | translate }}
     </div>
 
-    <div class="dashboard-stat__icon  ">
-
-    <span class="material-symbols-rounded">
-
+    <div class="dashboard-stat__icon">
+      <span class="material-symbols-rounded">
         {{ icon() }}
-
-    </span>
+      </span>
     </div>
 
+  </div>
+
+  <div class="dashboard-stat__value">
+    {{ value() }}
   </div>
 
 </div>

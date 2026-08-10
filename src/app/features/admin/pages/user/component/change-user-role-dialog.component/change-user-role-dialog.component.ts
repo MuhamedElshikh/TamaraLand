@@ -2,6 +2,7 @@ import { Component, effect, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserResponse } from '../../../../../../core/models/user.models';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-change-user-role-dialog',
@@ -9,6 +10,7 @@ import { UserResponse } from '../../../../../../core/models/user.models';
   imports: [
     CommonModule,
     FormsModule,
+    TranslatePipe
   ],
   templateUrl: './change-user-role-dialog.component.html',
   styleUrl: './change-user-role-dialog.component.css',
