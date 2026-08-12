@@ -8,12 +8,8 @@ export const guestIdInterceptor: HttpInterceptorFn = (req, next) => {
 
   let headers = req.headers;
   if (guestId) {
-    headers = headers
-      .set('X-Guest-Id', guestId)
-      .set('guestId', guestId)
-      .set('GuestId', guestId)
-      .set('X-Guest-ID', guestId);
-  }
+  headers = headers.set('X-Guest-Id', guestId);
+}
 
   const clonedReq = req.clone({ headers });
 
