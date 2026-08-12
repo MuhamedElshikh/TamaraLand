@@ -12,7 +12,7 @@
 
     border-radius:50%;
 
-    background:#25D366;
+    background:  #c6a433;
 
     display:flex;
 
@@ -20,7 +20,7 @@
 
     align-items:center;
 
-    box-shadow:0 12px 30px rgba(37,211,102,.45);
+    box-shadow:0 12px 30px rgba(212,175,55,.45);
 
     z-index:999;
 
@@ -60,15 +60,15 @@
 @keyframes whatsappPulse{
 
     0%{
-        box-shadow:0 0 0 0 rgba(37,211,102,.55);
+        box-shadow:0 0 0 0 rgba(212,175,55,.55);
     }
 
     70%{
-        box-shadow:0 0 0 18px rgba(37,211,102,0);
+        box-shadow:0 0 0 18px rgba(212,175,55,0);
     }
 
     100%{
-        box-shadow:0 0 0 0 rgba(37,211,102,0);
+        box-shadow:0 0 0 0 rgba(212,175,55,0);
     }
 
 }

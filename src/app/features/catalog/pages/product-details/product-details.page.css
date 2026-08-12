@@ -406,9 +406,7 @@
     font-size: 1rem;
   }
 
-  .product-details-page__reviews {
-    padding: 1rem;
-  }
+  
 
   .product-details-page__related-grid {
     grid-template-columns: repeat(2, 1fr);
