@@ -9,6 +9,7 @@
 .collection-page__hero {
   display: flex;
   flex-direction: column;
+  margin: 10px;
   gap: 0.5rem;
   padding: 1.25rem 0 0.25rem;
 }
@@ -33,6 +34,7 @@
 }
 
 .collection-page__toolbar {
+  margin: 0 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -50,6 +52,7 @@
 }
 
 .collection-page__grid {
+  padding: 10px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;

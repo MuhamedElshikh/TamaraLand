@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
+import { forkJoin } from 'rxjs';
 import { BannerService } from '../../../../core/services/banner.service';
 import {
   BannerResponse,
@@ -28,6 +28,9 @@ export class HeroBannerComponent implements OnInit, OnDestroy {
 
   private readonly bannerService = inject(BannerService);
   private readonly destroyRef = inject(DestroyRef);
+  readonly homeBanners = signal<BannerResponse[]>([]);
+  readonly offerBanners = signal<BannerResponse[]>([]);
+  readonly categoryBanners = signal<BannerResponse[]>([]);
 
   /**
    * Intro Screen
@@ -92,20 +95,9 @@ export class HeroBannerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.loadBanners();
-
+this.loadStaticBanners();
     window.addEventListener('resize', this.onResize);
 
-    this.introTimer = setTimeout(() => {
-
-      this.showIntro.set(false);
-
-      requestAnimationFrame(() => {
-
-        this.showSlider.set(true);
-
-      });
-
-    }, 5000);
 
   }
 
@@ -120,48 +112,111 @@ export class HeroBannerComponent implements OnInit, OnDestroy {
   // ==========================
   // Load
   // ==========================
+ private loadStaticBanners(): void {
 
+    forkJoin({
+      home: this.bannerService.getHeroBanners(BannerType.HomeBanner),
+      offer: this.bannerService.getHeroBanners(BannerType.OfferBanner),
+      category: this.bannerService.getHeroBanners(BannerType.CategoryBanner),
+    })
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe({
+
+      next: ({ home, offer, category }) => {
+
+        this.homeBanners.set(home.data ?? []);
+        this.offerBanners.set(offer.data ?? []);
+        this.categoryBanners.set(category.data ?? []);
+
+      },
+
+      error: () => {
+        // السكاشن دي مش أساسية زي الهيرو، فمش هنعمل حاجة لو فشلت
+      }
+
+    });
+
+  }
+
+  // ==========================
+  // Helpers
+  // ==========================
+
+  // شيل كلمة private من هنا عشان التمبلت يقدر يستخدمها
+  resolveImage(banner: BannerResponse): string {
+
+    return window.innerWidth <= 768 &&
+      banner.mobileImageUrl
+      ? banner.mobileImageUrl
+      : banner.imageUrl;
+
+  }
   private loadBanners(): void {
 
-    this.bannerService
-      .getHeroBanners(BannerType.HeroSlider)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
+  this.bannerService
+    .getHeroBanners(BannerType.HeroSlider)
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe({
 
-        next: (response) => {
+      next: (response) => {
 
-          this.banners.set(response.data ?? []);
+        this.banners.set(response.data ?? []);
 
-          const first = this.banners()[0];
+        const first = this.banners()[0];
 
-          if (first) {
+        if (first) {
 
-            this.currentImage.set(this.resolveImage(first));
+          this.currentImage.set(this.resolveImage(first));
           this.nextBanner.set(first);
-
-          }
-
-          this.loading.set(false);
-          this.loadError.set(false);
-
-          if (this.banners().length > 1) {
-
-            this.startAutoSlide();
-
-          }
-
-        },
-
-        error: () => {
-
-          this.loading.set(false);
-          this.loadError.set(true);
 
         }
 
-      });
+        this.loading.set(false);
+        this.loadError.set(false);
 
-  }
+        if (this.banners().length > 1) {
+
+          this.startAutoSlide();
+
+        }
+
+        // ==========================
+        // هنا الإضافة المهمة
+        // ==========================
+
+        if (this.hasBanners()) {
+
+          // فيه بانرات → نستنى 5 ثواني وبعدين نقفل الإنترو ونعرض السلايدر
+          this.introTimer = setTimeout(() => {
+
+            this.showIntro.set(false);
+
+            requestAnimationFrame(() => {
+
+              this.showSlider.set(true);
+
+            });
+
+          }, 5000);
+
+        }
+        // لو مفيش بانرات → showIntro فاضل true للأبد، ومفيش أي تايمر
+
+      },
+
+      error: () => {
+
+        this.loading.set(false);
+        this.loadError.set(true);
+
+        // فشل التحميل بردو معناه مفيش بانرات نعرضها → سيب الإنترو ثابت
+        // (متعملش setTimeout هنا)
+
+      }
+
+    });
+
+}
 
   // ==========================
   // Slider Controls
@@ -293,16 +348,7 @@ this.nextBanner.set(banner);
   // Helpers
   // ==========================
 
-  private resolveImage(
-    banner: BannerResponse
-  ): string {
-
-    return window.innerWidth <= 768 &&
-      banner.mobileImageUrl
-      ? banner.mobileImageUrl
-      : banner.imageUrl;
-
-  }
+  
 
   private onResize = () => {
 

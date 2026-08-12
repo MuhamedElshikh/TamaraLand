@@ -143,3 +143,76 @@
 </section>
 
 }
+
+@if (homeBanners().length > 0) {
+
+  <section class="static-banner-strip static-banner-strip--home">
+
+    @for (banner of homeBanners(); track banner.id) {
+
+      
+        
+<a class="static-banner"[routerLink]="banner.link">
+        <img
+          [src]="resolveImage(banner)"
+          [alt]="'hero.bannerAlt' | translate">
+
+      </a>
+
+    }
+
+  </section>
+
+}
+
+
+<!-- ========================================================= -->
+<!-- Offer Banner -->
+<!-- ========================================================= -->
+
+@if (offerBanners().length > 0) {
+
+  <section class="static-banner-strip static-banner-strip--offer">
+
+    @for (banner of offerBanners(); track banner.id) {
+
+      
+    
+<a class="static-banner"[routerLink]="banner.link">
+        <img
+          [src]="resolveImage(banner)"
+          [alt]="'hero.bannerAlt' | translate">
+
+    </a>
+
+    }
+
+  </section>
+
+}
+
+
+<!-- ========================================================= -->
+<!-- Category Banner -->
+<!-- ========================================================= -->
+
+@if (categoryBanners().length > 0) {
+
+  <section class="static-banner-strip static-banner-strip--category">
+
+    @for (banner of categoryBanners(); track banner.id) {
+
+      
+        
+<a class="static-banner"[routerLink]="banner.link">
+        <img
+          [src]="resolveImage(banner)"
+          [alt]="'hero.bannerAlt' | translate">
+
+      </a>
+
+    }
+
+  </section>
+
+}
