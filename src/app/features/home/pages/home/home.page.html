@@ -9,15 +9,20 @@
   </div>
 
   @if (categoriesLoading()) {
-    <div class="category-strip">
-      @for (i of [1, 2, 3, 4]; track i) {
-        <div class="category-card--skeleton"></div>
-      }
-    </div>
-  } @else if (categories().length === 0) { 
-    <p class="muted">{{ 'home.noCategories' | translate }}</p>
-  } @else {
-    <div class="category-strip">
+  <div class="category-strip">
+    @for (i of [1, 2, 3, 4]; track i) {
+      <div class="category-card--skeleton"></div>
+    }
+  </div>
+} @else if (categories().length === 0) { 
+  <p class="muted">{{ 'home.noCategories' | translate }}</p>
+} @else {
+  <div class="category-strip-wrapper">
+    <button class="category-strip__nav category-strip__nav--prev" (click)="scrollCategories(-1)" aria-label="Previous">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <div class="category-strip" #categoryStrip>
       @for (category of categories(); track category.id) {
         <a [routerLink]="['/categories', category.id]" class="category-card">
           <img [src]="category.imageUrl || fallbackImage" [alt]="category.name" />
@@ -25,7 +30,12 @@
         </a>
       }
     </div>
-  }
+
+    <button class="category-strip__nav category-strip__nav--next" (click)="scrollCategories(1)" aria-label="Next">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+}
 </section>
 
 <app-featured-products />

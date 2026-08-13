@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, viewChild, ElementRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CatalogService } from '../../../../core/services/catalog.service'; // عدّل المسار
 import { CategoryResponse } from '../../../../core/models/catalog.models'; // عدّل المسار
@@ -30,4 +30,12 @@ export class HomePage implements OnInit {
       error: () => this.categoriesLoading.set(false),
     });
   }
+  readonly categoryStrip = viewChild<ElementRef<HTMLDivElement>>('categoryStrip');
+
+scrollCategories(direction: 1 | -1): void {
+  const el = this.categoryStrip()?.nativeElement;
+  if (!el) return;
+  const scrollAmount = el.clientWidth * 0.7;
+  el.scrollBy({ left: scrollAmount * direction, behavior: 'smooth' });
+}
 }

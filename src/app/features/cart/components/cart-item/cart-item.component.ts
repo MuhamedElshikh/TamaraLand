@@ -23,7 +23,7 @@ export class CartItemComponent {
   readonly isUpdating = signal(false);
   readonly isRemoving = signal(false);
   readonly errorMessage = signal<string | null>(null);
-  readonly fallbackImage = 'assets/placeholder-product.jpg';
+  readonly fallbackImage = './../../../../../assets/placeholder-product.jpg';
 private readonly analytics = inject(AnalyticsService);
   increase(): void {
     this.updateQuantity(this.item.quantity + 1);
