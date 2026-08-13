@@ -70,7 +70,17 @@
 
   }
   </div>
+@if (product()?.description) {
+  <div class="product-details-page__description">
+    <h3 class="product-details-page__description-title">
+      {{ 'productDetails.description' | translate }}
+    </h3>
 
+    <p class="product-details-page__description-text">
+      {{ product()?.description }}
+    </p>
+  </div>
+}
   <div class="product-details-page__stats">
 
     <div class="stat-card">

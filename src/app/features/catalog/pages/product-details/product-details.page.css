@@ -8,6 +8,24 @@
   margin: 0 auto;
   padding: 1rem 1.5rem 3rem;
 }
+.product-details-page__description {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color, #e5e5e5);
+}
+
+.product-details-page__description-title {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.product-details-page__description-text {
+  margin: 0;
+  line-height: 1.8;
+  color: var(--text-secondary, #666);
+  white-space: pre-line;
+}
 
 .product-details-page__hero {
   position: relative;

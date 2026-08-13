@@ -58,6 +58,7 @@ export interface ProductCardResponse {
   imageUrl?: string;
   viewsCount: number;
   originalPrice: number;
+  description:string;
   price: number;
   hasDiscount: boolean;
   rating: number;
@@ -103,6 +104,7 @@ export interface ProductResponse  {
   price:number;
   name:string;
   rating:number;
+  description:string;
   inStock:boolean;
   originalPrice:number;
   reviewsCount:number;
