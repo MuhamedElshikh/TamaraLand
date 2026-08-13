@@ -84,12 +84,16 @@ export class AdminCatalogService {
     return this.http.get<ApiResponse<AdminProductImageResponse[]>>(`${this.productUrl}/${productId}/images`);
   }
 
-  uploadImage(productId: number, file: File, isMain: boolean): Observable<ApiResponse<AdminProductImageResponse>> {
-    const formData = new FormData();
-    formData.append('image', file);
-    formData.append('isMain', String(isMain));
-    return this.http.post<ApiResponse<AdminProductImageResponse>>(`${this.productUrl}/${productId}/images`, formData);
-  }
+ uploadImages(productId: number, files: File[], mainImageIndex: number = 0): Observable<ApiResponse<AdminProductImageResponse[]>> {
+  const formData = new FormData();
+  files.forEach(file => formData.append('Images', file, file.name));
+  formData.append('MainImageIndex', String(mainImageIndex));
+
+  return this.http.post<ApiResponse<AdminProductImageResponse[]>>(
+    `${this.productUrl}/${productId}/images`,
+    formData
+  );
+}
 
   deleteImage(imageId: number): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(`${this.productUrl}/images/${imageId}`);

@@ -17,6 +17,8 @@ import {
 } from '@angular/forms';
 
 import {
+  BannerImageResponse,
+  BannerImageUpload,
   BannerResponse,
   BannerType,
   UpsertBannerRequest,
@@ -31,6 +33,12 @@ import {
 
 import { TranslatePipe } from '@ngx-translate/core';
 
+interface ImageItem {
+  id?: number;          // موجودة فعلاً لو صورة قديمة، undefined لو جديدة
+  preview: string;       // Object URL أو الـ imageUrl من السيرفر
+  file?: File;           // موجودة لو صورة جديدة لسه ماترفعتش
+  link: string;
+}
 
 @Component({
   selector: 'app-banner-form',
@@ -48,623 +56,339 @@ import { TranslatePipe } from '@ngx-translate/core';
 export class BannerFormComponent {
 
   private readonly fb = inject(NonNullableFormBuilder);
-
-  private readonly bannerService =
-    inject(AdminBannerService);
-
+  private readonly bannerService = inject(AdminBannerService);
   readonly router = inject(Router);
-
-  private readonly route =
-    inject(ActivatedRoute);
-
+  private readonly route = inject(ActivatedRoute);
 
   // =========================================================
   // State
   // =========================================================
 
-  readonly banner =
-    signal<BannerResponse | null>(null);
+  readonly banner = signal<BannerResponse | null>(null);
+  readonly isSaving = signal(false);
+  readonly errorMessage = signal<string | null>(null);
 
-  readonly isSaving =
-    signal(false);
+  // صور موجودة فعلاً على السيرفر (وضع التعديل)، بتتحذف بـ endpoint منفصل
+  readonly existingDesktopImages = signal<BannerImageResponse[]>([]);
+  readonly existingMobileImages = signal<BannerImageResponse[]>([]);
 
-  readonly errorMessage =
-    signal<string | null>(null);
+  // صور جديدة لسه ماترفعتش، هتتبعت مع الـ submit
+  readonly newDesktopImages = signal<ImageItem[]>([]);
+  readonly newMobileImages = signal<ImageItem[]>([]);
 
-  readonly desktopPreview =
-    signal<string | null>(null);
-
-  readonly mobilePreview =
-    signal<string | null>(null);
-
-  readonly desktopDragging =
-    signal(false);
-
-  readonly mobileDragging =
-    signal(false);
-
-
-  // =========================================================
-  // Files
-  // =========================================================
-
-  private desktopImage?: File;
-
-  private mobileImage?: File;
-
+  readonly deletingImageId = signal<number | null>(null);
 
   // =========================================================
   // Computed
   // =========================================================
 
-  readonly isEdit = computed(
-    () => this.banner() !== null
-  );
-
+  readonly isEdit = computed(() => this.banner() !== null);
 
   // =========================================================
   // Banner Types
   // =========================================================
 
   readonly bannerTypes = [
-
-    {
-      value: BannerType.HeroSlider,
-      textKey: 'banners.types.heroSlider',
-    },
-
-    {
-      value: BannerType.HomeBanner,
-      textKey: 'banners.types.homeBanner',
-    },
-
-    {
-      value: BannerType.OfferBanner,
-      textKey: 'banners.types.offerBanner',
-    },
-
-    {
-      value: BannerType.CategoryBanner,
-      textKey: 'banners.types.categoryBanner',
-    },
-
+    { value: BannerType.HeroSlider, textKey: 'banners.types.heroSlider' },
+    { value: BannerType.HomeBanner, textKey: 'banners.types.homeBanner' },
+    { value: BannerType.OfferBanner, textKey: 'banners.types.offerBanner' },
+    { value: BannerType.CategoryBanner, textKey: 'banners.types.categoryBanner' },
   ];
-
 
   // =========================================================
   // Form
   // =========================================================
 
   readonly form = this.fb.group(
-
     {
-      title: [
-        '',
-        [
-          Validators.required,
-          Validators.maxLength(150),
-        ],
-      ],
-
-      description: [
-        '',
-        Validators.maxLength(1000),
-      ],
-
-      link: [
-        '',
-      ],
-
-      type: [
-        BannerType.HeroSlider,
-        Validators.required,
-      ],
-
-      displayOrder: [
-        1,
-        [
-          Validators.required,
-          Validators.min(1),
-        ],
-      ],
-
-      isActive: [
-        true,
-      ],
-
-      startDate: [
-        '',
-      ],
-
-      endDate: [
-        '',
-      ],
+      title: ['', [Validators.required, Validators.maxLength(150)]],
+      description: ['', Validators.maxLength(1000)],
+      type: [BannerType.HeroSlider, Validators.required],
+      displayOrder: [1, [Validators.required, Validators.min(1)]],
+      isActive: [true],
+      startDate: [''],
+      endDate: [''],
     },
-
-    {
-      validators: this.dateValidator,
-    }
-
+    { validators: this.dateValidator }
   );
-
 
   // =========================================================
   // Constructor
   // =========================================================
 
   constructor() {
-
-    const id =
-      Number(
-        this.route.snapshot.paramMap.get('id')
-      );
-
+    const id = Number(this.route.snapshot.paramMap.get('id'));
 
     if (id) {
       this.loadBanner(id);
     }
 
-
     effect(() => {
-
       const banner = this.banner();
-
-      if (!banner) {
-        return;
-      }
-
+      if (!banner) return;
 
       this.form.patchValue({
-
         title: banner.title,
-
-        description:
-          banner.description ?? '',
-
-        link:
-          banner.link ?? '',
-
-        type:
-          banner.type,
-
-        displayOrder:
-          banner.displayOrder,
-
-        isActive:
-          banner.isActive,
-
-        startDate:
-          banner.startDate?.substring(0, 10) ?? '',
-
-        endDate:
-          banner.endDate?.substring(0, 10) ?? '',
-
+        description: banner.description ?? '',
+        type: banner.type,
+        displayOrder: banner.displayOrder,
+        isActive: banner.isActive,
+        startDate: banner.startDate?.substring(0, 10) ?? '',
+        endDate: banner.endDate?.substring(0, 10) ?? '',
       });
 
-
-      this.desktopPreview.set(
-        banner.imageUrl
+      this.existingDesktopImages.set(
+        banner.images.filter(x => !x.isMobile)
       );
 
-
-      this.mobilePreview.set(
-        banner.mobileImageUrl ?? null
+      this.existingMobileImages.set(
+        banner.images.filter(x => x.isMobile)
       );
-
     });
-
   }
-
 
   // =========================================================
   // Load Banner
   // =========================================================
 
   private loadBanner(id: number): void {
-
-    this.bannerService
-      .getById(id)
-      .subscribe({
-
-        next: (res) => {
-
-          if (!res.success || !res.data) {
-
-            this.router.navigate(
-              ['/admin/banners']
-            );
-
-            return;
-          }
-
-
-          this.banner.set(
-            res.data
-          );
-
-        },
-
-
-        error: () => {
-
-          this.router.navigate(
-            ['/admin/banners']
-          );
-
-        },
-
-      });
-
+    this.bannerService.getById(id).subscribe({
+      next: (res) => {
+        if (!res.success || !res.data) {
+          this.router.navigate(['/admin/banners']);
+          return;
+        }
+        this.banner.set(res.data);
+      },
+      error: () => {
+        this.router.navigate(['/admin/banners']);
+      },
+    });
   }
 
-
   // =========================================================
-  // Desktop Image
+  // Add New Images
   // =========================================================
 
   desktopSelected(event: Event): void {
-
-    const file =
-      (event.target as HTMLInputElement)
-        .files?.[0];
-
-
-    this.setDesktopImage(file);
-
+    const files = (event.target as HTMLInputElement).files;
+    if (!files) return;
+    this.addNewImages(files, this.newDesktopImages);
+    (event.target as HTMLInputElement).value = '';
   }
-
-
-  desktopDrop(event: DragEvent): void {
-
-    event.preventDefault();
-
-    this.desktopDragging.set(false);
-
-
-    const file =
-      event.dataTransfer?.files?.[0];
-
-
-    this.setDesktopImage(file);
-
-  }
-
-
-  removeDesktopImage(): void {
-
-    this.desktopImage =
-      undefined;
-
-    this.desktopPreview.set(
-      null
-    );
-
-  }
-
-
-  // =========================================================
-  // Mobile Image
-  // =========================================================
 
   mobileSelected(event: Event): void {
-
-    const file =
-      (event.target as HTMLInputElement)
-        .files?.[0];
-
-
-    this.setMobileImage(file);
-
+    const files = (event.target as HTMLInputElement).files;
+    if (!files) return;
+    this.addNewImages(files, this.newMobileImages);
+    (event.target as HTMLInputElement).value = '';
   }
 
+  desktopDrop(event: DragEvent): void {
+    event.preventDefault();
+    const files = event.dataTransfer?.files;
+    if (!files) return;
+    this.addNewImages(files, this.newDesktopImages);
+  }
 
   mobileDrop(event: DragEvent): void {
-
     event.preventDefault();
-
-    this.mobileDragging.set(false);
-
-
-    const file =
-      event.dataTransfer?.files?.[0];
-
-
-    this.setMobileImage(file);
-
+    const files = event.dataTransfer?.files;
+    if (!files) return;
+    this.addNewImages(files, this.newMobileImages);
   }
 
+  private addNewImages(
+    files: FileList,
+    target: typeof this.newDesktopImages
+  ): void {
+    const valid: ImageItem[] = [];
 
-  removeMobileImage(): void {
+    Array.from(files).forEach(file => {
+      if (!this.validateImage(file)) return;
+      valid.push({
+        preview: URL.createObjectURL(file),
+        file,
+        link: '',
+      });
+    });
 
-    this.mobileImage =
-      undefined;
-
-    this.mobilePreview.set(
-      null
-    );
-
+    target.update(current => [...current, ...valid]);
   }
 
+  // =========================================================
+  // Update Link (new images)
+  // =========================================================
+
+  updateNewImageLink(
+    target: typeof this.newDesktopImages,
+    index: number,
+    link: string
+  ): void {
+    target.update(current => {
+      const copy = [...current];
+      copy[index] = { ...copy[index], link };
+      return copy;
+    });
+  }
+
+  // =========================================================
+  // Remove New Image (not yet uploaded)
+  // =========================================================
+
+  removeNewImage(
+    target: typeof this.newDesktopImages,
+    index: number
+  ): void {
+    target.update(current => {
+      const copy = [...current];
+      copy.splice(index, 1);
+      return copy;
+    });
+  }
+
+  // =========================================================
+  // Delete Existing Image (already on server)
+  // =========================================================
+
+  deleteExistingImage(image: BannerImageResponse): void {
+    const bannerId = this.banner()?.id;
+    if (!bannerId) return;
+
+    if (!confirm('Delete this image?')) return;
+
+    this.deletingImageId.set(image.id);
+
+    this.bannerService.deleteImage(bannerId, image.id).subscribe({
+      next: (res) => {
+        this.deletingImageId.set(null);
+        if (res.success) {
+          if (image.isMobile) {
+            this.existingMobileImages.update(imgs =>
+              imgs.filter(x => x.id !== image.id)
+            );
+          } else {
+            this.existingDesktopImages.update(imgs =>
+              imgs.filter(x => x.id !== image.id)
+            );
+          }
+        }
+      },
+      error: () => this.deletingImageId.set(null),
+    });
+  }
 
   // =========================================================
   // Submit
   // =========================================================
 
   submit(): void {
-
     if (this.form.invalid) {
-
       this.form.markAllAsTouched();
-
       return;
     }
 
+    const isNewBanner = !this.isEdit();
+    const hasAnyImage =
+      this.newDesktopImages().length > 0 ||
+      this.newMobileImages().length > 0 ||
+      this.existingDesktopImages().length > 0 ||
+      this.existingMobileImages().length > 0;
 
-    this.errorMessage.set(
-      null
-    );
+    if (isNewBanner && !hasAnyImage) {
+      this.errorMessage.set('banners.errors.imageRequired');
+      return;
+    }
 
-    this.isSaving.set(
-      true
-    );
+    this.errorMessage.set(null);
+    this.isSaving.set(true);
 
+    const desktopUploads: BannerImageUpload[] = this.newDesktopImages().map(img => ({
+      file: img.file!,
+      link: img.link || undefined,
+    }));
+
+    const mobileUploads: BannerImageUpload[] = this.newMobileImages().map(img => ({
+      file: img.file!,
+      link: img.link || undefined,
+    }));
 
     const request: UpsertBannerRequest = {
-
       ...this.form.getRawValue(),
-
-      image:
-        this.desktopImage,
-
-      mobileImage:
-        this.mobileImage,
-
+      desktopImages: desktopUploads,
+      mobileImages: mobileUploads,
     };
 
-
-    // =======================================================
-    // Update
-    // =======================================================
-
     if (this.isEdit()) {
+      const id = this.banner()!.id;
 
-      const id =
-        this.banner()!.id;
-
-
-      this.bannerService
-        .update(id, request)
-        .subscribe({
-
-          next: (res) => {
-
-            this.isSaving.set(
-              false
-            );
-
-
-            if (res.success) {
-
-              this.router.navigate(
-                ['/admin/banners']
-              );
-
-              return;
-            }
-
-
-            this.errorMessage.set(
-              res.message ??
-              'banners.errors.update'
-            );
-
-          },
-
-
-          error: (err) => {
-
-            this.isSaving.set(
-              false
-            );
-
-
-            this.errorMessage.set(
-              err?.error?.message ??
-              'banners.errors.update'
-            );
-
-          },
-
-        });
-
-
-      return;
-    }
-
-
-    // =======================================================
-    // Create
-    // =======================================================
-
-    this.bannerService
-      .create(request)
-      .subscribe({
-
+      this.bannerService.update(id, request).subscribe({
         next: (res) => {
-
-          this.isSaving.set(
-            false
-          );
-
-
+          this.isSaving.set(false);
           if (res.success) {
-
-            this.router.navigate(
-              ['/admin/banners']
-            );
-
+            this.router.navigate(['/admin/banners']);
             return;
           }
-
-
-          this.errorMessage.set(
-            res.message ??
-            'banners.errors.create'
-          );
-
+          this.errorMessage.set(res.message ?? 'banners.errors.update');
         },
-
-
         error: (err) => {
-
-          this.isSaving.set(
-            false
-          );
-
-
-          this.errorMessage.set(
-            err?.error?.message ??
-            'banners.errors.create'
-          );
-
+          this.isSaving.set(false);
+          this.errorMessage.set(err?.error?.message ?? 'banners.errors.update');
         },
-
       });
 
+      return;
+    }
+
+    this.bannerService.create(request).subscribe({
+      next: (res) => {
+        this.isSaving.set(false);
+        if (res.success) {
+          this.router.navigate(['/admin/banners']);
+          return;
+        }
+        this.errorMessage.set(res.message ?? 'banners.errors.create');
+      },
+      error: (err) => {
+        this.isSaving.set(false);
+        this.errorMessage.set(err?.error?.message ?? 'banners.errors.create');
+      },
+    });
   }
-
-
-  // =========================================================
-  // Set Desktop Image
-  // =========================================================
-
-  private setDesktopImage(
-    file?: File
-  ): void {
-
-    if (!file) {
-      return;
-    }
-
-
-    if (!this.validateImage(file)) {
-      return;
-    }
-
-
-    this.desktopImage =
-      file;
-
-
-    this.desktopPreview.set(
-      URL.createObjectURL(file)
-    );
-
-  }
-
-
-  // =========================================================
-  // Set Mobile Image
-  // =========================================================
-
-  private setMobileImage(
-    file?: File
-  ): void {
-
-    if (!file) {
-      return;
-    }
-
-
-    if (!this.validateImage(file)) {
-      return;
-    }
-
-
-    this.mobileImage =
-      file;
-
-
-    this.mobilePreview.set(
-      URL.createObjectURL(file)
-    );
-
-  }
-
 
   // =========================================================
   // Validate Image
   // =========================================================
 
-  private validateImage(
-    file: File
-  ): boolean {
-
-    const allowed = [
-
-      'image/jpeg',
-
-      'image/png',
-
-      'image/webp',
-
-    ];
-
+  private validateImage(file: File): boolean {
+    const allowed = ['image/jpeg', 'image/png', 'image/webp'];
 
     if (!allowed.includes(file.type)) {
-
-      alert(
-        'banners.errors.invalidImageType'
-      );
-
+      alert('banners.errors.invalidImageType');
       return false;
     }
 
-
-    if (
-      file.size >
-      5 * 1024 * 1024
-    ) {
-
-      alert(
-        'banners.errors.imageTooLarge'
-      );
-
+    if (file.size > 5 * 1024 * 1024) {
+      alert('banners.errors.imageTooLarge');
       return false;
     }
-
 
     return true;
-
   }
-
 
   // =========================================================
   // Date Validator
   // =========================================================
 
-  private dateValidator(
-    control: AbstractControl
-  ): ValidationErrors | null {
+  private dateValidator(control: AbstractControl): ValidationErrors | null {
+    const start = control.get('startDate')?.value;
+    const end = control.get('endDate')?.value;
 
-    const start =
-      control.get('startDate')?.value;
-
-    const end =
-      control.get('endDate')?.value;
-
-
-    if (!start || !end) {
-      return null;
-    }
-
+    if (!start || !end) return null;
 
     return new Date(start) <= new Date(end)
       ? null
-      : {
-          invalidDateRange: true,
-        };
-
+      : { invalidDateRange: true };
   }
-
+  
 }

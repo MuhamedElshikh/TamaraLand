@@ -57,12 +57,14 @@ export class BannersPage implements OnInit {
 
   readonly columns: DataTableColumn<BannerResponse>[] = [
 
-    {
-      key: 'imageUrl',
-      header: 'Image',
-      type: 'image',
-      accessor: r => r.imageUrl,
-    },
+   {
+  key: 'imageUrl',
+  header: 'Image',
+  type: 'image',
+  accessor: r => r.images.find(x => !x.isMobile)?.imageUrl
+    ?? r.images[0]?.imageUrl
+    ?? '',
+},
 
     {
       key: 'title',

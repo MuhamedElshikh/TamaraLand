@@ -75,8 +75,7 @@ export class AdminProductFormPage implements OnInit {
   readonly isUploadingImage = signal(false);
   readonly imageError = signal<string | null>(null);
 
-  selectedFile: File | null = null;
-  isMainImageSelection = false;
+  selectedFiles: File[] = [];
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -314,38 +313,37 @@ export class AdminProductFormPage implements OnInit {
     }
   }
 
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
-    }
+ onFilesSelected(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files.length > 0) {
+    this.selectedFiles = Array.from(input.files);
   }
+}
 
-  onUploadImage(): void {
-    if (!this.selectedFile || !this.productId()) return;
+onUploadImages(): void {
+  if (this.selectedFiles.length === 0 || !this.productId()) return;
 
-    this.isUploadingImage.set(true);
-    this.imageError.set(null);
+  this.isUploadingImage.set(true);
+  this.imageError.set(null);
 
-    this.adminCatalogService
-      .uploadImage(this.productId()!, this.selectedFile, this.isMainImageSelection)
-      .subscribe({
-        next: (res) => {
-          this.isUploadingImage.set(false);
-          if (res.success) {
-            this.selectedFile = null;
-            this.isMainImageSelection = false;
-            this.loadImages(this.productId()!);
-          } else {
-            this.imageError.set(res.message || 'Failed to upload image.');
-          }
-        },
-        error: (err) => {
-          this.isUploadingImage.set(false);
-          this.imageError.set(err?.error?.message || 'Error uploading image.');
-        },
-      });
-  }
+  this.adminCatalogService
+    .uploadImages(this.productId()!, this.selectedFiles)
+    .subscribe({
+      next: (res) => {
+        this.isUploadingImage.set(false);
+        if (res.success) {
+          this.selectedFiles = [];
+          this.loadImages(this.productId()!);
+        } else {
+          this.imageError.set(res.message || 'Failed to upload images.');
+        }
+      },
+      error: (err) => {
+        this.isUploadingImage.set(false);
+        this.imageError.set(err?.error?.message || 'Error uploading images.');
+      },
+    });
+}
 
   onSetMainImage(imageId: number): void {
     this.adminCatalogService.setMainImage(imageId).subscribe({

@@ -7,18 +7,24 @@ export enum BannerType {
   CategoryBanner = 4,
 }
 
+export interface BannerImageResponse {
+  id: number;
+  imageUrl: string;
+  link?: string;
+  isMobile: boolean;
+  displayOrder: number;
+}
+
 export interface BannerResponse {
   id: number;
   title: string;
   description?: string;
-  imageUrl: string;
-  mobileImageUrl?: string;
-  link?: string;
   type: BannerType;
   displayOrder: number;
   isActive: boolean;
   startDate?: string;
   endDate?: string;
+  images: BannerImageResponse[];
 }
 
 export interface BannerFilterRequest {
@@ -27,24 +33,24 @@ export interface BannerFilterRequest {
   pageNumber?: number;
   pageSize?: number;
 }
+
+// صورة جديدة هتتضاف مع الـ request (لسه مارفعتش)
+export interface BannerImageUpload {
+  file: File;
+  link?: string;
+}
+
 export interface UpsertBannerRequest {
   title: string;
   description?: string;
 
-  image?: File;
-
-  mobileImage?: File;
-
-  link?: string;
+  desktopImages: BannerImageUpload[];
+  mobileImages: BannerImageUpload[];
 
   type: BannerType;
-
   displayOrder: number;
-
   isActive: boolean;
-
   startDate?: string;
-
   endDate?: string;
 }
 

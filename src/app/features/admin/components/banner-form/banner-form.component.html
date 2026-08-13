@@ -1,213 +1,138 @@
 <!-- ========================================================= -->
 <!-- Banner Images -->
 <!-- ========================================================= -->
-<form
-  [formGroup]="form"
-  (ngSubmit)="submit()"
->
+<form [formGroup]="form" (ngSubmit)="submit()">
 <div class="card-header">
   <div>
-    <h2>
-      {{ 'banners.form.images.title' | translate }}
-    </h2>
-
-    <p>
-      {{ 'banners.form.images.description' | translate }}
-    </p>
+    <h2>{{ 'banners.form.images.title' | translate }}</h2>
+    <p>{{ 'banners.form.images.description' | translate }}</p>
   </div>
 </div>
-
 
 <div class="image-grid">
 
   <!-- ========================= -->
-  <!-- Desktop Image -->
+  <!-- Desktop Images -->
   <!-- ========================= -->
-
   <div class="upload-container">
+    <label class="upload-title">{{ 'banners.form.images.desktop' | translate }}</label>
 
-    <label class="upload-title">
-      {{ 'banners.form.images.desktop' | translate }}
-    </label>
-
-
-    @if (desktopPreview()) {
-
+    <!-- Existing images (edit mode) -->
+    @for (img of existingDesktopImages(); track img.id) {
       <div class="image-preview">
-
-        <img
-          [src]="desktopPreview()!"
-          [alt]="'banners.form.images.desktopAlt' | translate"
-        >
-
-
+        <img [src]="img.imageUrl" [alt]="'banners.form.images.desktopAlt' | translate">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Link (optional)"
+          [value]="img.link ?? ''"
+          disabled>
         <div class="image-actions">
-
-          <!-- Replace -->
-          <label class="btn btn-outline">
-
-            {{ 'common.replace' | translate }}
-
-            <input
-              hidden
-              type="file"
-              accept="image/*"
-              (change)="desktopSelected($event)"
-            >
-
-          </label>
-
-
-          <!-- Remove -->
           <button
             type="button"
             class="btn btn-danger"
-            (click)="removeDesktopImage()"
-          >
-
-            {{ 'common.remove' | translate }}
-
+            [disabled]="deletingImageId() === img.id"
+            (click)="deleteExistingImage(img)">
+            @if (deletingImageId() === img.id) {
+              <span class="spinner-sm"></span>
+            } @else {
+              {{ 'common.remove' | translate }}
+            }
           </button>
-
         </div>
-
       </div>
-
-    } @else {
-
-      <!-- Upload Desktop -->
-      <label
-        class="upload-box"
-        (drop)="desktopDrop($event)"
-        (dragover)="$event.preventDefault()"
-      >
-
-        <input
-          hidden
-          type="file"
-          accept="image/*"
-          (change)="desktopSelected($event)"
-        >
-
-
-        <i
-          class="fa-solid fa-cloud-arrow-up"
-          aria-hidden="true"
-        ></i>
-
-
-        <span>
-          {{ 'banners.form.images.clickToUpload' | translate }}
-        </span>
-
-
-        <small>
-          {{ 'banners.form.images.formats' | translate }}
-        </small>
-
-      </label>
-
     }
 
+    <!-- New images (not yet uploaded) -->
+    @for (img of newDesktopImages(); track $index) {
+      <div class="image-preview">
+        <img [src]="img.preview" [alt]="'banners.form.images.desktopAlt' | translate">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Link (optional)"
+          [value]="img.link"
+          (change)="updateNewImageLink(newDesktopImages, $index, $any($event.target).value)">
+        <div class="image-actions">
+          <button type="button" class="btn btn-danger" (click)="removeNewImage(newDesktopImages, $index)">
+            {{ 'common.remove' | translate }}
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- Upload box -->
+    <label
+      class="upload-box"
+      (drop)="desktopDrop($event)"
+      (dragover)="$event.preventDefault()">
+      <input hidden type="file" accept="image/*" multiple (change)="desktopSelected($event)">
+      <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+      <span>{{ 'banners.form.images.clickToUpload' | translate }}</span>
+      <small>{{ 'banners.form.images.formats' | translate }}</small>
+    </label>
   </div>
 
-
-
   <!-- ========================= -->
-  <!-- Mobile Image -->
+  <!-- Mobile Images -->
   <!-- ========================= -->
-
   <div class="upload-container">
+    <label class="upload-title">{{ 'banners.form.images.mobile' | translate }}</label>
 
-    <label class="upload-title">
-      {{ 'banners.form.images.mobile' | translate }}
-    </label>
-
-
-    @if (mobilePreview()) {
-
+    @for (img of existingMobileImages(); track img.id) {
       <div class="image-preview">
-
-        <img
-          [src]="mobilePreview()!"
-          [alt]="'banners.form.images.mobileAlt' | translate"
-        >
-
-
+        <img [src]="img.imageUrl" [alt]="'banners.form.images.mobileAlt' | translate">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Link (optional)"
+          [value]="img.link ?? ''"
+          disabled>
         <div class="image-actions">
-
-          <!-- Replace -->
-          <label class="btn btn-outline">
-
-            {{ 'common.replace' | translate }}
-
-            <input
-              hidden
-              type="file"
-              accept="image/*"
-              (change)="mobileSelected($event)"
-            >
-
-          </label>
-
-
-          <!-- Remove -->
           <button
             type="button"
             class="btn btn-danger"
-            (click)="removeMobileImage()"
-          >
-
-            {{ 'common.remove' | translate }}
-
+            [disabled]="deletingImageId() === img.id"
+            (click)="deleteExistingImage(img)">
+            @if (deletingImageId() === img.id) {
+              <span class="spinner-sm"></span>
+            } @else {
+              {{ 'common.remove' | translate }}
+            }
           </button>
-
         </div>
-
       </div>
-
-    } @else {
-
-      <!-- Upload Mobile -->
-      <label
-        class="upload-box"
-        (drop)="mobileDrop($event)"
-        (dragover)="$event.preventDefault()"
-      >
-
-        <input
-          hidden
-          type="file"
-          accept="image/*"
-          (change)="mobileSelected($event)"
-        >
-
-
-        <i
-          class="fa-solid fa-mobile-screen"
-          aria-hidden="true"
-        ></i>
-
-
-        <span>
-          {{ 'banners.form.images.uploadMobile' | translate }}
-        </span>
-
-
-        <small>
-          {{ 'banners.form.images.optional' | translate }}
-        </small>
-
-      </label>
-
     }
 
+    @for (img of newMobileImages(); track $index) {
+      <div class="image-preview">
+        <img [src]="img.preview" [alt]="'banners.form.images.mobileAlt' | translate">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Link (optional)"
+          [value]="img.link"
+          (change)="updateNewImageLink(newMobileImages, $index, $any($event.target).value)">
+        <div class="image-actions">
+          <button type="button" class="btn btn-danger" (click)="removeNewImage(newMobileImages, $index)">
+            {{ 'common.remove' | translate }}
+          </button>
+        </div>
+      </div>
+    }
+
+    <label
+      class="upload-box"
+      (drop)="mobileDrop($event)"
+      (dragover)="$event.preventDefault()">
+      <input hidden type="file" accept="image/*" multiple (change)="mobileSelected($event)">
+      <i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>
+      <span>{{ 'banners.form.images.uploadMobile' | translate }}</span>
+      <small>{{ 'banners.form.images.optional' | translate }}</small>
+    </label>
   </div>
 
 </div>
-
-
-
 <!-- ========================================================= -->
 <!-- Banner Content -->
 <!-- ========================================================= -->

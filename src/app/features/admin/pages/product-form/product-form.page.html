@@ -259,26 +259,35 @@
       </div>
 
       <div class="nested-form-box">
-        <h3 class="nested-form-title">Upload New Image</h3>
-        @if (imageError()) {
-          <div class="alert alert-danger mb-3">{{ imageError() }}</div>
-        }
-        <div class="upload-flex-row">
-          <input type="file" accept="image/*" class="form-control file-input" (change)="onFileSelected($event)" />
-          <label class="checkbox-label mb-0">
-            <input type="checkbox" [(ngModel)]="isMainImageSelection" />
-            <span>Set as Main Image</span>
-          </label>
-          <button type="button" class="btn btn-primary btn-sm" [disabled]="!selectedFile || isUploadingImage()" (click)="onUploadImage()">
-            @if (isUploadingImage()) {
-              <span class="spinner-sm"></span> Uploading...
-            } @else {
-              Upload Image
-            }
-          </button>
-        </div>
-      </div>
+  <h3 class="nested-form-title">Upload New Images</h3>
+  @if (imageError()) {
+    <div class="alert alert-danger mb-3">{{ imageError() }}</div>
+  }
+  <div class="upload-flex-row">
+    <input
+      type="file"
+      accept="image/*"
+      multiple
+      class="form-control file-input"
+      (change)="onFilesSelected($event)" />
 
+    @if (selectedFiles.length > 0) {
+      <span class="selected-count">{{ selectedFiles.length }} image(s) selected</span>
+    }
+
+    <button
+      type="button"
+      class="btn btn-primary btn-sm"
+      [disabled]="selectedFiles.length === 0 || isUploadingImage()"
+      (click)="onUploadImages()">
+      @if (isUploadingImage()) {
+        <span class="spinner-sm"></span> Uploading...
+      } @else {
+        Upload Image(s)
+      }
+    </button>
+  </div>
+</div>
       @if (isLoadingImages()) {
         <div class="loading-placeholder">Loading gallery images...</div>
       } @else if (images().length === 0) {

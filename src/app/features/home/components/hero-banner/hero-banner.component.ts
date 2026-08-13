@@ -142,15 +142,36 @@ this.loadStaticBanners();
   // Helpers
   // ==========================
 
-  // شيل كلمة private من هنا عشان التمبلت يقدر يستخدمها
   resolveImage(banner: BannerResponse): string {
 
-    return window.innerWidth <= 768 &&
-      banner.mobileImageUrl
-      ? banner.mobileImageUrl
-      : banner.imageUrl;
+    const isMobileView = window.innerWidth <= 768;
 
+    const mobileImage = banner.images.find(x => x.isMobile);
+    const desktopImage = banner.images.find(x => !x.isMobile);
+
+    if (isMobileView && mobileImage) {
+      return mobileImage.imageUrl;
+    }
+
+    return desktopImage?.imageUrl ?? mobileImage?.imageUrl ?? '';
   }
+
+  resolveLink(banner: BannerResponse | null): string | undefined {
+
+    if (!banner) return undefined;
+
+    const isMobileView = window.innerWidth <= 768;
+
+    const mobileImage = banner.images.find(x => x.isMobile);
+    const desktopImage = banner.images.find(x => !x.isMobile);
+
+    if (isMobileView && mobileImage) {
+      return mobileImage.link;
+    }
+
+    return desktopImage?.link ?? mobileImage?.link;
+  }
+
   private loadBanners(): void {
 
   this.bannerService
@@ -250,7 +271,6 @@ this.loadStaticBanners();
 
   go(index: number): void {
 
-    // كانت ناقصة هنا - كانت بتسمح تدوس على أي نقطة حتى لو transition شغالة
     if (this.isAnimating()) return;
 
     if (index === this.currentIndex()) return;
@@ -277,8 +297,6 @@ this.nextBanner.set(banner);
 
     image.onload = () => this.finishTransition(image.src, index);
 
-    // كانت ناقصة: لو الصورة فشلت تحميل، isAnimating كانت بتفضل true للأبد
-    // وتوقف الـ slider بالكامل. دلوقتي بننتقل للسلايد المطلوب برضو من غير الصورة الجديدة.
     image.onerror = () => this.finishTransition(this.currentImage(), index);
 
   }
@@ -345,10 +363,8 @@ this.nextBanner.set(banner);
   }
 
   // ==========================
-  // Helpers
+  // Resize
   // ==========================
-
-  
 
   private onResize = () => {
 

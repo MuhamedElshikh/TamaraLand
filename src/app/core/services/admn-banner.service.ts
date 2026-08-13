@@ -3,9 +3,13 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { API_BASE_URL } from '../../../app/core/constants/api.constants';
-import {PagedResponse } from '../../../app/core/models/catalog.models';
-import {ApiResponse}from '../../../app/core/models/api-response.model';
-import {BannerFilterRequest,BannerResponse,UpsertBannerRequest} from '../../../app/core/models/banner.models';
+import { PagedResponse } from '../../../app/core/models/catalog.models';
+import { ApiResponse } from '../../../app/core/models/api-response.model';
+import {
+  BannerFilterRequest,
+  BannerResponse,
+  UpsertBannerRequest,
+} from '../../../app/core/models/banner.models';
 
 @Injectable({
   providedIn: 'root',
@@ -65,40 +69,41 @@ export class AdminBannerService {
     );
   }
 
+  deleteImage(bannerId: number, imageId: number): Observable<ApiResponse<void>> {
+    return this.http.delete<ApiResponse<void>>(
+      `${this.baseUrl}/${bannerId}/images/${imageId}`
+    );
+  }
+
   private toFormData(request: UpsertBannerRequest): FormData {
     const formData = new FormData();
 
-    formData.append('title', request.title);
+    formData.append('Title', request.title);
 
     if (request.description)
-      formData.append('description', request.description);
+      formData.append('Description', request.description);
 
-    if (request.image)
-      formData.append('image', request.image);
-
-    if (request.mobileImage)
-      formData.append('mobileImage', request.mobileImage);
-
-    if (request.link)
-      formData.append('link', request.link);
-
-    formData.append('type', request.type.toString());
-
-    formData.append(
-      'displayOrder',
-      request.displayOrder.toString()
-    );
-
-    formData.append(
-      'isActive',
-      String(request.isActive)
-    );
+    formData.append('Type', request.type.toString());
+    formData.append('DisplayOrder', request.displayOrder.toString());
+    formData.append('IsActive', String(request.isActive));
 
     if (request.startDate)
-      formData.append('startDate', request.startDate);
+      formData.append('StartDate', request.startDate);
 
     if (request.endDate)
-      formData.append('endDate', request.endDate);
+      formData.append('EndDate', request.endDate);
+
+    request.desktopImages.forEach((img, i) => {
+      formData.append(`DesktopImages[${i}].File`, img.file, img.file.name);
+      if (img.link)
+        formData.append(`DesktopImages[${i}].Link`, img.link);
+    });
+
+    request.mobileImages.forEach((img, i) => {
+      formData.append(`MobileImages[${i}].File`, img.file, img.file.name);
+      if (img.link)
+        formData.append(`MobileImages[${i}].Link`, img.link);
+    });
 
     return formData;
   }
