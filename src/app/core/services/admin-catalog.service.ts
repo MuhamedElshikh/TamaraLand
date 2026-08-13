@@ -120,7 +120,7 @@ updateProductPublishStatus(
         params[k] = String(v);
       }
     });
-    return this.http.get<ApiResponse<PagedResponse<CategoryResponse>>>(this.categoryUrl, { params });
+    return this.http.get<ApiResponse<PagedResponse<CategoryResponse>>>(`${this.categoryUrl}/admin`, { params });
   }
   updatecategoryPublishStatus(
   id: number,
@@ -185,7 +185,7 @@ if (image)
         params[k] = String(v);
       }
     });
-    return this.http.get<ApiResponse<PagedResponse<BrandResponse>>>(this.brandUrl, { params });
+    return this.http.get<ApiResponse<PagedResponse<BrandResponse>>>(`${this.brandUrl}/admin`, { params });
   }
    updatebrandPublishStatus(
   id: number,
