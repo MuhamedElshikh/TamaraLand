@@ -75,36 +75,34 @@ export class AdminBannerService {
     );
   }
 
-  private toFormData(request: UpsertBannerRequest): FormData {
-    const formData = new FormData();
+ private toFormData(request: UpsertBannerRequest): FormData {
+  const formData = new FormData();
 
-    formData.append('Title', request.title);
+  formData.append('Title', request.title);
 
-    if (request.description)
-      formData.append('Description', request.description);
+  if (request.description)
+    formData.append('Description', request.description);
 
-    formData.append('Type', request.type.toString());
-    formData.append('DisplayOrder', request.displayOrder.toString());
-    formData.append('IsActive', String(request.isActive));
+  formData.append('Type', request.type.toString());
+  formData.append('DisplayOrder', request.displayOrder.toString());
+  formData.append('IsActive', String(request.isActive));
 
-    if (request.startDate)
-      formData.append('StartDate', request.startDate);
+  if (request.startDate)
+    formData.append('StartDate', request.startDate);
 
-    if (request.endDate)
-      formData.append('EndDate', request.endDate);
+  if (request.endDate)
+    formData.append('EndDate', request.endDate);
 
-    request.desktopImages.forEach((img, i) => {
-      formData.append(`DesktopImages[${i}].File`, img.file, img.file.name);
-      if (img.link)
-        formData.append(`DesktopImages[${i}].Link`, img.link);
-    });
+  request.desktopImages.forEach(img => {
+    formData.append('DesktopImages', img.file, img.file.name);
+    formData.append('DesktopImageLinks', img.link ?? '');
+  });
 
-    request.mobileImages.forEach((img, i) => {
-      formData.append(`MobileImages[${i}].File`, img.file, img.file.name);
-      if (img.link)
-        formData.append(`MobileImages[${i}].Link`, img.link);
-    });
+  request.mobileImages.forEach(img => {
+    formData.append('MobileImages', img.file, img.file.name);
+    formData.append('MobileImageLinks', img.link ?? '');
+  });
 
-    return formData;
-  }
+  return formData;
+}
 }

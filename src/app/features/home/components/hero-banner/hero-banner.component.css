@@ -196,7 +196,7 @@
 
     height:100%;
 
-    object-fit:fill;
+    object-fit:contain;
 
     transition:opacity .6s ease;
 

@@ -17,10 +17,16 @@ import {
 } from '../../../../core/models/banner.models';
 import { TranslatePipe } from '@ngx-translate/core';
 
+interface HeroSlide {
+  desktopUrl: string;
+  mobileUrl?: string;
+  link?: string;
+}
+
 @Component({
   selector: 'app-hero-banner',
   standalone: true,
-  imports: [RouterLink,TranslatePipe],
+  imports: [RouterLink, TranslatePipe],
   templateUrl: './hero-banner.component.html',
   styleUrl: './hero-banner.component.css'
 })
@@ -41,10 +47,10 @@ export class HeroBannerComponent implements OnInit, OnDestroy {
   private introTimer?: ReturnType<typeof setTimeout>;
 
   /**
-   * Banner Data
+   * Slider Data
    */
 
-  readonly banners = signal<BannerResponse[]>([]);
+  readonly slides = signal<HeroSlide[]>([]);
   readonly loading = signal(true);
   readonly loadError = signal(false);
 
@@ -53,13 +59,13 @@ export class HeroBannerComponent implements OnInit, OnDestroy {
   readonly showCurrent = signal(true);
   readonly currentImage = signal('');
   readonly nextImage = signal('');
-  readonly nextBanner = signal<BannerResponse | null>(null);
+  readonly nextSlide = signal<HeroSlide | null>(null);
 
-  readonly currentBanner = computed(() =>
-    this.banners()[this.currentIndex()] ?? null
+  readonly currentSlide = computed(() =>
+    this.slides()[this.currentIndex()] ?? null
   );
 
-  readonly hasBanners = computed(() => this.banners().length > 0);
+  readonly hasBanners = computed(() => this.slides().length > 0);
 
   private autoSlideTimer?: number;
 
@@ -80,7 +86,6 @@ export class HeroBannerComponent implements OnInit, OnDestroy {
     const deltaX = event.changedTouches[0].clientX - this.touchStartX;
     const deltaY = event.changedTouches[0].clientY - this.touchStartY;
 
-    // بنتجاهل اللمسة لو حركة رأسية (سكرول) أكبر من الأفقية، عشان منتدخلش في السكرول العادي
     if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
       if (deltaX < 0) {
         this.next();
@@ -95,9 +100,8 @@ export class HeroBannerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.loadBanners();
-this.loadStaticBanners();
+    this.loadStaticBanners();
     window.addEventListener('resize', this.onResize);
-
 
   }
 
@@ -112,7 +116,8 @@ this.loadStaticBanners();
   // ==========================
   // Load
   // ==========================
- private loadStaticBanners(): void {
+
+  private loadStaticBanners(): void {
 
     forkJoin({
       home: this.bannerService.getHeroBanners(BannerType.HomeBanner),
@@ -139,7 +144,7 @@ this.loadStaticBanners();
   }
 
   // ==========================
-  // Helpers
+  // Helpers (Static Banners)
   // ==========================
 
   resolveImage(banner: BannerResponse): string {
@@ -172,72 +177,125 @@ this.loadStaticBanners();
     return desktopImage?.link ?? mobileImage?.link;
   }
 
-  private loadBanners(): void {
+  // ==========================
+  // Helpers (Slider Slides)
+  // ==========================
 
-  this.bannerService
-    .getHeroBanners(BannerType.HeroSlider)
-    .pipe(takeUntilDestroyed(this.destroyRef))
-    .subscribe({
+  private buildSlides(banners: BannerResponse[]): HeroSlide[] {
 
-      next: (response) => {
+    const slides: HeroSlide[] = [];
 
-        this.banners.set(response.data ?? []);
+    for (const banner of banners) {
 
-        const first = this.banners()[0];
+      const desktopImages = banner.images
+        .filter(x => !x.isMobile)
+        .sort((a, b) => a.displayOrder - b.displayOrder);
 
-        if (first) {
+      const mobileImages = banner.images
+        .filter(x => x.isMobile)
+        .sort((a, b) => a.displayOrder - b.displayOrder);
 
-          this.currentImage.set(this.resolveImage(first));
-          this.nextBanner.set(first);
-
-        }
-
-        this.loading.set(false);
-        this.loadError.set(false);
-
-        if (this.banners().length > 1) {
-
-          this.startAutoSlide();
-
-        }
-
-        // ==========================
-        // هنا الإضافة المهمة
-        // ==========================
-
-        if (this.hasBanners()) {
-
-          // فيه بانرات → نستنى 5 ثواني وبعدين نقفل الإنترو ونعرض السلايدر
-          this.introTimer = setTimeout(() => {
-
-            this.showIntro.set(false);
-
-            requestAnimationFrame(() => {
-
-              this.showSlider.set(true);
-
-            });
-
-          }, 5000);
-
-        }
-        // لو مفيش بانرات → showIntro فاضل true للأبد، ومفيش أي تايمر
-
-      },
-
-      error: () => {
-
-        this.loading.set(false);
-        this.loadError.set(true);
-
-        // فشل التحميل بردو معناه مفيش بانرات نعرضها → سيب الإنترو ثابت
-        // (متعملش setTimeout هنا)
-
+      if (desktopImages.length === 0 && mobileImages.length > 0) {
+        // مفيش صور ديسكتوب، بس فيه موبايل → اعتبرها سلايدات مستقلة
+        mobileImages.forEach(m => {
+          slides.push({
+            desktopUrl: m.imageUrl,
+            mobileUrl: m.imageUrl,
+            link: m.link
+          });
+        });
+        continue;
       }
 
-    });
+      // كل صورة ديسكتوب = سلايد منفصل، ولو فيه صورة موبايل بنفس الترتيب نستخدمها ليها
+      desktopImages.forEach((d, i) => {
+        const mobileMatch = mobileImages[i];
+        slides.push({
+          desktopUrl: d.imageUrl,
+          mobileUrl: mobileMatch?.imageUrl,
+          link: d.link ?? mobileMatch?.link
+        });
+      });
+    }
 
-}
+    return slides;
+  }
+
+  private resolveSlideImage(slide: HeroSlide): string {
+
+    const isMobileView = window.innerWidth <= 768;
+
+    if (isMobileView && slide.mobileUrl) {
+      return slide.mobileUrl;
+    }
+
+    return slide.desktopUrl;
+  }
+
+  resolveSlideLink(slide: HeroSlide | null): string | undefined {
+
+    return slide?.link;
+  }
+
+  private loadBanners(): void {
+
+    this.bannerService
+      .getHeroBanners(BannerType.HeroSlider)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+
+        next: (response) => {
+
+          const rawBanners = response.data ?? [];
+
+          this.slides.set(this.buildSlides(rawBanners));
+
+          const first = this.slides()[0];
+
+          if (first) {
+
+            this.currentImage.set(this.resolveSlideImage(first));
+            this.nextSlide.set(first);
+
+          }
+
+          this.loading.set(false);
+          this.loadError.set(false);
+
+          if (this.slides().length > 1) {
+
+            this.startAutoSlide();
+
+          }
+
+          if (this.hasBanners()) {
+
+            this.introTimer = setTimeout(() => {
+
+              this.showIntro.set(false);
+
+              requestAnimationFrame(() => {
+
+                this.showSlider.set(true);
+
+              });
+
+            }, 5000);
+
+          }
+
+        },
+
+        error: () => {
+
+          this.loading.set(false);
+          this.loadError.set(true);
+
+        }
+
+      });
+
+  }
 
   // ==========================
   // Slider Controls
@@ -247,7 +305,7 @@ this.loadStaticBanners();
 
     if (this.isAnimating()) return;
 
-    const total = this.banners().length;
+    const total = this.slides().length;
 
     if (total <= 1) return;
 
@@ -259,7 +317,7 @@ this.loadStaticBanners();
 
     if (this.isAnimating()) return;
 
-    const total = this.banners().length;
+    const total = this.slides().length;
 
     if (total <= 1) return;
 
@@ -285,15 +343,16 @@ this.loadStaticBanners();
 
   private changeTo(index: number): void {
 
-    const banner = this.banners()[index];
+    const slide = this.slides()[index];
 
-    if (!banner) return;
-this.nextBanner.set(banner);
+    if (!slide) return;
+
+    this.nextSlide.set(slide);
     this.isAnimating.set(true);
 
     const image = new Image();
 
-    image.src = this.resolveImage(banner);
+    image.src = this.resolveSlideImage(slide);
 
     image.onload = () => this.finishTransition(image.src, index);
 
@@ -316,7 +375,7 @@ this.nextBanner.set(banner);
       this.currentImage.set(imageSrc);
 
       this.currentIndex.set(index);
-      this.nextBanner.set(this.banners()[index] ?? null);
+      this.nextSlide.set(this.slides()[index] ?? null);
 
       this.showCurrent.set(true);
 
@@ -354,7 +413,7 @@ this.nextBanner.set(banner);
 
   resume(): void {
 
-    if (this.banners().length > 1) {
+    if (this.slides().length > 1) {
 
       this.startAutoSlide();
 
@@ -368,12 +427,12 @@ this.nextBanner.set(banner);
 
   private onResize = () => {
 
-    const banner = this.currentBanner();
+    const slide = this.currentSlide();
 
-    if (!banner) return;
+    if (!slide) return;
 
     this.currentImage.set(
-      this.resolveImage(banner)
+      this.resolveSlideImage(slide)
     );
 
   };

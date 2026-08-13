@@ -31,6 +31,8 @@
        {{ 'hero.shopNewIn' | translate }}
 
       <a>
+
+      
         routerLink="/categories"
         class="btn btn-outline">
 
@@ -60,9 +62,9 @@
  
   <div class="hero-background">
 
-  
+  <a
     class="hero-link"
-    [routerLink]="resolveLink(currentBanner())">
+    [routerLink]="resolveSlideLink(currentSlide())">
 
     <img
     class="hero-image current"
@@ -70,9 +72,11 @@
     [src]="currentImage()"
     [alt]="'hero.bannerAlt' | translate">
 
-  <a>
+  </a>
+
+  <a
     class="hero-link"
-    [routerLink]="resolveLink(nextBanner())">
+    [routerLink]="resolveSlideLink(nextSlide())">
 
     <img
       class="hero-image next"
@@ -105,7 +109,7 @@
 
   <div class="hero-indicators">
 
-    @for (banner of banners(); track banner.id; let i = $index) {
+    @for (slide of slides(); track $index; let i = $index) {
 
       <button
         class="hero-dot"
