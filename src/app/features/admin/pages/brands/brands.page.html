@@ -45,11 +45,12 @@
 
   <!-- Data Table -->
   <app-data-table
-    [columns]="columns"
-    [rows]="brands()"
-    [isLoading]="isLoading()"
-    emptyMessage="admin.brands.empty"
-  >
+  [columns]="columns"
+  [rows]="brands()"
+  [isLoading]="isLoading()"
+  (toggleChange)="onStatusToggle($event)"
+  (rowClick)="onRowClick($event)"
+>
     <ng-template #actions let-row>
       <div class="action-buttons">
         <button

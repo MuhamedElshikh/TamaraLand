@@ -70,10 +70,11 @@ export class AdminCategoriesPage implements OnInit {
   },
 
   {
-    key: 'isPublished',
-    header: 'admin.categories.columns.published',
-    type: 'boolean',
-  },
+  key: 'isPublished',
+  header: 'Status',
+  type: 'toggle',
+  align: 'center'
+},
 
   {
     key: 'description',
@@ -258,4 +259,33 @@ export class AdminCategoriesPage implements OnInit {
       },
     });
   }
+   onRowClick(categry: CategoryResponse): void {
+    this.openEditModal(categry);
+  }
+  onStatusToggle(event: {
+  row: CategoryResponse;
+  column: DataTableColumn<CategoryResponse>;
+  value: boolean;
+}): void {
+  const category = event.row;
+
+  this.adminCatalogService
+    .updatecategoryPublishStatus(category.id, event.value)
+    .subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.categories.update(categories =>
+            categories.map(item =>
+              item.id === category.id
+                ? {
+                    ...item,
+                    isPublished: event.value
+                  }
+                : item
+            )
+          );
+        }
+      }
+    });
+}
 }

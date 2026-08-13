@@ -71,10 +71,11 @@ readonly columns: DataTableColumn<BrandResponse>[] = [
   },
 
   {
-    key: 'isPublished',
-    header: 'Published',
-    type: 'boolean'
-  },
+  key: 'isPublished',
+  header: 'Status',
+  type: 'toggle',
+  align: 'center'
+},
 
   {
     key: 'description',
@@ -265,4 +266,33 @@ readonly columns: DataTableColumn<BrandResponse>[] = [
       },
     });
   }
+  onRowClick(brand: BrandResponse): void {
+    this.openEditModal(brand);
+  }
+  onStatusToggle(event: {
+  row: BrandResponse;
+  column: DataTableColumn<BrandResponse>;
+  value: boolean;
+}): void {
+  const brand = event.row;
+
+  this.adminCatalogService
+    .updatebrandPublishStatus(brand.id, event.value)
+    .subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.brands.update(brands =>
+            brands.map(item =>
+              item.id === brand.id
+                ? {
+                    ...item,
+                    isPublished: event.value
+                  }
+                : item
+            )
+          );
+        }
+      }
+    });
+}
 }

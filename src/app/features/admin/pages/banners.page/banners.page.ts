@@ -298,5 +298,6 @@ export class BannersPage implements OnInit {
     }
 
   }
+  
 
 }

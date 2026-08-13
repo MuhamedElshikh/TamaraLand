@@ -43,7 +43,15 @@ export class AdminCatalogService {
     });
     return this.http.get<ApiResponse<PagedResponse<ProductAdminResponse>>>(`${this.productUrl}/admin`, { params });
   }
-
+updateProductPublishStatus(
+  id: number,
+  isPublished: boolean
+): Observable<ApiResponse<void>> {
+  return this.http.patch<ApiResponse<void>>(
+    `${API_BASE_URL}/api/Product/${id}/publish`,
+    isPublished
+  );
+}
   getProductById(id: number): Observable<ApiResponse<ProductAdminResponse>> {
     return this.http.get<ApiResponse<ProductAdminResponse>>(`${this.productUrl}/admin/${id}`);
   }
@@ -114,6 +122,15 @@ export class AdminCatalogService {
     });
     return this.http.get<ApiResponse<PagedResponse<CategoryResponse>>>(this.categoryUrl, { params });
   }
+  updatecategoryPublishStatus(
+  id: number,
+  isPublished: boolean
+): Observable<ApiResponse<void>> {
+  return this.http.patch<ApiResponse<void>>(
+    `${this.categoryUrl}/${id}/publish`,
+    isPublished
+  );
+}
 
   getCategoryById(id: number): Observable<ApiResponse<CategoryResponse>> {
     return this.http.get<ApiResponse<CategoryResponse>>(`${this.categoryUrl}/${id}`);
@@ -170,6 +187,15 @@ if (image)
     });
     return this.http.get<ApiResponse<PagedResponse<BrandResponse>>>(this.brandUrl, { params });
   }
+   updatebrandPublishStatus(
+  id: number,
+  isPublished: boolean
+): Observable<ApiResponse<void>> {
+  return this.http.patch<ApiResponse<void>>(
+    `${this.brandUrl}/${id}/publish`,
+    isPublished
+  );
+}
 
   getBrandById(id: number): Observable<ApiResponse<BrandResponse>> {
     return this.http.get<ApiResponse<BrandResponse>>(`${this.brandUrl}/${id}`);

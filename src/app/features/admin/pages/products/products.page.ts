@@ -57,11 +57,11 @@ export class ProductsPage implements OnInit {
     { key: 'brandName', header: 'Brand', accessor: (r) => r.brandName || '—' },
     { key: 'averageRating', header: 'Rating', align: 'center', accessor: (r) => r.averageRating ? `⭐ ${r.averageRating}` : '—' },
     {
-      key: 'isActive',
-      header: 'Status',
-      type: 'badge',
-      accessor: (r) => (r.isActive ? 'Active' : 'Inactive'),
-    },
+    key: 'isPublished',
+    header: 'Status',
+    type: 'toggle',
+    align: 'center'
+  },
   ];
 
   ngOnInit(): void {
@@ -161,4 +161,34 @@ export class ProductsPage implements OnInit {
       },
     });
   }
+  onRowClick(product: ProductAdminResponse): void {
+  this.editProduct(product);
+}
+onStatusToggle(event: {
+  row: ProductAdminResponse;
+  column: DataTableColumn<ProductAdminResponse>;
+  value: boolean;
+}): void {
+  const product = event.row;
+
+  this.adminCatalogService
+    .updateProductPublishStatus(product.id, event.value)
+    .subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.products.update(products =>
+            products.map(item =>
+              item.id === product.id
+                ? {
+                    ...item,
+                    isPublished: event.value
+                  }
+                : item
+            )
+          );
+        }
+      }
+    });
+}
+
 }
