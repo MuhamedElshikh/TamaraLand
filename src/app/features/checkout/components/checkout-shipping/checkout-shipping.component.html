@@ -3,7 +3,6 @@
   <div class="checkout-block__header">
 
     <div>
-
       <p class="section-kicker">
         {{ 'checkout.shipping.step' | translate }}
       </p>
@@ -11,7 +10,6 @@
       <h3>
         {{ 'checkout.shipping.title' | translate }}
       </h3>
-
     </div>
 
   </div>
@@ -25,13 +23,16 @@
   } @else if (noShippingAvailable()) {
 
     <p class="checkout-shipping__error">
-
       {{ 'checkout.shipping.notAvailable' | translate }}
-
       "{{ governorate() }}"
-
       {{ 'checkout.shipping.notAvailableSuffix' | translate }}
+    </p>
 
+  } @else if (areaNotAvailable()) {
+
+    <p class="checkout-shipping__error">
+      {{ 'checkout.shipping.areaNotAvailable' | translate }}
+      "{{ area() }}"
     </p>
 
   } @else {
@@ -47,7 +48,8 @@
         <input
           type="text"
           [value]="governorate()"
-          disabled />
+          disabled
+        />
 
       </label>
 
@@ -57,38 +59,24 @@
           {{ 'checkout.shipping.area' | translate }}
         </span>
 
-        <select
-          [ngModel]="selectedAreaId()"
-          (ngModelChange)="onAreaChange($event)"
-          name="checkoutArea">
-
-          <option
-            [ngValue]="null"
-            disabled>
-
-            {{ 'checkout.shipping.selectArea' | translate }}
-
-          </option>
-
-          @for (area of areasForGovernorate(); track area.id) {
-
-            <option [ngValue]="area.id">
-
-              {{ area.name }}
-
-              —
-
-              {{ area.shippingCost | number }} EGP
-
-            </option>
-
-          }
-
-        </select>
+        <input
+          type="text"
+          [value]="matchedArea()?.name ?? area()"
+          disabled
+        />
 
       </label>
 
     </div>
+
+    @if (matchedArea()) {
+
+      <div class="checkout-shipping__cost">
+        {{ matchedArea()!.shippingCost | number }}
+        EGP
+      </div>
+
+    }
 
   }
 

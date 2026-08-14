@@ -1,14 +1,32 @@
-import { Component, Output, EventEmitter, computed, effect, inject, input, signal } from '@angular/core';
+import {
+  Component,
+  Output,
+  EventEmitter,
+  computed,
+  effect,
+  inject,
+  input,
+} from '@angular/core';
+
 import { FormsModule } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
+
 import { AddressService } from '../../../../core/services/address.service';
-import { AddressResponse, ShippingAreaItem } from '../../../../core/models/domain.models';
+import {
+  AddressResponse,
+  ShippingAreaItem,
+} from '../../../../core/models/domain.models';
+
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-checkout-shipping',
   standalone: true,
-  imports: [FormsModule, DecimalPipe,TranslatePipe],
+  imports: [
+    FormsModule,
+    DecimalPipe,
+    TranslatePipe,
+  ],
   templateUrl: './checkout-shipping.component.html',
   styleUrl: './checkout-shipping.component.css',
 })
@@ -17,23 +35,79 @@ export class CheckoutShippingComponent {
 
   selectedAddress = input<AddressResponse | null>(null);
 
-  @Output() areaSelected = new EventEmitter<ShippingAreaItem | null>();
+  @Output() areaSelected =
+    new EventEmitter<ShippingAreaItem | null>();
 
-  readonly shippingLookup = this.addressService.shippingLookup;
-  readonly selectedAreaId = signal<number | null>(null);
+  readonly shippingLookup =
+    this.addressService.shippingLookup;
 
-  // المحافظة بقت مشتقة من العنوان المختار مباشرة، مش اختيار حر - كده مستحيل يحصل mismatch
-  readonly governorate = computed(() => this.selectedAddress()?.governorate ?? '');
+  // =========================
+  // Governorate
+  // =========================
+
+  readonly governorate = computed(() =>
+    this.selectedAddress()?.governorate ?? ''
+  );
 
   readonly matchedGovernorateGroup = computed(() => {
-    return this.shippingLookup().find((g) => g.governorate === this.governorate()) ?? null;
+    return (
+      this.shippingLookup().find(
+        g => g.governorate === this.governorate()
+      ) ?? null
+    );
   });
 
-  readonly areasForGovernorate = computed(() => this.matchedGovernorateGroup()?.areas ?? []);
+  // =========================
+  // Area from selected address
+  // =========================
 
-  // بيبان لو محافظة العنوان مالهاش شحن متاح خالص، عشان نوقف اليوزر بدل ما نسيبه يبعت طلب هيترفض
+  readonly area = computed(() =>
+    this.selectedAddress()?.area ?? ''
+  );
+
+  readonly matchedArea = computed(() => {
+    const areas = this.matchedGovernorateGroup()?.areas ?? [];
+    const selectedArea = this.area().trim();
+
+    if (!selectedArea) {
+      return null;
+    }
+
+    return (
+      areas.find(
+        x => x.name.trim() === selectedArea
+      ) ?? null
+    );
+  });
+
+  readonly selectedAreaId = computed(() =>
+    this.matchedArea()?.id ?? null
+  );
+
+  // =========================
+  // Shipping
+  // =========================
+
+  readonly areasForGovernorate = computed(() =>
+    this.matchedGovernorateGroup()?.areas ?? []
+  );
+
   readonly noShippingAvailable = computed(() => {
-    return !!this.governorate() && this.shippingLookup().length > 0 && !this.matchedGovernorateGroup();
+    return (
+      !!this.governorate() &&
+      this.shippingLookup().length > 0 &&
+      !this.matchedGovernorateGroup()
+    );
+  });
+
+  readonly areaNotAvailable = computed(() => {
+    return (
+      !!this.governorate() &&
+      !!this.area() &&
+      this.shippingLookup().length > 0 &&
+      !!this.matchedGovernorateGroup() &&
+      !this.matchedArea()
+    );
   });
 
   constructor() {
@@ -41,17 +115,12 @@ export class CheckoutShippingComponent {
       this.addressService.getShippingLookup().subscribe();
     }
 
-    // لما العنوان يتغيّر، نصفّر أي منطقة كانت متختارة قبل كده (كانت تبع عنوان تاني)
+    // لما العنوان أو بيانات الشحن تتغير،
+    // نحدد الـ Shipping Area تلقائيًا.
     effect(() => {
-      this.governorate(); // بنتابعه بس عشان الـ effect يشتغل لما يتغيّر
-      this.selectedAreaId.set(null);
-      this.areaSelected.emit(null);
-    });
-  }
+      const area = this.matchedArea();
 
-  onAreaChange(id: number | null): void {
-    this.selectedAreaId.set(id);
-    const area = this.areasForGovernorate().find((a) => a.id === id) ?? null;
-    this.areaSelected.emit(area);
+      this.areaSelected.emit(area);
+    });
   }
 }
