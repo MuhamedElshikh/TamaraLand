@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection,inject, provideAppInitializer } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter ,withInMemoryScrolling } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
@@ -24,7 +24,11 @@ export const appConfig: ApplicationConfig = {
       eventCoalescing: true
     }),
 
-    provideRouter(routes),
+    provideRouter(routes,withInMemoryScrolling({
+        scrollPositionRestoration: 'top', // يرجع لفوق مع كل navigation
+        anchorScrolling: 'enabled' // لو بتستخدم #anchors كمان
+      })
+    ),
 
     provideHttpClient(
       withInterceptors([
@@ -51,4 +55,6 @@ export const appConfig: ApplicationConfig = {
       return storeSettingsService.load();
     }),
   ]
+
+  
 };
