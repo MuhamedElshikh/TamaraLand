@@ -27,7 +27,11 @@
       }
     </label>
   </div>
-
+<app-address-map-picker
+  [initialLat]="existingAddress?.latitude ?? 30.0444"
+  [initialLng]="existingAddress?.longitude ?? 31.2357"
+  (locationPicked)="onLocationPicked($event)"
+></app-address-map-picker>
   <div class="field-grid">
     <label class="field">
       <span>{{ 'addressForm.governorate' | translate }}</span>

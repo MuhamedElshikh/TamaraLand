@@ -78,7 +78,6 @@
     "viewAll": "View all",
     "noProducts": "No products available yet."
   },
-
   "hero": {
     "eyebrow": "LUXURY FASHION",
 
@@ -294,7 +293,12 @@
   "addressForm": {
     "editTitle": "Edit Address",
     "addTitle": "Add a New Address",
-
+  "map": {
+      "searchPlaceholder": "Search for your address...",
+      "dragHint": "Drag the marker to your exact location",
+      "useMyLocation" :"use my location",
+      "locating" :"locating.."
+    },
     "fullName": "Full Name",
     "phoneNumber": "Phone Number",
     "governorate": "Governorate",

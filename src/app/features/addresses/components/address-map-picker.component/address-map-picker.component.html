@@ -1,0 +1,40 @@
+<div class="map-picker">
+  <div class="map-picker__search-wrapper">
+    <input
+      type="text"
+      [formControl]="searchControl"
+      class="map-picker__search"
+      placeholder="{{ 'addressForm.map.searchPlaceholder' | translate }}"
+      autocomplete="off"
+    />
+
+    @if (showResults) {
+      <ul class="map-picker__results">
+        @for (result of results; track result.display_name) {
+          <li (click)="selectResult(result)">{{ result.display_name }}</li>
+        }
+      </ul>
+    }
+  </div>
+
+  <button
+    type="button"
+    class="map-picker__locate-btn"
+    (click)="useMyLocation()"
+    [disabled]="isLocating()"
+  >
+    @if (isLocating()) {
+      {{ 'addressForm.map.locating' | translate }}
+    } @else {
+      📍 {{ 'addressForm.map.useMyLocation' | translate }}
+    }
+  </button>
+
+  @if (locationError()) {
+    <p class="map-picker__location-error">{{ locationError() }}</p>
+  }
+
+  <div id="address-map" class="map-picker__map"></div>
+
+  <p class="map-picker__hint">{{ 'addressForm.map.dragHint' | translate }}</p>
+</div>

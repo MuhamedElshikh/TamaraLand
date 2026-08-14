@@ -5,11 +5,12 @@ import { AddressResponse } from '../../../../core/models/domain.models';
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 import { DecimalPipe } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
+import { PickedLocation, AddressMapPickerComponent } from '../address-map-picker.component/address-map-picker.component';
 
 @Component({
   selector: 'app-address-form',
   standalone: true,
-  imports: [ReactiveFormsModule ,DecimalPipe,TranslatePipe],
+  imports: [ReactiveFormsModule, DecimalPipe, TranslatePipe, AddressMapPickerComponent],
   templateUrl: './address-form.component.html',
   styleUrl: './address-form.component.css',
 })
@@ -49,7 +50,15 @@ export class AddressFormComponent implements OnInit, OnChanges {
     apartment: [''],
     notes: [''],
     isDefault: [false],
+      latitude: [null as number | null],
+  longitude: [null as number | null],
   });
+  onLocationPicked(location: PickedLocation): void {
+  this.form.patchValue({
+    latitude: location.lat,
+    longitude: location.lng,
+  });
+}
 
   ngOnInit(): void {
     if (this.shippingLookup().length === 0) {
@@ -110,34 +119,40 @@ export class AddressFormComponent implements OnInit, OnChanges {
   }
 
   submit(): void {
-    if (this.form.invalid || this.isSubmitting()) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
-    this.isSubmitting.set(true);
-    this.errorMessage.set(null);
-
-    const payload = this.form.getRawValue();
-    const request$ = this.existingAddress
-      ? this.addressService.updateAddress(this.existingAddress.id, payload)
-      : this.addressService.createAddress(payload);
-
-    request$.subscribe({
-      next: (res) => {
-        this.isSubmitting.set(false);
-        if (res.success) {
-          this.saved.emit();
-        } else {
-          this.errorMessage.set(res.message);
-        }
-      },
-      error: (err) => {
-        this.isSubmitting.set(false);
-        this.errorMessage.set(extractErrorMessage(err, 'Could not save this address.'));
-      },
-    });
+  if (this.form.invalid || this.isSubmitting()) {
+    this.form.markAllAsTouched();
+    return;
   }
+
+  this.isSubmitting.set(true);
+  this.errorMessage.set(null);
+
+  const raw = this.form.getRawValue();
+  const payload = {
+    ...raw,
+    latitude: raw.latitude ?? undefined,
+    longitude: raw.longitude ?? undefined,
+  };
+
+  const request$ = this.existingAddress
+    ? this.addressService.updateAddress(this.existingAddress.id, payload)
+    : this.addressService.createAddress(payload);
+
+  request$.subscribe({
+    next: (res) => {
+      this.isSubmitting.set(false);
+      if (res.success) {
+        this.saved.emit();
+      } else {
+        this.errorMessage.set(res.message);
+      }
+    },
+    error: (err) => {
+      this.isSubmitting.set(false);
+      this.errorMessage.set(extractErrorMessage(err, 'Could not save this address.'));
+    },
+  });
+}
 
   cancel(): void {
     this.cancelled.emit();

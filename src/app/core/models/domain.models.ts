@@ -76,6 +76,8 @@ export interface AddressResponse {
   notes?: string;
   isDefault: boolean;
   isPhoneVerified: boolean;
+  latitude?: number;
+  longitude?: number;
 }
 
 
@@ -90,6 +92,8 @@ export interface CreateAddressRequest {
   apartment?: string;
   notes?: string;
   isDefault: boolean;
+  latitude?: number;
+  longitude?: number;
 }
 
 export type UpdateAddressRequest = CreateAddressRequest;

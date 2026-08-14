@@ -288,7 +288,12 @@
   "addressForm": {
     "editTitle": "تعديل العنوان",
     "addTitle": "إضافة عنوان جديد",
-
+"map": {
+      "searchPlaceholder": "دور على عنوانك...",
+      "dragHint": "اسحب العلامة لمكانك بالظبط",
+      "useMyLocation" :"استخدام موقعي ",
+      "locating" :"جاري التحديد.."
+    },
     "fullName": "الاسم بالكامل",
     "phoneNumber": "رقم الهاتف",
     "governorate": "المحافظة",

@@ -1,0 +1,63 @@
+.map-picker__map {
+  height: 300px;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.map-picker__search-wrapper {
+  position: relative;
+}
+
+.map-picker__results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  max-height: 200px;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.map-picker__results li {
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #d4af37; /* دهبي متماشي مع الـ design system بتاعك */
+}
+
+.map-picker__results li:hover {
+  background: #2a2a2a;
+}
+.map-picker__locate-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  margin: 8px 0;
+  background: transparent;
+  border: 1px solid #d4af37;
+  color: #d4af37;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.map-picker__locate-btn:hover:not(:disabled) {
+  background: #d4af37;
+  color: #1a1a1a;
+}
+
+.map-picker__locate-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.map-picker__location-error {
+  color: #e74c3c;
+  font-size: 0.8rem;
+  margin: 4px 0;
+}
