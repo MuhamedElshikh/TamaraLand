@@ -11,6 +11,7 @@ import { ProductDetailsResponse } from '../../../../core/models/catalog.models';
 import { CartService } from '../../../../core/services/cart.service';
 import { WishlistService } from '../../../../core/services/wishlist.service';
 import { AnalyticsService } from '../../../../core/services/analytics.service';
+import { ToastService } from '../../../../shared/toast/toast.service';
 import { TranslatePipe } from '@ngx-translate/core';
 import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe';
 import { LocalizedFieldPipe } from '../../../../shared/pipes/localized-field.pipe';
@@ -39,6 +40,7 @@ export class ProductDetailsPage implements AfterViewInit {
   private readonly cartService = inject(CartService);
   private readonly wishlistService = inject(WishlistService);
   private readonly analyticsService = inject(AnalyticsService);
+  private readonly toast = inject(ToastService);
 
   @ViewChild('relatedSliderTrack') relatedSliderTrack?: ElementRef<HTMLDivElement>;
 
@@ -163,6 +165,7 @@ Number(this.product()?.rating ?? 0)
     const variantId = this.selectedVariant()?.variantId;
     if (!variantId) {
 this.cartMessage.set('product.selectVariant');
+      this.toast.error('Please select a variant before adding to cart');
       return;
     }
 
@@ -170,8 +173,9 @@ this.cartMessage.set('product.selectVariant');
     this.cartMessage.set(null);
     this.cartService.addItem({ productVariantId: variantId, quantity: 1 }).subscribe((response) => {
       this.isAddingToCart.set(false);
-      this.cartMessage.set(response.success ? 'productDetails.successToadd' : 'productDetails.faildToAdd');
-      if (response.success && this.product()) {
+      if (response.success) {
+        this.cartMessage.set('productDetails.successToadd');
+        this.toast.success('Product added to cart successfully!');
         const prod = this.product()!;
         const variant = prod.variants.find(
     x => x.id === variantId
@@ -207,7 +211,13 @@ this.analyticsService.addToCart({
         (this.selectedVariant()?.price ?? prod.price)
 
 });
+      } else {
+        this.cartMessage.set('productDetails.faildToAdd');
+        this.toast.error(response.message || 'Failed to add product to cart');
       }
+    }, (err) => {
+      this.isAddingToCart.set(false);
+      this.toast.error('An error occurred while adding to cart');
     });
   }
 
@@ -226,30 +236,43 @@ this.analyticsService.addToCart({
 
     request$.subscribe({
       next: (response) => {
-        if (response.success){
-     const product = this.product();
-
-if (!product) return;
-
-this.analyticsService.wishlist({
-  id: product.id,
-  name: product.name,
-
-  category: product.categoryName,
-  brand: product.brandName,
-
-  price: product.price,
-  originalPrice: product.originalPrice,
-
-  discount: product.originalPrice - product.price
-});
-this.isInWishlist.set(wasInWishlist); // رجّع الحالة لو فشل
-        } 
         this.isTogglingWishlist.set(false);
+        if (response.success) {
+          const product = this.product();
+          if (!product) return;
+
+          if (wasInWishlist) {
+            this.toast.success('Removed from wishlist');
+            this.analyticsService.removeWishlist({
+              id: product.id,
+              name: product.name,
+              category: product.categoryName,
+              brand: product.brandName,
+              price: product.price,
+              originalPrice: product.originalPrice,
+              discount: product.originalPrice - product.price
+            });
+          } else {
+            this.toast.success('Added to wishlist');
+            this.analyticsService.wishlist({
+              id: product.id,
+              name: product.name,
+              category: product.categoryName,
+              brand: product.brandName,
+              price: product.price,
+              originalPrice: product.originalPrice,
+              discount: product.originalPrice - product.price
+            });
+          }
+        } else {
+          this.isInWishlist.set(wasInWishlist);
+          this.toast.error(response.message || 'Failed to update wishlist');
+        }
       },
       error: () => {
         this.isInWishlist.set(wasInWishlist);
         this.isTogglingWishlist.set(false);
+        this.toast.error('An error occurred while updating wishlist');
       },
     });
   }

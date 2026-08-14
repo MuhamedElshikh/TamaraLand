@@ -224,6 +224,8 @@ export interface OrderDetailsResponse {
   floor?: string;
   apartment?: string;
   notes?: string;
+  latitude?: number;
+  longitude?: number;
   items: OrderItemResponse[];
 }
 

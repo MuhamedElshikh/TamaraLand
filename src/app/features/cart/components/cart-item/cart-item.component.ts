@@ -7,6 +7,7 @@ import { DecimalPipe } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AnalyticsService } from '../../../../core/services/analytics.service';
 import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe';
+import { ToastService } from '../../../../shared/toast/toast.service';
 
 @Component({
   selector: 'app-cart-item',
@@ -17,6 +18,7 @@ import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe'
 })
 export class CartItemComponent {
   private readonly cartService = inject(CartService);
+  private readonly toast = inject(ToastService);
 
   @Input({ required: true }) item!: CartItemResponse;
 
@@ -43,11 +45,18 @@ private readonly analytics = inject(AnalyticsService);
     this.cartService.updateItem({ productVariantId: this.item.productVariantId, quantity }).subscribe({
       next: (res) => {
         this.isUpdating.set(false);
-        if (!res.success) this.errorMessage.set(res.message);
+        if (!res.success) {
+          this.errorMessage.set(res.message);
+          this.toast.error(res.message || 'Failed to update quantity');
+        } else {
+          this.toast.success('Quantity updated');
+        }
       },
       error: (err) => {
         this.isUpdating.set(false);
-        this.errorMessage.set(extractErrorMessage(err, 'Could not update quantity.'));
+        const errorMsg = extractErrorMessage(err, 'Could not update quantity.');
+        this.errorMessage.set(errorMsg);
+        this.toast.error(errorMsg);
       },
     });
   }
@@ -62,15 +71,22 @@ private readonly analytics = inject(AnalyticsService);
       this.isRemoving.set(false);
 
       if (res.success) {
+        this.toast.success('Item removed from cart');
         this.analytics.removeFromCart({
           id: this.item.productId,
           name: this.item.productName,
           price: this.item.unitPrice,
           quantity: this.item.quantity
         });
+      } else {
+        this.toast.error(res.message || 'Failed to remove item');
       }
     },
-    error: () => this.isRemoving.set(false),
+    error: (err) => {
+      this.isRemoving.set(false);
+      const errorMsg = extractErrorMessage(err, 'Could not remove item from cart.');
+      this.toast.error(errorMsg);
+    },
   });
 }
 }

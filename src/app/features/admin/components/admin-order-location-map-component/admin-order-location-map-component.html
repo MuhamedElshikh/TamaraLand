@@ -1,0 +1,23 @@
+<div class="admin-location-map">
+
+  <div class="admin-location-map__address">
+    <span class="admin-location-map__label">
+      Customer Location
+    </span>
+
+    <span class="admin-location-map__value">
+      {{ governorate }}
+      {{ area ? ' - ' + area : '' }}
+      {{ street ? ' - ' + street : '' }}
+      {{ building ? ', Bldg ' + building : '' }}
+      {{ floor ? ', Floor ' + floor : '' }}
+      {{ apartment ? ', Apt ' + apartment : '' }}
+    </span>
+  </div>
+
+  <div
+    id="admin-order-location-map"
+    class="admin-location-map__map"
+  ></div>
+
+</div>

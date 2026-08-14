@@ -209,6 +209,29 @@
             }
           </div>
         </div>
+        <!-- Customer Location -->
+@if (order.latitude != null && order.longitude != null) {
+
+  <div class="detail-card">
+
+    <h2 class="card-title">
+      Customer Location
+    </h2>
+
+    
+<app-admin-order-location-map
+  [latitude]="order.latitude!"
+  [longitude]="order.longitude!"
+  [governorate]="order.governorate"
+  [area]="order.area"
+  [street]="order.street"
+  [building]="order.building ?? ''"
+  [floor]="order.floor ?? ''"
+  [apartment]="order.apartment ?? ''"
+/>
+  </div>
+
+}
       </div>
 
       <!-- Right Column: Payment & Summary -->

@@ -7,6 +7,7 @@ import { WishlistService } from '../../../../core/services/wishlist.service';
 import { TranslatePipe } from '@ngx-translate/core';
 import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe';
 import { AnalyticsService } from '../../../../core/services/analytics.service';
+import { ToastService } from '../../../../shared/toast/toast.service';
 
 @Component({
   selector: 'app-product-card',
@@ -20,6 +21,7 @@ export class ProductCardComponent implements OnInit {
   private readonly wishlistService = inject(WishlistService);
   private readonly router = inject(Router);
   private readonly analytics = inject(AnalyticsService);
+  private readonly toast = inject(ToastService);
 
   @Input({ required: true }) product!: ProductCardResponse;
   @Input() fallbackImage = 'assets/placeholder-product.jpg';
@@ -92,6 +94,7 @@ export class ProductCardComponent implements OnInit {
   if (res.success) {
 
     if (wasInWishlist) {
+      this.toast.success('Removed from wishlist');
       this.analytics.removeWishlist({
         id: this.product.id,
         name: this.product.name,
@@ -103,6 +106,7 @@ export class ProductCardComponent implements OnInit {
 )
       });
     } else {
+      this.toast.success('Added to wishlist');
       this.analytics.wishlist({
         id: this.product.id,
         name: this.product.name,
@@ -118,12 +122,14 @@ export class ProductCardComponent implements OnInit {
   } else {
 
     this.isInWishlist.set(wasInWishlist);
+    this.toast.error(res.message || 'Failed to update wishlist');
 
   }
 },
       error: () => {
         this.isTogglingWishlist.set(false);
         this.isInWishlist.set(wasInWishlist);
+        this.toast.error('An error occurred while updating wishlist');
       },
     });
   }

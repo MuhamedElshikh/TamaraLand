@@ -10,11 +10,11 @@ import {
   paymentMethod,
 } from '../../../../core/models/domain.models';
 import { StatusBadgeComponent } from '../../components/status-badge/status-badge.component';
-
+import{AdminOrderLocationMapComponent} from '../../components/admin-order-location-map-component/admin-order-location-map-component'
 @Component({
   selector: 'app-admin-order-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, StatusBadgeComponent],
+  imports: [CommonModule, FormsModule, RouterLink, StatusBadgeComponent,AdminOrderLocationMapComponent],
   templateUrl: './order-detail.page.html',
   styleUrl: './order-detail.page.css',
 })
