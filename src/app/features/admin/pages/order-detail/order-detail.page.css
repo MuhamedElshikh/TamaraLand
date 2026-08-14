@@ -449,58 +449,33 @@
     transform: rotate(360deg);
   }
 }
-/* =========================================
-   Mobile Order Details
-   ========================================= */
-
 @media (max-width: 640px) {
-
-  /* ---------- Page ---------- */
-
   .admin-page {
     gap: 14px;
-  }
-
-  /* ---------- Top Bar ---------- */
-
-  .page-top-bar {
-    width: 100%;
   }
 
   .btn-back {
     width: 100%;
     justify-content: center;
-    padding: 10px 14px;
   }
-
-  /* ---------- Order Header ---------- */
 
   .admin-page__header {
     flex-direction: column;
     align-items: stretch;
-    gap: 18px;
     padding: 16px;
+    gap: 16px;
   }
 
   .order-header-badges {
-    align-items: flex-start;
     flex-wrap: wrap;
     gap: 8px;
-    margin-bottom: 6px;
   }
 
   .order-badge {
-    max-width: 100%;
     font-size: 1.05rem;
     line-height: 1.4;
     overflow-wrap: anywhere;
   }
-
-  .admin-page__subtitle {
-    font-size: 0.78rem;
-  }
-
-  /* ---------- Status ---------- */
 
   .status-action-box {
     width: 100%;
@@ -510,22 +485,13 @@
   .status-input-group {
     width: 100%;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 8px;
+    grid-template-columns: 1fr auto;
   }
 
   .status-select {
-    width: 100%;
     min-width: 0;
-    height: 38px;
+    width: 100%;
   }
-
-  .status-input-group .btn {
-    height: 38px;
-    padding: 8px 14px;
-  }
-
-  /* ---------- Layout ---------- */
 
   .order-details-grid {
     display: flex;
@@ -540,28 +506,16 @@
 
   .detail-card {
     padding: 14px;
-    border-radius: var(--radius-md);
   }
 
-  .card-title {
-    font-size: 0.95rem;
-    margin-bottom: 14px;
-    padding-bottom: 9px;
-  }
-
-  /* =========================================
-     Order Items -> Cards
-     ========================================= */
+  /* Mobile product cards */
 
   .table-responsive {
     overflow: visible;
   }
 
   .items-table {
-    width: 100%;
     min-width: 0;
-    border-collapse: separate;
-    border-spacing: 0;
   }
 
   .items-table thead {
@@ -577,125 +531,66 @@
   .items-table tbody tr {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0;
-
     background: var(--secondary-light);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
-
     overflow: hidden;
   }
 
-  .items-table tbody tr:hover {
-    background: var(--secondary-light);
-  }
-
   .items-table td {
-    display: flex;
-    align-items: center;
-
-    min-width: 0;
     padding: 9px 10px;
-
     border: 0;
     border-top: 1px solid var(--border-color);
-
     font-size: 0.76rem;
   }
 
-  /* Product occupies full width */
-
-  .items-table td:nth-child(1) {
+  .items-table td:first-child {
     grid-column: 1 / -1;
-
-    padding: 10px;
     border-top: 0;
   }
 
-  /* Variant */
-
-  .items-table td:nth-child(2) {
-    justify-content: flex-start;
+  .items-table td:nth-child(2)::before,
+  .items-table td:nth-child(3)::before,
+  .items-table td:nth-child(4)::before,
+  .items-table td:nth-child(5)::before,
+  .items-table td:nth-child(6)::before {
+    margin-right: 6px;
+    color: var(--text-muted);
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
   }
 
   .items-table td:nth-child(2)::before {
     content: "Variant";
-    margin-right: 8px;
-
-    color: var(--text-muted);
-    font-size: 0.62rem;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
-
-  /* SKU */
-
-  .items-table td:nth-child(3) {
-    justify-content: flex-end;
   }
 
   .items-table td:nth-child(3)::before {
     content: "SKU";
-    margin-right: 8px;
-
-    color: var(--text-muted);
-    font-size: 0.62rem;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
-
-  /* Quantity */
-
-  .items-table td:nth-child(4) {
-    justify-content: flex-start;
   }
 
   .items-table td:nth-child(4)::before {
     content: "Qty";
-    margin-right: 8px;
-
-    color: var(--text-muted);
-    font-size: 0.62rem;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
-
-  /* Unit Price */
-
-  .items-table td:nth-child(5) {
-    justify-content: flex-end;
   }
 
   .items-table td:nth-child(5)::before {
     content: "Unit";
-    margin-right: 8px;
-
-    color: var(--text-muted);
-    font-size: 0.62rem;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
-
-  /* Total */
-
-  .items-table td:nth-child(6) {
-    justify-content: flex-end;
-
-    color: var(--primary);
-    font-weight: 700;
   }
 
   .items-table td:nth-child(6)::before {
     content: "Total";
-    margin-right: 8px;
-
-    color: var(--text-muted);
-    font-size: 0.62rem;
-    font-weight: 700;
-    text-transform: uppercase;
   }
 
-  /* ---------- Product ---------- */
+  .items-table td:nth-child(3),
+  .items-table td:nth-child(5),
+  .items-table td:nth-child(6) {
+    justify-content: flex-end;
+  }
+
+  .items-table td:nth-child(6) {
+    color: var(--primary);
+    font-weight: 700;
+  }
 
   .product-cell {
     width: 100%;
@@ -704,19 +599,13 @@
   }
 
   .product-image {
-    width: 54px;
-    height: 68px;
-    flex: 0 0 54px;
-  }
-
-  .product-info {
-    flex: 1;
-    min-width: 0;
+    width: 50px;
+    height: 64px;
+    flex-basis: 50px;
   }
 
   .product-name {
     font-size: 0.8rem;
-    line-height: 1.3;
   }
 
   .product-arabic-name {
@@ -726,13 +615,6 @@
   .product-brand {
     font-size: 0.68rem;
   }
-
-  .variant-info {
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  /* ---------- Customer Info ---------- */
 
   .info-grid {
     grid-template-columns: 1fr;
@@ -749,13 +631,6 @@
 
   .info-value {
     font-size: 0.82rem;
-    line-height: 1.45;
-  }
-
-  /* ---------- Summary ---------- */
-
-  .summary-rows {
-    gap: 10px;
   }
 
   .summary-row {
