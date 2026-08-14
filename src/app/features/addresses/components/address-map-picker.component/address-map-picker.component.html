@@ -1,40 +1,125 @@
 <div class="map-picker">
-  <div class="map-picker__search-wrapper">
-    <input
-      type="text"
-      [formControl]="searchControl"
-      class="map-picker__search"
-      placeholder="{{ 'addressForm.map.searchPlaceholder' | translate }}"
-      autocomplete="off"
-    />
 
-    @if (showResults) {
-      <ul class="map-picker__results">
-        @for (result of results; track result.display_name) {
-          <li (click)="selectResult(result)">{{ result.display_name }}</li>
-        }
-      </ul>
-    }
+  <!-- Collapsed Location -->
+  <div class="map-picker__selected">
+
+    <div class="map-picker__selected-info">
+
+      <span class="map-picker__selected-label">
+        {{ 'addressForm.map.location' | translate }}
+      </span>
+
+      @if (selectedLocationText()) {
+        <span class="map-picker__selected-value">
+          {{ selectedLocationText() }}
+        </span>
+      } @else {
+        <span class="map-picker__selected-empty">
+          {{ 'addressForm.map.noLocation' | translate }}
+        </span>
+      }
+
+    </div>
+
+    <button
+      type="button"
+      class="map-picker__open-btn"
+      (click)="toggleMap()"
+    >
+      📍
+      {{
+        mapOpen()
+          ? ('addressForm.map.close' | translate)
+          : (
+              selectedLocationText()
+                ? ('addressForm.map.changeLocation' | translate)
+                : ('addressForm.map.chooseLocation' | translate)
+            )
+      }}
+    </button>
+
   </div>
 
-  <button
-    type="button"
-    class="map-picker__locate-btn"
-    (click)="useMyLocation()"
-    [disabled]="isLocating()"
-  >
-    @if (isLocating()) {
-      {{ 'addressForm.map.locating' | translate }}
-    } @else {
-      📍 {{ 'addressForm.map.useMyLocation' | translate }}
-    }
-  </button>
 
-  @if (locationError()) {
-    <p class="map-picker__location-error">{{ locationError() }}</p>
+  <!-- Map -->
+  @if (mapOpen()) {
+
+    <div class="map-picker__map-container">
+
+      <div class="map-picker__search-wrapper">
+
+        <input
+          type="text"
+          [formControl]="searchControl"
+          class="map-picker__search"
+          placeholder="{{ 'addressForm.map.searchPlaceholder' | translate }}"
+          autocomplete="off"
+        />
+
+        @if (showResults) {
+
+          <ul class="map-picker__results">
+
+            @for (
+              result of results;
+              track result.display_name
+            ) {
+
+              <li
+                (click)="selectResult(result)"
+              >
+                {{ result.display_name }}
+              </li>
+
+            }
+
+          </ul>
+
+        }
+
+      </div>
+
+
+      <button
+        type="button"
+        class="map-picker__locate-btn"
+        (click)="useMyLocation()"
+        [disabled]="isLocating()"
+      >
+        @if (isLocating()) {
+
+          {{ 'addressForm.map.locating' | translate }}
+
+        } @else {
+
+          📍
+          {{ 'addressForm.map.useMyLocation' | translate }}
+
+        }
+      </button>
+
+
+      @if (locationError()) {
+
+        <p class="map-picker__location-error">
+          {{ locationError() }}
+        </p>
+
+      }
+
+
+      <div
+        id="address-map"
+        class="map-picker__map"
+      ></div>
+
+
+      <p class="map-picker__hint">
+        {{ 'addressForm.map.dragHint' | translate }}
+      </p>
+
+    </div>
+
   }
 
-  <div id="address-map" class="map-picker__map"></div>
-
-  <p class="map-picker__hint">{{ 'addressForm.map.dragHint' | translate }}</p>
 </div>

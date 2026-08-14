@@ -291,66 +291,65 @@
     "delete": "Delete"
   },
   "addressForm": {
-    "editTitle": "Edit Address",
-    "addTitle": "Add a New Address",
+  "editTitle": "Edit Address",
+  "addTitle": "Add a New Address",
+
   "map": {
-      "searchPlaceholder": "Search for your address...",
-      "dragHint": "Drag the marker to your exact location",
-      "useMyLocation" :"use my location",
-      "locating" :"locating.."
-    },
-    "fullName": "Full Name",
-    "phoneNumber": "Phone Number",
-    "governorate": "Governorate",
-    "area": "Area",
-    "street": "Street",
-    "building": "Building",
-    "floor": "Floor",
-    "apartment": "Apartment",
-    "notes": "Notes (Optional)",
-
-    "placeholder": {
-      "fullName": "Full name",
-      "phone": "01xxxxxxxxx",
-      "street": "Street name",
-      "building": "Optional",
-      "floor": "Optional",
-      "apartment": "Optional",
-      "notes": "Delivery instructions..."
-    },
-
-    "selectGovernorate": "Select Governorate",
-    "selectArea": "Select Area",
-
-    "shipping": "{{cost}} EGP shipping",
-
-    "setDefault": "Set as Default Address",
-
-    "saving": "Saving...",
-    "saveChanges": "Save Changes",
-    "addAddress": "Add Address",
-    "cancel": "Cancel",
-
-    "validation": {
-      "fullNameRequired": "Full name is required.",
-      "phoneRequired": "Phone number is required.",
-      "phoneInvalid": "Enter a valid phone number.",
-      "governorateRequired": "Please select a governorate.",
-      "areaRequired": "Please select an area.",
-      "streetRequired": "Street is required."
-    }
+    "searchPlaceholder": "Search for your address...",
+    "dragHint": "Drag the marker to your exact location",
+    "useMyLocation": "Use my location",
+    "locating": "Locating...",
+    "changeLocation": "Change Location",
+    "chooseLocation": "Choose Location",
+    "close": "Close Map",
+    "location": "Location",
+    "noLocation": "No location selected"
   },
-  "addresses": {
-    "kicker": "Delivery",
-    "title": "Your Addresses",
 
-    "addAddress": "Add Address",
-    "addFirstAddress": "Add Your First Address",
+  "fullName": "Full Name",
+  "phoneNumber": "Phone Number",
+  "governorate": "Governorate",
+  "area": "Area",
+  "street": "Street",
+  "building": "Building",
+  "floor": "Floor",
+  "apartment": "Apartment",
+  "notes": "Notes (Optional)",
 
-    "empty": "You haven't saved any addresses yet.",
-
-    "loading": "Loading addresses..."
+  "placeholder": {
+    "fullName": "Full name",
+    "phone": "01xxxxxxxxx",
+    "street": "Street name",
+    "building": "Building number",
+    "floor": "Optional",
+    "apartment": "Apartment number",
+    "notes": "Delivery instructions..."
   },
+
+  "selectGovernorate": "Select Governorate",
+  "selectArea": "Select Area",
+
+  "shipping": "{{cost}} EGP shipping",
+
+  "setDefault": "Set as Default Address",
+
+  "saving": "Saving...",
+  "saveChanges": "Save Changes",
+  "addAddress": "Add Address",
+  "cancel": "Cancel",
+
+  "validation": {
+    "fullNameRequired": "Full name is required.",
+    "phoneRequired": "Phone number is required.",
+    "phoneInvalid": "Enter a valid phone number.",
+    "governorateRequired": "Please select a governorate.",
+    "areaRequired": "Please select an area.",
+    "streetRequired": "Street is required.",
+    "buildingRequired": "Building number is required.",
+    "apartmentRequired": "Apartment number is required.",
+    "locationRequired": "Please select your location on the map."
+  }
+},
   "auth": {
     "brand": "Tamara Land",
     "headline": "Be Proud to Be a Woman.",
@@ -458,6 +457,8 @@
       "lastName": "Last Name",
       "email": "Email",
       "phoneNumber": "Phone Number",
+      "addresses":"addresses",
+      "manegeaddresses":"manege addresses",
 
       "currentPassword": "Current Password",
       "newPassword": "New Password",

@@ -222,17 +222,37 @@
   position: absolute;
   top: calc(100% + 12px);
   right: 0;
+
   min-width: 200px;
+  max-width: calc(100vw - 24px);
+
   background: rgba(13, 11, 8, 0.97);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
+
   padding: 0.85rem;
+
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+
   z-index: 1100;
   animation: fadeInUp 0.18s ease;
+
+  box-sizing: border-box;
+}
+/* RTL */
+:host-context([dir='rtl']) .account-menu__dropdown {
+  right: auto;
+  left: 0;
+  text-align: right;
+}
+
+/* LTR */
+:host-context([dir='ltr']) .account-menu__dropdown {
+  left: auto;
+  right: 0;
 }
 
 .account-menu__greeting {

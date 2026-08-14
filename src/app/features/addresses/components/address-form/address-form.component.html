@@ -30,8 +30,30 @@
 <app-address-map-picker
   [initialLat]="existingAddress?.latitude ?? 30.0444"
   [initialLng]="existingAddress?.longitude ?? 31.2357"
+  [initialLocationSelected]="
+    existingAddress?.latitude != null &&
+    existingAddress?.longitude != null
+  "
+  [initialLocationText]="
+    existingAddress
+      ? existingAddress.governorate +
+        ' - ' +
+        existingAddress.area +
+        ' - ' +
+        existingAddress.street
+      : ''
+  "
   (locationPicked)="onLocationPicked($event)"
 ></app-address-map-picker>
+
+@if (
+  controlHasError('latitude', 'required') ||
+  controlHasError('longitude', 'required')
+) {
+  <small class="location-validation-error">
+    {{ 'addressForm.validation.locationRequired' | translate }}
+  </small>
+}
   <div class="field-grid">
     <label class="field">
       <span>{{ 'addressForm.governorate' | translate }}</span>
@@ -70,17 +92,39 @@
 
   <div class="field-grid field-grid--three">
     <label class="field">
-      <span>{{ 'addressForm.building' | translate }}</span>
-      <input type="text" formControlName="building" placeholder="{{ 'addressForm.placeholder.building' | translate }}" />
-    </label>
+  <span>{{ 'addressForm.building' | translate }}</span>
+
+  <input
+    type="text"
+    formControlName="building"
+    placeholder="{{ 'addressForm.placeholder.building' | translate }}"
+  />
+
+  @if (controlHasError('building', 'required')) {
+    <small>
+      {{ 'addressForm.validation.buildingRequired' | translate }}
+    </small>
+  }
+</label>
     <label class="field">
       <span>{{ 'addressForm.floor' | translate }}</span>
       <input type="text" formControlName="floor" placeholder="{{ 'addressForm.placeholder.floor' | translate }}" />
     </label>
-    <label class="field">
-      <span>{{ 'addressForm.apartment' | translate }}</span>
-      <input type="text" formControlName="apartment" placeholder="{{ 'addressForm.placeholder.apartment' | translate }}" />
-    </label>
+   <label class="field">
+  <span>{{ 'addressForm.apartment' | translate }}</span>
+
+  <input
+    type="text"
+    formControlName="apartment"
+    placeholder="{{ 'addressForm.placeholder.apartment' | translate }}"
+  />
+
+  @if (controlHasError('apartment', 'required')) {
+    <small>
+      {{ 'addressForm.validation.apartmentRequired' | translate }}
+    </small>
+  }
+</label>
   </div>
 
   <label class="field">

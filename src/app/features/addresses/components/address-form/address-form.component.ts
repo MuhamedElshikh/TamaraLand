@@ -45,19 +45,120 @@ export class AddressFormComponent implements OnInit, OnChanges {
     governorate: ['', Validators.required],
     area: ['', Validators.required],
     street: ['', Validators.required],
-    building: [''],
+   building: ['', Validators.required],
     floor: [''],
-    apartment: [''],
+    apartment: ['', Validators.required],
     notes: [''],
     isDefault: [false],
-      latitude: [null as number | null],
-  longitude: [null as number | null],
+     latitude: [
+  null as number | null,
+  Validators.required,
+],
+
+longitude: [
+  null as number | null,
+  Validators.required,
+],
   });
-  onLocationPicked(location: PickedLocation): void {
+ onLocationPicked(location: PickedLocation): void {
+
   this.form.patchValue({
     latitude: location.lat,
     longitude: location.lng,
   });
+
+  if (location.governorate) {
+    this.setGovernorateFromLocation(
+      location.governorate
+    );
+  }
+
+  if (location.street) {
+    this.form.patchValue({
+      street: location.street,
+    });
+  }
+
+  if (location.building) {
+    this.form.patchValue({
+      building: location.building,
+    });
+  }
+
+  if (location.area) {
+    // بعد تحديد المحافظة، الـ computed
+    // هيكون شايف areas الجديدة
+    this.setAreaFromLocation(
+      location.area
+    );
+  }
+}
+private normalizeLocationName(
+  value: string
+): string {
+  return value
+    .trim()
+    .replace(/^محافظة\s+/u, '')
+    .replace(/\s+/g, ' ')
+    .toLowerCase();
+}
+private setGovernorateFromLocation(
+  governorate: string
+): void {
+
+  const normalized =
+    this.normalizeLocationName(
+      governorate
+    );
+
+  const match =
+    this.governorates().find(
+      gov =>
+        this.normalizeLocationName(gov) ===
+        normalized
+    );
+
+  if (!match) {
+    return;
+  }
+
+  this.form
+    .get('governorate')
+    ?.setValue(match);
+
+  this.selectedGovernorate.set(match);
+
+  this.form
+    .get('area')
+    ?.setValue('');
+}
+private setAreaFromLocation(
+  areaName: string
+): void {
+
+  const areas =
+    this.areasForSelectedGovernorate();
+
+  const normalized =
+    this.normalizeLocationName(
+      areaName
+    );
+
+  const match =
+    areas.find(
+      area =>
+        this.normalizeLocationName(
+          area.name
+        ) === normalized
+    );
+
+  if (!match) {
+    return;
+  }
+
+  this.form
+    .get('area')
+    ?.setValue(match.name);
 }
 
   ngOnInit(): void {
@@ -94,6 +195,11 @@ export class AddressFormComponent implements OnInit, OnChanges {
         floor: this.existingAddress.floor || '',
         apartment: this.existingAddress.apartment || '',
         notes: this.existingAddress.notes || '',
+        latitude:
+  this.existingAddress.latitude,
+
+longitude:
+  this.existingAddress.longitude,
         isDefault: this.existingAddress.isDefault,
       });
     } else {

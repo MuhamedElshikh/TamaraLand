@@ -1,3 +1,4 @@
+<app-navbar></app-navbar>
 <section class="scaffold-page profile-page">
   <header class="profile-page__hero">
     <p class="section-kicker">
@@ -17,7 +18,6 @@
         <h3 class="profile-block__title">
           {{ 'profile.personalInformation' | translate }}
         </h3>
-
         @if (!isEditingProfile()) {
           <button
             type="button"
@@ -53,6 +53,12 @@
             <span>{{ 'profile.fields.phoneNumber' | translate }}</span>
             <strong>{{ profile()?.phoneNumber || '—' }}</strong>
           </div>
+           <div class="profile-view__row">
+            <span>{{ 'profile.fields.addresses' | translate }}</span>
+            <strong> <a class="calor=black" routerLink="/addresses">{{ 'profile.fields.manegeaddresses' | translate }}</a>
+</strong>
+          </div>
+
 
         </div>
 
@@ -284,5 +290,7 @@
     </div>
 
   </div>
+  
+  
 
 </section>

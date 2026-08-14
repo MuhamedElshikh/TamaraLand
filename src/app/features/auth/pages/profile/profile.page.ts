@@ -3,6 +3,10 @@ import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl, Validati
 import { AuthService } from '../../../../core/services/auth.service'; // عدّل المسار
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 import { TranslatePipe } from '@ngx-translate/core';
+import { CheckoutAddressComponent } from "../../../checkout/components/checkout-address/checkout-address.component";
+import { AddressCardComponent } from "../../../addresses/components/address-card/address-card.component";
+import { RouterLink } from "@angular/router";
+import { NavbarComponent } from "../../../../layout/components/navbar/navbar.component";
 
 function passwordsMatchValidator(control: AbstractControl): ValidationErrors | null {
   const newPassword = control.get('newPassword')?.value;
@@ -15,7 +19,7 @@ function passwordsMatchValidator(control: AbstractControl): ValidationErrors | n
 @Component({
   selector: 'app-profile-page',
   standalone: true,
-  imports: [ReactiveFormsModule,TranslatePipe],
+  imports: [ReactiveFormsModule, TranslatePipe, CheckoutAddressComponent, AddressCardComponent, RouterLink, NavbarComponent],
   templateUrl: './profile.page.html',
   styleUrl: './profile.page.css',
 })

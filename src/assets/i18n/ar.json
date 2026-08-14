@@ -286,66 +286,65 @@
     "delete": "حذف"
   },
   "addressForm": {
-    "editTitle": "تعديل العنوان",
-    "addTitle": "إضافة عنوان جديد",
-"map": {
-      "searchPlaceholder": "دور على عنوانك...",
-      "dragHint": "اسحب العلامة لمكانك بالظبط",
-      "useMyLocation" :"استخدام موقعي ",
-      "locating" :"جاري التحديد.."
-    },
+  "editTitle": "تعديل العنوان",
+  "addTitle": "إضافة عنوان جديد",
+
+  "map": {
+    "searchPlaceholder": "دور على عنوانك...",
+    "dragHint": "اسحب العلامة لمكانك بالظبط",
+    "useMyLocation": "استخدام موقعي",
+    "locating": "جاري تحديد موقعك...",
+    "changeLocation": "تغيير الموقع",
+    "chooseLocation": "اختيار الموقع",
+    "close": "إغلاق الخريطة",
+    "location": "الموقع",
+    "noLocation": "لم يتم اختيار موقع"
+  },
+
+  "fullName": "الاسم بالكامل",
+  "phoneNumber": "رقم الهاتف",
+  "governorate": "المحافظة",
+  "area": "المنطقة",
+  "street": "الشارع",
+  "building": "المبنى",
+  "floor": "الدور",
+  "apartment": "الشقة",
+  "notes": "ملاحظات (اختياري)",
+
+  "placeholder": {
     "fullName": "الاسم بالكامل",
-    "phoneNumber": "رقم الهاتف",
-    "governorate": "المحافظة",
-    "area": "المنطقة",
-    "street": "الشارع",
-    "building": "المبنى",
-    "floor": "الدور",
-    "apartment": "الشقة",
-    "notes": "ملاحظات (اختياري)",
-
-    "placeholder": {
-      "fullName": "الاسم بالكامل",
-      "phone": "01xxxxxxxxx",
-      "street": "اسم الشارع",
-      "building": "اختياري",
-      "floor": "اختياري",
-      "apartment": "اختياري",
-      "notes": "تعليمات التوصيل..."
-    },
-
-    "selectGovernorate": "اختر المحافظة",
-    "selectArea": "اختر المنطقة",
-
-    "shipping": "تكلفة الشحن {{cost}} جنيه",
-
-    "setDefault": "تعيين كعنوان افتراضي",
-
-    "saving": "جارٍ الحفظ...",
-    "saveChanges": "حفظ التعديلات",
-    "addAddress": "إضافة العنوان",
-    "cancel": "إلغاء",
-
-    "validation": {
-      "fullNameRequired": "الاسم بالكامل مطلوب.",
-      "phoneRequired": "رقم الهاتف مطلوب.",
-      "phoneInvalid": "يرجى إدخال رقم هاتف صحيح.",
-      "governorateRequired": "يرجى اختيار المحافظة.",
-      "areaRequired": "يرجى اختيار المنطقة.",
-      "streetRequired": "الشارع مطلوب."
-    }
+    "phone": "01xxxxxxxxx",
+    "street": "اسم الشارع",
+    "building": "رقم المبنى",
+    "floor": "اختياري",
+    "apartment": "رقم الشقة",
+    "notes": "تعليمات التوصيل..."
   },
-  "addresses": {
-    "kicker": "التوصيل",
-    "title": "عناوينك",
 
-    "addAddress": "إضافة عنوان",
-    "addFirstAddress": "أضف أول عنوان",
+  "selectGovernorate": "اختر المحافظة",
+  "selectArea": "اختر المنطقة",
 
-    "empty": "لم تقم بإضافة أي عنوان حتى الآن.",
+  "shipping": "تكلفة الشحن {{cost}} جنيه",
 
-    "loading": "جارٍ تحميل العناوين..."
-  },
+  "setDefault": "تعيين كعنوان افتراضي",
+
+  "saving": "جارٍ الحفظ...",
+  "saveChanges": "حفظ التعديلات",
+  "addAddress": "إضافة العنوان",
+  "cancel": "إلغاء",
+
+  "validation": {
+    "fullNameRequired": "الاسم بالكامل مطلوب.",
+    "phoneRequired": "رقم الهاتف مطلوب.",
+    "phoneInvalid": "يرجى إدخال رقم هاتف صحيح.",
+    "governorateRequired": "يرجى اختيار المحافظة.",
+    "areaRequired": "يرجى اختيار المنطقة.",
+    "streetRequired": "الشارع مطلوب.",
+    "buildingRequired": "رقم المبنى مطلوب.",
+    "apartmentRequired": "رقم الشقة مطلوب.",
+    "locationRequired": "يرجى اختيار موقعك على الخريطة."
+  }
+},
   "auth": {
     "brand": "تمارا لاند",
     "headline": "كوني فخورة بكونك امرأة.",
@@ -453,6 +452,8 @@
       "lastName": "اسم العائلة",
       "email": "البريد الإلكتروني",
       "phoneNumber": "رقم الهاتف",
+      "addresses":"عنواني",
+      "manegeaddresses":"ادارة العناوين",
 
       "currentPassword": "كلمة المرور الحالية",
       "newPassword": "كلمة المرور الجديدة",
