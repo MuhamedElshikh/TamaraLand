@@ -114,23 +114,77 @@
           @if (statusError()) {
             <div class="alert alert-danger mb-3">{{ statusError() }}</div>
           }
+          @if (paymentStatusError()) {
+  <div class="alert alert-danger mb-3">
+    {{ paymentStatusError() }}
+  </div>
+}
 
           <div class="form-group">
-            <label class="form-label" for="new-status">{{ 'admin.orders.newStatus' | translate }}</label>
-            <select
-              id="new-status"
-              class="form-control"
-              [ngModel]="newStatus()"
-              (ngModelChange)="newStatus.set(+$event)"
-            >
-              <option [value]="0">{{ 'admin.orders.pending' | translate }}</option>
-              <option [value]="1">{{ 'admin.orders.confirmed' | translate }}</option>
-              <option [value]="2">{{ 'admin.orders.processing' | translate }}</option>
-              <option [value]="3">{{ 'admin.orders.shipped' | translate }}</option>
-              <option [value]="4">{{ 'admin.orders.delivered' | translate }}</option>
-              <option [value]="5">{{ 'admin.orders.cancelled' | translate }}</option>
-            </select>
-          </div>
+  <label class="form-label" for="new-status">
+    {{ 'admin.orders.newStatus' | translate }}
+  </label>
+
+  <select
+    id="new-status"
+    class="form-control"
+    [ngModel]="newStatus()"
+    (ngModelChange)="newStatus.set(+$event)"
+  >
+    <option [value]="0">
+      {{ 'admin.orders.pending' | translate }}
+    </option>
+
+    <option [value]="1">
+      {{ 'admin.orders.confirmed' | translate }}
+    </option>
+
+    <option [value]="2">
+      {{ 'admin.orders.processing' | translate }}
+    </option>
+
+    <option [value]="3">
+      {{ 'admin.orders.shipped' | translate }}
+    </option>
+
+    <option [value]="4">
+      {{ 'admin.orders.delivered' | translate }}
+    </option>
+
+    <option [value]="5">
+      {{ 'admin.orders.cancelled' | translate }}
+    </option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label class="form-label" for="new-payment-status">
+    {{ 'admin.orders.paymentStatus' | translate }}
+  </label>
+
+  <select
+    id="new-payment-status"
+    class="form-control"
+    [ngModel]="newPaymentStatus()"
+    (ngModelChange)="newPaymentStatus.set(+$event)"
+  >
+    <option [value]="0">
+      {{ 'admin.orders.paymentPending' | translate }}
+    </option>
+
+    <option [value]="1">
+      {{ 'admin.orders.paymentPaid' | translate }}
+    </option>
+
+    <option [value]="2">
+      {{ 'admin.orders.paymentFailed' | translate }}
+    </option>
+
+    <option [value]="3">
+      {{ 'admin.orders.paymentRefunded' | translate }}
+    </option>
+  </select>
+</div>
         </div>
 
         <div class="modal-actions">

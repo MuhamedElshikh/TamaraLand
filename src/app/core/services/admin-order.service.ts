@@ -44,4 +44,13 @@ export class AdminOrderService {
     const body: UpdateOrderStatusRequest = { status };
     return this.http.patch<ApiResponse<void>>(`${this.baseUrl}/${id}/status`, body);
   }
+  updatePaymentStatus(orderId: number,status: number
+) {
+  return this.http.patch<ApiResponse<null>>(
+    `${this.baseUrl}/${orderId}/payment-status`,
+    {
+      status
+    }
+  );
+}
 }

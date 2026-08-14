@@ -971,9 +971,31 @@
       "title": "Products Management", "subtitle": "Manage catalog items, variants, and product media", "add": "Add Product", "search": "Search Product", "searchPlaceholder": "Search by name...", "category": "Category", "brand": "Brand", "allCategories": "All Categories", "allBrands": "All Brands", "empty": "No products found matching your search criteria.", "edit": "Edit Product", "delete": "Delete Product",
       "backToList": "Back to Products", "setMainImage": "Set as Main Image", "savingProduct": "Saving product..."
     },
-    "orders": {
-      "title": "Orders Management", "subtitle": "Track customer orders, manage order workflow statuses, and view complete details", "search": "Search Order", "searchPlaceholder": "Search by order number...", "status": "Order Status", "newStatus": "New Order Status", "allStatuses": "All Statuses", "pending": "Pending", "confirmed": "Confirmed", "processing": "Processing", "shipped": "Shipped", "delivered": "Delivered", "cancelled": "Cancelled", "empty": "No orders found matching your criteria.", "viewDetails": "View Order Details", "updateStatus": "Update Status", "updating": "Updating...", "updateTitle": "Update Order Status"
-    },
+   "orders": {
+  "title": "Orders Management",
+  "subtitle": "Track customer orders, manage order workflow statuses, and view complete details",
+  "search": "Search Order",
+  "searchPlaceholder": "Search by order number...",
+  "status": "Order Status",
+  "newStatus": "New Order Status",
+  "paymentStatus": "Payment Status",
+  "paymentPending": "Pending",
+  "paymentPaid": "Paid",
+  "paymentFailed": "Failed",
+  "paymentRefunded": "Refunded",
+  "allStatuses": "All Statuses",
+  "pending": "Pending",
+  "confirmed": "Confirmed",
+  "processing": "Processing",
+  "shipped": "Shipped",
+  "delivered": "Delivered",
+  "cancelled": "Cancelled",
+  "empty": "No orders found matching your criteria.",
+  "viewDetails": "View Order Details",
+  "updateStatus": "Update Status",
+  "updating": "Updating...",
+  "updateTitle": "Update Order Status"
+},
     "brands": {
       "title": "Brands Management",
       "subtitle": "Manage store brands and manufacturers",
