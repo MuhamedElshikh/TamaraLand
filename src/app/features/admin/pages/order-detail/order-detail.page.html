@@ -84,34 +84,90 @@
           <h2 class="card-title">Order Items</h2>
           <div class="table-responsive">
             <table class="items-table">
-              <thead>
-                <tr>
-                  <th>Product</th>
-                  <th>Variant</th>
-                  <th>SKU</th>
-                  <th class="text-center">Qty</th>
-                  <th class="text-right">Unit Price</th>
-                  <th class="text-right">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (item of order.items; track item.productVariantId) {
-                  <tr>
-                    <td class="font-medium text-primary">{{ item.productName }}</td>
-                    <td>
-                      @if (item.color || item.size) {
-                        {{ item.color }} {{ item.size ? '/ ' + item.size : '' }}
-                      } @else {
-                        —
-                      }
-                    </td>
-                    <td class="text-muted">{{ item.sku || '—' }}</td>
-                    <td class="text-center font-semibold">{{ item.quantity }}</td>
-                    <td class="text-right">{{ item.unitPrice | number }} EGP</td>
-                    <td class="text-right font-semibold text-gold">{{ item.totalPrice | number }} EGP</td>
-                  </tr>
-                }
-              </tbody>
+             <thead>
+  <tr>
+    <th>Product</th>
+    <th>Variant</th>
+    <th>SKU</th>
+    <th class="text-center">Qty</th>
+    <th class="text-right">Unit Price</th>
+    <th class="text-right">Total</th>
+  </tr>
+</thead>
+
+<tbody>
+  @for (item of order.items; track item.productVariantId) {
+    <tr>
+      <td>
+        <div class="product-cell">
+          <div class="product-image">
+            @if (item.imageUrl) {
+              <img
+                [src]="item.imageUrl"
+                [alt]="item.productName"
+                loading="lazy"
+              />
+            } @else {
+              <div class="product-image-placeholder">
+                —
+              </div>
+            }
+          </div>
+
+          <div class="product-info">
+            <span class="product-name">
+              {{ item.productName }}
+            </span>
+
+            @if (item.productArabicName) {
+              <span class="product-arabic-name">
+                {{ item.productArabicName }}
+              </span>
+            }
+
+            @if (item.brandName) {
+              <span class="product-brand">
+                {{ item.brandName }}
+              </span>
+            }
+          </div>
+        </div>
+      </td>
+
+      <td>
+        @if (item.color || item.size) {
+          <div class="variant-info">
+            @if (item.color) {
+              <span>{{ item.color }}</span>
+            }
+
+            @if (item.size) {
+              <span>{{ item.size }}</span>
+            }
+          </div>
+        } @else {
+          —
+        }
+      </td>
+
+      <td class="text-muted">
+        {{ item.sku || '—' }}
+      </td>
+
+      <td class="text-center font-semibold">
+        {{ item.quantity }}
+      </td>
+
+      <td class="text-right">
+        {{ item.unitPrice | number }} EGP
+      </td>
+
+      <td class="text-right font-semibold text-gold">
+        {{ item.totalPrice | number }} EGP
+      </td>
+    </tr>
+  }
+</tbody>
             </table>
           </div>
         </div>

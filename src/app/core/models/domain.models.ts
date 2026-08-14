@@ -175,6 +175,7 @@ brandName: string;
 arabicBrandName: string;
 categoryName: string;
 arabicCategoryName: string;
+imageUrl:string,
 color: string;
 size: string;
 sku: string;
