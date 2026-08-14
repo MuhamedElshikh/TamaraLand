@@ -1,16 +1,23 @@
 <section class="addresses-page">
   <header class="addresses-page__hero">
     <div>
-      <p class="section-kicker">    {{ 'addresses.kicker' | translate }}</p>
-      <h1 class="section-title">{{ 'addresses.title' | translate }}</h1>
+      <p class="section-kicker">
+        {{ 'addresses.kicker' | translate }}
+      </p>
+
+      <h1 class="section-title">
+        {{ 'addresses.title' | translate }}
+      </h1>
     </div>
 
     @if (!isFormOpen()) {
-      <button type="button" class="btn btn-primary" (click)="openCreateForm()">@if(currentLang() === 'ar'){
-    {{ 'addresses.addAddress' | translate }} +
-}@else{
-    + {{ 'addresses.addAddress' | translate }}
-}</button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="openCreateForm()"
+      >
+        {{ 'addresses.addAddress' | translate }} +
+      </button>
     }
   </header>
 
@@ -28,15 +35,31 @@
         <div class="addresses-page__skeleton"></div>
       }
     </div>
-  } @else if (addresses().length === 0 && !isFormOpen()) {
+  }
+
+  @else if (addresses().length === 0 && !isFormOpen()) {
     <div class="addresses-page__empty">
-      <p class="section-copy">    {{ 'addresses.empty' | translate }}</p>
-      <button type="button" class="btn btn-primary" (click)="openCreateForm()">{{ 'addresses.addFirstAddress' | translate }}</button>
+      <p class="section-copy">
+        {{ 'addresses.empty' | translate }}
+      </p>
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="openCreateForm()"
+      >
+        {{ 'addresses.addFirstAddress' | translate }}
+      </button>
     </div>
-  } @else if (addresses().length > 0) {
+  }
+
+  @else if (addresses().length > 0) {
     <div class="addresses-page__grid">
       @for (address of addresses(); track address.id) {
-        <app-address-card [address]="address" (edit)="openEditForm($event)" />
+        <app-address-card
+          [address]="address"
+          (edit)="openEditForm($event)"
+        />
       }
     </div>
   }

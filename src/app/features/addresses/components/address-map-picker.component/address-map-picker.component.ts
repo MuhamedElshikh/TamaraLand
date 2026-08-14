@@ -229,20 +229,21 @@ export class AddressMapPickerComponent
     }, 100);
   }
 
-  private searchAddress(query: string) {
-    return this.http.get<NominatimResult[]>(
-      'https://nominatim.openstreetmap.org/search',
-      {
-        params: {
-          q: query,
-          format: 'json',
-          addressdetails: '1',
-          countrycodes: 'eg',
-          limit: '5',
-        },
-      }
-    );
-  }
+ private searchAddress(query: string) {
+  return this.http.get<NominatimResult[]>(
+    'https://nominatim.openstreetmap.org/search',
+    {
+      params: {
+        q: query,
+        format: 'json',
+        addressdetails: '1',
+        countrycodes: 'eg',
+        limit: '5',
+        'accept-language': 'ar',
+      },
+    }
+  );
+}
 
   selectResult(result: NominatimResult): void {
     const lat = parseFloat(result.lat);
@@ -264,73 +265,74 @@ export class AddressMapPickerComponent
   }
 
   private reverseGeocode(
-    lat: number,
-    lng: number
-  ): void {
+  lat: number,
+  lng: number
+): void {
 
-    this.http
-      .get<{
-        display_name: string;
-        address?: NominatimAddress;
-      }>(
-        'https://nominatim.openstreetmap.org/reverse',
-        {
-          params: {
-            lat: lat.toString(),
-            lon: lng.toString(),
-            format: 'json',
-            addressdetails: '1',
-          },
-        }
-      )
-      .subscribe({
-        next: (res) => {
-
-          const address = res.address;
-
-          const location: PickedLocation = {
-            lat,
-            lng,
-
-            formattedAddress:
-              res.display_name,
-
-            governorate:
-              this.extractGovernorate(address),
-
-            area:
-              this.extractArea(address),
-
-            street:
-              address?.road,
-
-            building:
-              address?.house_number,
-          };
-
-          this.selectedLocationText.set(
-            res.display_name
-          );
-
-          this.locationPicked.emit(location);
-
-          this.closeMap();
+  this.http
+    .get<{
+      display_name: string;
+      address?: NominatimAddress;
+    }>(
+      'https://nominatim.openstreetmap.org/reverse',
+      {
+        params: {
+          lat: lat.toString(),
+          lon: lng.toString(),
+          format: 'json',
+          addressdetails: '1',
+          'accept-language': 'ar',
         },
+      }
+    )
+    .subscribe({
+      next: (res) => {
 
-        error: () => {
+        const address = res.address;
 
-          this.selectedLocationText.set(
-            `${lat.toFixed(6)}, ${lng.toFixed(6)}`
-          );
+        const location: PickedLocation = {
+          lat,
+          lng,
 
-          this.locationPicked.emit({
-            lat,
-            lng,
-            formattedAddress: '',
-          });
-        },
-      });
-  }
+          formattedAddress:
+            res.display_name,
+
+          governorate:
+            this.extractGovernorate(address),
+
+          area:
+            this.extractArea(address),
+
+          street:
+            address?.road,
+
+          building:
+            address?.house_number,
+        };
+
+        this.selectedLocationText.set(
+          res.display_name
+        );
+
+        this.locationPicked.emit(location);
+
+        this.closeMap();
+      },
+
+      error: () => {
+
+        this.selectedLocationText.set(
+          `${lat.toFixed(6)}, ${lng.toFixed(6)}`
+        );
+
+        this.locationPicked.emit({
+          lat,
+          lng,
+          formattedAddress: '',
+        });
+      },
+    });
+}
 
   private extractGovernorate(
     address?: NominatimAddress

@@ -275,20 +275,22 @@
 
     "noProducts": "No products match your current filters."
   },
-  "address": {
+  "addresses": {
     "default": "Default",
-
     "building": "Bldg",
     "floor": "Fl",
     "apartment": "Apt",
-
     "settingDefault": "Setting...",
     "setDefault": "Set as Default",
-
     "edit": "Edit",
-
     "deleting": "Deleting...",
-    "delete": "Delete"
+    "delete": "Delete",
+    "kicker": "التوصيل",
+    "title": "عناوينك",
+    "addAddress": "إضافة عنوان",
+    "addFirstAddress": "أضف أول عنوان",
+    "empty": "لم تقم بإضافة أي عنوان حتى الآن.",
+    "loading": "جارٍ تحميل العناوين..."
   },
   "addressForm": {
   "editTitle": "Edit Address",
