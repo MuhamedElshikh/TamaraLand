@@ -5,6 +5,7 @@
 .auth-copy {
   display: grid;
   gap: 24px;
+  min-width: 0;
 }
 
 .auth-copy__header h1 {
@@ -13,26 +14,29 @@
   line-height: 1.05;
   color: var(--text-primary);
 }
-.google-signin-container {
-  width: 100%;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  overflow: hidden;
+/* ===== لغة عربية: خط سيريف عربي فخم بدل الـ fallback البايظ ===== */
+html[dir='rtl'] .auth-copy__header h1,
+html[dir='rtl'] .section-kicker {
+  font-family: 'El Messiri', 'Tajawal', sans-serif;
 }
 
-.google-signin-container iframe {
-  max-width: 100%;
+html[dir='rtl'] .auth-copy__header h1 {
+  font-weight: 700;
 }
-.google-signin-container > div {
-  max-width: 100%;
-}
+
+/* ===================================================================
+   Social Auth
+   الزرارين دلوقتي بتوعنا 100% — زرار جوجل الحقيقي بيترندر في هوست
+   مخفي بره الشاشة (SocialAuthService) والكليك بيتوجّه له برمجيًا.
+   يعني مفيش iframe في الليّاوت، ومفيش عرض مفروض من جوجل، ومفيش
+   سكرول أفقي، والتصميم كله تحت إيدنا.
+   =================================================================== */
 
 .social-auth {
   display: grid;
   gap: 12px;
+  min-width: 0;
 }
 
 .social-btn {
@@ -41,8 +45,9 @@
   justify-content: center;
   gap: 12px;
   width: 100%;
-  min-height: 50px;
+  min-height: 52px;
   padding: 0 16px;
+  border: 1px solid var(--border-color);
   border-radius: 18px;
   font: inherit;
   font-size: 0.95rem;
@@ -50,8 +55,17 @@
   cursor: pointer;
   background: var(--bg-secondary);
   color: var(--text-primary);
-  border: 1px solid var(--border-color);
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}
+
+/* زرار جوجل: ترانسبيرنت خالص من غير أي باك جراوند */
+.social-btn--google {
+  background: transparent;
+  box-shadow: none;
+}
+
+.social-btn--google:hover:not(:disabled) {
+  background: transparent;
 }
 
 .social-btn:hover:not(:disabled) {
@@ -93,6 +107,7 @@
 .auth-form {
   display: grid;
   gap: 18px;
+  min-width: 0;
 }
 
 .field {
