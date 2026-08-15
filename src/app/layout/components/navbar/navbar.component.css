@@ -334,6 +334,10 @@
     top: 60px;
     left: 0;
     right: 0;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+    overflow-x: hidden;
     flex-direction: column;
     align-items: flex-start;
     gap: 1.25rem;
@@ -346,6 +350,13 @@
     pointer-events: none;
     transition: var(--transition-smooth);
   }
+
+  .site-nav .nav-link {
+    max-width: 100%;
+    white-space: normal;
+    word-break: break-word;
+  }
+
 
   .site-nav--open {
     transform: translateY(0);
