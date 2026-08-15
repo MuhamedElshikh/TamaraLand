@@ -24,7 +24,7 @@ export class ProductsPage implements OnInit {
   readonly products = signal<ProductAdminResponse[]>([]);
   readonly isLoading = signal(true);
   readonly totalPages = signal(1);
-  readonly pageIndex = signal(1);
+  readonly pageNumber = signal(1);
 
   // Filters
   readonly search = signal('');
@@ -107,7 +107,7 @@ export class ProductsPage implements OnInit {
       next: (res) => {
         this.isDeleting.set(null);
         if (res.success) {
-          this.load(this.pageIndex());
+          this.load(this.pageNumber());
         } else {
           this.deleteError.set(res.message || 'Failed to delete product.');
         }
@@ -132,15 +132,15 @@ export class ProductsPage implements OnInit {
     });
   }
 
-  private load(pageIndex: number): void {
+  private load(pageNumber: number): void {
     this.isLoading.set(true);
-    this.pageIndex.set(pageIndex);
+    this.pageNumber.set(pageNumber);
 
     const filter: ProductFilterRequest = {
       search: this.search().trim() || undefined,
       categoryId: this.categoryId(),
       brandId: this.brandId(),
-      pageIndex,
+      pageNumber,
       pageSize: PAGE_SIZE,
     };
 

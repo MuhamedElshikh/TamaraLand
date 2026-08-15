@@ -23,7 +23,7 @@ export class FeaturedProductsComponent implements OnInit , AfterViewInit  {
   canScrollNext = signal(true);
 
   ngOnInit(): void {
-    this.catalog.getProducts({ pageSize: 8, pageIndex: 1, sortBy: 'newest' }).subscribe({
+    this.catalog.getProducts({ pageSize: 8, pageNumber: 1, sortBy: 'newest' }).subscribe({
       next: (res) => {
         if (res.success && res.data) this.products.set(res.data.items);
         this.loading.set(false);

@@ -24,7 +24,7 @@ export class AdminCategoriesPage implements OnInit {
   readonly categories = signal<CategoryResponse[]>([]);
   readonly isLoading = signal(true);
   readonly totalPages = signal(1);
-  readonly pageIndex = signal(1);
+  readonly pageNumber = signal(1);
   readonly search = signal('');
 
   // Form & Drawer State
@@ -174,7 +174,7 @@ export class AdminCategoriesPage implements OnInit {
           this.isSubmitting.set(false);
           if (res.success) {
             this.closeModal();
-            this.load(this.pageIndex());
+            this.load(this.pageNumber());
           } else {
             this.formError.set(res.message || 'Failed to update category.');
           }
@@ -220,7 +220,7 @@ export class AdminCategoriesPage implements OnInit {
       next: (res) => {
         this.isDeletingId.set(null);
         if (res.success) {
-          this.load(this.pageIndex());
+          this.load(this.pageNumber());
         } else {
           this.deleteError.set(res.message || 'Failed to delete category.');
         }
@@ -232,13 +232,13 @@ export class AdminCategoriesPage implements OnInit {
     });
   }
 
-  private load(pageIndex: number): void {
+  private load(pageNumber: number): void {
     this.isLoading.set(true);
-    this.pageIndex.set(pageIndex);
+    this.pageNumber.set(pageNumber);
 
     const filter: CategoryFilterRequest = {
       search: this.search().trim() || undefined,
-      pageIndex,
+      pageNumber,
       pageSize: PAGE_SIZE,
     };
 

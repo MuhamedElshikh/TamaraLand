@@ -1,7 +1,7 @@
-import { Component, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { finalize } from 'rxjs';
+import { finalize, Subscription } from 'rxjs';
 import { AuthFormShellComponent } from '../../components/auth-form-shell/auth-form-shell.component';
 import { ErrorMessageComponent } from '../../../../shared/components/error-message/error-message.component';
 import { AuthService } from '../../../../core/services/auth.service';
@@ -20,7 +20,8 @@ import { AnalyticsService } from '../../../../core/services/analytics.service';
   templateUrl: './login.page.html',
   styleUrl: './login.page.css',
 })
-export class LoginPage {
+export class LoginPage implements AfterViewInit, OnDestroy {
+  private googleInitSub?: Subscription;
   protected readonly isSubmitting = signal(false);
   protected readonly isGoogleSubmitting = signal(false);
   protected readonly isFacebookSubmitting = signal(false);
@@ -69,33 +70,39 @@ private readonly analytics = inject(AnalyticsService);
       });
   }
 
-  protected signInWithGoogle(): void {
-    if (this.isGoogleSubmitting() || this.isSubmitting() || this.isFacebookSubmitting()) return;
+ protected signInWithGoogle(): void {
 
-    this.isGoogleSubmitting.set(true);
-    this.errorMessage.set(null);
-
-    this.socialAuthService
-      .login('google')
-      .pipe(finalize(() => this.isGoogleSubmitting.set(false)))
-      .subscribe({
-        next: (response: ApiResponse<AuthResponse>) => {
-          const token = response.data?.accessToken ?? this.authService.token();
-          if (token) {
-            this.analytics.login('google');
-            void this.router.navigateByUrl(this.authService.isAdmin() ? '/admin' : '/');
-            return;
-          }
-          this.errorMessage.set(extractErrorMessage(response.message, 'Google login failed.'));
-        },
-        error: (error) => {
-          this.errorMessage.set(
-            extractErrorMessage(error?.message || error?.error?.Message, 'Failed to sign in with Google.')
-          );
-        },
-      });
+  if (
+    this.isGoogleSubmitting() ||
+    this.isSubmitting() ||
+    this.isFacebookSubmitting()
+  ) {
+    return;
   }
 
+  this.isGoogleSubmitting.set(true);
+  this.errorMessage.set(null);
+
+  
+  
+}
+ngAfterViewInit(): void {
+  this.googleInitSub =
+    this.socialAuthService
+      .initializeGoogleButton()
+      .subscribe({
+        error: error => {
+          console.error(
+            'Failed to initialize Google Sign-In:',
+            error
+          );
+        }
+      });
+}
+
+ngOnDestroy(): void {
+  this.googleInitSub?.unsubscribe();
+}
   protected signInWithFacebook(): void {
     if (this.isFacebookSubmitting() || this.isSubmitting() || this.isGoogleSubmitting()) return;
 

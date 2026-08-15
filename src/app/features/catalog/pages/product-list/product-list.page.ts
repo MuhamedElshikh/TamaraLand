@@ -41,7 +41,7 @@ private readonly AnalyticsService = inject(AnalyticsService);
   readonly products = signal<ProductCardResponse[]>([]);
   readonly isLoading = signal(false);
   readonly totalCount = signal(0);
-  readonly pageIndex = signal(1);
+  readonly pageNumber = signal(1);
   readonly totalPages = signal(1);
 readonly pageTitle = signal('All Products');
 readonly pageKicker = signal('Catalog');
@@ -78,7 +78,7 @@ this.translate.stream(data['subtitle']).subscribe(subtitle => {
     const filter: ProductFilterRequest = {
 
       search: params['search'] ?? '',
-      pageIndex: +(params['page'] ?? 1),
+      pageNumber: +(params['page'] ?? 1),
       collection: this.collection
 
     };
@@ -87,7 +87,7 @@ this.translate.stream(data['subtitle']).subscribe(subtitle => {
 if (filter.search?.trim()) {
   this.AnalyticsService.search(filter.search);
 }
-    this.loadProducts(filter, filter.pageIndex);
+    this.loadProducts(filter, filter.pageNumber);
 
   });
 
@@ -104,11 +104,11 @@ if (filter.search?.trim()) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  private loadProducts(filter: ProductFilterRequest = {}, pageIndex = 1): void {
+  private loadProducts(filter: ProductFilterRequest = {}, pageNumber = 1): void {
     this.isLoading.set(true);
-    this.pageIndex.set(pageIndex);
+    this.pageNumber.set(pageNumber);
 
-    this.catalogService.getProducts({ ...filter, pageIndex, pageSize: PAGE_SIZE }).subscribe({
+    this.catalogService.getProducts({ ...filter, pageNumber, pageSize: PAGE_SIZE }).subscribe({
       next: (response) => {
         if (response.success && response.data) {
           this.products.set(response.data.items);

@@ -90,7 +90,7 @@
   @if (!isLoading() && totalPages() > 1) {
     <div class="pagination-wrapper">
       <app-pagination
-        [currentPage]="pageIndex()"
+        [currentPage]="pageNumber()"
         [totalPages]="totalPages()"
         (pageChange)="onPageChange($event)"
       />

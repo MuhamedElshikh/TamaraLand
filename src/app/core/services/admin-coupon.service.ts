@@ -10,7 +10,7 @@ import { CouponResponse, CreateCouponRequest, UpdateCouponRequest } from '../mod
 export interface CouponFilterRequest {
   search?: string;
   isActive?: boolean;
-  pageIndex?: number;
+  pageNumber?: number;
   pageSize?: number;
 }
 

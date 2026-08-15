@@ -29,7 +29,7 @@ export class BrandProductsPage implements OnInit {
   readonly products = signal<ProductCardResponse[]>([]);
   readonly brand = signal<BrandResponse | null>(null);
   readonly totalCount = signal(0);
-  readonly pageIndex = signal(1);
+  readonly pageNumber = signal(1);
   readonly totalPages = signal(1);
   readonly isLoading = signal(true);
   readonly notFound = signal(false);
@@ -88,12 +88,12 @@ clearFilters() {
       });
   }
 
-  private loadProducts(filter: ProductFilterRequest, pageIndex: number): void {
+  private loadProducts(filter: ProductFilterRequest, pageNumber: number): void {
     this.isLoading.set(true);
-    this.pageIndex.set(pageIndex);
+    this.pageNumber.set(pageNumber);
 
     this.catalogService
-      .getProducts({ ...filter, brandId: this.brandId, pageIndex, pageSize: PAGE_SIZE })
+      .getProducts({ ...filter, brandId: this.brandId, pageNumber, pageSize: PAGE_SIZE })
       .pipe(catchError(() => of(null)))
       .subscribe((response) => {
         if (response?.success && response.data) {

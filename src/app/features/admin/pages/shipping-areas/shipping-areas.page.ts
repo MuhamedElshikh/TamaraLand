@@ -24,7 +24,7 @@ export class ShippingAreasPage implements OnInit {
   readonly areas = signal<ShippingAreaAdminResponse[]>([]);
   readonly isLoading = signal(true);
   readonly totalPages = signal(1);
-  readonly pageIndex = signal(1);
+  readonly pageNumber = signal(1);
   readonly search = signal('');
   readonly isDeleting = signal<number | null>(null);
   readonly listError = signal<string | null>(null);
@@ -111,7 +111,7 @@ export class ShippingAreasPage implements OnInit {
         this.isSubmitting.set(false);
         if (res.success) {
           this.closeForm();
-          this.load(this.pageIndex());
+          this.load(this.pageNumber());
         } else {
           this.formError.set(res.message);
         }
@@ -133,7 +133,7 @@ export class ShippingAreasPage implements OnInit {
       next: (res) => {
         this.isDeleting.set(null);
         if (res.success) {
-          this.load(this.pageIndex());
+          this.load(this.pageNumber());
         } else {
           this.listError.set(res.message);
         }
@@ -145,12 +145,12 @@ export class ShippingAreasPage implements OnInit {
     });
   }
 
-  private load(pageIndex: number): void {
+  private load(pageNumber: number): void {
     this.isLoading.set(true);
-    this.pageIndex.set(pageIndex);
+    this.pageNumber.set(pageNumber);
 
     this.shippingAreaService
-      .getAll({ search: this.search() || undefined, pageIndex, pageSize: PAGE_SIZE })
+      .getAll({ search: this.search() || undefined, pageNumber, pageSize: PAGE_SIZE })
       .subscribe({
         next: (res) => {
           if (res.success && res.data) {

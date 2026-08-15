@@ -23,7 +23,7 @@ export class CouponsPage implements OnInit {
   readonly coupons = signal<CouponResponse[]>([]);
   readonly isLoading = signal(true);
   readonly totalPages = signal(1);
-  readonly pageIndex = signal(1);
+  readonly pageNumber = signal(1);
   readonly search = signal('');
   readonly isDeleting = signal<number | null>(null);
   readonly listError = signal<string | null>(null);
@@ -145,7 +145,7 @@ console.log(payload)
         this.isSubmitting.set(false);
         if (res.success) {
           this.closeForm();
-          this.load(this.pageIndex());
+          this.load(this.pageNumber());
         } else {
           this.formError.set(res.message);
         }
@@ -167,7 +167,7 @@ console.log(payload)
       next: (res) => {
         this.isDeleting.set(null);
         if (res.success) {
-          this.load(this.pageIndex());
+          this.load(this.pageNumber());
         } else {
           this.listError.set(res.message);
         }
@@ -179,11 +179,11 @@ console.log(payload)
     });
   }
 
-  private load(pageIndex: number): void {
+  private load(pageNumber: number): void {
     this.isLoading.set(true);
-    this.pageIndex.set(pageIndex);
+    this.pageNumber.set(pageNumber);
 
-    this.couponService.getAll({ search: this.search() || undefined, pageIndex, pageSize: PAGE_SIZE }).subscribe({
+    this.couponService.getAll({ search: this.search() || undefined, pageNumber, pageSize: PAGE_SIZE }).subscribe({
       next: (res) => {
         if (res.success && res.data) {
           this.coupons.set(res.data.items);

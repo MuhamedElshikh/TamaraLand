@@ -41,35 +41,29 @@ private readonly clarity: ClarityService = new ClarityService();
 
   constructor(private http: HttpClient, private router: Router ,  private analytics: AnalyticsService) {}
 
-  login(data: LoginRequest): Observable<ApiResponse<AuthResponse>> {
-    return this.http.post<ApiResponse<AuthResponse>>(`${API_BASE_URL}/api/Auth/login`, data).pipe(
+ login(
+  data: LoginRequest
+): Observable<ApiResponse<AuthResponse>> {
+  return this.http
+    .post<ApiResponse<AuthResponse>>(
+      `${API_BASE_URL}/api/Auth/login`,
+      data
+    )
+    .pipe(
       tap(res => {
-        if (res.success && res.data) {
-          const token = res.data.accessToken;
-
-this._token.set(token);
-localStorage.setItem('usertoken', token);
-
-this.setupAnalytics(token);
-this.analytics.login();        }
+        if (
+          res.success &&
+          res.data?.accessToken
+        ) {
+          this.saveToken(
+            res.data.accessToken
+          );
+        }
       })
     );
-  }
+}
 
-  loginWithGoogle(idToken: string): Observable<ApiResponse<AuthResponse>> {
-    return this.http.post<ApiResponse<AuthResponse>>(`${API_BASE_URL}/api/Auth/google`, { idToken }).pipe(
-      tap(res => {
-        if (res.success && res.data) {
-         const token = res.data.accessToken;
 
-this._token.set(token);
-localStorage.setItem('usertoken', token);
-
-this.setupAnalytics(token);
-this.analytics.login('google');        }
-      })
-    );
-  }
 
   loginWithFacebook(accessToken: string): Observable<ApiResponse<AuthResponse>> {
     return this.http.post<ApiResponse<AuthResponse>>(`${API_BASE_URL}/api/Auth/facebook`, { accessToken }).pipe(
@@ -86,21 +80,86 @@ this.analytics.login('facebook');        }
     );
   }
 
-  register(data: RegisterRequest): Observable<ApiResponse<AuthResponse>> {
-    return this.http.post<ApiResponse<AuthResponse>>(`${API_BASE_URL}/api/Auth/register`, data).pipe(
+register(
+  data: RegisterRequest
+): Observable<ApiResponse<AuthResponse>> {
+  return this.http
+    .post<ApiResponse<AuthResponse>>(
+      `${API_BASE_URL}/api/Auth/register`,
+      data
+    )
+    .pipe(
       tap(res => {
-        if (res.success && res.data) {
-          const token = res.data.accessToken;
+        if (
+          res.success &&
+          res.data?.accessToken
+        ) {
+          this.saveToken(
+            res.data.accessToken
+          );
 
-          this._token.set(token);
-          localStorage.setItem('usertoken', token);
-
-this.setupAnalytics(token);
-this.analytics.signUp();       }
+          this.analytics.signUp();
+        }
       })
     );
+}
+completeGoogleLogin(
+  response: AuthResponse
+): void {
+
+  if (!response?.accessToken) {
+    return;
   }
 
+  this._token.set(
+    response.accessToken
+  );
+
+  localStorage.setItem(
+    'usertoken',
+    response.accessToken
+  );
+
+  this.setupAnalytics(
+    response.accessToken
+  );
+
+  this.analytics.login(
+    'google'
+  );
+}
+loginWithGoogle(
+  idToken: string
+): Observable<ApiResponse<AuthResponse>> {
+
+  return this.http
+    .post<ApiResponse<AuthResponse>>(
+      `${API_BASE_URL}/api/Auth/google`,
+      {
+        idToken
+      }
+    )
+    .pipe(
+
+      tap(res => {
+
+        if (
+          res.success &&
+          res.data
+        ) {
+
+          this.setToken(
+            res.data.accessToken
+          );
+
+          this.analytics.login(
+            'google'
+          );
+        }
+
+      })
+    );
+}
   logout(): void {
    this.analytics.trackEvent('logout');
 this.analytics.clearUser();
@@ -158,5 +217,33 @@ private setupAnalytics(token: string): void {
     this.analytics.setUser(userId);
 this.clarity.setUser(userId);
   }
+}
+private saveToken(
+  token: string,
+  provider?: string
+): void {
+  this._token.set(token);
+
+  localStorage.setItem(
+    'usertoken',
+    token
+  );
+
+  this.setupAnalytics(token);
+
+  if (provider) {
+    this.analytics.login(provider);
+  }
+}
+setToken(token: string): void {
+
+  this._token.set(token);
+
+  localStorage.setItem(
+    'usertoken',
+    token
+  );
+
+  this.setupAnalytics(token);
 }
 }

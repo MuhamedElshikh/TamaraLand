@@ -28,7 +28,7 @@ readonly paymentStatusError = signal<string | null>(null);
   readonly orders = signal<OrderSummaryResponse[]>([]);
   readonly isLoading = signal(true);
   readonly totalPages = signal(1);
-  readonly pageIndex = signal(1);
+  readonly pageNumber = signal(1);
   readonly search = signal('');
   readonly selectedStatusFilter = signal<number | undefined>(undefined);
 
@@ -171,7 +171,7 @@ private updatePaymentIfNeeded(
   if (!paymentStatusChanged) {
     this.isSubmittingStatus.set(false);
     this.closeStatusModal();
-    this.load(this.pageIndex());
+    this.load(this.pageNumber());
     return;
   }
 
@@ -186,7 +186,7 @@ private updatePaymentIfNeeded(
 
         if (res.success) {
           this.closeStatusModal();
-          this.load(this.pageIndex());
+          this.load(this.pageNumber());
         } else {
           this.paymentStatusError.set(
             res.message ||
@@ -207,12 +207,12 @@ private updatePaymentIfNeeded(
 }
 
   private load(page: number): void {
-    this.pageIndex.set(page);
+    this.pageNumber.set(page);
     this.isLoading.set(true);
 
     this.adminOrderService
       .getOrders({
-        pageIndex: page,
+        pageNumber: page,
         pageSize: PAGE_SIZE,
         Status: this.selectedStatusFilter(),
         OrderNumber: this.search() ? this.search().trim() : undefined,

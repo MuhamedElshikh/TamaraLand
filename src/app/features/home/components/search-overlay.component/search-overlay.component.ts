@@ -51,7 +51,7 @@ export class SearchOverlayComponent implements OnDestroy {
 
       return this.catalogService.getProducts({
         search: term,
-        pageIndex: 1,
+        pageNumber: 1,
         pageSize: 5
       }).pipe(
 
@@ -120,7 +120,7 @@ private saveRecentSearch(term: string): void {
 }
   private runSearch(term: string): void {
     this.isLoading.set(true);
-    this.catalogService.getProducts({ search: term, pageSize: 5, pageIndex: 1 }).subscribe({
+    this.catalogService.getProducts({ search: term, pageSize: 5, pageNumber: 1 }).subscribe({
       next: (res) => {
         this.isLoading.set(false);
         this.hasSearched.set(true);

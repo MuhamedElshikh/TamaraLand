@@ -26,4 +26,5 @@ export const AUTH_ROUTES: Routes = [
     loadComponent: () => import('./pages/profile/profile.page').then((m) => m.ProfilePage),
     canActivate: [authGuard],
   },
+ 
 ];

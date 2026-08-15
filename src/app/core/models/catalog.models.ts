@@ -92,7 +92,7 @@ export interface ProductFilterRequest {
   minPrice?: number;
   maxPrice?: number;
   collection?: ProductCollection;
-  pageIndex?: number;
+  pageNumber?: number;
   pageSize?: number;
   sortBy?: string;
 }
@@ -119,13 +119,13 @@ arabicBrandName: string;
 
 export interface CategoryFilterRequest {
   search?: string;
-  pageIndex?: number;
+  pageNumber?: number;
   pageSize?: number;
 }
 
 export interface BrandFilterRequest {
   search?: string;
-  pageIndex?: number;
+  pageNumber?: number;
   pageSize?: number;
 }
 export interface AnalyticsItem {

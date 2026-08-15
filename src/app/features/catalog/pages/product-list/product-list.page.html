@@ -56,7 +56,7 @@
             <app-product-card [product]="product" />
           }
         </div>
-        <app-pagination [currentPage]="pageIndex()" [totalPages]="totalPages()" (pageChange)="onPageChange($event)" />
+        <app-pagination [currentPage]="pageNumber()" [totalPages]="totalPages()" (pageChange)="onPageChange($event)" />
       }
     </div>
   </div>

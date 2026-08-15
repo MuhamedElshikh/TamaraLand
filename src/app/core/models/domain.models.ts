@@ -231,7 +231,7 @@ export interface OrderDetailsResponse {
 
 export interface OrderFilterRequest {
   status?: OrderStatusName;
-  pageIndex?: number;
+  pageNumber?: number;
   pageSize?: number;
 }
 
@@ -261,7 +261,7 @@ export interface AdminOrderFilterRequest {
   Status?: number;
   OrderNumber?: string;
   search?: string;
-  pageIndex?: number;
+  pageNumber?: number;
   pageSize?: number;
 }
 
@@ -613,7 +613,7 @@ export type UpdateShippingAreaRequest = CreateShippingAreaRequest;
 export interface ShippingAreaFilterRequest {
   governorate?: string;
   search?: string;
-  pageIndex?: number;
+  pageNumber?: number;
   pageSize?: number;
 }
 // ---- Admin Users ----

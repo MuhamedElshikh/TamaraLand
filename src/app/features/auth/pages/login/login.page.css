@@ -13,6 +13,22 @@
   line-height: 1.05;
   color: var(--text-primary);
 }
+.google-signin-container {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
+}
+
+.google-signin-container iframe {
+  max-width: 100%;
+}
+.google-signin-container > div {
+  max-width: 100%;
+}
 
 .social-auth {
   display: grid;

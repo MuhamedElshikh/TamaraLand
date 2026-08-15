@@ -27,8 +27,8 @@ export class AdminOrderService {
     if (filter.search && filter.search.trim()) {
       params['search'] = filter.search.trim();
     }
-    if (filter.pageIndex) {
-      params['pageIndex'] = String(filter.pageIndex);
+    if (filter.pageNumber) {
+      params['pageNumber'] = String(filter.pageNumber);
     }
     if (filter.pageSize) {
       params['pageSize'] = String(filter.pageSize);

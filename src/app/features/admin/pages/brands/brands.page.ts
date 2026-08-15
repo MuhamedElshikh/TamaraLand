@@ -24,7 +24,7 @@ export class AdminBrandsPage implements OnInit {
   readonly brands = signal<BrandResponse[]>([]);
   readonly isLoading = signal(true);
   readonly totalPages = signal(1);
-  readonly pageIndex = signal(1);
+  readonly pageNumber = signal(1);
   readonly search = signal('');
 
   // Form & Modal State
@@ -178,7 +178,7 @@ readonly columns: DataTableColumn<BrandResponse>[] = [
           this.isSubmitting.set(false);
           if (res.success) {
             this.closeModal();
-            this.load(this.pageIndex());
+            this.load(this.pageNumber());
           } else {
             this.formError.set(res.message || 'Failed to update brand.');
           }
@@ -227,7 +227,7 @@ readonly columns: DataTableColumn<BrandResponse>[] = [
       next: (res) => {
         this.isDeletingId.set(null);
         if (res.success) {
-          this.load(this.pageIndex());
+          this.load(this.pageNumber());
         } else {
           this.deleteError.set(res.message || 'Failed to delete brand.');
         }
@@ -239,13 +239,13 @@ readonly columns: DataTableColumn<BrandResponse>[] = [
     });
   }
 
-  private load(pageIndex: number): void {
+  private load(pageNumber: number): void {
     this.isLoading.set(true);
-    this.pageIndex.set(pageIndex);
+    this.pageNumber.set(pageNumber);
 
     const filter: BrandFilterRequest = {
       search: this.search().trim() || undefined,
-      pageIndex,
+      pageNumber,
       pageSize: PAGE_SIZE,
     };
 

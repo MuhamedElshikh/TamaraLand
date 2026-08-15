@@ -28,7 +28,7 @@ export class OrderListPage implements OnInit {
   readonly orders = signal<OrderResponse[]>([]);
   readonly isLoading = signal(true);
   readonly totalPages = signal(1);
-  readonly pageIndex = signal(1);
+  readonly pageNumber = signal(1);
 
   readonly statusOptions = STATUS_OPTIONS;
 readonly selectedStatus = signal<OrderStatusName | ''>('');
@@ -48,14 +48,14 @@ this.selectedStatus.set(status as OrderStatusName | '');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  private load(pageIndex = 1): void {
+  private load(pageNumber = 1): void {
     this.isLoading.set(true);
-    this.pageIndex.set(pageIndex);
+    this.pageNumber.set(pageNumber);
 
     this.orderService
       .getMyOrders({
         status: this.selectedStatus() || undefined,
-        pageIndex,
+        pageNumber,
         pageSize: PAGE_SIZE,
       })
       .subscribe({
