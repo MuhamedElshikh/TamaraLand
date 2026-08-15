@@ -7,6 +7,7 @@ import { PaginationComponent } from '../../../../shared/pagination/pagination';
 import { AdminOrderService } from '../../../../core/services/admin-order.service';
 import { OrderSummaryResponse, orderStatus, paymentStatus } from '../../../../core/models/domain.models';
 import { TranslateModule, TranslatePipe ,TranslateService } from '@ngx-translate/core';
+import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 
 const PAGE_SIZE = 10;
 
@@ -149,10 +150,7 @@ readonly paymentStatusError = signal<string | null>(null);
         error: (err) => {
           this.isSubmittingStatus.set(false);
 
-          this.statusError.set(
-            err?.error?.message ||
-            'Error updating order status. Please try again.'
-          );
+          this.statusError.set(extractErrorMessage(err, 'Error updating order status. Please try again.'));
         },
       });
 
@@ -198,10 +196,7 @@ private updatePaymentIfNeeded(
       error: (err) => {
         this.isSubmittingStatus.set(false);
 
-        this.paymentStatusError.set(
-          err?.error?.message ||
-          'Error updating payment status. Please try again.'
-        );
+        this.paymentStatusError.set(extractErrorMessage(err, 'Error updating payment status. Please try again.'));
       },
     });
 }

@@ -7,6 +7,7 @@ import { AdminCatalogService } from '../../../../core/services/admin-catalog.ser
 import { CategoryResponse, CategoryFilterRequest } from '../../../../core/models/catalog.models';
 import { CreateCategoryRequest, UpdateCategoryRequest } from '../../../../core/models/domain.models';
 import { TranslatePipe } from '@ngx-translate/core';
+import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 
 const PAGE_SIZE = 10;
 
@@ -181,7 +182,7 @@ export class AdminCategoriesPage implements OnInit {
         },
         error: (err) => {
           this.isSubmitting.set(false);
-          this.formError.set(err?.error?.message || 'Error updating category.');
+          this.formError.set(extractErrorMessage(err, 'Error updating category.'));
         },
       });
     } else {
@@ -204,7 +205,7 @@ export class AdminCategoriesPage implements OnInit {
         },
         error: (err) => {
           this.isSubmitting.set(false);
-          this.formError.set(err?.error?.message || 'Error creating category.');
+          this.formError.set(extractErrorMessage(err, 'Error creating category.'));
         },
       });
     }
@@ -227,7 +228,7 @@ export class AdminCategoriesPage implements OnInit {
       },
       error: (err) => {
         this.isDeletingId.set(null);
-        this.deleteError.set(err?.error?.message || 'Error deleting category.');
+        this.deleteError.set(extractErrorMessage(err, 'Error deleting category.'));
       },
     });
   }

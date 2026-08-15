@@ -17,6 +17,7 @@ import {
 
 import { AdminBannerService } from '../../../../core/services/admn-banner.service';
 import { TranslatePipe } from '@ngx-translate/core';
+import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 
 const PAGE_SIZE = 10;
 
@@ -194,13 +195,7 @@ export class BannersPage implements OnInit {
 
         this.isDeleting.set(null);
 
-        this.deleteError.set(
-
-          err?.error?.message ??
-
-          'Failed to delete banner.'
-
-        );
+        this.deleteError.set(extractErrorMessage(err, 'Failed to delete banner.'));
 
       },
 

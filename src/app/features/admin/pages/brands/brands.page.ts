@@ -7,6 +7,7 @@ import { AdminCatalogService } from '../../../../core/services/admin-catalog.ser
 import { BrandResponse, BrandFilterRequest } from '../../../../core/models/catalog.models';
 import { CreateBrandRequest, UpdateBrandRequest } from '../../../../core/models/domain.models';
 import { TranslatePipe } from '@ngx-translate/core';
+import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 
 const PAGE_SIZE = 10;
 
@@ -185,7 +186,7 @@ readonly columns: DataTableColumn<BrandResponse>[] = [
         },
         error: (err) => {
           this.isSubmitting.set(false);
-          this.formError.set(err?.error?.message || 'Error updating brand.');
+          this.formError.set(extractErrorMessage(err, 'Error updating brand.'));
         },
       });
     } else {
@@ -211,7 +212,7 @@ readonly columns: DataTableColumn<BrandResponse>[] = [
         },
         error: (err) => {
           this.isSubmitting.set(false);
-          this.formError.set(err?.error?.message || 'Error creating brand.');
+          this.formError.set(extractErrorMessage(err, 'Error creating brand.'));
         },
       });
     }
@@ -234,7 +235,7 @@ readonly columns: DataTableColumn<BrandResponse>[] = [
       },
       error: (err) => {
         this.isDeletingId.set(null);
-        this.deleteError.set(err?.error?.message || 'Error deleting brand.');
+        this.deleteError.set(extractErrorMessage(err, 'Error deleting brand.'));
       },
     });
   }

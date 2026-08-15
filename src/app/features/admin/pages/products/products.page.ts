@@ -7,6 +7,7 @@ import { AdminCatalogService } from '../../../../core/services/admin-catalog.ser
 import { ProductAdminResponse } from '../../../../core/models/domain.models';
 import { ProductFilterRequest, CategoryResponse, BrandResponse } from '../../../../core/models/catalog.models';
 import { TranslateModule } from '@ngx-translate/core';
+import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 
 const PAGE_SIZE = 10;
 
@@ -114,7 +115,7 @@ export class ProductsPage implements OnInit {
       },
       error: (err) => {
         this.isDeleting.set(null);
-        this.deleteError.set(err?.error?.message || 'Could not delete product.');
+        this.deleteError.set(extractErrorMessage(err, 'Could not delete product.'));
       },
     });
   }

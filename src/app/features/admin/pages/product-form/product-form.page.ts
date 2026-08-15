@@ -16,6 +16,7 @@ import {
   UpdateProductVariantRequest,
 } from '../../../../core/models/domain.models';
 import { TranslatePipe } from '@ngx-translate/core';
+import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 
 @Component({
   selector: 'app-admin-product-form',
@@ -164,7 +165,7 @@ export class AdminProductFormPage implements OnInit {
       },
       error: (err) => {
         this.isSubmitting.set(false);
-        this.errorMessage.set(err?.error?.message || err?.message || 'Error updating product.');
+        this.errorMessage.set(extractErrorMessage(err, 'Error updating product.'));
       },
     });
   } else {
@@ -204,7 +205,7 @@ export class AdminProductFormPage implements OnInit {
       },
       error: (err) => {
         this.isSubmitting.set(false);
-        this.errorMessage.set(err?.error?.message || err?.message || 'Error creating product.');
+        this.errorMessage.set(extractErrorMessage(err, 'Error creating product.'));
       },
     });
   }
@@ -340,7 +341,7 @@ onUploadImages(): void {
       },
       error: (err) => {
         this.isUploadingImage.set(false);
-        this.imageError.set(err?.error?.message || 'Error uploading images.');
+        this.imageError.set(extractErrorMessage(err, 'Error uploading images.'));
       },
     });
 }
@@ -354,7 +355,7 @@ onUploadImages(): void {
           alert(res.message || 'Failed to set main image.');
         }
       },
-      error: (err) => alert(err?.error?.message || 'Error setting main image.'),
+      error: (err) => alert(extractErrorMessage(err, 'Error setting main image.')),
     });
   }
 
@@ -369,7 +370,7 @@ onUploadImages(): void {
           alert(res.message || 'Failed to delete image.');
         }
       },
-      error: (err) => alert(err?.error?.message || 'Error deleting image.'),
+      error: (err) => alert(extractErrorMessage(err, 'Error deleting image.')),
     });
   }
 

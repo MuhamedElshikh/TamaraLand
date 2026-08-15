@@ -10,6 +10,7 @@ import {
   paymentMethod,
 } from '../../../../core/models/domain.models';
 import { StatusBadgeComponent } from '../../components/status-badge/status-badge.component';
+import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 import{AdminOrderLocationMapComponent} from '../../components/admin-order-location-map-component/admin-order-location-map-component'
 @Component({
   selector: 'app-admin-order-detail',
@@ -65,7 +66,7 @@ export class AdminOrderDetailPage implements OnInit {
       },
       error: (err) => {
         this.isLoading.set(false);
-        this.errorMessage.set(err?.error?.message || 'Failed to load order details.');
+        this.errorMessage.set(extractErrorMessage(err, 'Failed to load order details.'));
       },
     });
   }
@@ -90,7 +91,7 @@ export class AdminOrderDetailPage implements OnInit {
       },
       error: (err) => {
         this.isUpdatingStatus.set(false);
-        this.errorMessage.set(err?.error?.message || 'Error updating status. Please try again.');
+        this.errorMessage.set(extractErrorMessage(err, 'Error updating status. Please try again.'));
       },
     });
   }

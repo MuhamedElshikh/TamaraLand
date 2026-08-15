@@ -9,6 +9,7 @@ import {
 } from '../../../../core/models/domain.models';
 import { Router  } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 
 @Component({
   selector: 'app-admin-store-settings',
@@ -81,10 +82,7 @@ private readonly router = inject(Router);
 
         this.isLoading.set(false);
 
-        this.error.set(
-          err?.error?.message ??
-          'Failed to load settings.'
-        );
+        this.error.set(extractErrorMessage(err, 'Failed to load settings.'));
 
       }
 
@@ -135,10 +133,7 @@ private readonly router = inject(Router);
 
           this.isSubmitting.set(false);
 
-          this.error.set(
-            err?.error?.message ??
-            'Failed to save settings.'
-          );
+          this.error.set(extractErrorMessage(err, 'Failed to save settings.'));
 
         }
 

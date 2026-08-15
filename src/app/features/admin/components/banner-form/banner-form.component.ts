@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
+import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 
 import {
   AbstractControl,
@@ -333,7 +334,7 @@ export class BannerFormComponent {
         },
         error: (err) => {
           this.isSaving.set(false);
-          this.errorMessage.set(err?.error?.message ?? 'banners.errors.update');
+          this.errorMessage.set(extractErrorMessage(err, 'banners.errors.update'));
         },
       });
 
@@ -351,7 +352,7 @@ export class BannerFormComponent {
       },
       error: (err) => {
         this.isSaving.set(false);
-        this.errorMessage.set(err?.error?.message ?? 'banners.errors.create');
+        this.errorMessage.set(extractErrorMessage(err, 'banners.errors.create'));
       },
     });
   }
