@@ -1,88 +1,333 @@
 <section class="collection-page">
+
   @if (notFound()) {
-    <p class="section-copy">{{ 'categoryPage.notFound' | translate }}</p>
+
+    <div class="collection-page__not-found">
+      <p class="section-copy">
+        {{ 'categoryPage.notFound' | translate }}
+      </p>
+    </div>
+
   } @else {
+
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+
     <header class="collection-page__hero">
-<app-breadcrumbs
-  [items]="[
-    { label: ('categoryPage.home' | translate), link: '/' },
-    { label: ('categoryPage.categories' | translate), link: '/categories' },
-    { label: (category() | localizedName) || ('categoryPage.category' | translate) }
-  ]"
-/>      <div>
-        <p class="section-kicker">{{ 'categoryPage.category' | translate }}</p>
-        <h1 class="section-title">{{ category() ? (category() | localizedName) : ('categoryPage.loading' | translate) }}</h1>
+
+      <app-breadcrumbs
+        [items]="[
+          {
+            label: ('categoryPage.home' | translate),
+            link: '/'
+          },
+          {
+            label: ('categoryPage.categories' | translate),
+            link: '/categories'
+          },
+          {
+            label: category()
+              ? (category() | localizedName)
+              : ('categoryPage.category' | translate)
+          }
+        ]"
+      />
+
+      <div class="collection-page__hero-content">
+
+        <p class="section-kicker">
+          {{ 'categoryPage.category' | translate }}
+        </p>
+
+        <h1 class="section-title">
+          {{
+            category()
+              ? (category() | localizedName)
+              : ('categoryPage.loading' | translate)
+          }}
+        </h1>
+
         @if (category()?.description) {
-          <p class="section-copy">{{ category()?.description }}</p>
+
+          <p class="section-copy">
+            {{ category()?.description }}
+          </p>
+
         }
+
       </div>
+
     </header>
 
+
+    <!-- =====================================================
+         PAGE CONTENT
+         ===================================================== -->
+
     <div class="collection-page__layout">
-      <!-- Desktop sidebar -->
+
+      <!-- ===================================================
+           DESKTOP FILTERS
+           =================================================== -->
+
       <aside class="collection-page__filters">
-        <app-product-filters [hideCategoryFilter]="true" (filtersChanged)="onFiltersChanged($event)" />
+
+        <app-product-filters
+          [hideCategoryFilter]="true"
+          (filtersChanged)="onFiltersChanged($event)"
+        />
+
       </aside>
 
+
+      <!-- ===================================================
+           PRODUCTS
+           =================================================== -->
+
       <div class="collection-page__content">
-        <!-- Toolbar with mobile filter toggle -->
+
+        <!-- Toolbar -->
+
         <div class="collection-page__toolbar">
-          <p class="collection-page__summary">@if(totalCount() === 1){
 
-{{ 'categoryPage.productCount' | translate:{count: totalCount()} }}
+          <p class="collection-page__summary">
 
-}@else{
+            @if (totalCount() === 1) {
 
-{{ 'categoryPage.productsCount' | translate:{count: totalCount()} }}
+              {{
+                'categoryPage.productCount'
+                  | translate:{
+                      count: totalCount()
+                    }
+              }}
 
-}</p>
-          
-          <button class="filters-toggle" (click)="openFilters()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-            Filters
+            } @else {
+
+              {{
+                'categoryPage.productsCount'
+                  | translate:{
+                      count: totalCount()
+                    }
+              }}
+
+            }
+
+          </p>
+
+
+          <!-- Mobile Filters -->
+
+          <button
+            type="button"
+            class="filters-toggle"
+            (click)="openFilters()"
+            [attr.aria-expanded]="filtersOpen()"
+          >
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polygon
+                points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"
+              />
+            </svg>
+
+            <span>
+              {{ 'categoryPage.filters' | translate }}
+            </span>
+
           </button>
+
         </div>
 
-        <!-- Mobile filter drawer -->
-        <div class="filters-backdrop" [class.filters-backdrop--visible]="filtersOpen()" (click)="closeFilters()"></div>
-        <div class="filters-drawer" [class.filters-drawer--open]="filtersOpen()">
-          <div class="filters-drawer__header">
-            <span class="filters-drawer__title">{{ 'categoryPage.filters' | translate }}</span>
-            <button class="filters-drawer__close" (click)="closeFilters()">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
-          </div>
-          <div class="filters-drawer__body">
-            <app-product-filters [hideCategoryFilter]="true" (filtersChanged)="onFiltersChanged($event)" />
-          </div>
-          <div class="filters-drawer__footer">
-            <button class="btn btn-outline" (click)="clearFilters()">{{ 'categoryPage.clearAll' | translate }}</button>
-            <button class="btn btn-primary" (click)="closeFilters()">{{ 'categoryPage.showResults' | translate }}</button>
-          </div>
-        </div>
+
+        <!-- =================================================
+             PRODUCTS
+             ================================================= -->
 
         @if (isLoading()) {
+
           <div class="collection-page__grid">
-            @for (i of [1, 2, 3, 4]; track i) {
-              <div class="collection-page__skeleton"></div>
+
+            @for (
+              i of [1, 2, 3, 4, 5, 6];
+              track i
+            ) {
+
+              <div
+                class="collection-page__skeleton"
+              ></div>
+
             }
+
           </div>
+
         } @else if (products().length === 0) {
-          <p class="section-copy">{{ 'categoryPage.noProducts' | translate }}</p>
-        } @else {
-          <div class="collection-page__grid">
-            @for (product of products(); track product.id) {
-              <app-product-card [product]="product" />
-            }
+
+          <div class="collection-page__empty">
+
+            <p class="section-copy">
+              {{ 'categoryPage.noProducts' | translate }}
+            </p>
+
           </div>
+
+        } @else {
+
+          <div class="collection-page__grid">
+
+            @for (
+              product of products();
+              track product.id
+            ) {
+
+              <app-product-card
+                [product]="product"
+              />
+
+            }
+
+          </div>
+
 
           <app-pagination
             [currentPage]="pageNumber()"
             [totalPages]="totalPages()"
             (pageChange)="onPageChange($event)"
           />
+
         }
+
       </div>
+
     </div>
+
+
+    <!-- =====================================================
+         MOBILE FILTER BACKDROP
+         ===================================================== -->
+
+    <div
+      class="filters-backdrop"
+      [class.filters-backdrop--visible]="filtersOpen()"
+      (click)="closeFilters()"
+    ></div>
+
+
+    <!-- =====================================================
+         MOBILE FILTER DRAWER
+         ===================================================== -->
+
+    <section
+      class="filters-drawer"
+      [class.filters-drawer--open]="filtersOpen()"
+      aria-label="Product filters"
+    >
+
+      <div class="filters-drawer__handle"></div>
+
+
+      <!-- Header -->
+
+      <header class="filters-drawer__header">
+
+        <div>
+
+          <span class="filters-drawer__eyebrow">
+            {{ 'categoryPage.filters' | translate }}
+          </span>
+
+          <h2 class="filters-drawer__title">
+            {{ 'categoryPage.filters' | translate }}
+          </h2>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="filters-drawer__close"
+          (click)="closeFilters()"
+          aria-label="Close filters"
+        >
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line
+              x1="18"
+              y1="6"
+              x2="6"
+              y2="18"
+            ></line>
+
+            <line
+              x1="6"
+              y1="6"
+              x2="18"
+              y2="18"
+            ></line>
+          </svg>
+
+        </button>
+
+      </header>
+
+
+      <!-- Filter Body -->
+
+      <div class="filters-drawer__body">
+
+        <app-product-filters
+          [hideCategoryFilter]="true"
+          (filtersChanged)="onFiltersChanged($event)"
+        />
+
+      </div>
+
+
+      <!-- Footer -->
+
+      <footer class="filters-drawer__footer">
+
+        <button
+          type="button"
+          class="btn btn-outline"
+          (click)="clearFilters()"
+        >
+          {{ 'categoryPage.clearAll' | translate }}
+        </button>
+
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="applyFilters()"
+        >
+          {{ 'categoryPage.showResults' | translate }}
+        </button>
+
+      </footer>
+
+    </section>
+
   }
+
 </section>

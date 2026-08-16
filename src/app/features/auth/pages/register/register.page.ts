@@ -23,6 +23,8 @@ import { AnalyticsService } from '../../../../core/services/analytics.service';
 export class RegisterPage {
   protected readonly isSubmitting = signal(false);
   protected readonly errorMessage = signal<string | null>(null);
+  protected readonly isPasswordVisible = signal(false);
+  protected readonly isConfirmPasswordVisible = signal(false);
   private readonly fb = inject(FormBuilder);
 private readonly analytics = inject(AnalyticsService);
   protected readonly form = this.fb.nonNullable.group(
@@ -85,6 +87,11 @@ private readonly analytics = inject(AnalyticsService);
 
   protected passwordMismatch(): boolean {
     return this.form.touched && this.form.hasError('passwordMismatch');
+  }
+
+  protected togglePasswordVisibility(field: 'password' | 'confirmPassword'): void {
+    const visibility = field === 'password' ? this.isPasswordVisible : this.isConfirmPasswordVisible;
+    visibility.update((isVisible) => !isVisible);
   }
 }
 

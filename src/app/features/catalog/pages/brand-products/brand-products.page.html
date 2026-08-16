@@ -1,84 +1,260 @@
 <section class="collection-page">
+
   @if (notFound()) {
-    <p class="section-copy">{{ 'brandPage.notFound' | translate }}</p>
+
+    <p class="section-copy">
+      {{ 'brandPage.notFound' | translate }}
+    </p>
+
   } @else {
+
     <header class="collection-page__hero">
-<app-breadcrumbs
-  [items]="[
-    { label: ('brandPage.home' | translate), link: '/' },
-    { label: ('brandPage.brands' | translate), link: '/brands' },
-    { label: brand() ? (brand() | localizedName) : ('brandPage.brand' | translate) }
-  ]"
-/>      <div>
-        <p class="section-kicker">{{ 'brandPage.brand' | translate }}</p>
-        <h1 class="section-title">{{ brand() ? (brand() | localizedName) : ('brandPage.loading' | translate) }}</h1>
+
+      <app-breadcrumbs
+        [items]="[
+          {
+            label: ('brandPage.home' | translate),
+            link: '/'
+          },
+          {
+            label: ('brandPage.brands' | translate),
+            link: '/brands'
+          },
+          {
+            label: brand()
+              ? (brand() | localizedName)
+              : ('brandPage.brand' | translate)
+          }
+        ]"
+      />
+
+      <div>
+        <p class="section-kicker">
+          {{ 'brandPage.brand' | translate }}
+        </p>
+
+        <h1 class="section-title">
+          {{ brand()
+            ? (brand() | localizedName)
+            : ('brandPage.loading' | translate)
+          }}
+        </h1>
+
         @if (brand()?.description) {
-          <p class="section-copy">{{ brand()?.description }}</p>
+          <p class="section-copy">
+            {{ brand()?.description }}
+          </p>
         }
       </div>
+
     </header>
 
+
     <div class="collection-page__layout">
-      <!-- Desktop sidebar -->
+
+      <!-- Desktop Filters -->
       <aside class="collection-page__filters">
-        <app-product-filters [hideBrandFilter]="true" (filtersChanged)="onFiltersChanged($event)" />
+
+        <app-product-filters
+          [hideBrandFilter]="true"
+          (filtersChanged)="onFiltersChanged($event)"
+        />
+
       </aside>
 
+
+      <!-- Products Content -->
       <div class="collection-page__content">
-        <!-- Toolbar with mobile filter toggle -->
+
         <div class="collection-page__toolbar">
-          <p class="collection-page__summary">@if (totalCount() === 1) {
-  {{ 'brandPage.productCount' | translate:{ count: totalCount() } }}
-} @else {
-  {{ 'brandPage.productsCount' | translate:{ count: totalCount() } }}
-}p>
 
-          <button class="filters-toggle" (click)="openFilters()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-            {{ 'brandPage.filters' | translate }}
+          <p class="collection-page__summary">
+
+            @if (totalCount() === 1) {
+              {{ 'brandPage.productCount' | translate:{
+                count: totalCount()
+              } }}
+            } @else {
+              {{ 'brandPage.productsCount' | translate:{
+                count: totalCount()
+              } }}
+            }
+
+          </p>
+
+
+          <!-- Mobile Filter Button -->
+          <button
+            type="button"
+            class="filters-toggle"
+            (click)="openFilters()"
+            [attr.aria-expanded]="filtersOpen()"
+          >
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polygon
+                points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"
+              />
+            </svg>
+
+            <span>
+              {{ 'brandPage.filters' | translate }}
+            </span>
+
           </button>
+
         </div>
 
-        <!-- Mobile filter drawer -->
-        <div class="filters-backdrop" [class.filters-backdrop--visible]="filtersOpen()" (click)="closeFilters()"></div>
-        <div class="filters-drawer" [class.filters-drawer--open]="filtersOpen()">
-          <div class="filters-drawer__header">
-            <span class="filters-drawer__title">{{ 'brandPage.filters' | translate }}</span>
-            <button class="filters-drawer__close" (click)="closeFilters()">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
-          </div>
-          <div class="filters-drawer__body">
-            <app-product-filters [hideBrandFilter]="true" (filtersChanged)="onFiltersChanged($event)" />
-          </div>
-          <div class="filters-drawer__footer">
-            <button class="btn btn-outline" (click)="clearFilters()">{{ 'brandPage.clearAll' | translate }}</button>
-            <button class="btn btn-primary" (click)="closeFilters()">{{ 'brandPage.showResults' | translate }}</button>
-          </div>
-        </div>
 
         @if (isLoading()) {
+
           <div class="collection-page__grid">
+
             @for (i of [1, 2, 3, 4]; track i) {
               <div class="collection-page__skeleton"></div>
             }
+
           </div>
+
         } @else if (products().length === 0) {
-          <p class="section-copy">{{ 'brandPage.noProducts' | translate }}</p>
+
+          <p class="section-copy">
+            {{ 'brandPage.noProducts' | translate }}
+          </p>
+
         } @else {
+
           <div class="collection-page__grid">
+
             @for (product of products(); track product.id) {
-              <app-product-card [product]="product" />
+
+              <app-product-card
+                [product]="product"
+              />
+
             }
+
           </div>
+
 
           <app-pagination
             [currentPage]="pageNumber()"
             [totalPages]="totalPages()"
             (pageChange)="onPageChange($event)"
           />
+
         }
+
       </div>
+
     </div>
+
+
+    <!-- =====================================================
+         MOBILE FILTER DRAWER
+         ===================================================== -->
+
+    <div
+      class="filters-backdrop"
+      [class.filters-backdrop--visible]="filtersOpen()"
+      (click)="closeFilters()"
+    ></div>
+
+
+    <section
+      class="filters-drawer"
+      [class.filters-drawer--open]="filtersOpen()"
+      aria-label="Product filters"
+    >
+
+      <div class="filters-drawer__handle"></div>
+
+
+      <header class="filters-drawer__header">
+
+        <div>
+
+          <span class="filters-drawer__eyebrow">
+            {{ 'brandPage.filters' | translate }}
+          </span>
+
+          <h2 class="filters-drawer__title">
+            {{ 'brandPage.filters' | translate }}
+          </h2>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="filters-drawer__close"
+          (click)="closeFilters()"
+          aria-label="Close filters"
+        >
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+
+        </button>
+
+      </header>
+
+
+      <div class="filters-drawer__body">
+
+        <app-product-filters
+          [hideBrandFilter]="true"
+          (filtersChanged)="onFiltersChanged($event)"
+        />
+
+      </div>
+
+
+      <footer class="filters-drawer__footer">
+
+        <button
+          type="button"
+          class="btn btn-outline"
+          (click)="clearFilters()"
+        >
+          {{ 'brandPage.clearAll' | translate }}
+        </button>
+
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="applyFilters()"
+        >
+          {{ 'brandPage.showResults' | translate }}
+        </button>
+
+      </footer>
+
+    </section>
+
   }
+
 </section>

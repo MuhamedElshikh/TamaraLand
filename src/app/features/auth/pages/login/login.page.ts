@@ -28,6 +28,7 @@ export class LoginPage implements AfterViewInit, OnDestroy {
   protected readonly isFacebookSubmitting = signal(false);
   protected readonly isGoogleReady = signal(false);
   protected readonly errorMessage = signal<string | null>(null);
+  protected readonly isPasswordVisible = signal(false);
 
   private readonly analytics = inject(AnalyticsService);
   private readonly fb = inject(FormBuilder);
@@ -169,5 +170,9 @@ export class LoginPage implements AfterViewInit, OnDestroy {
   protected controlHasError(name: 'email' | 'password', errorKey?: string): boolean {
     const control = this.form.controls[name];
     return control.touched && control.invalid && (!errorKey || control.hasError(errorKey));
+  }
+
+  protected togglePasswordVisibility(): void {
+    this.isPasswordVisible.update((isVisible) => !isVisible);
   }
 }

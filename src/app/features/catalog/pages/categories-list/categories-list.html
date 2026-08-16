@@ -1,31 +1,136 @@
 <section class="listing-page">
+
+  <!-- =====================================================
+       HERO
+       ===================================================== -->
+
   <header class="listing-page__hero">
-<p class="section-kicker">{{ 'categories.kicker' | translate }}</p>
-<h1 class="section-title">{{ 'categories.title' | translate }}</h1>
-    <p class="section-copy">{{ 'categories.subtitle' | translate }}</p>
+
+    <span class="listing-page__hero-line"></span>
+
+    <p class="section-kicker">
+      {{ 'categories.kicker' | translate }}
+    </p>
+
+    <h1 class="section-title">
+      {{ 'categories.title' | translate }}
+    </h1>
+
+    <p class="section-copy">
+      {{ 'categories.subtitle' | translate }}
+    </p>
+
   </header>
 
+
+  <!-- =====================================================
+       LOADING
+       ===================================================== -->
+
   @if (isLoading()) {
-    <div class="listing-page__grid">
-      @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+
+    <div class="listing-page__grid listing-page__grid--loading">
+
+      @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
+
         <div class="listing-page__skeleton"></div>
+
       }
+
     </div>
+
+
+  <!-- =====================================================
+       EMPTY
+       ===================================================== -->
+
   } @else if (categories().length === 0) {
-    <p class="section-copy">{{ 'categories.empty' | translate }}</p>
-  } @else {
-    <div class="listing-page__grid">
-      @for (category of categories(); track category.id) {
-        <a [routerLink]="['/categories', category.id]" class="listing-card">
-          <img [src]="category.imageUrl || fallbackImage" [alt]="category | localizedName" />
-          <div class="listing-card__overlay">
-            <span class="listing-card__name">{{ category | localizedName }}</span>
-            @if (category.description) {
-              <span class="listing-card__desc">{{ category.description }}</span>
-            }
-          </div>
-        </a>
-      }
+
+    <div class="listing-page__empty">
+
+      <p class="section-copy">
+        {{ 'categories.empty' | translate }}
+      </p>
+
     </div>
+
+
+  <!-- =====================================================
+       CATEGORIES
+       ===================================================== -->
+
+  } @else {
+
+    <div class="listing-page__grid">
+
+      @for (
+        category of categories();
+        track category.id;
+        let i = $index
+      ) {
+
+        <a
+          [routerLink]="['/categories', category.id]"
+          class="listing-card"
+          [style.--card-index]="i"
+        >
+
+          <!-- Image -->
+          <div class="listing-card__image">
+
+            <img
+              [src]="category.imageUrl || fallbackImage"
+              [alt]="category | localizedName"
+              loading="lazy"
+            />
+
+          </div>
+
+
+          <!-- Gradient -->
+          <div class="listing-card__gradient"></div>
+
+
+          <!-- Content -->
+          <div class="listing-card__content">
+
+            <div class="listing-card__text">
+
+              <span class="listing-card__name">
+                {{ category | localizedName }}
+              </span>
+
+              @if (category.description) {
+
+                <span class="listing-card__desc">
+                  {{ category.description }}
+                </span>
+
+              }
+
+            </div>
+
+
+            <!-- Arrow -->
+            <span class="listing-card__explore">
+
+              <span
+                class="listing-card__arrow"
+                aria-hidden="true"
+              >
+                →
+              </span>
+
+            </span>
+
+          </div>
+
+        </a>
+
+      }
+
+    </div>
+
   }
+
 </section>

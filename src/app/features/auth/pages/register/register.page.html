@@ -80,11 +80,14 @@
 
         <span>{{ 'register.fields.password' | translate }}</span>
 
-        <input
-          type="password"
-          formControlName="password"
-          [placeholder]="'register.placeholders.password' | translate"
-          autocomplete="new-password" />
+        <div class="password-input">
+          <input [type]="isPasswordVisible() ? 'text' : 'password'" formControlName="password"
+            [placeholder]="'register.placeholders.password' | translate" autocomplete="new-password" />
+          <button class="password-toggle" type="button" (click)="togglePasswordVisibility('password')"
+            [attr.aria-label]="isPasswordVisible() ? 'Hide password' : 'Show password'">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="isPasswordVisible() ? 'm3 3 18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 4.2A10.8 10.8 0 0 1 12 4c5.5 0 9.5 5.1 9.5 8s-1.4 4.1-3.5 5.6M6.2 6.2C3.8 7.8 2.5 10.1 2.5 12c0 2.9 4 8 9.5 8 1.1 0 2.2-.2 3.2-.6M14.1 14.1A3 3 0 0 1 9.9 9.9' : 'M2.5 12S6.5 4 12 4s9.5 5.1 9.5 8-4 8-9.5 8-9.5-5.1-9.5-8Z M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z'" /></svg>
+          </button>
+        </div>
 
         @if (controlHasError('password','required')) {
           <small>{{ 'register.validation.passwordRequired' | translate }}</small>
@@ -98,11 +101,14 @@
 
         <span>{{ 'register.fields.confirmPassword' | translate }}</span>
 
-        <input
-          type="password"
-          formControlName="confirmPassword"
-          [placeholder]="'register.placeholders.confirmPassword' | translate"
-          autocomplete="new-password" />
+        <div class="password-input">
+          <input [type]="isConfirmPasswordVisible() ? 'text' : 'password'" formControlName="confirmPassword"
+            [placeholder]="'register.placeholders.confirmPassword' | translate" autocomplete="new-password" />
+          <button class="password-toggle" type="button" (click)="togglePasswordVisibility('confirmPassword')"
+            [attr.aria-label]="isConfirmPasswordVisible() ? 'Hide password' : 'Show password'">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="isConfirmPasswordVisible() ? 'm3 3 18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 4.2A10.8 10.8 0 0 1 12 4c5.5 0 9.5 5.1 9.5 8s-1.4 4.1-3.5 5.6M6.2 6.2C3.8 7.8 2.5 10.1 2.5 12c0 2.9 4 8 9.5 8 1.1 0 2.2-.2 3.2-.6M14.1 14.1A3 3 0 0 1 9.9 9.9' : 'M2.5 12S6.5 4 12 4s9.5 5.1 9.5 8-4 8-9.5 8-9.5-5.1-9.5-8Z M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z'" /></svg>
+          </button>
+        </div>
 
         @if (controlHasError('confirmPassword','required')) {
           <small>{{ 'register.validation.confirmPasswordRequired' | translate }}</small>
