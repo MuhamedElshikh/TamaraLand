@@ -1,6 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
+  HostListener,
   Input,
   OnDestroy,
   OnInit,
@@ -20,16 +22,16 @@ const SEARCH_DEBOUNCE_MS = 350;
 @Component({
   selector: 'app-product-filters',
   standalone: true,
-  imports: [TranslatePipe,LocalizedNamePipe],
+  imports: [TranslatePipe, LocalizedNamePipe],
   templateUrl: './product-filters.component.html',
   styleUrl: './product-filters.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductFiltersComponent implements OnInit, OnDestroy {
   private readonly catalogService = inject(CatalogService);
+  private readonly elRef = inject(ElementRef);
   private searchTimer?: ReturnType<typeof setTimeout>;
 
-  /** استخدمهم في صفحات الفئة/البراند عشان تخفي الفلتر المتكرر مع الـ route نفسه */
   @Input() hideCategoryFilter = false;
   @Input() hideBrandFilter = false;
 
@@ -44,6 +46,9 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
   readonly inStockOnly = signal(false);
   readonly sortBy = signal('');
 
+  // ---- حالة الـ dropdown panel المفتوح حاليًا (اسم الفلتر أو null) ----
+  readonly openPanel = signal<string | null>(null);
+
   readonly activeFiltersCount = computed(() => {
     let count = 0;
     if (this.search()) count++;
@@ -56,6 +61,14 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
     return count;
   });
 
+  readonly selectedCategory = computed(() =>
+    this.categories().find((c) => c.id === this.selectedCategoryId())
+  );
+
+  readonly selectedBrand = computed(() =>
+    this.brands().find((b) => b.id === this.selectedBrandId())
+  );
+
   readonly filtersChanged = output<ProductFilterRequest>();
 
   ngOnInit(): void {
@@ -65,6 +78,22 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     clearTimeout(this.searchTimer);
+  }
+
+  // ---- قفل الـ panel لو المستخدم دوس بره الـ component خالص ----
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.elRef.nativeElement.contains(event.target)) {
+      this.openPanel.set(null);
+    }
+  }
+
+  togglePanel(name: string): void {
+    this.openPanel.update((current) => (current === name ? null : name));
+  }
+
+  closePanel(): void {
+    this.openPanel.set(null);
   }
 
   private loadCategories(): void {
@@ -79,22 +108,22 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ---- البحث بيتأخر شوية (debounce) عشان مش نضرب الـ API مع كل حرف ----
   onSearch(value: string): void {
     this.search.set(value);
     clearTimeout(this.searchTimer);
     this.searchTimer = setTimeout(() => this.applyFilters(), SEARCH_DEBOUNCE_MS);
   }
 
-  // ---- دول بيطبّقوا فورًا (auto-apply)، مفيش داعي للمستخدم يدوس زرار ----
   selectCategory(id: number | undefined): void {
     this.selectedCategoryId.set(id);
     this.applyFilters();
+    this.closePanel();
   }
 
   selectBrand(id: number | undefined): void {
     this.selectedBrandId.set(id);
     this.applyFilters();
+    this.closePanel();
   }
 
   toggleInStock(): void {
@@ -107,9 +136,9 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
     this.applyFilters();
   }
 
-  // ---- السعر بس محتاج تأكيد صريح (زرار Apply) عشان منضربش API مع كل رقم ----
   applyPriceRange(): void {
     this.applyFilters();
+    this.closePanel();
   }
 
   setMinPrice(value: string): void {
@@ -129,6 +158,7 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
     this.inStockOnly.set(false);
     this.sortBy.set('');
     this.applyFilters();
+    this.closePanel();
   }
 
   applyFilters(): void {

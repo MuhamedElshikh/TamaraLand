@@ -34,6 +34,15 @@ clearFilters() {
   // reset your filters
   this.closeFilters();
 }
+
+
+
+
+applyFilters(): void {
+  this.closeFilters();
+}
+
+
   private currentFilter: ProductFilterRequest = {};
   private readonly route = inject(ActivatedRoute);
 private readonly translate = inject(TranslateService);

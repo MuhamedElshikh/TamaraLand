@@ -1,197 +1,148 @@
-<aside class="filters-shell">
-
-  <!-- Header -->
-  <header class="filters-header">
-    <div class="filters-header__top">
-      <p class="section-kicker">{{ 'filters.filters' | translate }}</p>
-      @if (activeFiltersCount() > 0) {
-        <span class="filters-badge">{{ activeFiltersCount() }} {{ activeFiltersCount() }} {{ 'filters.active' | translate }}</span>
-      }
-    </div>
-
-    <h2 class="filters-title">{{ 'filters.title' | translate }}    </h2>
-
-    <p class="filters-copy">
-{{ 'filters.subtitle' | translate }}    </p>
-  </header>
+<div class="filters-bar">
 
   <!-- Search -->
-
-  <section class="filter-group">
-
-    <div class="filter-group__header">
-      <h3>{{ 'filters.search' | translate }}</h3>
-    </div>
-
+  <div class="filters-bar__search">
+    <svg class="filters-bar__search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     <input
-      class="form-control"
       type="text"
       [placeholder]="'filters.searchPlaceholder' | translate"
       [value]="search()"
       (input)="onSearch($any($event.target).value)"
     />
+  </div>
 
-  </section>
+  <div class="filters-bar__pills">
 
-  <!-- Categories -->
+    <!-- Category Pill -->
+    @if (!hideCategoryFilter) {
+      <div class="filter-pill-wrapper">
+        <button
+          type="button"
+          class="filter-pill"
+          [class.filter-pill--active]="selectedCategoryId() !== undefined"
+          [class.filter-pill--open]="openPanel() === 'category'"
+          (click)="togglePanel('category')"
+        >
+          <span>
+            @if (selectedCategory(); as cat) {
+              {{ cat | localizedName }}
+            } @else {
+              {{ 'filters.categories' | translate }}
+            }
+          </span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
 
-  @if (!hideCategoryFilter) {
-    <section class="filter-group">
-
-      <div class="filter-group__header">
-        <h3>{{ 'filters.categories' | translate }}</h3>
-      </div>
-
-      <div class="filter-options">
-
-        <label class="filter-option">
-          <input
-            type="radio"
-            name="category"
-            [checked]="selectedCategoryId() === undefined"
-            (change)="selectCategory(undefined)"
-          />
-          <span>{{ 'filters.allCategories' | translate }}</span>
-        </label>
-
-        @for (category of categories(); track category.id) {
-
-          <label class="filter-option">
-
-            <input
-              type="radio"
-              name="category"
-              [checked]="selectedCategoryId() === category.id"
-              (change)="selectCategory(category.id)"
-            />
-
-            <span>{{ category | localizedName }}</span>
-
-          </label>
-
+        @if (openPanel() === 'category') {
+          <div class="filter-panel">
+            <label class="filter-option">
+              <input type="radio" name="category" [checked]="selectedCategoryId() === undefined" (change)="selectCategory(undefined)" />
+              <span>{{ 'filters.allCategories' | translate }}</span>
+            </label>
+            @for (category of categories(); track category.id) {
+              <label class="filter-option">
+                <input type="radio" name="category" [checked]="selectedCategoryId() === category.id" (change)="selectCategory(category.id)" />
+                <span>{{ category | localizedName }}</span>
+              </label>
+            }
+          </div>
         }
-
       </div>
+    }
 
-    </section>
-  }
+    <!-- Brand Pill -->
+    @if (!hideBrandFilter) {
+      <div class="filter-pill-wrapper">
+        <button
+          type="button"
+          class="filter-pill"
+          [class.filter-pill--active]="selectedBrandId() !== undefined"
+          [class.filter-pill--open]="openPanel() === 'brand'"
+          (click)="togglePanel('brand')"
+        >
+          <span>
+            @if (selectedBrand(); as brand) {
+              {{ brand | localizedName }}
+            } @else {
+              {{ 'filters.brands' | translate }}
+            }
+          </span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
 
-  <!-- Brands -->
-
-  @if (!hideBrandFilter) {
-    <section class="filter-group">
-
-      <div class="filter-group__header">
-        <h3>{{ 'filters.brands' | translate }}</h3>
-      </div>
-
-      <div class="filter-options">
-
-        <label class="filter-option">
-          <input
-            type="radio"
-            name="brand"
-            [checked]="selectedBrandId() === undefined"
-            (change)="selectBrand(undefined)"
-          />
-          <span>{{ 'filters.allBrands' | translate }}</span>
-        </label>
-
-        @for (brand of brands(); track brand.id) {
-
-          <label class="filter-option">
-
-            <input
-              type="radio"
-              name="brand"
-              [checked]="selectedBrandId() === brand.id"
-              (change)="selectBrand(brand.id)"
-            />
-
-            <span>{{ brand | localizedName }}</span>
-
-          </label>
-
+        @if (openPanel() === 'brand') {
+          <div class="filter-panel">
+            <label class="filter-option">
+              <input type="radio" name="brand" [checked]="selectedBrandId() === undefined" (change)="selectBrand(undefined)" />
+              <span>{{ 'filters.allBrands' | translate }}</span>
+            </label>
+            @for (brand of brands(); track brand.id) {
+              <label class="filter-option">
+                <input type="radio" name="brand" [checked]="selectedBrandId() === brand.id" (change)="selectBrand(brand.id)" />
+                <span>{{ brand | localizedName }}</span>
+              </label>
+            }
+          </div>
         }
-
       </div>
+    }
 
-    </section>
-  }
+    <!-- Price Pill -->
+    <div class="filter-pill-wrapper">
+      <button
+        type="button"
+        class="filter-pill"
+        [class.filter-pill--active]="minPrice() !== undefined || maxPrice() !== undefined"
+        [class.filter-pill--open]="openPanel() === 'price'"
+        (click)="togglePanel('price')"
+      >
+        <span>{{ 'filters.priceRange' | translate }}</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
 
-  <!-- Price -->
-
-  <section class="filter-group">
-
-    <div class="filter-group__header">
-      <h3>{{ 'filters.priceRange' | translate }}</h3>
+      @if (openPanel() === 'price') {
+        <div class="filter-panel filter-panel--price">
+          <div class="price-range">
+            <input
+              class="form-control"
+              type="number"
+              [placeholder]="'filters.min' | translate"
+              [value]="minPrice()"
+              (input)="setMinPrice($any($event.target).value)"
+              (keyup.enter)="applyPriceRange()"
+            />
+            <span class="price-divider">—</span>
+            <input
+              class="form-control"
+              type="number"
+              [placeholder]="'filters.max' | translate"
+              [value]="maxPrice()"
+              (input)="setMaxPrice($any($event.target).value)"
+              (keyup.enter)="applyPriceRange()"
+            />
+          </div>
+          <button class="btn btn-primary filter-panel__apply" type="button" (click)="applyPriceRange()">
+            {{ 'filters.applyPrice' | translate }}
+          </button>
+        </div>
+      }
     </div>
 
-    <div class="price-range">
-
-      <input
-        class="form-control"
-        type="number"
-        [placeholder]="'filters.min' | translate"
-        [value]="minPrice()"
-        (input)="setMinPrice($any($event.target).value)"
-        (keyup.enter)="applyPriceRange()"
-      />
-
-      <span class="price-divider">—</span>
-
-      <input
-        class="form-control"
-        type="number"
-        [placeholder]="'filters.max' | translate"
-        [value]="maxPrice()"
-        (input)="setMaxPrice($any($event.target).value)"
-        (keyup.enter)="applyPriceRange()"
-      />
-
-    </div>
-
-    <button class="btn btn-outline filter-group__apply" type="button" (click)="applyPriceRange()">
-     {{ 'filters.applyPrice' | translate }}
+    <!-- Stock Toggle Pill (مفيهاش panel، بتتفعل مباشرة) -->
+    <button
+      type="button"
+      class="filter-pill filter-pill--toggle"
+      [class.filter-pill--active]="inStockOnly()"
+      (click)="toggleInStock()"
+    >
+      <span>{{ 'filters.inStockOnly' | translate }}</span>
     </button>
 
-  </section>
+  </div>
 
-  <!-- Availability -->
-
-  <section class="filter-group">
-
-    <div class="filter-group__header">
-      <h3>{{ 'filters.availability' | translate }}</h3>
-    </div>
-
-    <label class="filter-option">
-
-      <input
-        type="checkbox"
-        [checked]="inStockOnly()"
-        (change)="toggleInStock()"
-      />
-
-      <span>{{ 'filters.inStockOnly' | translate }}</span>
-
-    </label>
-
-  </section>
-
-  <!-- Sort -->
-
-  <section class="filter-group">
-
-    <div class="filter-group__header">
-      <h3>{{ 'filters.sortBy' | translate }}</h3>
-    </div>
-
-    <select
-      class="form-control"
-      [value]="sortBy()"
-      (change)="changeSort($any($event.target).value)"
-    >
+  <!-- Sort + Clear -->
+  <div class="filters-bar__end">
+    <select class="form-control filters-bar__sort" [value]="sortBy()" (change)="changeSort($any($event.target).value)">
       <option value="">{{ 'filters.featured' | translate }}</option>
       <option value="newest">{{ 'filters.newest' | translate }}</option>
       <option value="priceAsc">{{ 'filters.priceLowHigh' | translate }}</option>
@@ -199,19 +150,11 @@
       <option value="discount">{{ 'filters.bestDiscount' | translate }}</option>
     </select>
 
-  </section>
-
-  <!-- Footer -->
-
-  @if (activeFiltersCount() > 0) {
-    <footer class="filters-footer">
-      <button
-        class="btn btn-outline"
-        (click)="clearFilters()"
-      >
-        {{ 'filters.clearAll' | translate }}({{ activeFiltersCount() }})
+    @if (activeFiltersCount() > 0) {
+      <button class="filters-bar__clear" type="button" (click)="clearFilters()">
+        {{ 'filters.clearAll' | translate }} ({{ activeFiltersCount() }})
       </button>
-    </footer>
-  }
+    }
+  </div>
 
-</aside>
+</div>
