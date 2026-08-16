@@ -40,7 +40,9 @@
 
 <app-featured-products />
 
-<section class="brand-banner">
+<app-testimonials/>
+
+<section class="brand-banner" appScrollReveal>
   <div class="brand-banner__glow"></div>
   <p class="brand-banner__eyebrow">{{ 'home.ourPromise' | translate }}</p>
   <blockquote class="brand-banner__quote">
@@ -50,7 +52,7 @@
 </section>
 
 <section class="trust-strip">
-  <div class="trust-item">
+  <div class="trust-item" [appScrollReveal]="0">
     <span class="trust-item__icon">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 7h13v9H3z" stroke="currentColor" stroke-width="1.6"/><path d="M16 10h3l2 3v3h-5z" stroke="currentColor" stroke-width="1.6"/><circle cx="7" cy="18.5" r="1.6" stroke="currentColor" stroke-width="1.6"/><circle cx="17.5" cy="18.5" r="1.6" stroke="currentColor" stroke-width="1.6"/></svg>
     </span>
@@ -59,7 +61,7 @@
       <p class="trust-item__copy">{{ 'home.fastDeliveryDescription' | translate }}</p>
     </div>
   </div>
-  <div class="trust-item">
+  <div class="trust-item" appScrollReveal="150">
     <span class="trust-item__icon">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
     </span>

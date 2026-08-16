@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { API_BASE_URL } from '../constants/api.constants';
 import { ApiResponse } from '../models/api-response.model';
-import { CreateReviewRequest, ReviewResponse, UpdateReviewRequest } from '../models/domain.models';
+import { CreateReviewRequest, FeaturedReviewResponse, ReviewResponse, UpdateReviewRequest } from '../models/domain.models';
 
 /**
  * Customer review CRUD against backend API.
@@ -40,4 +40,10 @@ export class ReviewService {
   deleteReview(reviewId: number): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(`${this.baseUrl}/${reviewId}`);
   }
+  getFeaturedReviews(count: number = 6): Observable<ApiResponse<FeaturedReviewResponse[]>> {
+  return this.http.get<ApiResponse<FeaturedReviewResponse[]>>(
+    `${this.baseUrl}/featured`,
+    { params: { count } }
+  );
+}
 }

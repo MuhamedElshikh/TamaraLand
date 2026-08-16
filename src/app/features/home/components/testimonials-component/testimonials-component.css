@@ -1,0 +1,633 @@
+/* =========================================================
+   Testimonials Section
+   ========================================================= */
+
+.testimonials {
+  position: relative;
+
+  padding: 4.5rem 1.5rem 3rem;
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   Carousel
+   ========================================================= */
+
+.testimonials-carousel {
+  width: 100%;
+  max-width: 1450px;
+
+  margin: 0 auto;
+}
+
+
+/* =========================================================
+   Stage
+   ========================================================= */
+
+.testimonials-stage {
+  position: relative;
+
+  width: 100%;
+  height: 530px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  perspective: 1200px;
+}
+
+
+/* =========================================================
+   Card Base
+   ========================================================= */
+
+.testimonial-card {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 275px;
+  height: 440px;
+
+  border-radius: 24px;
+
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(201, 162, 75, 0.25);
+
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.18);
+
+  transform-origin: center center;
+
+  transition:
+    transform 0.75s cubic-bezier(.22, .61, .36, 1),
+    opacity 0.75s ease,
+    width 0.75s cubic-bezier(.22, .61, .36, 1),
+    height 0.75s cubic-bezier(.22, .61, .36, 1),
+    filter 0.75s ease,
+    box-shadow 0.75s ease;
+
+  will-change:
+    transform,
+    opacity,
+    width,
+    height;
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   CENTER
+   ========================================================= */
+
+.testimonial-card.position-center {
+
+  width: 435px;
+  height: 530px;
+
+  opacity: 1;
+
+  transform:
+    translate(-50%, -50%)
+    scale(1);
+
+  filter: none;
+
+  z-index: 3;
+
+  border-color:
+    rgba(201, 162, 75, 0.38);
+
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(201, 162, 75, 0.08);
+}
+
+
+/* =========================================================
+   LEFT
+   ========================================================= */
+
+.testimonial-card.position-left {
+
+  width: 275px;
+  height: 440px;
+
+  opacity: 0.82;
+
+  transform:
+    translate(
+      calc(-50% - 350px),
+      -50%
+    )
+    scale(0.92);
+
+  filter: saturate(0.85);
+
+  z-index: 2;
+}
+
+
+/* =========================================================
+   RIGHT
+   ========================================================= */
+
+.testimonial-card.position-right {
+
+  width: 275px;
+  height: 440px;
+
+  opacity: 0.82;
+
+  transform:
+    translate(
+      calc(-50% + 350px),
+      -50%
+    )
+    scale(0.92);
+
+  filter: saturate(0.85);
+
+  z-index: 2;
+}
+
+
+/* =========================================================
+   Hidden Cards
+   ========================================================= */
+
+.testimonial-card.position-hidden {
+
+  opacity: 0;
+
+  transform:
+    translate(-50%, -50%)
+    scale(0.7);
+
+  z-index: 1;
+}
+
+
+/* =========================================================
+   Overlay
+   ========================================================= */
+
+.testimonial-card__overlay {
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to bottom,
+
+      rgba(0, 0, 0, 0.02) 25%,
+
+      rgba(0, 0, 0, 0.08) 42%,
+
+      rgba(0, 0, 0, 0.38) 62%,
+
+      rgba(10, 9, 8, 0.94) 100%
+    );
+}
+
+
+/* =========================================================
+   Content
+   ========================================================= */
+
+.testimonial-card__content {
+
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: flex-end;
+
+  padding: 1.6rem;
+
+  color: #fff;
+}
+
+
+/* =========================================================
+   Stars
+   ========================================================= */
+
+.testimonial-card__stars {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 3px;
+
+  margin-bottom: 0.85rem;
+}
+
+.testimonial-card__stars svg {
+
+  width: 17px;
+  height: 17px;
+
+  flex-shrink: 0;
+}
+
+
+/* =========================================================
+   Quote
+   ========================================================= */
+
+.testimonial-card__quote {
+
+  margin: 0 0 1rem;
+
+  font-family:
+    'Cairo',
+    'Cormorant Garamond',
+    serif;
+
+  font-size: 1rem;
+
+  font-weight: 500;
+
+  line-height: 1.65;
+
+  color: rgba(255, 255, 255, 0.96);
+
+  text-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.35);
+
+  display: -webkit-box;
+
+  -webkit-box-orient: vertical;
+
+  -webkit-line-clamp: 4;
+
+  overflow: hidden;
+}
+
+
+/* Center typography */
+
+.testimonial-card.position-center
+.testimonial-card__quote {
+
+  font-size: 1.28rem;
+
+  line-height: 1.65;
+
+  margin-bottom: 1.15rem;
+}
+
+
+/* =========================================================
+   Product
+   ========================================================= */
+
+.testimonial-card__product {
+
+  display: block;
+
+  margin-bottom: 0.85rem;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  color: #C9A24B;
+
+  font-size: 0.68rem;
+
+  font-weight: 700;
+
+  letter-spacing: 0.1em;
+
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   Author
+   ========================================================= */
+
+.testimonial-card__author {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  gap: 0.65rem;
+}
+
+
+.testimonial-card__name {
+
+  color: rgba(255, 255, 255, 0.94);
+
+  font-size: 0.8rem;
+
+  font-weight: 600;
+}
+
+
+.testimonial-card__avatar {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 38px;
+  height: 38px;
+
+  flex: 0 0 38px;
+
+  border-radius: 50%;
+
+  color: #C9A24B;
+
+  background:
+    rgba(201, 162, 75, 0.12);
+
+  border:
+    1px solid rgba(201, 162, 75, 0.45);
+
+  font-size: 0.8rem;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   Navigation
+   ========================================================= */
+
+.testimonials-navigation {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 1rem;
+
+  margin-top: 0.5rem;
+}
+
+
+/* =========================================================
+   Arrow
+   ========================================================= */
+
+.testimonial-nav {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+
+  padding: 0;
+
+  border:
+    1px solid var(--border-color);
+
+  border-radius: 50%;
+
+  background:
+    var(--bg-secondary);
+
+  color:
+    var(--text-primary);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.25s ease,
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+
+.testimonial-nav svg {
+
+  width: 20px;
+  height: 20px;
+
+  fill: none;
+
+  stroke: currentColor;
+
+  stroke-width: 1.8;
+}
+
+
+.testimonial-nav:hover {
+
+  background:
+    var(--primary);
+
+  border-color:
+    var(--primary);
+
+  color: #fff;
+
+  transform:
+    translateY(-2px);
+}
+
+
+/* =========================================================
+   Dots
+   ========================================================= */
+
+.testimonial-dots {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 0.4rem;
+}
+
+
+.testimonial-dot {
+
+  width: 7px;
+  height: 7px;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 999px;
+
+  background:
+    var(--border-color);
+
+  cursor: pointer;
+
+  transition:
+    width 0.3s ease,
+    background-color 0.3s ease;
+}
+
+
+.testimonial-dot.is-active {
+
+  width: 22px;
+
+  background:
+    var(--primary);
+}
+
+
+/* =========================================================
+   Tablet
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+  .testimonial-card.position-left {
+
+    transform:
+      translate(
+        calc(-50% - 290px),
+        -50%
+      )
+      scale(0.88);
+  }
+
+  .testimonial-card.position-right {
+
+    transform:
+      translate(
+        calc(-50% + 290px),
+        -50%
+      )
+      scale(0.88);
+  }
+
+}
+
+
+/* =========================================================
+   Mobile
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .testimonials {
+
+    padding:
+      3rem 1rem 2.5rem;
+  }
+
+
+  .testimonials-stage {
+
+    height: 500px;
+  }
+
+
+  .testimonial-card.position-center {
+
+    width: 300px;
+
+    height: 450px;
+  }
+
+
+  .testimonial-card.position-left {
+
+    width: 220px;
+
+    height: 370px;
+
+    transform:
+      translate(
+        calc(-50% - 245px),
+        -50%
+      )
+      scale(0.8);
+
+    opacity: 0.35;
+  }
+
+
+  .testimonial-card.position-right {
+
+    width: 220px;
+
+    height: 370px;
+
+    transform:
+      translate(
+        calc(-50% + 245px),
+        -50%
+      )
+      scale(0.8);
+
+    opacity: 0.35;
+  }
+
+
+  .testimonial-card__content {
+
+    padding:
+      1.25rem;
+  }
+
+
+  .testimonial-card.position-center
+  .testimonial-card__quote {
+
+    font-size:
+      1.1rem;
+  }
+
+}
+
+
+/* =========================================================
+   Reduced Motion
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .testimonial-card {
+
+    transition:
+      opacity 0.2s ease;
+  }
+
+}

@@ -8,7 +8,7 @@
   display: flex;
   gap: 1.25rem;
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: x proximity;   /* كانت mandatory */
   scroll-behavior: smooth;
   scroll-padding-inline: 16px;
   padding-bottom: 4px;
@@ -132,23 +132,31 @@
   to { opacity: 1; }
 }
 
-.scaffold-page,
-.brand-banner,
-.trust-strip {
+.scaffold-page {
   opacity: 0;
   animation: fadeInUp 0.7s ease forwards;
 }
 
-.brand-banner { animation-delay: 0.1s; }
-.trust-strip { animation-delay: 0.2s; }
-
-.trust-item {
-  opacity: 0;
-  animation: fadeInUp 0.6s ease forwards;
+.trust-item__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: rgba(201, 162, 75, 0.1);
+  color: var(--primary);
+  transition: transform 0.3s ease;
 }
 
-.trust-item:nth-child(1) { animation-delay: 0.25s; }
-.trust-item:nth-child(2) { animation-delay: 0.35s; }
+.trust-item:hover .trust-item__icon {
+  animation: iconPulse 0.5s ease;
+}
+
+@keyframes iconPulse {
+  50% { transform: scale(1.12); }
+}
 
 .brand-banner__glow {
   pointer-events: none;
@@ -168,6 +176,19 @@
 @keyframes pulseGlow {
   0%, 100% { opacity: 0.12; }
   50% { opacity: 0.22; }
+}
+
+/* ---- Scroll Reveal (بديل الـ page-load animation للسكاشن اللي تحت) ---- */
+
+.reveal-init {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal-active {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ---- Brand banner ---- */
@@ -238,18 +259,6 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
-.trust-item__icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: rgba(201, 162, 75, 0.1);
-  color: var(--primary);
-}
-
 .trust-item__title {
   font-size: 0.9rem;
   font-weight: 700;
@@ -259,6 +268,28 @@
 .trust-item__copy {
   font-size: 0.8rem;
   color: var(--text-secondary);
+}
+
+/* ---- Button shine ---- */
+
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transition: left 0.6s ease;
+}
+
+.btn-primary:hover::before {
+  left: 120%;
 }
 
 /* ---- Responsive ---- */
@@ -356,10 +387,11 @@
 @media (prefers-reduced-motion: reduce) {
   .category-card,
   .scaffold-page,
-  .brand-banner,
-  .trust-strip,
-  .trust-item {
+  .reveal-init,
+  .reveal-active {
     animation: none;
+    transition: none;
     opacity: 1;
+    transform: none;
   }
 }

@@ -255,6 +255,16 @@ export interface UpdateReviewRequest {
   rating: number;
   comment?: string;
 }
+export interface FeaturedReviewResponse {
+  id: number;
+  userName: string;
+  rating: number;
+  comment?: string;
+  createdAt: string;
+  productId: number;
+  productName: string;
+  productImageUrl?: string;
+}
 
 // ---- Admin ----
 export interface AdminOrderFilterRequest {

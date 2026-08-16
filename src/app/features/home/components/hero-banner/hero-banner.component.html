@@ -146,7 +146,7 @@
 
 @if (homeBanners().length > 0) {
 
-  <section class="static-banner-strip static-banner-strip--home">
+  <section class="static-banner-strip static-banner-strip--home" appScrollReveal>
 
     @for (banner of homeBanners(); track banner.id) {
 
@@ -170,7 +170,7 @@
 
 @if (offerBanners().length > 0) {
 
-  <section class="static-banner-strip static-banner-strip--offer">
+  <section class="static-banner-strip static-banner-strip--offer" appScrollReveal>
 
     @for (banner of offerBanners(); track banner.id) {
 
@@ -194,7 +194,7 @@
 
 @if (categoryBanners().length > 0) {
 
-  <section class="static-banner-strip static-banner-strip--category">
+  <section class="static-banner-strip static-banner-strip--category" appScrollReveal>
 
     @for (banner of categoryBanners(); track banner.id) {
 

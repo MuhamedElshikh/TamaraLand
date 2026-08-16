@@ -1,28 +1,73 @@
-
-
-@keyframes skeletonPulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 0.9; }
+/* ─────────────────────────────────────────
+   1. SKELETON: Shimmer بدل الـ Pulse الباهت
+───────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 .product-card--skeleton {
   aspect-ratio: 3 / 4.3;
   border-radius: var(--radius-md);
-  background: var(--secondary-light);
+  background: linear-gradient(
+    90deg,
+    var(--secondary-light) 0%,
+    rgba(255, 255, 255, 0.45) 50%,
+    var(--secondary-light) 100%
+  );
+  background-size: 200% 100%;
   border: 1px solid var(--border-color);
-  animation: skeletonPulse 1.4s ease-in-out infinite;
+  animation: shimmer 1.6s infinite linear;
 }
+
+/* ─────────────────────────────────────────
+   2. SLIDER WRAPPER: دخول كتلة واحدة ناعمة
+───────────────────────────────────────── */
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .slider-wrapper {
   position: relative;
   width: 100%;
+  /* بيدخل بأنيميشن لما بيظهر في الـ DOM (@else block) */
+  animation: slideUpFade 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* ─────────────────────────────────────────
+   3. SLIDER ITEMS: بدون fadeInUp الفردي
+      + Hover Lift ظريف
+───────────────────────────────────────── */
+.slider-item {
+  flex: 0 0 auto;
+  width: 250px;
+  scroll-snap-align: start;
+  /* نعمول ترانزيشن ناعم للرفعة */
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.4s ease;
+  will-change: transform;
+}
+
+.slider-item:hover {
+  transform: translateY(-10px);
+}
+
+/* ─────────────────────────────────────────
+   4. SLIDER TRACK
+───────────────────────────────────────── */
 .product-slider {
   display: flex;
   gap: 1.25rem;
   overflow-x: auto;
   scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: x proximity;
   scrollbar-width: none;
   -ms-overflow-style: none;
   padding: 0.5rem 0.25rem;
@@ -32,12 +77,9 @@
   display: none;
 }
 
-.slider-item {
-  flex: 0 0 auto;
-  width: 250px;
-  scroll-snap-align: start;
-}
-
+/* ─────────────────────────────────────────
+   5. NAV BUTTONS: مايكرو-إنتراكشن scale
+───────────────────────────────────────── */
 .slider-nav {
   position: absolute;
   top: 50%;
@@ -54,7 +96,12 @@
   cursor: pointer;
   z-index: 10;
   box-shadow: var(--shadow-md);
-  transition: var(--transition-fast);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.2s ease,
+              border-color 0.2s ease,
+              color 0.2s ease,
+              background 0.2s ease,
+              box-shadow 0.2s ease;
 }
 
 .slider-nav:hover:not(:disabled) {
@@ -62,12 +109,18 @@
   color: var(--primary);
   background: var(--bg-secondary);
   box-shadow: var(--shadow-glow);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.slider-nav:active:not(:disabled) {
+  transform: translateY(-50%) scale(0.95);
 }
 
 .slider-nav:disabled {
   opacity: 0.25;
   cursor: not-allowed;
   box-shadow: none;
+  transform: translateY(-50%) scale(0.9);
 }
 
 .slider-nav--prev {
@@ -78,6 +131,9 @@
   inset-inline-end: -16px;
 }
 
+/* ─────────────────────────────────────────
+   6. RESPONSIVE
+───────────────────────────────────────── */
 @media (max-width: 768px) {
   .slider-nav {
     display: none;
@@ -98,5 +154,18 @@
 @media (max-width: 420px) {
   .slider-item {
     width: 185px;
+  }
+}
+
+/* ─────────────────────────────────────────
+   7. احترام تفضيلات المستخدم (Accessibility)
+───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
