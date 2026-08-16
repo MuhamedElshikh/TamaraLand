@@ -7,7 +7,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 @Component({
   selector: 'app-wishlist-page',
   standalone: true,
-  imports: [RouterLink, WishlistItemComponent,TranslatePipe],
+  imports: [RouterLink, WishlistItemComponent, TranslatePipe],
   templateUrl: './wishlist.page.html',
   styleUrl: './wishlist.page.css',
 })

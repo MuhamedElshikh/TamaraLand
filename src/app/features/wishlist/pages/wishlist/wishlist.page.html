@@ -14,45 +14,41 @@
 
   @if (isLoading()) {
 
-    <div class="wishlist-page__loading">
+  <div class="wishlist-page__loading">
 
-      @for (i of [1,2,3]; track i) {
-        <div class="wishlist-page__skeleton"></div>
-      }
+    @for (i of [1,2,3]; track i) {
+    <div class="wishlist-page__skeleton"></div>
+    }
 
-    </div>
+  </div>
 
   } @else if (items().length === 0) {
 
-    <div class="wishlist-page__empty">
+  <div class="wishlist-page__empty">
 
-      <p class="section-copy">
-        {{ 'wishlist.empty' | translate }}
-      </p>
+    <p class="section-copy">
+      {{ 'wishlist.empty' | translate }}
+    </p>
 
-      <a
-        routerLink="/products"
-        class="btn btn-primary">
+    <a routerLink="/products" class="btn btn-primary">
 
-        {{ 'wishlist.discoverProducts' | translate }}
+      {{ 'wishlist.discoverProducts' | translate }}
 
-      </a>
+    </a>
 
-    </div>
+  </div>
 
   } @else {
 
-    <div class="wishlist-page__list">
+  <div class="wishlist-page__list">
 
-      @for (item of items(); track item.id) {
+    @for (item of items(); track item.id) {
 
-        <app-wishlist-item
-          [item]="item"
-          (removed)="onItemRemoved()" />
+    <app-wishlist-item [item]="item" (removed)="onItemRemoved()" />
 
-      }
+    }
 
-    </div>
+  </div>
 
   }
 

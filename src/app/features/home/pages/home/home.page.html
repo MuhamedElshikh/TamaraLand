@@ -26,7 +26,12 @@
       @for (category of categories(); track category.id) {
         <a [routerLink]="['/categories', category.id]" class="category-card">
           <img [src]="category.imageUrl || fallbackImage" [alt]="category.name" />
-          <span class="category-card__label">{{ category | localizedName }}</span>
+          <div class="category-card__content">
+            <span class="category-card__label">{{ category | localizedName }}</span>
+            <span class="category-card__arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </div>
         </a>
       }
     </div>
@@ -61,13 +66,31 @@
       <p class="trust-item__copy">{{ 'home.fastDeliveryDescription' | translate }}</p>
     </div>
   </div>
-  <div class="trust-item" appScrollReveal="150">
+  <div class="trust-item" appScrollReveal="100">
     <span class="trust-item__icon">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
     </span>
     <div>
       <p class="trust-item__title">{{ 'home.secureCheckout' | translate }}</p>
       <p class="trust-item__copy">{{ 'home.secureCheckoutDescription' | translate }}</p>
+    </div>
+  </div>
+  <div class="trust-item" appScrollReveal="200">
+    <span class="trust-item__icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20 12v10H4V12" stroke="currentColor" stroke-width="1.6"/><path d="M22 7H2v5h20V7z" stroke="currentColor" stroke-width="1.6"/><path d="M12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" stroke="currentColor" stroke-width="1.6"/></svg>
+    </span>
+    <div>
+      <p class="trust-item__title">{{ 'home.luxuryPackaging' | translate }}</p>
+      <p class="trust-item__copy">{{ 'home.luxuryPackagingDescription' | translate }}</p>
+    </div>
+  </div>
+  <div class="trust-item" appScrollReveal="300">
+    <span class="trust-item__icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+    </span>
+    <div>
+      <p class="trust-item__title">{{ 'home.guaranteedQuality' | translate }}</p>
+      <p class="trust-item__copy">{{ 'home.guaranteedQualityDescription' | translate }}</p>
     </div>
   </div>
 </section>

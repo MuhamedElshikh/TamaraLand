@@ -70,17 +70,16 @@
 
   }
   </div>
-@if (product()?.description) {
-  <div class="product-details-page__description">
-    <h3 class="product-details-page__description-title">
-      {{ 'productDetails.description' | translate }}
-    </h3>
-
-    <p class="product-details-page__description-text">
-      {{ product()?.description }}
-    </p>
-  </div>
-}
+  @if (product()?.description) {
+    <div class="product-details-page__description">
+      <h3 class="product-details-page__description-title">
+        {{ 'productDetails.description' | translate }}
+      </h3>
+      <p class="product-details-page__description-text">
+        {{ product()?.description }}
+      </p>
+    </div>
+  }
   <div class="product-details-page__stats">
 
     <div class="stat-card">
@@ -219,5 +218,24 @@
         </div>
       </div>
     }
+  }
+
+  @if (showStickyBar() && product()) {
+    <div class="product-sticky-bar">
+      <div class="product-sticky-bar__info">
+        <img [src]="product()?.imageUrl || '/assets/placeholder-product.jpg'" [alt]="product() | localizedName" class="product-sticky-bar__img" />
+        <div>
+          <p class="product-sticky-bar__title">{{ product() | localizedName }}</p>
+          <p class="product-sticky-bar__price">{{ priceLabel() }}</p>
+        </div>
+      </div>
+      <button
+        type="button"
+        class="btn btn-primary product-sticky-bar__btn"
+        (click)="addToCart()"
+        [disabled]="isAddingToCart()">
+        {{ isAddingToCart()? ('productDetails.adding' | translate): ('productDetails.addToCart' | translate) }}
+      </button>
+    </div>
   }
 </section>

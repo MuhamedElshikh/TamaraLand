@@ -20,30 +20,36 @@
     "shopByCategory": "تسوق حسب القسم",
     "findYourStyle": "اعثري على استايلك",
     "noCategories": "لا توجد أقسام متاحة حالياً.",
-"customerLove": "آراء عملائنا",
+    "customerLove": "آراء عملائنا",
     "whatTheySay": "ايه اللي بيقولوه عننا",
     "ourPromise": "وعدنا",
-
     "brandQuote": "كل قطعة في تمارا لاند تم اختيارها بعناية لتجعلك تشعرين بالثقة والتميز وتعبرين عن شخصيتك بكل فخر.",
-
     "discoverCollection": "اكتشف المجموعة",
-
     "fastDelivery": "توصيل سريع",
     "fastDeliveryDescription": "من يومين إلى أربعة أيام عمل داخل جميع المحافظات",
-
     "secureCheckout": "دفع آمن",
-    "secureCheckoutDescription": "مدفوعات مشفرة وآمنة دائماً"
+    "secureCheckoutDescription": "مدفوعات مشفرة وآمنة دائماً",
+    "luxuryPackaging": "تغليف فاخر",
+    "luxuryPackagingDescription": "علب مجهزة خصيصاً للهدايا والمناسبات",
+    "guaranteedQuality": "جودة مضمونة",
+    "guaranteedQualityDescription": "اختيارات فاخرة ومضمونة 100%",
+    "bentoKicker": "تشكيلات حصرية",
+    "bentoTitle": "عالم من الفخامة والذوق الرفيع",
+    "bentoCard1Title": "أطقم الهدايا الملكية",
+    "bentoCard1Subtitle": "تشكيلات فاخرة معدّة خصيصاً للمناسبات والاهداء الراقي",
+    "bentoCard2Title": "التمور المحشية الفاخرة",
+    "bentoCard2Subtitle": "محشوة بأجود أنواع المكسرات الفاخرة",
+    "bentoCard3Title": "باقات الضيافة الفاخرة",
+    "bentoCard3Subtitle": "اختيارات طازجة ومثالية تليق بضيوفك"
   },
   "footer": {
     "tagline": "كوني فخورة بكونك امرأة",
-
     "newsletter": {
       "title": "انضمي إلى مجتمع تمارا لاند",
       "description": "احصلي على أحدث المجموعات والعروض الحصرية والخصومات المميزة.",
       "placeholder": "أدخل بريدك الإلكتروني",
       "subscribe": "اشترك"
     },
-
     "shop": {
       "title": "التسوق",
       "newIn": "وصل حديثًا",
@@ -51,7 +57,6 @@
       "brands": "العلامات التجارية",
       "sale": "التخفيضات"
     },
-
     "support": {
       "title": "الدعم",
       "contact": "تواصل معنا",
@@ -59,36 +64,27 @@
       "returns": "الاسترجاع",
       "faq": "الأسئلة الشائعة"
     },
-
     "contact": {
       "title": "بيانات التواصل"
     },
-
     "bottom": {
       "rights": "جميع الحقوق محفوظة.",
       "privacy": "سياسة الخصوصية",
       "terms": "الشروط والأحكام"
     }
   },
-
   "featuredProducts": {
     "justLanded": "وصل حديثًا",
     "newArrivals": "أحدث المنتجات",
     "viewAll": "عرض الكل",
     "noProducts": "لا توجد منتجات متاحة حاليًا."
   },
-
   "hero": {
     "eyebrow": "أزياء فاخرة",
-
     "title": "كوني فخورة بكونك امرأة",
-
     "description": "الفساتين الراقيه والبلوزات اليجنت والبليزرات الوهمية هتلاقيها هنا وبس",
-
     "shopNewIn": "تسوقي أحدث المنتجات",
-
     "exploreCollections": "استكشفي المجموعات",
-
     "bannerLoadError": "تعذر تحميل البنرات حالياً.",
     "bannerAlt": "بانر"
   },
@@ -97,44 +93,33 @@
     "adding": "جارٍ الإضافة...",
     "added": "تمت الإضافة \u2713",
     "tryAgain": "حاول مرة أخرى",
-
     "addToWishlist": "إضافة إلى المفضلة",
     "removeFromWishlist": "إزالة من المفضلة",
-
     "currency": "ج.م"
   },
   "filters": {
     "title": "خصص اختيارك",
     "subtitle": "اكتشف المنتجات المناسبة لذوقك باستخدام خيارات التصفية.",
-
     "filters": "التصفية",
     "active": "نشط",
-
     "search": "بحث",
     "searchPlaceholder": "ابحث عن المنتجات...",
-
     "categories": "الأقسام",
     "allCategories": "كل الأقسام",
-
     "brands": "العلامات التجارية",
     "allBrands": "كل العلامات",
-
     "priceRange": "نطاق السعر",
     "min": "الحد الأدنى",
     "max": "الحد الأقصى",
     "applyPrice": "تطبيق السعر",
-
     "availability": "التوفر",
     "inStockOnly": "المتوفر فقط",
-
     "sortBy": "ترتيب حسب",
-
     "featured": "الأبرز",
     "newest": "الأحدث",
     "priceLowHigh": "السعر: من الأقل للأعلى",
     "priceHighLow": "السعر: من الأعلى للأقل",
     "bestDiscount": "أفضل خصم",
-
     "clearAll": "مسح الكل"
   },
   "gallery": {
@@ -146,7 +131,6 @@
     "sku": "رمز المنتج",
     "stock": "المخزون",
     "cm": "سم",
-
     "bust": "الصدر",
     "waist": "الخصر",
     "hip": "الأرداف",
@@ -155,55 +139,41 @@
   "reviews": {
     "leaveReview": "أضف تقييمًا",
     "shareThoughts": "شاركنا رأيك",
-
     "signIn": "تسجيل الدخول",
     "loginPrompt": "لإضافة تقييم لهذا المنتج.",
-
     "rating": "التقييم",
     "comment": "التعليق",
     "commentPlaceholder": "أخبرنا برأيك في المنتج...",
-
     "submit": "إرسال التقييم",
     "submitting": "جارٍ الإرسال...",
-
     "thankYou": "شكرًا لمشاركتك رأيك."
   },
   "reviewList": {
     "reviews": "التقييمات",
     "customerReviews": "آراء العملاء",
-
     "review": "تقييم",
     "reviewsPlural": "تقييم",
-
     "loading": "جارٍ تحميل التقييمات...",
-
     "saving": "جارٍ الحفظ...",
     "save": "حفظ",
     "cancel": "إلغاء",
-
     "edit": "تعديل",
     "delete": "حذف",
-
     "emptyComment": "رأي جميل من أحد عملائنا.",
-
     "noReviews": "لا توجد تقييمات بعد. كن أول من يشارك تجربته."
   },
   "catalog": {
     "filters": "التصفية",
-
     "clearAll": "مسح الكل",
     "showResults": "عرض النتائج",
-
     "noProducts": "لا توجد منتجات تطابق عوامل التصفية الحالية."
   },
   "productDetails": {
     "catalog": "المنتجات",
     "premiumSelection": "مجموعة مميزة",
     "featuredItem": "منتج مميز",
-    "description":"  الوصف :",
-
+    "description": "  الوصف :",
     "productImages": "صور المنتج",
-
     "addToCart": "أضف إلى السلة",
     "adding": "جارٍ الإضافة...",
     "successToadd": "تمت الإضافة المنتج إلى السلة بنجاح",
@@ -215,12 +185,9 @@
     "inStock": "متوفر",
     "availability": "التوفر",
     "selected": "المحدد",
-
     "removeWishlist": "إزالة من المفضلة",
     "addWishlist": "إضافة إلى المفضلة",
-
     "productNotFound": "هذا المنتج غير متوفر أو لم يعد موجودًا.",
-
     "relatedProducts": "قد يعجبك أيضًا"
   },
   "categoryPage": {
@@ -229,13 +196,10 @@
     "categories": "الأقسام",
     "category": "القسم",
     "loading": "جارٍ التحميل...",
-
     "filters": "الفلاتر",
     "clearAll": "مسح الكل",
     "showResults": "عرض النتائج",
-
     "noProducts": "لا توجد منتجات مطابقة للفلاتر الحالية.",
-
     "productsCount": "{{count}} منتج",
     "productCount": "{{count}} منتج"
   },
@@ -243,115 +207,94 @@
     "kicker": "تصفح",
     "title": "تسوق حسب القسم",
     "subtitle": "استكشف جميع أقسام تمارا لاند، من القطع اليومية الأساسية إلى أحدث صيحات الموضة.",
-
     "empty": "لا توجد أقسام متاحة حاليًا."
   },
   "brands": {
     "kicker": "تصفح",
     "title": "تسوق حسب العلامة التجارية",
     "subtitle": "اكتشف العلامات التجارية التي تقف وراء كل قطعة في تمارا لاند.",
-
     "empty": "لا توجد علامات تجارية متاحة حاليًا."
   },
   "brandPage": {
     "notFound": "هذه العلامة التجارية غير موجودة أو لم تعد متاحة.",
-
     "home": "الرئيسية",
     "brands": "العلامات التجارية",
     "brand": "العلامة التجارية",
-
     "loading": "جارٍ التحميل...",
-
     "filters": "الفلاتر",
     "clearAll": "مسح الكل",
     "showResults": "عرض النتائج",
-
     "productCount": "{{count}} منتج",
     "productsCount": "{{count}} منتج",
-
     "noProducts": "لا توجد منتجات مطابقة للفلاتر الحالية."
   },
   "address": {
     "default": "الافتراضي",
-
     "building": "مبنى",
     "floor": "الدور",
     "apartment": "شقة",
-
     "settingDefault": "جارٍ التعيين...",
     "setDefault": "تعيين كافتراضي",
-
     "edit": "تعديل",
-
     "deleting": "جارٍ الحذف...",
     "delete": "حذف"
   },
   "addressForm": {
-  "editTitle": "تعديل العنوان",
-  "addTitle": "إضافة عنوان جديد",
-
-  "map": {
-    "searchPlaceholder": "دور على عنوانك...",
-    "dragHint": "اسحب العلامة لمكانك بالظبط",
-    "useMyLocation": "استخدام موقعي",
-    "locating": "جاري تحديد موقعك...",
-    "changeLocation": "تغيير الموقع",
-    "chooseLocation": "اختيار الموقع",
-    "close": "إغلاق الخريطة",
-    "location": "الموقع",
-    "noLocation": "لم يتم اختيار موقع"
-  },
-
-  "fullName": "الاسم بالكامل",
-  "phoneNumber": "رقم الهاتف",
-  "governorate": "المحافظة",
-  "area": "المنطقة",
-  "street": "الشارع",
-  "building": "المبنى",
-  "floor": "الدور",
-  "apartment": "الشقة",
-  "notes": "ملاحظات (اختياري)",
-
-  "placeholder": {
+    "editTitle": "تعديل العنوان",
+    "addTitle": "إضافة عنوان جديد",
+    "map": {
+      "searchPlaceholder": "دور على عنوانك...",
+      "dragHint": "اسحب العلامة لمكانك بالظبط",
+      "useMyLocation": "استخدام موقعي",
+      "locating": "جاري تحديد موقعك...",
+      "changeLocation": "تغيير الموقع",
+      "chooseLocation": "اختيار الموقع",
+      "close": "إغلاق الخريطة",
+      "location": "الموقع",
+      "noLocation": "لم يتم اختيار موقع"
+    },
     "fullName": "الاسم بالكامل",
-    "phone": "01xxxxxxxxx",
-    "street": "اسم الشارع",
-    "building": "رقم المبنى",
-    "floor": "اختياري",
-    "apartment": "رقم الشقة",
-    "notes": "تعليمات التوصيل..."
+    "phoneNumber": "رقم الهاتف",
+    "governorate": "المحافظة",
+    "area": "المنطقة",
+    "street": "الشارع",
+    "building": "المبنى",
+    "floor": "الدور",
+    "apartment": "الشقة",
+    "notes": "ملاحظات (اختياري)",
+    "placeholder": {
+      "fullName": "الاسم بالكامل",
+      "phone": "01xxxxxxxxx",
+      "street": "اسم الشارع",
+      "building": "رقم المبنى",
+      "floor": "اختياري",
+      "apartment": "رقم الشقة",
+      "notes": "تعليمات التوصيل..."
+    },
+    "selectGovernorate": "اختر المحافظة",
+    "selectArea": "اختر المنطقة",
+    "shipping": "تكلفة الشحن {{cost}} جنيه",
+    "setDefault": "تعيين كعنوان افتراضي",
+    "saving": "جارٍ الحفظ...",
+    "saveChanges": "حفظ التعديلات",
+    "addAddress": "إضافة العنوان",
+    "cancel": "إلغاء",
+    "validation": {
+      "fullNameRequired": "الاسم بالكامل مطلوب.",
+      "phoneRequired": "رقم الهاتف مطلوب.",
+      "phoneInvalid": "يرجى إدخال رقم هاتف صحيح.",
+      "governorateRequired": "يرجى اختيار المحافظة.",
+      "areaRequired": "يرجى اختيار المنطقة.",
+      "streetRequired": "الشارع مطلوب.",
+      "buildingRequired": "رقم المبنى مطلوب.",
+      "apartmentRequired": "رقم الشقة مطلوب.",
+      "locationRequired": "يرجى اختيار موقعك على الخريطة."
+    }
   },
-
-  "selectGovernorate": "اختر المحافظة",
-  "selectArea": "اختر المنطقة",
-
-  "shipping": "تكلفة الشحن {{cost}} جنيه",
-
-  "setDefault": "تعيين كعنوان افتراضي",
-
-  "saving": "جارٍ الحفظ...",
-  "saveChanges": "حفظ التعديلات",
-  "addAddress": "إضافة العنوان",
-  "cancel": "إلغاء",
-
-  "validation": {
-    "fullNameRequired": "الاسم بالكامل مطلوب.",
-    "phoneRequired": "رقم الهاتف مطلوب.",
-    "phoneInvalid": "يرجى إدخال رقم هاتف صحيح.",
-    "governorateRequired": "يرجى اختيار المحافظة.",
-    "areaRequired": "يرجى اختيار المنطقة.",
-    "streetRequired": "الشارع مطلوب.",
-    "buildingRequired": "رقم المبنى مطلوب.",
-    "apartmentRequired": "رقم الشقة مطلوب.",
-    "locationRequired": "يرجى اختيار موقعك على الخريطة."
-  }
-},
   "auth": {
     "brand": "تمارا لاند",
     "headline": "كوني فخورة بكونك امرأة.",
-
     "description": "اكتشفي قطعًا مختارة بعناية للمرأة التي تعرف قيمتها. سجلي الدخول للاحتفاظ بسلة التسوق، والمفضلة، وطلباتك كما تركتها.",
-
     "features": {
       "collections": {
         "title": "تشكيلات مختارة بعناية",
@@ -371,22 +314,17 @@
     "kicker": "هل تحتاج إلى مساعدة؟",
     "title": "هل نسيت كلمة المرور؟",
     "description": "أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة تعيين كلمة المرور إذا كان الحساب موجودًا.",
-
     "email": "البريد الإلكتروني",
     "emailPlaceholder": "you@example.com",
-
     "requestFailed": "فشل الطلب",
-
     "validation": {
       "required": "البريد الإلكتروني مطلوب.",
       "invalid": "يرجى إدخال بريد إلكتروني صحيح."
     },
-
     "buttons": {
       "send": "إرسال رابط إعادة التعيين",
       "sending": "جارٍ إرسال الرابط..."
     },
-
     "footer": {
       "backToLogin": "العودة لتسجيل الدخول",
       "createAccount": "إنشاء حساب"
@@ -395,9 +333,7 @@
   "login": {
     "kicker": "مرحبًا بعودتك",
     "title": "تسجيل الدخول إلى تمارا لاند",
-
     "loginFailed": "فشل تسجيل الدخول",
-
     "social": {
       "google": "المتابعة باستخدام Google",
       "googleLoading": "جارٍ الاتصال بـ Google...",
@@ -405,25 +341,20 @@
       "facebookLoading": "جارٍ الاتصال بـ Facebook...",
       "divider": "أو سجّل الدخول باستخدام البريد الإلكتروني"
     },
-
     "email": "البريد الإلكتروني",
     "emailPlaceholder": "you@example.com",
-
     "password": "كلمة المرور",
     "passwordPlaceholder": "كلمة المرور",
-
     "validation": {
       "emailRequired": "البريد الإلكتروني مطلوب.",
       "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح.",
       "passwordRequired": "كلمة المرور مطلوبة.",
       "passwordMin": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل."
     },
-
     "buttons": {
       "login": "تسجيل الدخول",
       "loading": "جارٍ تسجيل الدخول..."
     },
-
     "footer": {
       "forgotPassword": "نسيت كلمة المرور؟",
       "newHere": "ليس لديك حساب؟",
@@ -433,34 +364,27 @@
   "profile": {
     "kicker": "الحساب",
     "title": "إعدادات الحساب",
-
     "personalInformation": "المعلومات الشخصية",
     "password": "كلمة المرور",
-
     "edit": "تعديل",
     "saveChanges": "حفظ التعديلات",
     "saving": "جارٍ الحفظ...",
     "cancel": "إلغاء",
-
     "changePassword": "تغيير كلمة المرور",
     "updatePassword": "تحديث كلمة المرور",
     "updatingPassword": "جارٍ التحديث...",
-
     "passwordChanged": "تم تغيير كلمة المرور بنجاح.",
-
     "fields": {
       "firstName": "الاسم الأول",
       "lastName": "اسم العائلة",
       "email": "البريد الإلكتروني",
       "phoneNumber": "رقم الهاتف",
-      "addresses":"عنواني",
-      "manegeaddresses":"ادارة العناوين",
-
+      "addresses": "عنواني",
+      "manegeaddresses": "ادارة العناوين",
       "currentPassword": "كلمة المرور الحالية",
       "newPassword": "كلمة المرور الجديدة",
       "confirmPassword": "تأكيد كلمة المرور الجديدة"
     },
-
     "placeholders": {
       "firstName": "الاسم الأول",
       "lastName": "اسم العائلة",
@@ -469,11 +393,9 @@
       "newPassword": "كلمة المرور الجديدة",
       "confirmPassword": "أعد إدخال كلمة المرور الجديدة"
     },
-
     "validation": {
       "firstNameRequired": "الاسم الأول مطلوب.",
       "lastNameRequired": "اسم العائلة مطلوب.",
-
       "currentPasswordRequired": "كلمة المرور الحالية مطلوبة.",
       "newPasswordRequired": "كلمة المرور الجديدة مطلوبة.",
       "passwordMinLength": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.",
@@ -484,9 +406,7 @@
   "register": {
     "kicker": "ابدأ الآن",
     "title": "إنشاء حساب جديد",
-
     "registrationFailed": "فشل إنشاء الحساب",
-
     "fields": {
       "firstName": "الاسم الأول",
       "lastName": "اسم العائلة",
@@ -494,7 +414,6 @@
       "password": "كلمة المرور",
       "confirmPassword": "تأكيد كلمة المرور"
     },
-
     "placeholders": {
       "firstName": "أحمد",
       "lastName": "علي",
@@ -502,7 +421,6 @@
       "password": "أنشئ كلمة مرور",
       "confirmPassword": "أعد إدخال كلمة المرور"
     },
-
     "validation": {
       "firstNameRequired": "الاسم الأول مطلوب.",
       "firstNameMinLength": "يجب ألا يقل الاسم الأول عن حرفين.",
@@ -515,12 +433,10 @@
       "confirmPasswordRequired": "يرجى تأكيد كلمة المرور.",
       "passwordMismatch": "كلمتا المرور غير متطابقتين."
     },
-
     "buttons": {
       "createAccount": "إنشاء حساب",
       "creating": "جارٍ إنشاء الحساب..."
     },
-
     "footer": {
       "alreadyHaveAccount": "لديك حساب بالفعل؟",
       "signIn": "تسجيل الدخول",
@@ -531,23 +447,19 @@
     "kicker": "إعادة تعيين الوصول",
     "title": "اختر كلمة مرور جديدة",
     "subtitle": "استخدم رمز إعادة التعيين المرسل إلى بريدك الإلكتروني لتحديث كلمة المرور بأمان.",
-
     "resetFailed": "فشل إعادة التعيين",
-
     "fields": {
       "email": "البريد الإلكتروني",
       "token": "رمز إعادة التعيين",
       "newPassword": "كلمة المرور الجديدة",
       "confirmPassword": "تأكيد كلمة المرور الجديدة"
     },
-
     "placeholders": {
       "email": "you@example.com",
       "token": "الصق رمز إعادة التعيين",
       "newPassword": "أنشئ كلمة مرور جديدة",
       "confirmPassword": "أعد إدخال كلمة المرور الجديدة"
     },
-
     "validation": {
       "emailRequired": "البريد الإلكتروني مطلوب.",
       "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح.",
@@ -557,12 +469,10 @@
       "confirmPasswordRequired": "يرجى تأكيد كلمة المرور الجديدة.",
       "passwordMismatch": "كلمتا المرور غير متطابقتين."
     },
-
     "buttons": {
       "resetPassword": "إعادة تعيين كلمة المرور",
       "updating": "جارٍ تحديث كلمة المرور..."
     },
-
     "footer": {
       "backToLogin": "العودة لتسجيل الدخول",
       "requestAnotherLink": "طلب رابط جديد"
@@ -571,13 +481,10 @@
   "cart": {
     "sku": "رمز المنتج",
     "each": "للوحدة",
-
     "increaseQuantity": "زيادة الكمية",
     "decreaseQuantity": "تقليل الكمية",
-
     "remove": "حذف",
     "removing": "جارٍ الحذف...",
-
     "summary": {
       "title": "ملخص الطلب",
       "items": "المنتجات",
@@ -595,12 +502,9 @@
   },
   "coupon": {
     "placeholder": "كود الخصم",
-
     "apply": "تطبيق",
     "applying": "جارٍ التطبيق...",
-
     "applied": "تم تطبيق الكوبون",
-
     "remove": "إزالة",
     "removing": "جارٍ الإزالة..."
   },
@@ -634,11 +538,9 @@
       "shipping": "الشحن",
       "selectArea": "اختر المنطقة",
       "estimatedTotal": "الإجمالي المتوقع",
-
       "paymentMethod": "طريقة الدفع",
       "cashOnDelivery": "الدفع عند الاستلام",
       "onlinePaymentSoon": "الدفع الإلكتروني سيتوفر قريبًا.",
-
       "placeOrder": "تأكيد الطلب",
       "placingOrder": "جارٍ تأكيد الطلب..."
     },
@@ -928,7 +830,6 @@
   "sidebar": {
     "logoAlt": "شعار تمارا لاند",
     "adminPanel": "لوحة الإدارة",
-
     "dashboard": "لوحة التحكم",
     "products": "المنتجات",
     "categories": "التصنيفات",
@@ -941,7 +842,6 @@
     "banners": "البانرات",
     "whatsapp": "واتساب",
     "storeSettings": "إعدادات المتجر",
-
     "backToStore": "العودة إلى المتجر"
   },
   "common": {
@@ -954,7 +854,6 @@
     "delete": "حذف",
     "refresh": "تحديث"
   },
-
   "admin": {
     "labels": {
       "marketing": "التسويق",
@@ -1024,39 +923,40 @@
       "delete": "حذف المنتج",
       "backToList": "العودة إلى المنتجات",
       "setMainImage": "تعيين كصورة رئيسية",
-      "savingProduct": "جارٍ حفظ المنتج...","columns": {
-  "image": "الصورة",
-  "englishName": "الاسم بالإنجليزي",
-  "arabicName": "الاسم بالعربي",
-  "published": "منشور",
-  "description": "الوصف"
-}
+      "savingProduct": "جارٍ حفظ المنتج...",
+      "columns": {
+        "image": "الصورة",
+        "englishName": "الاسم بالإنجليزي",
+        "arabicName": "الاسم بالعربي",
+        "published": "منشور",
+        "description": "الوصف"
+      }
     },
     "orders": {
-  "title": "إدارة الطلبات",
-  "subtitle": "تابع طلبات العملاء، وأدر حالات الطلبات، واعرض التفاصيل الكاملة",
-  "search": "بحث عن طلب",
-  "searchPlaceholder": "ابحث برقم الطلب...",
-  "status": "حالة الطلب",
-  "newStatus": "حالة الطلب الجديدة",
-  "paymentStatus": "حالة الدفع",
-  "paymentPending": "معلق",
-  "paymentPaid": "تم الدفع",
-  "paymentFailed": "فشل الدفع",
-  "paymentRefunded": "تم استرداد المبلغ",
-  "allStatuses": "كل الحالات",
-  "pending": "معلق",
-  "confirmed": "مؤكد",
-  "processing": "قيد التجهيز",
-  "shipped": "تم الشحن",
-  "delivered": "تم التوصيل",
-  "cancelled": "ملغي",
-  "empty": "لا توجد طلبات مطابقة للبحث.",
-  "viewDetails": "عرض تفاصيل الطلب",
-  "updateStatus": "تحديث الحالة",
-  "updating": "جاري التحديث...",
-  "updateTitle": "تحديث حالة الطلب"
-},
+      "title": "إدارة الطلبات",
+      "subtitle": "تابع طلبات العملاء، وأدر حالات الطلبات، واعرض التفاصيل الكاملة",
+      "search": "بحث عن طلب",
+      "searchPlaceholder": "ابحث برقم الطلب...",
+      "status": "حالة الطلب",
+      "newStatus": "حالة الطلب الجديدة",
+      "paymentStatus": "حالة الدفع",
+      "paymentPending": "معلق",
+      "paymentPaid": "تم الدفع",
+      "paymentFailed": "فشل الدفع",
+      "paymentRefunded": "تم استرداد المبلغ",
+      "allStatuses": "كل الحالات",
+      "pending": "معلق",
+      "confirmed": "مؤكد",
+      "processing": "قيد التجهيز",
+      "shipped": "تم الشحن",
+      "delivered": "تم التوصيل",
+      "cancelled": "ملغي",
+      "empty": "لا توجد طلبات مطابقة للبحث.",
+      "viewDetails": "عرض تفاصيل الطلب",
+      "updateStatus": "تحديث الحالة",
+      "updating": "جاري التحديث...",
+      "updateTitle": "تحديث حالة الطلب"
+    },
     "brands": {
       "title": "إدارة العلامات التجارية",
       "subtitle": "إدارة علامات المتجر والمصنعين",
@@ -1072,35 +972,41 @@
       "searchPlaceholder": "ابحث باسم التصنيف...",
       "empty": "لا توجد تصنيفات.",
       "add": "إضافة تصنيف",
-  "editTooltip": "تعديل التصنيف",
-  "deleteTooltip": "حذف التصنيف",
-  "editTitle": "تعديل التصنيف",
-  "createTitle": "إنشاء تصنيف",
-  "name": "اسم التصنيف",
-  "namePlaceholder": "مثال: عطور وبخور",
-  "nameRequired": "اسم التصنيف مطلوب (حرفين على الأقل).",
-  "arabicName": "الاسم بالعربي",
-  "arabicNamePlaceholder": "مثال: فساتين",
-  "arabicNameRequired": "الاسم بالعربي مطلوب (حرفين على الأقل).",
-  "description": "الوصف",
-  "descriptionPlaceholder": "وصف التصنيف...",
-  "published": "منشور",
-  "image": "صورة التصنيف",
-  "currentImage": "الصورة الحالية",
-  "currentImageAlt": "صورة التصنيف الحالية",
-  "newImageAlt": "معاينة الصورة الجديدة",
-  "removeImage": "إزالة الصورة المحددة",
-  "changeImage": "تغيير الصورة",
-  "uploadImage": "رفع صورة",
-  "update": "تحديث التصنيف",
-  "save": "حفظ التصنيف"
+      "editTooltip": "تعديل التصنيف",
+      "deleteTooltip": "حذف التصنيف",
+      "editTitle": "تعديل التصنيف",
+      "createTitle": "إنشاء تصنيف",
+      "name": "اسم التصنيف",
+      "namePlaceholder": "مثال: عطور وبخور",
+      "nameRequired": "اسم التصنيف مطلوب (حرفين على الأقل).",
+      "arabicName": "الاسم بالعربي",
+      "arabicNamePlaceholder": "مثال: فساتين",
+      "arabicNameRequired": "الاسم بالعربي مطلوب (حرفين على الأقل).",
+      "description": "الوصف",
+      "descriptionPlaceholder": "وصف التصنيف...",
+      "published": "منشور",
+      "image": "صورة التصنيف",
+      "currentImage": "الصورة الحالية",
+      "currentImageAlt": "صورة التصنيف الحالية",
+      "newImageAlt": "معاينة الصورة الجديدة",
+      "removeImage": "إزالة الصورة المحددة",
+      "changeImage": "تغيير الصورة",
+      "uploadImage": "رفع صورة",
+      "update": "تحديث التصنيف",
+      "save": "حفظ التصنيف"
     },
     "users": {
       "title": "المستخدمون",
       "subtitle": "إدارة المسؤولين والعملاء",
       "searchPlaceholder": "ابحث بالاسم أو البريد...",
-      "roles": { "all": "كل الأدوار", "admin": "المسؤول", "customer": "عميل" },
-      "status": { "all": "كل الحالات" },
+      "roles": {
+        "all": "كل الأدوار",
+        "admin": "المسؤول",
+        "customer": "عميل"
+      },
+      "status": {
+        "all": "كل الحالات"
+      },
       "view": "عرض",
       "changeRoleButton": "تغيير الدور",
       "disable": "تعطيل",
@@ -1115,12 +1021,13 @@
       "rolesLabels": {
         "admin": "المسؤول",
         "customer": "العميل"
-      },"drawer": {
-    "role": "الدور",
-    "status": "الحالة",
-    "phone": "الهاتف",
-    "joined": "تاريخ الانضمام"
-  }
+      },
+      "drawer": {
+        "role": "الدور",
+        "status": "الحالة",
+        "phone": "الهاتف",
+        "joined": "تاريخ الانضمام"
+      }
     },
     "storeSettings": {
       "title": "إعدادات المتجر",
@@ -1128,28 +1035,34 @@
       "save": "حفظ الإعدادات",
       "saving": "جارٍ الحفظ...",
       "loading": "جارٍ التحميل...",
-  "sections": {
-    "general": { "title": "عام" },
-    "config": { "title": "إعدادات المتجر" },
-    "social": { "title": "روابط التواصل الاجتماعي"}
-  },
-   "fields": {
-    "storeName": "اسم المتجر",
-    "arabicName": "الاسم بالعربي",
-    "supportEmail": "بريد الدعم",
-    "supportPhone": "هاتف الدعم",
-    "address": "العنوان",
-    "currency": "العملة",
-    "currencySymbol": "رمز العملة",
-    "shippingCost": "تكلفة الشحن",
-    "freeShippingThreshold": "الشحن المجاني",
-    "taxPercentage": "نسبة الضريبة %",
-    "maintenanceMode": "وضع الصيانة",
-    "facebook": "فيسبوك",
-    "instagram": "إنستجرام",
-    "whatsapp": "واتساب"
-  }
-},
+      "sections": {
+        "general": {
+          "title": "عام"
+        },
+        "config": {
+          "title": "إعدادات المتجر"
+        },
+        "social": {
+          "title": "روابط التواصل الاجتماعي"
+        }
+      },
+      "fields": {
+        "storeName": "اسم المتجر",
+        "arabicName": "الاسم بالعربي",
+        "supportEmail": "بريد الدعم",
+        "supportPhone": "هاتف الدعم",
+        "address": "العنوان",
+        "currency": "العملة",
+        "currencySymbol": "رمز العملة",
+        "shippingCost": "تكلفة الشحن",
+        "freeShippingThreshold": "الشحن المجاني",
+        "taxPercentage": "نسبة الضريبة %",
+        "maintenanceMode": "وضع الصيانة",
+        "facebook": "فيسبوك",
+        "instagram": "إنستجرام",
+        "whatsapp": "واتساب"
+      }
+    },
     "whatsapp": {
       "title": "واتساب",
       "subtitle": "إدارة تكامل واتساب",
@@ -1194,18 +1107,53 @@
         "analytics": "التحليلات"
       },
       "section": {
-        "store": { "kicker": "المتجر", "title": "أداء المتجر" },
-        "visitors": { "kicker": "الزوار", "title": "تحليلات الزوار" },
-        "revenue": { "kicker": "الإيرادات" },
-        "orders": { "kicker": "الطلبات", "latest": "أحدث الطلبات" },
-        "products": { "kicker": "المنتجات", "topSelling": "الأكثر مبيعًا", "mostViewed": "الأكثر مشاهدة", "mostWishlisted": "الأكثر إضافًة إلى المفضلة" },
-        "recent": { "kicker": "الأحدث" },
-        "customers": { "kicker": "العملاء", "title": "تفاعل العملاء" },
-        "sessions": { "kicker": "الجلسات" },
-        "audience": { "kicker": "الجمهور", "topCountries": "أهم الدول" },
-        "devices": { "kicker": "الأجهزة", "categories": "فئات الأجهزة" },
-        "traffic": { "kicker": "حركة المرور", "sources": "مصادر الحركة" },
-        "content": { "kicker": "المحتوى", "topPages": "أهم الصفحات" },
+        "store": {
+          "kicker": "المتجر",
+          "title": "أداء المتجر"
+        },
+        "visitors": {
+          "kicker": "الزوار",
+          "title": "تحليلات الزوار"
+        },
+        "revenue": {
+          "kicker": "الإيرادات"
+        },
+        "orders": {
+          "kicker": "الطلبات",
+          "latest": "أحدث الطلبات"
+        },
+        "products": {
+          "kicker": "المنتجات",
+          "topSelling": "الأكثر مبيعًا",
+          "mostViewed": "الأكثر مشاهدة",
+          "mostWishlisted": "الأكثر إضافًة إلى المفضلة"
+        },
+        "recent": {
+          "kicker": "الأحدث"
+        },
+        "customers": {
+          "kicker": "العملاء",
+          "title": "تفاعل العملاء"
+        },
+        "sessions": {
+          "kicker": "الجلسات"
+        },
+        "audience": {
+          "kicker": "الجمهور",
+          "topCountries": "أهم الدول"
+        },
+        "devices": {
+          "kicker": "الأجهزة",
+          "categories": "فئات الأجهزة"
+        },
+        "traffic": {
+          "kicker": "حركة المرور",
+          "sources": "مصادر الحركة"
+        },
+        "content": {
+          "kicker": "المحتوى",
+          "topPages": "أهم الصفحات"
+        },
         "catalog": {
           "kicker": "الكتالوج",
           "title": "المنتجات والمخزون"
@@ -1292,30 +1240,23 @@
       "images": {
         "title": "صور البانر",
         "description": "قم برفع صورة البانر لسطح المكتب وصورة اختيارية للموبايل.",
-
         "desktop": "صورة سطح المكتب",
         "desktopAlt": "بانر سطح المكتب",
-
         "mobile": "صورة الموبايل (اختياري)",
         "mobileAlt": "بانر الموبايل",
-
         "clickToUpload": "اضغط لرفع الصورة",
         "uploadMobile": "رفع بانر الموبايل",
-
         "formats": "PNG أو JPG أو WEBP",
         "optional": "اختياري"
       },
-
       "content": {
         "title": "محتوى البانر",
         "description": "قم بتحديد المحتوى الذي سيظهر للعملاء."
       },
-
       "display": {
         "title": "إعدادات العرض",
         "description": "تحكم في مكان ووقت ظهور هذا البانر."
       },
-
       "fields": {
         "title": "العنوان",
         "description": "الوصف",
@@ -1326,20 +1267,17 @@
         "endDate": "تاريخ الانتهاء",
         "active": "بانر نشط"
       },
-
       "actions": {
         "create": "إنشاء بانر",
         "update": "تحديث البانر"
       }
     },
-
     "types": {
       "heroSlider": "السلايدر الرئيسي",
       "homeBanner": "بانر الصفحة الرئيسية",
       "offerBanner": "بانر العروض",
       "categoryBanner": "بانر التصنيف"
     },
-
     "errors": {
       "update": "فشل تحديث البانر.",
       "create": "فشل إنشاء البانر.",
@@ -1358,5 +1296,22 @@
       "status": "الحالة",
       "allStatus": "كل الحالات"
     }
+  },
+  "featuredProducts": {
+    "justLanded": "مجموعات حصرية",
+    "newArrivals": "تشكيلات فاخرة لكم",
+    "viewAll": "عرض الكل",
+    "noProducts": "لا توجد منتجات متوفرة حالياً.",
+    "tabAll": "الكل",
+    "tabNew": "الوصل حديثاً",
+    "tabTop": "الأعلى تقييماً",
+    "tabOffers": "العروض الحصرية"
+  },
+  "productDetailsExt": {
+    "tabDescription": "تفاصيل المنتج والمكونات",
+    "tabCare": "طريقة الحفظ والنضارة",
+    "tabShipping": "الشحن والتغليف الفاخر",
+    "careText": "يحفظ في مكان بارد وجاف بعيداً عن أشعة الشمس المباشرة لضمان أقصى درجات الطزاجة والنكهة الغنية.",
+    "shippingText": "يتم التغليف في علب فاخرة مفرغة من الهواء ومقاومة للصدمات مع توصيل مبرد وسريع لجميع المحافظات خلال 2-4 أيام عمل."
   }
 }

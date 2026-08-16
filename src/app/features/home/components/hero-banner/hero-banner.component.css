@@ -99,7 +99,8 @@
 
     margin-bottom:1.4rem;
 
-    background:var(--gold-gradient);
+    background: linear-gradient(135deg, #C9A24B 0%, #FFF5D0 30%, #C9A24B 60%, #E8C170 100%);
+    background-size: 200% auto;
 
     -webkit-background-clip:text;
 
@@ -107,8 +108,13 @@
 
     color:transparent;
 
-    animation:FadeUp 1s ease;
+    animation:FadeUp 1s ease, goldShimmer 6s linear infinite;
 
+}
+
+@keyframes goldShimmer {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
 }
 
 .hero-intro__description{
@@ -205,7 +211,13 @@
 .hero-image.current{
 
     opacity:1;
+    animation: kenBurns 12s ease-out infinite alternate;
 
+}
+
+@keyframes kenBurns {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.06); }
 }
 
 .hero-image.current.hidden{

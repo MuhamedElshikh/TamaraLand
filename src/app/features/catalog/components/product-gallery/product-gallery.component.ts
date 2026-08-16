@@ -15,6 +15,7 @@ export class ProductGalleryComponent implements OnChanges {
   @Input() fallbackImage = '/src/assets/placeholder-product.jpg';
 
   selectedImage = signal<ProductImageResponse | null>(null);
+  isLightboxOpen = signal(false);
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['images']) {
@@ -24,5 +25,13 @@ export class ProductGalleryComponent implements OnChanges {
 
   selectImage(image: ProductImageResponse): void {
     this.selectedImage.set(image);
+  }
+
+  openLightbox(): void {
+    this.isLightboxOpen.set(true);
+  }
+
+  closeLightbox(): void {
+    this.isLightboxOpen.set(false);
   }
 }

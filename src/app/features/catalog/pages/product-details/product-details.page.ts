@@ -46,9 +46,19 @@ export class ProductDetailsPage implements AfterViewInit {
 
   readonly canScrollPrev = signal(false);
   readonly canScrollNext = signal(true);
+  readonly showStickyBar = signal(false);
 
   ngAfterViewInit(): void {
     setTimeout(() => this.onRelatedSliderScroll(), 0);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', this.onWindowScroll.bind(this), { passive: true });
+    }
+  }
+
+  private onWindowScroll(): void {
+    if (typeof window === 'undefined') return;
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    this.showStickyBar.set(scrollY > 450);
   }
 
   scrollRelatedSlider(direction: 1 | -1): void {
