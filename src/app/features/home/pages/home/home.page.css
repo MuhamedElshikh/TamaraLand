@@ -274,6 +274,17 @@
 }
 
 /* ---- Trust strip ---- */
+
+.trust-strip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem;
+  max-width: 1280px;
+  margin: 3.5rem auto;
+  padding: 0 1.5rem;
+}
+
 .trust-item {
   display: flex;
   align-items: center;
@@ -281,7 +292,7 @@
   padding: 1.35rem 1.25rem;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
-  background: rgba(22, 18, 12, 0.85);
+  background: rgba(22, 18, 12, 0.7);
   backdrop-filter: blur(8px);
   flex: 1 1 240px;
   max-width: 100%;
@@ -312,6 +323,7 @@
   color: rgba(255, 245, 224, 0.62);
   line-height: 1.4;
 }
+
 /* ---- Button shine ---- */
 
 .btn-primary {

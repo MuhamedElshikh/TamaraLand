@@ -18,14 +18,16 @@
         <p class="catalog-page__summary">{{ summary() }}</p>
 
         <!-- Mobile filter toggle -->
-        <button class="filters-toggle" (click)="openFilters()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        <button class="filters-toggle" type="button" (click)="openFilters()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+               stroke-linejoin="round" aria-hidden="true">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+          </svg>
           {{ 'catalog.filters' | translate }}
         </button>
       </div>
 
-      <!-- Mobile filter drawer -->
-     
       @if (isLoading()) {
         <div class="catalog-page__grid">
           @for (i of [1, 2, 3, 4]; track i) {
@@ -33,31 +35,452 @@
           }
         </div>
       } @else if (products().length === 0) {
-        <p class="section-copy">{{ 'catalog.noProducts' | translate }}</p>
+
+        @if (isSalePage()) {
+          <section
+            class="seasonal-empty"
+            [class.seasonal-empty--summer]="season().key === 'summer'"
+            [class.seasonal-empty--winter]="season().key === 'winter'"
+            [class.seasonal-empty--spring]="season().key === 'spring'"
+            [class.seasonal-empty--autumn]="season().key === 'autumn'"
+          >
+            <div class="seasonal-empty__ambient seasonal-empty__ambient--one"></div>
+            <div class="seasonal-empty__ambient seasonal-empty__ambient--two"></div>
+
+            <div class="seasonal-empty__particles" aria-hidden="true">
+              @for (item of seasonalParticles(); track item.id) {
+                <span
+                  class="seasonal-particle"
+                  [style.left.%]="item.left"
+                  [style.animation-delay.s]="item.delay"
+                  [style.animation-duration.s]="item.duration"
+                >{{ item.symbol }}</span>
+              }
+            </div>
+
+            <div class="seasonal-empty__content">
+
+              <div class="seasonal-empty__copy">
+                <p class="seasonal-empty__eyebrow">
+                  <span class="seasonal-empty__eyebrow-line"></span>
+                  {{ season().kicker }}
+                </p>
+
+                <h2 class="seasonal-empty__title">
+                  {{ season().title }}
+                </h2>
+
+                <p class="seasonal-empty__description">
+                  {{ season().description }}
+                </p>
+
+                <div class="seasonal-empty__divider" aria-hidden="true">
+                  <span></span>
+                  <i>✦</i>
+                  <span></span>
+                </div>
+
+                <p class="seasonal-empty__bottom-text">
+                  {{ 'catalog.comingSoon' | translate }}
+                </p>
+              </div>
+
+              <div class="seasonal-empty__visual">
+                <div class="seasonal-empty__visual-frame">
+
+                  <div class="seasonal-empty__visual-top">
+                    <span>THE NEXT EDIT</span>
+                    <span>01</span>
+                  </div>
+
+                  <div class="seasonal-empty__season-number" aria-hidden="true">
+                    @if (season().key === 'summer') {
+                      08
+                    } @else if (season().key === 'autumn') {
+                      09
+                    } @else if (season().key === 'winter') {
+                      12
+                    } @else {
+                      03
+                    }
+                  </div>
+
+                  <div class="seasonal-empty__art">
+                    @switch (season().key) {
+
+                      @case ('summer') {
+                        <svg class="season-figure season-figure--summer"
+                             viewBox="0 0 240 360"
+                             xmlns="http://www.w3.org/2000/svg"
+                             aria-hidden="true">
+                          <g class="art-sun">
+                            <circle class="art-sun-halo" cx="182" cy="58" r="48"/>
+                            <circle class="art-sun-core" cx="182" cy="58" r="18"/>
+                            <g class="art-sun-rays">
+                              <path d="M182 29V20"/><path d="M182 96V87"/>
+                              <path d="M153 58H144"/><path d="M220 58H211"/>
+                              <path d="M161 37L154 30"/><path d="M203 79L210 86"/>
+                              <path d="M203 37L210 30"/><path d="M161 79L154 86"/>
+                            </g>
+                          </g>
+
+                          <g class="art-back-hair">
+                            <path d="M84 92 C61 103 58 138 67 163 C72 178 65 202 76 219 C87 236 111 228 116 207 C120 187 143 170 143 139 C143 108 121 91 84 92Z"/>
+                            <path class="art-hair-line" d="M77 112C66 139 73 171 84 190"/>
+                            <path class="art-hair-line" d="M98 101C84 137 91 177 101 202"/>
+                            <path class="art-hair-line" d="M119 105C111 135 122 161 130 177"/>
+                          </g>
+
+                          <ellipse class="art-skin" cx="103" cy="76" rx="27" ry="31"/>
+                          <path class="art-front-hair" d="M76 73C74 45 88 31 105 31C124 31 138 45 134 72C123 58 113 52 102 52C91 52 82 59 76 73Z"/>
+
+                          <g class="art-face">
+                            <path d="M88 76Q94 72 99 76"/>
+                            <path d="M107 76Q113 72 118 76"/>
+                            <path d="M99 88Q104 91 109 88"/>
+                          </g>
+
+                          <g class="art-sun-hat">
+                            <ellipse cx="104" cy="43" rx="51" ry="10"/>
+                            <path d="M80 42Q84 16 104 16Q124 16 129 42Z"/>
+                            <path class="art-hat-band" d="M78 38Q104 46 130 38"/>
+                          </g>
+
+                          <path class="art-skin" d="M94 103V116Q103 121 113 116V103Z"/>
+
+                          <g class="art-summer-dress">
+                            <path class="art-dress-fill"
+                                  d="M92 112Q103 120 114 112L128 151Q139 191 153 250Q158 271 143 286Q104 299 64 286Q49 271 54 250Q67 191 78 151Z"/>
+                            <path class="art-neckline" d="M92 112Q103 126 114 112"/>
+                            <path class="art-dress-fold" d="M82 150Q75 213 83 276"/>
+                            <path class="art-dress-fold" d="M103 143V285"/>
+                            <path class="art-dress-fold" d="M123 150Q132 213 123 276"/>
+                            <path class="art-waist" d="M68 169Q103 180 139 169"/>
+                          </g>
+
+                          <g class="art-arms">
+                            <path class="art-skin" d="M79 125Q62 151 68 190L80 187Q79 155 90 135Z"/>
+                            <path class="art-skin" d="M127 125Q144 151 138 190L126 187Q127 155 116 135Z"/>
+                          </g>
+
+                          <g class="art-bag">
+                            <path class="art-bag-handle" d="M50 188Q39 155 28 188"/>
+                            <path class="art-bag-body" d="M27 186Q40 180 53 186L51 222Q40 228 29 222Z"/>
+                            <path class="art-bag-detail" d="M32 196H48"/>
+                          </g>
+
+                          <path class="art-skin" d="M83 279H99L97 322H83Z"/>
+                          <path class="art-skin" d="M108 279H124L127 322H113Z"/>
+                          <path class="art-sandal" d="M78 321Q90 314 101 321V328H76Z"/>
+                          <path class="art-sandal" d="M109 321Q121 314 132 321V328H107Z"/>
+
+                          <g class="art-floating-sparkles">
+                            <circle cx="38" cy="94" r="2"/>
+                            <circle cx="204" cy="145" r="1.5"/>
+                            <circle cx="43" cy="252" r="1.5"/>
+                          </g>
+                        </svg>
+                      }
+
+                      @case ('autumn') {
+                        <svg class="season-figure season-figure--autumn"
+                             viewBox="0 0 240 360"
+                             xmlns="http://www.w3.org/2000/svg"
+                             aria-hidden="true">
+                          <circle class="art-autumn-sun" cx="182" cy="62" r="40"/>
+
+                          <g class="art-back-hair">
+                            <path d="M84 92C61 103 58 138 67 163C72 178 65 202 76 219C87 236 111 228 116 207C120 187 143 170 143 139C143 108 121 91 84 92Z"/>
+                            <path class="art-hair-line" d="M77 112C66 139 73 171 84 190"/>
+                            <path class="art-hair-line" d="M98 101C84 137 91 177 101 202"/>
+                            <path class="art-hair-line" d="M119 105C111 135 122 161 130 177"/>
+                          </g>
+
+                          <ellipse class="art-skin" cx="103" cy="76" rx="27" ry="31"/>
+                          <path class="art-front-hair" d="M76 73C74 45 88 31 105 31C124 31 138 45 134 72C123 58 113 52 102 52C91 52 82 59 76 73Z"/>
+
+                          <g class="art-face">
+                            <path d="M88 76Q94 72 99 76"/>
+                            <path d="M107 76Q113 72 118 76"/>
+                            <path d="M99 88Q104 91 109 88"/>
+                          </g>
+
+                          <g class="art-beret">
+                            <path class="art-beret-shape" d="M75 48Q84 21 108 21Q130 21 137 42Q111 53 75 48Z"/>
+                            <path class="art-beret-band" d="M76 43Q106 52 137 41"/>
+                            <circle cx="108" cy="21" r="4"/>
+                          </g>
+
+                          <path class="art-skin" d="M94 103V116Q103 121 113 116V103Z"/>
+
+                          <g class="art-autumn-coat">
+                            <path class="art-coat-fill"
+                                  d="M90 111Q103 120 116 111L132 150Q143 195 151 254Q154 276 139 289Q103 300 67 289Q52 276 55 254Q63 195 74 150Z"/>
+                            <path class="art-lapel" d="M90 111L103 145L116 111"/>
+                            <path class="art-coat-seam" d="M103 121V288"/>
+                            <path class="art-coat-seam" d="M65 178Q103 188 141 178"/>
+                            <circle class="art-coat-button" cx="103" cy="163" r="2.2"/>
+                            <circle class="art-coat-button" cx="103" cy="177" r="2.2"/>
+                          </g>
+
+                          <g class="art-scarf">
+                            <path class="art-scarf-wrap" d="M80 110Q103 126 126 110Q125 125 103 133Q81 125 80 110Z"/>
+                            <path d="M93 127Q86 153 92 181"/>
+                            <path d="M112 127Q120 153 114 181"/>
+                          </g>
+
+                          <g class="art-arms">
+                            <path class="art-coat-sleeve" d="M74 126Q58 155 64 190L77 188Q76 156 86 136Z"/>
+                            <path class="art-coat-sleeve" d="M132 126Q148 155 142 190L129 188Q130 156 120 136Z"/>
+                          </g>
+
+                          <path class="art-skin" d="M82 280H98L96 322H82Z"/>
+                          <path class="art-skin" d="M108 280H124L127 322H113Z"/>
+                          <path class="art-boot" d="M77 313Q89 306 101 313V330H74Q75 321 77 313Z"/>
+                          <path class="art-boot" d="M109 313Q121 306 133 313V330H106Q107 321 109 313Z"/>
+
+                          <g class="art-autumn-leaves">
+                            <path d="M35 105Q45 94 53 105Q45 117 35 105Z"/>
+                            <path d="M198 140Q207 130 214 140Q207 151 198 140Z"/>
+                            <path d="M35 246Q44 235 52 246Q44 257 35 246Z"/>
+                            <path d="M183 274Q193 263 201 274Q193 285 183 274Z"/>
+                          </g>
+                        </svg>
+                      }
+
+                      @case ('winter') {
+                        <svg class="season-figure season-figure--winter"
+                             viewBox="0 0 240 360"
+                             xmlns="http://www.w3.org/2000/svg"
+                             aria-hidden="true">
+                          <circle class="art-winter-moon-halo" cx="182" cy="62" r="46"/>
+                          <path class="art-winter-moon" d="M191 33Q166 40 169 63Q173 85 198 80Q188 94 169 88Q145 79 148 55Q151 31 177 29Q184 29 191 33Z"/>
+
+                          <g class="art-back-hair">
+                            <path d="M84 92C61 103 58 138 67 163C72 178 65 202 76 219C87 236 111 228 116 207C120 187 143 170 143 139C143 108 121 91 84 92Z"/>
+                            <path class="art-hair-line" d="M77 112C66 139 73 171 84 190"/>
+                            <path class="art-hair-line" d="M98 101C84 137 91 177 101 202"/>
+                            <path class="art-hair-line" d="M119 105C111 135 122 161 130 177"/>
+                          </g>
+
+                          <ellipse class="art-skin" cx="103" cy="76" rx="27" ry="31"/>
+                          <path class="art-front-hair" d="M76 73C74 45 88 31 105 31C124 31 138 45 134 72C123 58 113 52 102 52C91 52 82 59 76 73Z"/>
+
+                          <g class="art-face">
+                            <path d="M88 76Q94 72 99 76"/>
+                            <path d="M107 76Q113 72 118 76"/>
+                            <path d="M99 88Q104 91 109 88"/>
+                          </g>
+
+                          <g class="art-beanie">
+                            <path class="art-beanie-cap" d="M75 51Q77 18 103 15Q129 18 132 51Q103 42 75 51Z"/>
+                            <path class="art-beanie-band" d="M75 46Q103 56 132 46V58Q103 67 75 58Z"/>
+                            <circle class="art-beanie-pom" cx="103" cy="15" r="7"/>
+                          </g>
+
+                          <path class="art-skin" d="M94 103V116Q103 121 113 116V103Z"/>
+
+                          <g class="art-winter-coat">
+                            <path class="art-coat-fill"
+                                  d="M89 111Q103 120 117 111L132 150Q144 196 151 254Q154 276 139 289Q103 300 67 289Q52 276 55 254Q62 196 74 150Z"/>
+                            <path class="art-lapel" d="M89 111L103 146L117 111"/>
+                            <path class="art-coat-seam" d="M103 121V288"/>
+                            <circle class="art-coat-button" cx="103" cy="163" r="2.2"/>
+                            <circle class="art-coat-button" cx="103" cy="177" r="2.2"/>
+                            <path class="art-pocket" d="M69 214L89 220"/>
+                            <path class="art-pocket" d="M137 214L117 220"/>
+                          </g>
+
+                          <g class="art-winter-scarf">
+                            <path class="art-scarf-wrap" d="M79 109Q103 127 127 109Q126 126 103 134Q80 126 79 109Z"/>
+                            <path d="M93 128Q88 154 95 183"/>
+                            <path d="M113 128Q120 155 113 185"/>
+                          </g>
+
+                          <g class="art-winter-arms">
+                            <path class="art-coat-sleeve" d="M74 127Q58 155 64 190L77 188Q76 156 86 136Z"/>
+                            <path class="art-coat-sleeve" d="M132 127Q148 155 142 190L129 188Q130 156 120 136Z"/>
+                            <circle class="art-glove" cx="70" cy="191" r="7"/>
+                            <circle class="art-glove" cx="136" cy="191" r="7"/>
+                          </g>
+
+                          <path class="art-skin" d="M82 280H98L96 322H82Z"/>
+                          <path class="art-skin" d="M108 280H124L127 322H113Z"/>
+                          <path class="art-winter-boot" d="M77 312Q89 305 101 312V330H74Q75 320 77 312Z"/>
+                          <path class="art-winter-boot" d="M109 312Q121 305 133 312V330H106Q107 320 109 312Z"/>
+
+                          <g class="art-snowflakes">
+                            <path d="M35 104L42 111M42 104L35 111M38.5 102V113M33 107.5H44"/>
+                            <path d="M198 147L205 154M205 147L198 154M201.5 145V156M196 150.5H207"/>
+                            <path d="M38 247L45 254M45 247L38 254M41.5 245V256M36 250.5H47"/>
+                          </g>
+                        </svg>
+                      }
+
+                      @case ('spring') {
+                        <svg class="season-figure season-figure--spring"
+                             viewBox="0 0 240 360"
+                             xmlns="http://www.w3.org/2000/svg"
+                             aria-hidden="true">
+                          <g class="art-spring-orbit">
+                            <path d="M34 111Q50 86 74 76"/>
+                            <path d="M153 76Q177 87 204 111"/>
+                            <circle cx="36" cy="109" r="5"/>
+                            <circle cx="54" cy="89" r="5"/>
+                            <circle cx="72" cy="77" r="5"/>
+                            <circle cx="155" cy="77" r="5"/>
+                            <circle cx="177" cy="89" r="5"/>
+                            <circle cx="201" cy="110" r="5"/>
+                          </g>
+
+                          <g class="art-back-hair">
+                            <path d="M84 92C61 103 58 138 67 163C72 178 65 202 76 219C87 236 111 228 116 207C120 187 143 170 143 139C143 108 121 91 84 92Z"/>
+                            <path class="art-hair-line" d="M77 112C66 139 73 171 84 190"/>
+                            <path class="art-hair-line" d="M98 101C84 137 91 177 101 202"/>
+                            <path class="art-hair-line" d="M119 105C111 135 122 161 130 177"/>
+                          </g>
+
+                          <ellipse class="art-skin" cx="103" cy="76" rx="27" ry="31"/>
+                          <path class="art-front-hair" d="M76 73C74 45 88 31 105 31C124 31 138 45 134 72C123 58 113 52 102 52C91 52 82 59 76 73Z"/>
+
+                          <g class="art-face">
+                            <path d="M88 76Q94 72 99 76"/>
+                            <path d="M107 76Q113 72 118 76"/>
+                            <path d="M99 88Q104 91 109 88"/>
+                          </g>
+
+                          <g class="art-flower-crown">
+                            <path d="M76 51Q103 35 132 50"/>
+                            <circle cx="80" cy="48" r="7"/>
+                            <circle cx="94" cy="40" r="7"/>
+                            <circle cx="108" cy="39" r="7"/>
+                            <circle cx="123" cy="47" r="7"/>
+                            <circle class="art-flower-center" cx="80" cy="48" r="2.5"/>
+                            <circle class="art-flower-center" cx="94" cy="40" r="2.5"/>
+                            <circle class="art-flower-center" cx="108" cy="39" r="2.5"/>
+                            <circle class="art-flower-center" cx="123" cy="47" r="2.5"/>
+                          </g>
+
+                          <path class="art-skin" d="M94 103V116Q103 121 113 116V103Z"/>
+
+                          <g class="art-spring-dress">
+                            <path class="art-dress-fill"
+                                  d="M91 111Q103 120 115 111L130 150Q141 194 151 254Q154 275 140 289Q103 300 66 289Q52 275 55 254Q65 194 76 150Z"/>
+                            <path class="art-neckline" d="M91 111Q103 126 115 111"/>
+                            <path class="art-waist" d="M68 170Q103 180 139 170"/>
+                            <path class="art-dress-fold" d="M83 150Q76 215 84 278"/>
+                            <path class="art-dress-fold" d="M103 144V286"/>
+                            <path class="art-dress-fold" d="M123 150Q131 214 123 278"/>
+                            <circle class="art-print" cx="75" cy="202" r="3"/>
+                            <circle class="art-print" cx="103" cy="222" r="3"/>
+                            <circle class="art-print" cx="130" cy="201" r="3"/>
+                          </g>
+
+                          <g class="art-spring-arms">
+                            <path class="art-skin" d="M77 126Q61 153 68 190L80 187Q79 155 89 136Z"/>
+                            <path class="art-skin" d="M129 126Q145 153 138 190L126 187Q127 155 117 136Z"/>
+                          </g>
+
+                          <g class="art-bouquet">
+                            <path d="M126 191L146 161"/>
+                            <path d="M128 191L146 168"/>
+                            <circle cx="146" cy="158" r="7"/>
+                            <circle cx="139" cy="164" r="7"/>
+                            <circle cx="152" cy="167" r="7"/>
+                            <circle class="art-flower-center" cx="146" cy="163" r="3"/>
+                          </g>
+
+                          <path class="art-skin" d="M82 280H98L96 322H82Z"/>
+                          <path class="art-skin" d="M108 280H124L127 322H113Z"/>
+                          <path class="art-sandal" d="M77 321Q89 314 101 321V328H76Z"/>
+                          <path class="art-sandal" d="M109 321Q121 314 132 321V328H107Z"/>
+
+                          <g class="art-petals">
+                            <path d="M34 178Q43 168 51 178Q43 188 34 178Z"/>
+                            <path d="M194 217Q203 207 211 217Q203 227 194 217Z"/>
+                            <path d="M43 286Q52 276 60 286Q52 296 43 286Z"/>
+                          </g>
+                        </svg>
+                      }
+                    }
+                  </div>
+
+                  <p class="seasonal-empty__figure-label">{{ season().key }}</p>
+
+                  <div class="seasonal-empty__visual-bottom">
+                    <span>COMING SOON</span>
+                    <span>✦</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </section>
+        } @else {
+          <p class="section-copy">
+            {{ 'catalog.noProducts' | translate }}
+          </p>
+        }
+
       } @else {
         <div class="catalog-page__grid">
           @for (product of products(); track product.id) {
             <app-product-card [product]="product" />
           }
         </div>
-        <app-pagination [currentPage]="pageNumber()" [totalPages]="totalPages()" (pageChange)="onPageChange($event)" />
+
+        <app-pagination
+          [currentPage]="pageNumber()"
+          [totalPages]="totalPages()"
+          (pageChange)="onPageChange($event)"
+        />
       }
     </div>
   </div>
 </section>
- <div class="filters-backdrop" [class.filters-backdrop--visible]="filtersOpen()" (click)="closeFilters()"></div>
-      <div class="filters-drawer" [class.filters-drawer--open]="filtersOpen()">
-        <div class="filters-drawer__header">
-          <span class="filters-drawer__title">{{ 'catalog.filters' | translate }}</span>
-          <button class="filters-drawer__close" (click)="closeFilters()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-          </button>
-        </div>
-        <div class="filters-drawer__body">
-          <app-product-filters (filtersChanged)="onFiltersChanged($event)" />
-        </div>
-        <div class="filters-drawer__footer">
-          <button class="btn btn-outline" (click)="clearFilters()">{{ 'catalog.clearAll' | translate }}</button>
-          <button class="btn btn-primary" (click)="closeFilters()">{{ 'catalog.showResults' | translate }}</button>
-        </div>
-      </div>
+
+<div
+  class="filters-backdrop"
+  [class.filters-backdrop--visible]="filtersOpen()"
+  (click)="closeFilters()"
+></div>
+
+<div
+  class="filters-drawer"
+  [class.filters-drawer--open]="filtersOpen()"
+>
+  <div class="filters-drawer__header">
+    <span class="filters-drawer__title">
+      {{ 'catalog.filters' | translate }}
+    </span>
+
+    <button
+      class="filters-drawer__close"
+      type="button"
+      (click)="closeFilters()"
+      aria-label="Close filters"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+           viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+           aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+  <div class="filters-drawer__body">
+    <app-product-filters (filtersChanged)="onFiltersChanged($event)" />
+  </div>
+
+  <div class="filters-drawer__footer">
+    <button class="btn btn-outline" type="button" (click)="clearFilters()">
+      {{ 'catalog.clearAll' | translate }}
+    </button>
+
+    <button class="btn btn-primary" type="button" (click)="closeFilters()">
+      {{ 'catalog.showResults' | translate }}
+    </button>
+  </div>
+</div>
