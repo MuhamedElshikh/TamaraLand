@@ -44,7 +44,9 @@ export class AutoSlideDirective implements OnInit, OnDestroy {
     const isAtEnd = currentScroll >= maxScroll - 15;
 
     if (isAtEnd) {
-      el.scrollTo({ left: 0, behavior: 'smooth' });
+      // بدل الرجوع بالأنيميشن (اللي بيبان وكأنه راجع للخلف)، بنعمل قفزة فورية للبداية
+      // من غير smooth، فبصريًا بيبان إنها استمرت في نفس الاتجاه من غير أي "ريفيرس"
+      el.scrollTo({ left: 0, behavior: 'auto' });
     } else {
       const scrollDir = isRtl ? -1 : 1;
       el.scrollBy({ left: stepAmount * scrollDir, behavior: 'smooth' });

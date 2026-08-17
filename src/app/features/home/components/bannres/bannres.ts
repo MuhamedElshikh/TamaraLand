@@ -13,12 +13,19 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BannerService } from '../../../../core/services/banner.service';
 import { BannerResponse, BannerType } from '../../../../core/models/banner.models';
-import { ScrollRevealDirective } from '../../../../shared/directives/scroll-reveal.directive'; // عدّل المسار على حسب مكان الديركتيف عندك
+import { ScrollRevealDirective } from '../../../../shared/directives/scroll-reveal.directive';
+import { AutoSlideDirective } from '../../../../shared/directives/auto-slide.directive';
+
+interface BannerSlide {
+  desktopUrl: string;
+  mobileUrl?: string;
+  link?: string;
+}
 
 @Component({
   selector: 'app-banners',
   standalone: true,
-  imports: [RouterLink, TranslatePipe, NgClass, ScrollRevealDirective],
+  imports: [RouterLink, TranslatePipe, NgClass, ScrollRevealDirective, AutoSlideDirective],
   templateUrl: './bannres.html',
   styleUrl: './bannres.css'
 })
@@ -30,6 +37,8 @@ export class Banners implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly banners = signal<BannerResponse[]>([]);
+
+  readonly isHomeBanner = computed(() => this.bannerType === BannerType.HomeBanner);
 
   readonly stripClass = computed(() => {
     switch (this.bannerType) {
@@ -43,6 +52,12 @@ export class Banners implements OnInit {
         return '';
     }
   });
+
+  // ==========================
+  // Home Banner: سلايدات مبنية من كل صور كل البانرز (مش بانر = كارت واحد بس)
+  // ==========================
+
+  readonly homeSlides = computed(() => this.buildSlides(this.banners()));
 
   ngOnInit(): void {
 
@@ -61,6 +76,61 @@ export class Banners implements OnInit {
       });
 
   }
+
+  private buildSlides(banners: BannerResponse[]): BannerSlide[] {
+
+    const slides: BannerSlide[] = [];
+
+    for (const banner of banners) {
+
+      const desktopImages = banner.images
+        .filter(x => !x.isMobile)
+        .sort((a, b) => a.displayOrder - b.displayOrder);
+
+      const mobileImages = banner.images
+        .filter(x => x.isMobile)
+        .sort((a, b) => a.displayOrder - b.displayOrder);
+
+      if (desktopImages.length === 0 && mobileImages.length > 0) {
+        // مفيش صور ديسكتوب، بس فيه موبايل → اعتبرها سلايدات مستقلة
+        mobileImages.forEach(m => {
+          slides.push({
+            desktopUrl: m.imageUrl,
+            mobileUrl: m.imageUrl,
+            link: m.link
+          });
+        });
+        continue;
+      }
+
+      // كل صورة ديسكتوب = سلايد منفصل، ولو فيه صورة موبايل بنفس الترتيب نستخدمها ليها
+      desktopImages.forEach((d, i) => {
+        const mobileMatch = mobileImages[i];
+        slides.push({
+          desktopUrl: d.imageUrl,
+          mobileUrl: mobileMatch?.imageUrl,
+          link: d.link ?? mobileMatch?.link
+        });
+      });
+    }
+
+    return slides;
+  }
+
+  resolveSlideImage(slide: BannerSlide): string {
+
+    const isMobileView = window.innerWidth <= 768;
+
+    if (isMobileView && slide.mobileUrl) {
+      return slide.mobileUrl;
+    }
+
+    return slide.desktopUrl;
+  }
+
+  // ==========================
+  // Offer / Category: بانر = كارت واحد
+  // ==========================
 
   resolveImage(banner: BannerResponse): string {
 

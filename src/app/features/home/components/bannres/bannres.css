@@ -105,6 +105,36 @@
 
 
 /* ===========================
+   HOME BANNER SLIDER
+   (appAutoSlide بيعمل scrollBy على الديف ده)
+=========================== */
+
+.banner-slider{
+
+    overflow-x:auto;
+    scroll-behavior:smooth;
+    scroll-snap-type:x mandatory;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+
+}
+
+.banner-slider::-webkit-scrollbar{
+
+    display:none;
+
+}
+
+/* كل بانر هوم = سلايد كامل العرض، مايتقصش تحت تأثير flex shrink */
+.banner-slider .static-banner{
+
+    flex:0 0 100%;
+    scroll-snap-align:start;
+
+}
+
+
+/* ===========================
    RESPONSIVE — TABLET (≤768px)
 =========================== */
 

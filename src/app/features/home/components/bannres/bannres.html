@@ -1,5 +1,31 @@
-@if (banners().length > 0) {
+@if (isHomeBanner()) {
 
+  @if (homeSlides().length > 0) {
+
+    <!-- Home Banner: سلايدر بيتحرك لوحده باستخدام AutoSlideDirective -->
+    <section
+      class="static-banner-strip static-banner-strip--home banner-slider"
+      appAutoSlide="forward"
+      [autoSlideInterval]="4000"
+      appScrollReveal>
+
+      @for (slide of homeSlides(); track $index) {
+
+        <a class="static-banner slider-item" [routerLink]="slide.link">
+          <img
+            [src]="resolveSlideImage(slide)"
+            [alt]="'hero.bannerAlt' | translate">
+        </a>
+
+      }
+
+    </section>
+
+  }
+
+} @else if (banners().length > 0) {
+
+  <!-- Offer / Category: شريط ثابت جنب بعض من غير أي تبديل -->
   <section
     class="static-banner-strip"
     [ngClass]="stripClass()"
