@@ -1,0 +1,157 @@
+/* ===========================
+   STATIC BANNER STRIPS
+   (Home / Offer / Category)
+=========================== */
+
+.static-banner-strip{
+
+    width:90%;
+
+    margin:20px auto;
+
+    display:flex;
+
+    gap:16px;
+
+    flex:3 ;
+    flex-direction: row;
+
+}
+
+.static-banner{
+
+    flex:1 1 300px;
+
+    display:block;
+
+    position:relative;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    background:#000;
+
+    -webkit-border-radius:12px;
+    -moz-border-radius:12px;
+
+}
+
+.static-banner img{
+
+    width:100%;
+
+    height:100%;
+
+    display:block;
+
+    object-fit:fill;
+
+    aspect-ratio:16/6;
+
+    transition:transform .5s ease;
+
+}
+
+.static-banner:hover img{
+
+    transform:scale(1.03);
+
+}
+
+
+/* ===========================
+   PER-TYPE VARIATIONS
+=========================== */
+
+/* Home Banner: شريط واحد عريض */
+.static-banner-strip--home .static-banner{
+
+    flex:1 1 100%;
+
+}
+
+.static-banner-strip--home img{
+
+    aspect-ratio:21/6;
+
+}
+
+/* Offer Banner: 2 جنب بعض على الديسكتوب */
+.static-banner-strip--offer .static-banner{
+
+    flex:1 1 calc(50% - 8px);
+
+}
+
+.static-banner-strip--offer img{
+
+    aspect-ratio:16/9;
+
+}
+
+/* Category Banner: كروت أصغر، ممكن أكتر من 2 */
+.static-banner-strip--category .static-banner{
+
+    flex:1 1 calc(33.333% - 11px);
+
+}
+
+.static-banner-strip--category img{
+
+    aspect-ratio:4/5;
+
+}
+
+
+/* ===========================
+   RESPONSIVE — TABLET (≤768px)
+=========================== */
+
+@media (max-width:768px){
+
+.static-banner-strip{
+
+    gap:12px;
+
+    margin:14px auto;
+
+}
+
+.static-banner-strip--offer .static-banner,
+.static-banner-strip--category .static-banner{
+
+    flex:1 1 100%;
+
+}
+
+.static-banner-strip--home img{
+
+    aspect-ratio:16/9;
+
+}
+
+}
+
+
+/* ===========================
+   RESPONSIVE — SMALL PHONES (≤420px)
+=========================== */
+
+@media (max-width:420px){
+
+.static-banner-strip{
+
+    width:94%;
+
+    gap:10px;
+
+}
+
+.static-banner img{
+
+    aspect-ratio:16/10;
+
+}
+
+}

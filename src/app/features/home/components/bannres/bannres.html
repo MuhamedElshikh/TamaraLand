@@ -1,0 +1,20 @@
+@if (banners().length > 0) {
+
+  <section
+    class="static-banner-strip"
+    [ngClass]="stripClass()"
+    appScrollReveal>
+
+    @for (banner of banners(); track banner.id) {
+
+      <a class="static-banner" [routerLink]="resolveLink(banner)">
+        <img
+          [src]="resolveImage(banner)"
+          [alt]="'hero.bannerAlt' | translate">
+      </a>
+
+    }
+
+  </section>
+
+}

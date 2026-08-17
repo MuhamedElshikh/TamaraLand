@@ -3,6 +3,8 @@ import { RouterLink } from '@angular/router';
 import { CatalogService } from '../../../../core/services/catalog.service'; // عدّل المسار
 import { CategoryResponse } from '../../../../core/models/catalog.models'; // عدّل المسار
 import { HeroBannerComponent } from '../../components/hero-banner/hero-banner.component';
+import { Banners } from '../../components/bannres/bannres'; // عدّل المسار
+import { BannerType } from '../../../../core/models/banner.models'; // عدّل المسار
 import { FeaturedProductsComponent } from '../../components/featured-products/featured-products.component';
 import { TranslatePipe } from '@ngx-translate/core';
 import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe';
@@ -16,6 +18,7 @@ import { TestimonialsComponent } from '../../components/testimonials-component/t
   imports: [
     RouterLink,
     HeroBannerComponent,
+    Banners,
     FeaturedProductsComponent,
     TranslatePipe,
     LocalizedNamePipe,
@@ -28,6 +31,8 @@ import { TestimonialsComponent } from '../../components/testimonials-component/t
 })
 export class HomePage implements OnInit {
   private catalog = inject(CatalogService);
+
+  protected readonly bannerType = BannerType;
 
   categories = signal<CategoryResponse[]>([]);
   categoriesLoading = signal(true);
