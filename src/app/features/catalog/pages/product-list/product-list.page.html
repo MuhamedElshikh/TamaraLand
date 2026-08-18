@@ -27,6 +27,51 @@
           {{ 'catalog.filters' | translate }}
         </button>
       </div>
+     @if (didYouMean().length && currentSearch()) {
+  <div class="catalog-page__did-you-mean">
+
+    <span class="catalog-page__did-you-mean-label">
+      Did you mean
+    </span>
+
+    <div class="catalog-page__did-you-mean-list">
+
+      @for (
+        suggestion of didYouMean();
+        track suggestion
+      ) {
+
+        <button
+          type="button"
+          class="catalog-page__did-you-mean-option"
+          (click)="selectDidYouMean(suggestion)">
+
+          {{ suggestion }}
+
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true">
+
+            <path
+              d="M5 12h14M13 6l6 6-6 6"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round" />
+
+          </svg>
+
+        </button>
+
+      }
+
+    </div>
+
+  </div>
+}
 
       @if (isLoading()) {
         <div class="catalog-page__grid">

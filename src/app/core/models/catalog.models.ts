@@ -10,7 +10,10 @@ export interface PagedResponse<T> {
   totalPages: number;
   hasPreviousPage: boolean;
   hasNextPage: boolean;
+
+  didYouMean: string[];
 }
+
 
 export interface CategoryResponse {
   id: number;
@@ -20,7 +23,10 @@ export interface CategoryResponse {
   imageUrl?: string;
     isPublished: boolean;
 }
-
+export interface ProductSearchSuggestionsResponse {
+  suggestions: ProductSearchSuggestion[];
+  didYouMean: string[];
+}
 export interface BrandResponse {
   id: number;
   name: string;
@@ -68,6 +74,17 @@ export interface ProductCardResponse {
   arabicBrandName: string;
   categoryName: string;
   arabicCategoryName: string;
+}
+export type ProductSearchSuggestionType =
+  | 'product'
+  | 'category'
+  | 'brand'
+  | 'color';
+
+export interface ProductSearchSuggestion {
+  id: number | null;
+  text: string;
+  type: ProductSearchSuggestionType;
 }
 
 export interface ProductDetailsResponse extends ProductResponse {

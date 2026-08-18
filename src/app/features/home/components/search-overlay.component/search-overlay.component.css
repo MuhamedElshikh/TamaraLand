@@ -329,3 +329,207 @@
     font-size: 0.8rem;
   }
 }
+/* =========================================================
+   Search Suggestions
+   ========================================================= */
+
+.search-overlay__suggestion-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.search-overlay__suggestion {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.8rem 1.25rem;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.search-overlay__suggestion:hover,
+.search-overlay__suggestion.active {
+  background: rgba(201, 162, 75, 0.07);
+}
+
+.search-overlay__suggestion-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  background: rgba(201, 162, 75, 0.07);
+  color: var(--primary-light);
+}
+
+.search-overlay__suggestion-icon[data-type="product"] {
+  color: var(--primary-light);
+}
+
+.search-overlay__suggestion-icon[data-type="category"] {
+  color: var(--text-secondary);
+}
+
+.search-overlay__suggestion-icon[data-type="brand"] {
+  color: var(--primary);
+}
+
+.search-overlay__suggestion-icon[data-type="color"] {
+  color: var(--text-primary);
+}
+
+.search-overlay__suggestion-content {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.search-overlay__suggestion-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-overlay__suggestion-type {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.search-overlay__suggestion-arrow {
+  flex-shrink: 0;
+  font-size: 1rem;
+  color: var(--text-muted);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: var(--transition-fast);
+}
+
+.search-overlay__suggestion:hover
+.search-overlay__suggestion-arrow,
+.search-overlay__suggestion.active
+.search-overlay__suggestion-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.search-overlay__suggestion-skeleton {
+  height: 56px;
+  margin: 0.35rem 1.25rem;
+  border-radius: var(--radius-sm);
+  background: var(--secondary-light);
+  animation: skeletonPulse 1.4s ease-in-out infinite;
+}
+
+.search-overlay__empty-action {
+  margin-top: 0.7rem;
+  border: none;
+  background: transparent;
+  color: var(--primary-light);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.search-overlay__empty-action:hover {
+  color: var(--primary);
+}
+
+@media (max-width: 768px) {
+
+  .search-overlay__suggestion {
+    padding: 0.9rem 1rem;
+    gap: 0.8rem;
+  }
+
+  .search-overlay__suggestion-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .search-overlay__suggestion-text {
+    font-size: 0.95rem;
+  }
+
+  .search-overlay__suggestion-type {
+    font-size: 0.7rem;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .search-overlay__suggestion {
+    padding: 0.8rem 0.85rem;
+  }
+
+  .search-overlay__suggestion-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+}
+.search-overlay__did-you-mean {
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  background: rgba(201, 162, 75, 0.045);
+}
+
+.search-overlay__did-you-mean-label {
+  display: block;
+  margin-bottom: 0.55rem;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.search-overlay__did-you-mean-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.search-overlay__did-you-mean-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid rgba(201, 162, 75, 0.35);
+  border-radius: var(--radius-full);
+  background: var(--bg-card);
+  color: var(--primary-light);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.search-overlay__did-you-mean-item:hover {
+  border-color: var(--primary);
+  background: rgba(201, 162, 75, 0.08);
+  color: var(--primary);
+}
+
+.search-overlay__did-you-mean-item svg {
+  transition: transform 0.2s ease;
+}
+
+.search-overlay__did-you-mean-item:hover svg {
+  transform: translateX(2px);
+}

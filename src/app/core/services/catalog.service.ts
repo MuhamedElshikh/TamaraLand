@@ -4,7 +4,7 @@
   import { tap } from 'rxjs/operators';
   import { API_BASE_URL } from '../constants/api.constants';
   import { ApiResponse } from '../models/api-response.model';
-  import { PagedResponse, CategoryResponse, BrandResponse, ProductCardResponse, ProductDetailsResponse, ProductFilterRequest, CategoryFilterRequest, BrandFilterRequest } from '../models/catalog.models';
+  import { PagedResponse,ProductSearchSuggestionsResponse, CategoryResponse, BrandResponse, ProductCardResponse, ProductDetailsResponse, ProductFilterRequest, CategoryFilterRequest, BrandFilterRequest, ProductSearchSuggestion } from '../models/catalog.models';
 
   @Injectable({ providedIn: 'root' })
   export class CatalogService {
@@ -59,4 +59,16 @@
       });
       return params;
     }
+    getProductSuggestions(
+  query: string
+): Observable<ApiResponse<ProductSearchSuggestionsResponse>> {
+  return this.http.get<ApiResponse<ProductSearchSuggestionsResponse>>(
+    `${API_BASE_URL}/api/Product/suggestions`,
+    {
+      params: {
+        q: query
+      }
+    }
+  );
+}
   }

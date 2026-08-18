@@ -1,6 +1,10 @@
-<div class="search-overlay" (click)="$event.stopPropagation()">
+<div
+  class="search-overlay"
+  (click)="$event.stopPropagation()">
 
-  <form class="search-overlay__form" (submit)="onSubmit($event)">
+  <form
+    class="search-overlay__form"
+    (submit)="onSubmit($event)">
 
     <svg
       class="search-overlay__icon"
@@ -30,9 +34,13 @@
       class="search-overlay__input"
       placeholder="Search for products..."
       [value]="query()"
-      (input)="onInput($any($event.target).value)" />
+      (input)="onInput($any($event.target).value)"
+      autocomplete="off"
+      role="combobox"
+      [attr.aria-expanded]="query().length >= 2" />
 
     @if (query()) {
+
       <button
         type="button"
         class="search-overlay__clear"
@@ -46,6 +54,11 @@
 
   </form>
 
+
+  <!-- ===================================================== -->
+  <!-- RECENT SEARCHES -->
+  <!-- ===================================================== -->
+
   @if (!query()) {
 
     <div class="search-overlay__suggestions">
@@ -58,7 +71,10 @@
 
           <div class="search-tags">
 
-            @for (search of recentSearches(); track search) {
+            @for (
+              search of recentSearches();
+              track search
+            ) {
 
               <button
                 type="button"
@@ -67,81 +83,281 @@
                 {{ search }}
 
               </button>
-
             }
 
           </div>
 
         </section>
-
       }
 
-    
     </div>
 
   } @else {
 
     <div class="search-overlay__results">
 
+      <!-- ================================================= -->
+      <!-- LOADING -->
+      <!-- ================================================= -->
+@if (didYouMean().length) {
+  <div class="search-overlay__did-you-mean">
+
+    <span class="search-overlay__did-you-mean-label">
+      Did you mean?
+    </span>
+
+    <div class="search-overlay__did-you-mean-list">
+
+      @for (
+        suggestion of didYouMean();
+        track suggestion
+      ) {
+
+        <button
+          type="button"
+          class="search-overlay__did-you-mean-item"
+          (click)="selectDidYouMean(suggestion)">
+
+          {{ suggestion }}
+
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true">
+
+            <path
+              d="M5 12h14M13 6l6 6-6 6"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round" />
+
+          </svg>
+
+        </button>
+
+      }
+
+    </div>
+
+  </div>
+}
       @if (isLoading()) {
 
         <div class="search-overlay__loading">
 
-          @for (i of [1,2,3]; track i) {
+          @for (
+            i of [1,2,3,4];
+            track i
+          ) {
 
-            <div class="search-overlay__skeleton"></div>
+            <div
+              class="search-overlay__suggestion-skeleton">
+            </div>
+
+          }
+
+        </div>
+
+      }
+
+      <!-- ================================================= -->
+      <!-- SUGGESTIONS -->
+      <!-- ================================================= -->
+
+      @else if (suggestions().length) {
+
+        <div
+          class="search-overlay__suggestion-list"
+          role="listbox">
+
+          @for (
+            suggestion of suggestions();
+            track suggestion.type + '-' + suggestion.id + '-' + suggestion.text;
+            let i = $index
+          ) {
+
+            <button
+              type="button"
+              class="search-overlay__suggestion"
+              [class.active]="selectedIndex() === i"
+              (mouseenter)="selectedIndex.set(i)"
+              (click)="selectSuggestion(suggestion)"
+              role="option"
+              [attr.aria-selected]="selectedIndex() === i">
+
+              <span
+                class="search-overlay__suggestion-icon"
+                [attr.data-type]="suggestion.type">
+
+                @switch (suggestion.type) {
+
+                  @case ('product') {
+
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      aria-hidden="true">
+
+                      <path
+                        d="M6 7.5h12l1 12H5l1-12Z"
+                        stroke="currentColor"
+                        stroke-width="1.5" />
+
+                      <path
+                        d="M9 8V6a3 3 0 0 1 6 0v2"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round" />
+
+                    </svg>
+
+                  }
+
+                  @case ('category') {
+
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      aria-hidden="true">
+
+                      <rect
+                        x="4"
+                        y="4"
+                        width="6"
+                        height="6"
+                        rx="1"
+                        stroke="currentColor"
+                        stroke-width="1.5" />
+
+                      <rect
+                        x="14"
+                        y="4"
+                        width="6"
+                        height="6"
+                        rx="1"
+                        stroke="currentColor"
+                        stroke-width="1.5" />
+
+                      <rect
+                        x="4"
+                        y="14"
+                        width="6"
+                        height="6"
+                        rx="1"
+                        stroke="currentColor"
+                        stroke-width="1.5" />
+
+                      <rect
+                        x="14"
+                        y="14"
+                        width="6"
+                        height="6"
+                        rx="1"
+                        stroke="currentColor"
+                        stroke-width="1.5" />
+
+                    </svg>
+
+                  }
+
+                  @case ('brand') {
+
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      aria-hidden="true">
+
+                      <path
+                        d="M4 8.5 8.5 4H19v10.5L14.5 19H4V8.5Z"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linejoin="round" />
+
+                      <circle
+                        cx="14.5"
+                        cy="8.5"
+                        r="1.2"
+                        fill="currentColor" />
+
+                    </svg>
+
+                  }
+
+                  @case ('color') {
+
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      aria-hidden="true">
+
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="7"
+                        stroke="currentColor"
+                        stroke-width="1.5" />
+
+                      <path
+                        d="M8 8.5c1.2-1 2.5-1.5 4-1.5 1.5 0 2.8.5 4 1.5"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round" />
+
+                    </svg>
+
+                  }
+
+                }
+
+              </span>
+
+              <span
+                class="search-overlay__suggestion-content">
+
+                <span
+                  class="search-overlay__suggestion-text">
+
+                  {{ suggestion.text }}
+
+                </span>
+
+                <span
+                  class="search-overlay__suggestion-type">
+
+                  {{ getSuggestionLabel(suggestion.type) }}
+
+                </span>
+
+              </span>
+
+              <span
+                class="search-overlay__suggestion-arrow">
+
+                →
+                
+              </span>
+
+            </button>
 
           }
 
         </div>
 
-      } @else if (results().length === 0 && hasSearched()) {
 
-        <p class="search-overlay__empty">
-
-          No products found for
-          <strong>"{{ query() }}"</strong>
-
-        </p>
-
-      } @else if (results().length) {
-
-        <div class="search-overlay__list">
-
-          @for (product of results(); track product.id) {
-
-            <a
-              [routerLink]="['/products', product.id]"
-              class="search-overlay__item"
-              [class.active]="selectedIndex() === $index"
-              (mouseenter)="selectedIndex.set($index)"
-              (click)="close()">
-
-              <img
-                [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
-                [alt]="product.name" />
-
-              <div class="search-overlay__content">
-
-                <p class="search-overlay__item-name">
-
-                  {{ product.name }}
-
-                </p>
-
-                <p class="search-overlay__item-price">
-
-                  {{ product.price | number:'1.0-0' }} EGP
-
-                </p>
-
-              </div>
-
-            </a>
-
-          }
-
-        </div>
+        <!-- ================================================= -->
+        <!-- VIEW ALL -->
+        <!-- ================================================= -->
 
         <button
           type="button"
@@ -152,6 +368,35 @@
           <strong>"{{ query() }}"</strong>
 
         </button>
+
+      }
+
+      <!-- ================================================= -->
+      <!-- NO RESULTS -->
+      <!-- ================================================= -->
+
+      @else if (
+        hasSearched() &&
+        query().trim().length >= 2
+      ) {
+
+        <p class="search-overlay__empty">
+
+          No suggestions found for
+          <strong>"{{ query() }}"</strong>
+
+          <br />
+
+          <button
+            type="button"
+            class="search-overlay__empty-action"
+            (click)="viewAllResults()">
+
+            Search anyway
+
+          </button>
+
+        </p>
 
       }
 

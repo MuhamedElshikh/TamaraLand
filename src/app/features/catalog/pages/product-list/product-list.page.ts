@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
 
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute , Router} from '@angular/router';
 
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
@@ -105,6 +105,9 @@ export class ProductListPage implements OnInit {
 
   readonly totalPages = signal(1);
 
+readonly didYouMean = signal<string[]>([]);
+readonly currentSearch = signal('');
+
 
   // =========================================================
   // PAGE CONTENT
@@ -133,6 +136,7 @@ export class ProductListPage implements OnInit {
   // =========================================================
 
   private currentFilter: ProductFilterRequest = {};
+  private readonly router = inject(Router);
 
 
   // =========================================================
@@ -309,18 +313,17 @@ export class ProductListPage implements OnInit {
 
     this.route.queryParams.subscribe(params => {
 
-      const filter: ProductFilterRequest = {
+  const filter: ProductFilterRequest = {
+    search: params['search'] ?? '',
+    pageNumber: +(params['page'] ?? 1),
+    collection: this.collection(),
+  };
 
-        search: params['search'] ?? '',
+  this.currentFilter = filter;
 
-        pageNumber: +(params['page'] ?? 1),
-
-        collection: this.collection(),
-      };
-
-
-      this.currentFilter = filter;
-
+  this.currentSearch.set(
+    filter.search?.trim() ?? ''
+  );
 
       // -----------------------------------------------------
       // Analytics - Search
@@ -428,45 +431,41 @@ export class ProductListPage implements OnInit {
 
         next: response => {
 
-          if (response.success && response.data) {
+         if (response.success && response.data) {
 
-            // -----------------------------------------------
-            // Products
-            // -----------------------------------------------
+  this.products.set(
+    response.data.items
+  );
 
-            this.products.set(
-              response.data.items
-            );
+  this.didYouMean.set(
+    response.data.didYouMean ?? []
+  );
 
+  // -----------------------------------------------
+  // Analytics
+  // -----------------------------------------------
 
-            // -----------------------------------------------
-            // Analytics
-            // -----------------------------------------------
+  this.analyticsService.viewItemList(
+    response.data.items.map(item => ({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+    })),
+    this.pageTitle()
+  );
 
-            this.analyticsService.viewItemList(
+  // -----------------------------------------------
+  // Pagination
+  // -----------------------------------------------
 
-              response.data.items.map(item => ({
-                id: item.id,
-                name: item.name,
-                price: item.price,
-              })),
+  this.totalCount.set(
+    response.data.totalCount
+  );
 
-              this.pageTitle()
-            );
-
-
-            // -----------------------------------------------
-            // Pagination
-            // -----------------------------------------------
-
-            this.totalCount.set(
-              response.data.totalCount
-            );
-
-            this.totalPages.set(
-              response.data.totalPages || 1
-            );
-          }
+  this.totalPages.set(
+    response.data.totalPages || 1
+  );
+}
 
 
           this.isLoading.set(false);
@@ -477,16 +476,32 @@ export class ProductListPage implements OnInit {
         // ERROR
         // ===================================================
 
-        error: () => {
+       error: () => {
 
-          this.isLoading.set(false);
+  this.isLoading.set(false);
 
-          this.products.set([]);
+  this.products.set([]);
 
-          this.totalCount.set(0);
+  this.totalCount.set(0);
 
-          this.totalPages.set(1);
-        },
+  this.totalPages.set(1);
+
+  this.didYouMean.set([]);
+},
       });
   }
+  selectDidYouMean(term: string): void {
+  const search = term.trim();
+
+  if (!search) return;
+
+  this.router.navigate(
+    ['/products'],
+    {
+      queryParams: {
+        search
+      }
+    }
+  );
+}
 }
