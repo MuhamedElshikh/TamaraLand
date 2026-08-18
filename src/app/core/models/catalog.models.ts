@@ -112,6 +112,8 @@ export interface ProductFilterRequest {
   pageNumber?: number;
   pageSize?: number;
   sortBy?: string;
+  desc?: boolean;
+  inStockOnly?: boolean;
 }
 
 export type RelatedProductResponse = ProductCardResponse;

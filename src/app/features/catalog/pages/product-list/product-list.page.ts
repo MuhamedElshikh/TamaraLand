@@ -310,13 +310,40 @@ readonly currentSearch = signal('');
     // -------------------------------------------------------
     // Query Params
     // -------------------------------------------------------
-
-    this.route.queryParams.subscribe(params => {
+this.route.queryParams.subscribe(params => {
 
   const filter: ProductFilterRequest = {
-    search: params['search'] ?? '',
-    pageNumber: +(params['page'] ?? 1),
-    collection: this.collection(),
+    search: params['search'] ?? undefined,
+
+    categoryId: params['categoryId']
+      ? +params['categoryId']
+      : undefined,
+
+    brandId: params['brandId']
+      ? +params['brandId']
+      : undefined,
+
+    minPrice: params['minPrice']
+      ? +params['minPrice']
+      : undefined,
+
+    maxPrice: params['maxPrice']
+      ? +params['maxPrice']
+      : undefined,
+
+    sortBy: params['sortBy'] ?? undefined,
+
+    desc:
+      params['desc'] === 'true',
+
+    inStockOnly:
+      params['inStockOnly'] === 'true',
+
+    pageNumber:
+      +(params['page'] ?? 1),
+
+    collection:
+      this.collection(),
   };
 
   this.currentFilter = filter;
@@ -325,46 +352,77 @@ readonly currentSearch = signal('');
     filter.search?.trim() ?? ''
   );
 
-      // -----------------------------------------------------
-      // Analytics - Search
-      // -----------------------------------------------------
+  if (filter.search?.trim()) {
+    this.analyticsService.search(
+      filter.search
+    );
+  }
 
-      if (filter.search?.trim()) {
-        this.analyticsService.search(filter.search);
-      }
-
-
-      // -----------------------------------------------------
-      // Load Products
-      // -----------------------------------------------------
-
-      this.loadProducts(
-        filter,
-        filter.pageNumber ?? 1
-      );
-    });
+  this.loadProducts(
+    filter,
+    filter.pageNumber ?? 1
+  );
+});
   }
 
 
   // =========================================================
   // FILTERS CHANGED
   // =========================================================
+onFiltersChanged(
+  filter: ProductFilterRequest
+): void {
 
-  onFiltersChanged(filter: ProductFilterRequest): void {
+  const queryParams: Record<string, string | number | boolean> = {};
 
-    this.currentFilter = {
-      ...filter,
-
-      collection: this.collection(),
-    };
-
-
-    // أي فلتر جديد يرجع لأول صفحة
-    this.loadProducts(
-      this.currentFilter,
-      1
-    );
+  if (filter.search?.trim()) {
+    queryParams['search'] =
+      filter.search.trim();
   }
+
+  if (filter.categoryId !== undefined) {
+    queryParams['categoryId'] =
+      filter.categoryId;
+  }
+
+  if (filter.brandId !== undefined) {
+    queryParams['brandId'] =
+      filter.brandId;
+  }
+
+  if (filter.minPrice !== undefined) {
+    queryParams['minPrice'] =
+      filter.minPrice;
+  }
+
+  if (filter.maxPrice !== undefined) {
+    queryParams['maxPrice'] =
+      filter.maxPrice;
+  }
+
+  if (filter.inStockOnly) {
+    queryParams['inStockOnly'] = true;
+  }
+
+  if (filter.sortBy) {
+    queryParams['sortBy'] =
+      filter.sortBy;
+
+    queryParams['desc'] =
+      filter.desc ?? false;
+  }
+
+  queryParams['page'] = 1;
+
+  this.router.navigate(
+    [],
+    {
+      relativeTo: this.route,
+      queryParams,
+      replaceUrl: true
+    }
+  );
+}
 
 
   // =========================================================

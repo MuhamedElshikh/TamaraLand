@@ -8,8 +8,8 @@ import {
   signal
 } from '@angular/core';
 import { NgClass } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {Router,RouterLink,UrlTree
+} from '@angular/router';import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BannerService } from '../../../../core/services/banner.service';
 import { BannerResponse, BannerType } from '../../../../core/models/banner.models';
@@ -35,7 +35,7 @@ export class Banners implements OnInit {
 
   private readonly bannerService = inject(BannerService);
   private readonly destroyRef = inject(DestroyRef);
-
+private readonly router = inject(Router);
   readonly banners = signal<BannerResponse[]>([]);
 
   readonly isHomeBanner = computed(() => this.bannerType === BannerType.HomeBanner);
@@ -159,5 +159,42 @@ export class Banners implements OnInit {
 
     return desktopImage?.link ?? mobileImage?.link;
   }
+resolveRouterLink(link?: string): UrlTree | null {
+  if (!link) {
+    return null;
+  }
 
+  const trimmedLink = link.trim();
+
+  if (!trimmedLink) {
+    return null;
+  }
+
+  try {
+    const [path, queryString] = trimmedLink.split('?');
+
+    const queryParams: Record<string, string> = {};
+
+    if (queryString) {
+      const params = new URLSearchParams(queryString);
+
+      params.forEach((value, key) => {
+        queryParams[key] = value;
+      });
+    }
+
+    return this.router.createUrlTree(
+      [path],
+      {
+        queryParams:
+          Object.keys(queryParams).length > 0
+            ? queryParams
+            : undefined
+      }
+    );
+
+  } catch {
+    return null;
+  }
+}
 }
