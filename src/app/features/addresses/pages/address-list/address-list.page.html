@@ -2,11 +2,11 @@
   <header class="addresses-page__hero">
     <div>
       <p class="section-kicker">
-        {{ 'addresses.kicker' | translate }}
+        {{ 'address.kicker' | translate }}
       </p>
 
       <h1 class="section-title">
-        {{ 'addresses.title' | translate }}
+        {{ 'address.title' | translate }}
       </h1>
     </div>
 
@@ -16,7 +16,7 @@
         class="btn btn-primary"
         (click)="openCreateForm()"
       >
-        {{ 'addresses.addAddress' | translate }} +
+        {{ 'address.addAddress' | translate }} +
       </button>
     }
   </header>
@@ -32,7 +32,7 @@
   @if (isLoading()) {
     <div class="addresses-page__grid">
       @for (i of [1, 2]; track i) {
-        <div class="addresses-page__skeleton"></div>
+        <div class="address-page__skeleton"></div>
       }
     </div>
   }
@@ -40,7 +40,7 @@
   @else if (addresses().length === 0 && !isFormOpen()) {
     <div class="addresses-page__empty">
       <p class="section-copy">
-        {{ 'addresses.empty' | translate }}
+        {{ 'address.empty' | translate }}
       </p>
 
       <button
@@ -48,7 +48,7 @@
         class="btn btn-primary"
         (click)="openCreateForm()"
       >
-        {{ 'addresses.addFirstAddress' | translate }}
+        {{ 'address.addFirstAddress' | translate }}
       </button>
     </div>
   }

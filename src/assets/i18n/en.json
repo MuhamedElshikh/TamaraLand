@@ -220,7 +220,7 @@
     "productsCount": "{{count}} products",
     "noProducts": "No products match your current filters."
   },
-  "addresses": {
+  "address": {
     "default": "Default",
     "building": "Bldg",
     "floor": "Fl",
