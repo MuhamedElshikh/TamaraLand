@@ -32,6 +32,11 @@
           [class.position-right]="getPosition(i) === 'right'"
           [class.position-hidden]="getPosition(i) === 'hidden'"
           [style.background-image]="'url(' + r.productImageUrl + ')'"
+          (click)="goToProduct(r.productId)"
+          role="link"
+          tabindex="0"
+          [attr.aria-label]="r.productName"
+          (keyup.enter)="goToProduct(r.productId)"
         >
 
           <div class="testimonial-card__overlay"></div>
@@ -90,7 +95,7 @@
         type="button"
         class="testimonial-nav"
         aria-label="Previous review"
-        (click)="previousReview()"
+        (click)="previousReview(); $event.stopPropagation()"
       >
         <svg viewBox="0 0 24 24">
           <path d="M15 18l-6-6 6-6" />
@@ -103,7 +108,7 @@
             type="button"
             class="testimonial-dot"
             [class.is-active]="i === activeReviewIndex()"
-            (click)="goToReview(i)"
+            (click)="goToReview(i); $event.stopPropagation()"
             [attr.aria-label]="'Review ' + (i + 1)"
           ></button>
         }
@@ -113,7 +118,7 @@
         type="button"
         class="testimonial-nav"
         aria-label="Next review"
-        (click)="nextReview()"
+        (click)="nextReview(); $event.stopPropagation()"
       >
         <svg viewBox="0 0 24 24">
           <path d="M9 18l6-6-6-6" />

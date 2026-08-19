@@ -49,6 +49,7 @@
 
 .testimonial-card {
   position: absolute;
+  cursor: pointer;
 
   left: 50%;
   top: 50%;
@@ -85,7 +86,6 @@
     width,
     height;
 
-  pointer-events: none;
 }
 
 

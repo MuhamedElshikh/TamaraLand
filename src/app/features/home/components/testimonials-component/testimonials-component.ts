@@ -1,5 +1,6 @@
-import { Component, inject, signal, computed, OnInit,OnDestroy } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { ReviewService } from '../../../../core/services/review.service';
 import { FeaturedReviewResponse } from '../../../../core/models/domain.models';
@@ -8,12 +9,13 @@ import { FeaturedReviewResponse } from '../../../../core/models/domain.models';
 @Component({
   selector: 'app-testimonials',
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, RouterLink],
   templateUrl: './testimonials-component.html',
   styleUrl: './testimonials-component.css',
 })
-export class TestimonialsComponent implements OnInit {
+export class TestimonialsComponent implements OnInit, OnDestroy {
   private readonly reviewService = inject(ReviewService);
+  private readonly router = inject(Router);
 
   protected readonly loading = signal(true);
   protected readonly reviews = signal<FeaturedReviewResponse[]>([]);
@@ -44,6 +46,20 @@ export class TestimonialsComponent implements OnInit {
 private autoplayInterval?: ReturnType<typeof setInterval>;
 
 private readonly autoplayDelay = 4500;
+
+
+/* =========================================================
+   Navigation to product
+   ========================================================= */
+
+goToProduct(productId: number | string | undefined): void {
+
+  if (productId === undefined || productId === null) {
+    return;
+  }
+
+  this.router.navigate(['/products', productId]);
+}
 
 
 /* =========================================================
