@@ -92,32 +92,33 @@
       </section>
 
       <!-- ================= Links ================= -->
-      <section class="footer-links">
+     <section class="footer-links">
+  <div class="footer-links__column">
+    <h3>{{ 'footer.shop.title' | translate }}</h3>
+    <div class="footer-links__divider"></div>
+    <a routerLink="/new-in">{{ 'footer.shop.newIn' | translate }}</a>
+    <a routerLink="/categories">{{ 'footer.shop.collections' | translate }}</a>
+    <a routerLink="/brands">{{ 'footer.shop.brands' | translate }}</a>
+    <a routerLink="/sale">{{ 'footer.shop.sale' | translate }}</a>
+  </div>
 
-        <div class="footer-links__column">
-          <h3>{{ 'footer.shop.title' | translate }}</h3>
-          <a routerLink="/new-in">{{ 'footer.shop.newIn' | translate }}</a>
-          <a routerLink="/categories">{{ 'footer.shop.collections' | translate }}</a>
-          <a routerLink="/brands">{{ 'footer.shop.brands' | translate }}</a>
-          <a routerLink="/sale">{{ 'footer.shop.sale' | translate }}</a>
-        </div>
+  <div class="footer-links__column">
+    <h3>{{ 'footer.support.title' | translate }}</h3>
+    <div class="footer-links__divider"></div>
+    <a routerLink="/contact">{{ 'footer.support.contact' | translate }}</a>
+    <a routerLink="/shipping">{{ 'footer.support.shipping' | translate }}</a>
+    <a routerLink="/returns">{{ 'footer.support.returns' | translate }}</a>
+    <a routerLink="/faq">{{ 'footer.support.faq' | translate }}</a>
+  </div>
 
-        <div class="footer-links__column">
-          <h3>{{ 'footer.support.title' | translate }}</h3>
-          <a routerLink="/contact">{{ 'footer.support.contact' | translate }}</a>
-          <a routerLink="/shipping">{{ 'footer.support.shipping' | translate }}</a>
-          <a routerLink="/returns">{{ 'footer.support.returns' | translate }}</a>
-          <a routerLink="/faq">{{ 'footer.support.faq' | translate }}</a>
-        </div>
-
-        <div class="footer-links__column footer-links__column--contact">
-          <h3>{{ 'footer.contact.title' | translate }}</h3>
-          <p>{{ settings()?.supportEmail }}</p>
-          <p>{{ settings()?.supportPhone }}</p>
-          <p>{{ settings()?.address }}</p>
-        </div>
-
-      </section>
+ <div class="footer-links__column footer-links__column--contact">
+  <h3>{{ 'footer.contact.title' | translate }}</h3>
+  <div class="footer-links__divider"></div>
+  <p><span class="contact-icon">✉</span> {{ settings()?.supportEmail }}</p>
+  <p><span class="contact-icon">☎</span> {{ settings()?.supportPhone }}</p>
+  <p><span class="contact-icon">📍</span> {{ settings()?.address }}</p>
+</div>
+</section>
 
     </div>
 
