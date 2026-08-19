@@ -40,6 +40,19 @@ export const CATALOG_ROUTES: Routes = [
   },
 
   {
+    path: 'under-800',
+    loadComponent: () =>
+      import('./pages/product-list/product-list.page').then((m) => m.ProductListPage),
+    data: {
+      title: 'catalogs.under800.title',
+      kicker: 'catalogs.under800.kicker',
+      subtitle: 'catalogs.under800.subtitle',
+      collection: ProductCollection.None,
+      priceCap: 800,
+    },
+  },
+
+  {
     path: 'products/:id',
     loadComponent: () =>
       import('./pages/product-details/product-details.page').then((m) => m.ProductDetailsPage),

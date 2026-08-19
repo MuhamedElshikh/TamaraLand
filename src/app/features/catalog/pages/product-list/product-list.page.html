@@ -10,7 +10,9 @@
   <div class="catalog-page__layout">
     <!-- Desktop sidebar -->
     <aside class="catalog-page__filters">
-      <app-product-filters (filtersChanged)="onFiltersChanged($event)" />
+      <app-product-filters
+        [maxAllowedPrice]="priceCap()"
+        (filtersChanged)="onFiltersChanged($event)" />
     </aside>
 
     <div class="catalog-page__content">
@@ -516,7 +518,9 @@
   </div>
 
   <div class="filters-drawer__body">
-    <app-product-filters (filtersChanged)="onFiltersChanged($event)" />
+    <app-product-filters
+      [maxAllowedPrice]="priceCap()"
+      (filtersChanged)="onFiltersChanged($event)" />
   </div>
 
   <div class="filters-drawer__footer">

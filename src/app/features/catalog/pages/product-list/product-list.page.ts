@@ -105,8 +105,8 @@ export class ProductListPage implements OnInit {
 
   readonly totalPages = signal(1);
 
-readonly didYouMean = signal<string[]>([]);
-readonly currentSearch = signal('');
+  readonly didYouMean = signal<string[]>([]);
+  readonly currentSearch = signal('');
 
 
   // =========================================================
@@ -129,6 +129,13 @@ readonly currentSearch = signal('');
   private readonly collection = signal<ProductCollection>(
     ProductCollection.None
   );
+
+
+  // =========================================================
+  // PRICE CAP (for capped collections like "Under 800")
+  // =========================================================
+
+  readonly priceCap = signal<number | null>(null);
 
 
   // =========================================================
@@ -283,6 +290,13 @@ readonly currentSearch = signal('');
 
 
     // -------------------------------------------------------
+    // Price Cap (e.g. "Under 800" collection page)
+    // -------------------------------------------------------
+
+    this.priceCap.set(data['priceCap'] ?? null);
+
+
+    // -------------------------------------------------------
     // Translations
     // -------------------------------------------------------
 
@@ -312,6 +326,20 @@ readonly currentSearch = signal('');
     // -------------------------------------------------------
 this.route.queryParams.subscribe(params => {
 
+  const cap = this.priceCap();
+
+  const requestedMax = params['maxPrice']
+    ? +params['maxPrice']
+    : undefined;
+
+  // لو الصفحة "capped" (زي Under 800):
+  // - لو المستخدم مبعتش maxPrice -> استخدم الـ cap نفسه
+  // - لو بعت maxPrice أكبر من الـ cap -> نزّله للـ cap
+  // - لو بعت maxPrice أصغر من الـ cap -> سيبه زي ما هو
+  const clampedMax = cap
+    ? Math.min(requestedMax ?? cap, cap)
+    : requestedMax;
+
   const filter: ProductFilterRequest = {
     search: params['search'] ?? undefined,
 
@@ -327,9 +355,7 @@ this.route.queryParams.subscribe(params => {
       ? +params['minPrice']
       : undefined,
 
-    maxPrice: params['maxPrice']
-      ? +params['maxPrice']
-      : undefined,
+    maxPrice: clampedMax,
 
     sortBy: params['sortBy'] ?? undefined,
 
@@ -373,6 +399,8 @@ onFiltersChanged(
   filter: ProductFilterRequest
 ): void {
 
+  const cap = this.priceCap();
+
   const queryParams: Record<string, string | number | boolean> = {};
 
   if (filter.search?.trim()) {
@@ -396,8 +424,13 @@ onFiltersChanged(
   }
 
   if (filter.maxPrice !== undefined) {
-    queryParams['maxPrice'] =
-      filter.maxPrice;
+    // امنع أي قيمة تتخطى الـ cap لو الصفحة محدودة بسعر معين
+    queryParams['maxPrice'] = cap
+      ? Math.min(filter.maxPrice, cap)
+      : filter.maxPrice;
+  } else if (cap) {
+    // المستخدم مبعتش سعر، بس الصفحة نفسها محدودة بـ cap
+    queryParams['maxPrice'] = cap;
   }
 
   if (filter.inStockOnly) {

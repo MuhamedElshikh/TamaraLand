@@ -9,6 +9,11 @@
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
 }
+.filter-panel__hint {
+  font-size: .78rem;
+  color: var(--text-muted, #999);
+  margin: 0 0 .5rem;
+}
 
 /* ---- Search ---- */
 

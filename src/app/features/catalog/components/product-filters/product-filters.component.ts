@@ -49,6 +49,12 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
   @Input() hideCategoryFilter = false;
   @Input() hideBrandFilter = false;
 
+  /**
+   * لو الصفحة اللي فيها الفلتر محدودة بسقف سعر (زي صفحة "أقل من 800")
+   * هيتقفل عليها أي سعر أعلى منه، والـ input بتاع الحد الأقصى هيتقيد بيه.
+   */
+  @Input() maxAllowedPrice: number | null = null;
+
   // =========================================================
   // DATA
   // =========================================================
@@ -133,6 +139,14 @@ readonly sortDescending = signal(false);
       brand =>
         brand.id === this.selectedBrandId()
     )
+  );
+
+  /**
+   * الحد الأقصى اللي المفروض يظهر في الـ input بتاع السعر (attr max).
+   * بنعرضه في التمبلت عشان اليوزر ميقدرش يكتب رقم أكبر من الـ cap أصلاً.
+   */
+  readonly priceInputMax = computed(() =>
+    this.maxAllowedPrice ?? undefined
   );
 
   // =========================================================
@@ -353,20 +367,38 @@ readonly sortDescending = signal(false);
 
   setMinPrice(value: string): void {
 
-    this.minPrice.set(
-      value
-        ? Number(value)
-        : undefined
-    );
+    let parsed = value
+      ? Number(value)
+      : undefined;
+
+    // امنع الحد الأدنى إنه يتخطى الـ cap لو موجود
+    if (
+      parsed !== undefined &&
+      this.maxAllowedPrice !== null &&
+      parsed > this.maxAllowedPrice
+    ) {
+      parsed = this.maxAllowedPrice;
+    }
+
+    this.minPrice.set(parsed);
   }
 
   setMaxPrice(value: string): void {
 
-    this.maxPrice.set(
-      value
-        ? Number(value)
-        : undefined
-    );
+    let parsed = value
+      ? Number(value)
+      : undefined;
+
+    // امنع الحد الأقصى إنه يتخطى الـ cap لو موجود
+    if (
+      parsed !== undefined &&
+      this.maxAllowedPrice !== null &&
+      parsed > this.maxAllowedPrice
+    ) {
+      parsed = this.maxAllowedPrice;
+    }
+
+    this.maxPrice.set(parsed);
   }
 
   // =========================================================
@@ -400,6 +432,16 @@ readonly sortDescending = signal(false);
   // =========================================================
 
 applyFilters(): void {
+
+  // آخر خط دفاع: أي قيمة maxPrice طالعة أعلى من الـ cap تتقفل عليه هنا
+  const effectiveMaxPrice =
+    this.maxAllowedPrice !== null
+      ? Math.min(
+          this.maxPrice() ?? this.maxAllowedPrice,
+          this.maxAllowedPrice
+        )
+      : this.maxPrice();
+
   this.filtersChanged.emit({
     search:
       this.search().trim() || undefined,
@@ -414,7 +456,7 @@ applyFilters(): void {
       this.minPrice(),
 
     maxPrice:
-      this.maxPrice(),
+      effectiveMaxPrice,
 
     inStockOnly:
       this.inStockOnly()

@@ -102,10 +102,19 @@
 
       @if (openPanel() === 'price') {
         <div class="filter-panel filter-panel--price">
+
+          @if (maxAllowedPrice !== null) {
+            <p class="filter-panel__hint">
+              {{ 'filters.maxAllowedPriceHint' | translate: { max: maxAllowedPrice } }}
+            </p>
+          }
+
           <div class="price-range">
             <input
               class="form-control"
               type="number"
+              min="0"
+              [attr.max]="priceInputMax()"
               [placeholder]="'filters.min' | translate"
               [value]="minPrice()"
               (input)="setMinPrice($any($event.target).value)"
@@ -115,6 +124,8 @@
             <input
               class="form-control"
               type="number"
+              min="0"
+              [attr.max]="priceInputMax()"
               [placeholder]="'filters.max' | translate"
               [value]="maxPrice()"
               (input)="setMaxPrice($any($event.target).value)"
