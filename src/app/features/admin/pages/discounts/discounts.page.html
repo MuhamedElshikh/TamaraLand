@@ -1,99 +1,227 @@
 <section class="admin-discounts-page">
-  <header class="admin-page__hero">
-    <div class="admin-page__hero-content">
-      <p class="section-kicker">
-        {{ 'admin.labels.marketing' | translate }}
-      </p>
 
-      <h1 class="section-title">
-        {{ 'admin.discounts.title' | translate }}
-      </h1>
+  <!-- =========================================================
+       PAGE HEADER
+       ========================================================= -->
+  <header class="admin-page__hero">
+
+    <div class="admin-page__hero-content">
+
+      <div class="admin-page__title-wrap">
+
+        <div class="admin-page__title-icon" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7" />
+            <path d="M16 2v6h6" />
+            <path d="M16 2l6 6" />
+            <path d="M8 13h8" />
+            <path d="M8 17h5" />
+          </svg>
+        </div>
+
+        <div>
+          <p class="section-kicker">
+            {{ 'admin.labels.marketing' | translate }}
+          </p>
+
+          <h1 class="section-title">
+            {{ 'admin.discounts.title' | translate }}
+          </h1>
+        </div>
+
+      </div>
+
+      @if (!isFormOpen()) {
+
+        <button
+          type="button"
+          class="btn btn-primary admin-page__create-btn"
+          (click)="openCreateForm()"
+        >
+
+          <span
+            class="admin-page__create-icon"
+            aria-hidden="true"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <path d="M12 5v14" />
+              <path d="M5 12h14" />
+            </svg>
+          </span>
+
+          <span>
+            {{ 'admin.discounts.new' | translate }}
+          </span>
+
+        </button>
+
+      }
+
     </div>
 
-    @if (!isFormOpen()) {
-      <button
-        type="button"
-        class="btn btn-primary admin-page__create-btn"
-        (click)="openCreateForm()"
-      >
-        <span class="admin-page__create-icon">+</span>
-        <span>
-          {{ 'admin.discounts.new' | translate }}
-        </span>
-      </button>
-    }
   </header>
 
+
+  <!-- =========================================================
+       ERROR
+       ========================================================= -->
   @if (listError()) {
+
     <div
       class="admin-page__alert admin-page__alert--error"
       role="alert"
     >
-      <span class="admin-page__alert-icon">!</span>
-      <span>{{ listError() }}</span>
+
+      <span
+        class="admin-page__alert-icon"
+        aria-hidden="true"
+      >
+        !
+      </span>
+
+      <span>
+        {{ listError() }}
+      </span>
+
     </div>
+
   }
 
+
+  <!-- =========================================================
+       CREATE / EDIT FORM
+       ========================================================= -->
   @if (isFormOpen()) {
+
     <form
       class="discount-form"
       [formGroup]="form"
       (ngSubmit)="submit()"
     >
+
+      <!-- FORM HEADER -->
       <div class="discount-form__header">
-        <div>
+
+        <div class="discount-form__header-content">
+
           <span class="discount-form__eyebrow">
-            {{ editingDiscount()
-              ? ('admin.labels.edit' | translate)
-              : ('admin.discounts.new' | translate)
+            {{
+              editingDiscount()
+                ? ('admin.labels.edit' | translate)
+                : ('admin.discounts.new' | translate)
             }}
           </span>
 
           <h2 class="discount-form__title">
-            {{ editingDiscount()
-              ? ('admin.discounts.editTitle' | translate)
-              : ('admin.discounts.newTitle' | translate)
+            {{
+              editingDiscount()
+                ? ('admin.discounts.editTitle' | translate)
+                : ('admin.discounts.newTitle' | translate)
             }}
           </h2>
+
+          <p class="discount-form__subtitle">
+            {{
+              editingDiscount()
+                ? ('admin.discounts.form.updateSubtitle' | translate)
+                : ('admin.discounts.form.createSubtitle' | translate)
+            }}
+          </p>
+
         </div>
 
         <button
           type="button"
           class="discount-form__close"
           (click)="closeForm()"
-          aria-label="Close"
+          [attr.aria-label]="'admin.labels.close' | translate"
+          [title]="'admin.labels.close' | translate"
         >
-          ×
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+          >
+            <path d="M6 6l12 12" />
+            <path d="M18 6L6 18" />
+          </svg>
         </button>
+
       </div>
 
       <div class="discount-form__divider"></div>
 
+
+      <!-- FORM ERROR -->
       @if (formError()) {
+
         <div
           class="admin-page__alert admin-page__alert--error"
           role="alert"
         >
-          <span class="admin-page__alert-icon">!</span>
-          <span>{{ formError() }}</span>
+
+          <span
+            class="admin-page__alert-icon"
+            aria-hidden="true"
+          >
+            !
+          </span>
+
+          <span>
+            {{ formError() }}
+          </span>
+
         </div>
+
       }
 
+
+      <!-- =======================================================
+           SECTION 01 — DISCOUNT DETAILS
+           ======================================================= -->
       <div class="discount-form__section">
+
         <div class="discount-form__section-heading">
+
           <span class="discount-form__section-number">
             01
           </span>
 
           <div>
+
             <h3>
               {{ 'admin.discounts.newTitle' | translate }}
             </h3>
+
+            <p>
+              {{ 'admin.discounts.form.detailsDescription' | translate }}
+            </p>
+
           </div>
+
         </div>
 
+
         <div class="discount-form__fields">
+
+          <!-- NAME -->
           <label class="field field--full">
+
             <span>
               {{ 'admin.labels.name' | translate }}
             </span>
@@ -101,29 +229,38 @@
             <input
               type="text"
               formControlName="name"
-              placeholder="Summer sale"
+              [placeholder]="'admin.discounts.form.namePlaceholder' | translate"
               autocomplete="off"
             />
 
             @if (controlHasError('name', 'required')) {
+
               <small>
                 {{ 'admin.discounts.validation.nameRequired' | translate }}
               </small>
+
             }
 
             @if (controlHasError('name', 'minlength')) {
+
               <small>
-                {{ 'admin.discounts.validation.nameRequired' | translate }}
+                {{ 'admin.discounts.validation.nameMinLength' | translate }}
               </small>
+
             }
+
           </label>
 
+
+          <!-- TYPE -->
           <label class="field">
+
             <span>
               {{ 'admin.discounts.type' | translate }}
             </span>
 
             <select formControlName="discountType">
+
               <option [ngValue]="0">
                 {{ 'admin.labels.percentage' | translate }}
               </option>
@@ -131,15 +268,21 @@
               <option [ngValue]="1">
                 {{ 'admin.labels.fixedAmount' | translate }}
               </option>
+
             </select>
+
           </label>
 
+
+          <!-- VALUE -->
           <label class="field">
+
             <span>
               {{ 'admin.labels.value' | translate }}
             </span>
 
             <div class="field__input-wrap">
+
               <input
                 type="number"
                 formControlName="discountValue"
@@ -154,27 +297,37 @@
                     : 'EGP'
                 }}
               </span>
+
             </div>
 
             @if (controlHasError('discountValue', 'required')) {
+
               <small>
                 {{ 'admin.discounts.validation.valueRequired' | translate }}
               </small>
+
             }
 
             @if (controlHasError('discountValue', 'min')) {
+
               <small>
-                {{ 'admin.discounts.validation.valueRequired' | translate }}
+                {{ 'admin.discounts.validation.valueMin' | translate }}
               </small>
+
             }
+
           </label>
 
+
+          <!-- MAXIMUM -->
           <label class="field">
+
             <span>
               {{ 'admin.discounts.maximum' | translate }}
             </span>
 
             <div class="field__input-wrap">
+
               <input
                 type="number"
                 formControlName="maximumDiscount"
@@ -185,10 +338,15 @@
               <span class="field__suffix">
                 EGP
               </span>
+
             </div>
+
           </label>
 
+
+          <!-- PRIORITY -->
           <label class="field">
+
             <span>
               {{ 'admin.discounts.priority' | translate }}
             </span>
@@ -198,25 +356,45 @@
               formControlName="priority"
               min="0"
             />
+
           </label>
+
         </div>
+
       </div>
 
+
+      <!-- =======================================================
+           SECTION 02 — TARGET
+           ======================================================= -->
       <div class="discount-form__section">
+
         <div class="discount-form__section-heading">
+
           <span class="discount-form__section-number">
             02
           </span>
 
           <div>
+
             <h3>
               {{ 'admin.discounts.appliesTo' | translate }}
             </h3>
+
+            <p>
+              {{ 'admin.discounts.form.targetDescription' | translate }}
+            </p>
+
           </div>
+
         </div>
 
+
         <div class="discount-form__fields">
+
+          <!-- TARGET TYPE -->
           <label class="field field--full">
+
             <span>
               {{ 'admin.discounts.appliesTo' | translate }}
             </span>
@@ -225,6 +403,7 @@
               formControlName="target"
               (change)="onTargetChange()"
             >
+
               <option [ngValue]="0">
                 {{ 'admin.labels.product' | translate }}
               </option>
@@ -236,128 +415,240 @@
               <option [ngValue]="2">
                 {{ 'admin.labels.brand' | translate }}
               </option>
+
             </select>
+
           </label>
 
-          <div class="field field--full">
-            <div class="target-picker__heading">
-              <span>
-                {{ 'admin.discounts.select' | translate }}
-                {{
-                  targetLabels[
-                    form.controls.target.value
-                  ]
-                }}
-              </span>
 
-              <span class="target-picker__count">
-                {{ selectedTargetIds().length }}
-              </span>
-            </div>
+          <!-- TARGET PICKER -->
+          <div class="field field--full">
+
+            <span class="field__label">
+              {{ 'admin.discounts.selectTarget' | translate }}
+            </span>
 
             <div
               class="target-picker"
               [class.target-picker--error]="
                 controlHasError('targetIds', 'required')
               "
+              [class.target-picker--open]="isPickerOpen()"
             >
-              <div class="target-picker__selected">
-                @if (selectedTargetOptions().length > 0) {
-                  @for (
-                    option of selectedTargetOptions();
-                    track option.id
-                  ) {
-                    <button
-                      type="button"
-                      class="target-chip"
-                      (click)="removeTarget(option.id)"
-                    >
-                      <span>
-                        {{ option.name }}
-                      </span>
 
-                      <span
-                        class="target-chip__remove"
-                        aria-hidden="true"
+              <div
+                class="target-picker__trigger"
+                tabindex="0"
+                role="button"
+                [attr.aria-expanded]="isPickerOpen()"
+                (click)="togglePicker()"
+                (keydown.enter)="togglePicker()"
+              >
+
+                <div class="target-picker__trigger-content">
+
+                  @if (selectedTargetOptions().length > 0) {
+
+                    @for (
+                      option of selectedTargetOptions();
+                      track option.id
+                    ) {
+
+                      <button
+                        type="button"
+                        class="target-chip"
+                        (click)="removeTarget(option.id); $event.stopPropagation()"
                       >
-                        ×
-                      </span>
-                    </button>
+
+                        <span>
+                          {{ option.name }}
+                        </span>
+
+                        <span
+                          class="target-chip__remove"
+                          aria-hidden="true"
+                        >
+                          ×
+                        </span>
+
+                      </button>
+
+                    }
+
+                  } @else {
+
+                    <span class="target-picker__placeholder">
+                      {{ 'admin.discounts.selectOne' | translate }}
+                    </span>
+
                   }
-                } @else {
-                  <span class="target-picker__placeholder">
-                    {{ 'admin.discounts.selectOne' | translate }}
+
+                </div>
+
+
+                <div class="target-picker__trigger-meta">
+
+                  <span class="target-picker__count">
+                    {{ selectedTargetIds().length }}
                   </span>
-                }
+
+                  <span
+                    class="target-picker__chevron"
+                    [class.target-picker__chevron--open]="isPickerOpen()"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </span>
+
+                </div>
+
               </div>
 
-              @if (targetOptions().length > 0) {
-                <div class="target-picker__options">
-                  @for (
-                    option of targetOptions();
-                    track option.id
-                  ) {
-                    <label
-                      class="target-option"
-                      [class.target-option--selected]="
-                        isTargetSelected(option.id)
-                      "
-                    >
-                      <input
-                        type="checkbox"
-                        [checked]="
-                          isTargetSelected(option.id)
-                        "
-                        (change)="
-                          toggleTarget(option.id)
-                        "
-                      />
 
-                      <span class="target-option__box">
-                        <span class="target-option__check">
-                          ✓
-                        </span>
-                      </span>
+              @if (isPickerOpen()) {
 
-                      <span class="target-option__name">
-                        {{ option.name }}
-                      </span>
+                <div class="target-picker__panel">
 
-                      <span
-                        class="target-option__id"
+                  <div class="target-picker__panel-header">
+
+                    <span>
+                      {{ 'admin.discounts.select' | translate }}
+                      {{ targetLabels[form.controls.target.value] }}
+                    </span>
+
+                    @if (targetOptions().length > 0) {
+
+                      <button
+                        type="button"
+                        class="target-picker__select-all"
+                        (click)="toggleSelectAllTargets()"
                       >
-                        #{{ option.id }}
-                      </span>
-                    </label>
+                        {{
+                          allTargetsSelected()
+                            ? ('admin.labels.deselectAll' | translate)
+                            : ('admin.labels.selectAll' | translate)
+                        }}
+                      </button>
+
+                    }
+
+                  </div>
+
+
+                  @if (targetOptions().length > 0) {
+
+                    <div class="target-picker__options">
+
+                      @for (
+                        option of targetOptions();
+                        track option.id
+                      ) {
+
+                        <label
+                          class="target-option"
+                          [class.target-option--selected]="
+                            isTargetSelected(option.id)
+                          "
+                        >
+
+                          <input
+                            type="checkbox"
+                            [checked]="isTargetSelected(option.id)"
+                            (change)="toggleTarget(option.id)"
+                          />
+
+                          <span class="target-option__box">
+
+                            <span class="target-option__check">
+                              ✓
+                            </span>
+
+                          </span>
+
+                          <span class="target-option__name">
+                            {{ option.name }}
+                          </span>
+
+                          <span class="target-option__id">
+                            #{{ option.id }}
+                          </span>
+
+                        </label>
+
+                      }
+
+                    </div>
+
+                  } @else {
+
+                    <p class="target-picker__empty">
+                      {{ 'admin.discounts.noOptions' | translate }}
+                    </p>
+
                   }
+
                 </div>
+
               }
+
             </div>
 
+
             @if (controlHasError('targetIds', 'required')) {
+
               <small>
                 {{ 'admin.discounts.selectOne' | translate }}
               </small>
+
             }
+
           </div>
+
         </div>
+
       </div>
 
+
+      <!-- =======================================================
+           SECTION 03 — DATES
+           ======================================================= -->
       <div class="discount-form__section">
+
         <div class="discount-form__section-heading">
+
           <span class="discount-form__section-number">
             03
           </span>
 
           <div>
+
             <h3>
               {{ 'admin.discounts.startDate' | translate }}
             </h3>
+
+            <p>
+              {{ 'admin.discounts.form.datesDescription' | translate }}
+            </p>
+
           </div>
+
         </div>
 
+
         <div class="discount-form__fields">
+
+          <!-- START -->
           <label class="field">
+
             <span>
               {{ 'admin.discounts.startDate' | translate }}
             </span>
@@ -368,13 +659,19 @@
             />
 
             @if (controlHasError('startDate', 'required')) {
+
               <small>
                 {{ 'admin.discounts.validation.startDateRequired' | translate }}
               </small>
+
             }
+
           </label>
 
+
+          <!-- END -->
           <label class="field">
+
             <span>
               {{ 'admin.discounts.endDate' | translate }}
             </span>
@@ -385,25 +682,38 @@
             />
 
             @if (controlHasError('endDate', 'required')) {
+
               <small>
                 {{ 'admin.discounts.validation.endDateRequired' | translate }}
               </small>
+
             }
 
             @if (
               form.hasError('dateRange') &&
               form.get('endDate')?.touched
             ) {
+
               <small>
                 {{ 'admin.discounts.validation.dateRange' | translate }}
               </small>
+
             }
+
           </label>
+
         </div>
+
       </div>
 
+
+      <!-- =======================================================
+           STATUS
+           ======================================================= -->
       <div class="discount-form__status">
+
         <label class="status-toggle">
+
           <input
             type="checkbox"
             formControlName="isActive"
@@ -414,26 +724,63 @@
           </span>
 
           <span class="status-toggle__content">
+
             <strong>
               {{ 'admin.discounts.isActive' | translate }}
             </strong>
+
+            <small>
+              {{ 'admin.discounts.form.activeDescription' | translate }}
+            </small>
+
           </span>
+
         </label>
+
       </div>
 
+
+      <!-- =======================================================
+           ACTIONS
+           ======================================================= -->
       <div class="discount-form__actions">
+
         <button
           class="btn btn-primary"
           type="submit"
           [disabled]="isSubmitting()"
         >
+
           @if (isSubmitting()) {
+
             <span class="btn__spinner"></span>
 
             <span>
               {{ 'admin.labels.saving' | translate }}
             </span>
+
           } @else {
+
+            <span
+              class="discount-form__submit-icon"
+              aria-hidden="true"
+            >
+
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z" />
+                <path d="M17 21v-8H7v8" />
+                <path d="M7 3v5h8" />
+              </svg>
+
+            </span>
+
             <span>
               {{
                 editingDiscount()
@@ -441,8 +788,11 @@
                   : ('admin.discounts.create' | translate)
               }}
             </span>
+
           }
+
         </button>
+
 
         <button
           class="btn btn-outline"
@@ -452,13 +802,23 @@
         >
           {{ 'admin.labels.cancel' | translate }}
         </button>
+
       </div>
+
     </form>
+
   }
 
+
+  <!-- =========================================================
+       DISCOUNT LIST
+       ========================================================= -->
   <section class="discount-list">
+
     <div class="discount-list__header">
-      <div>
+
+      <div class="discount-list__header-content">
+
         <span class="discount-list__eyebrow">
           {{ 'admin.labels.marketing' | translate }}
         </span>
@@ -466,45 +826,115 @@
         <h2>
           {{ 'admin.discounts.title' | translate }}
         </h2>
+
+        <p>
+          {{ 'admin.discounts.form.campaignsDescription' | translate }}
+        </p>
+
       </div>
 
-      <span class="discount-list__count">
-        {{ discounts().length }}
-      </span>
+
+      <div class="discount-list__count-wrap">
+
+        <span class="discount-list__count">
+          {{ discounts().length }}
+        </span>
+
+        <span>
+          {{ 'admin.discounts.form.campaigns' | translate }}
+        </span>
+
+      </div>
+
     </div>
 
+
     <div class="discount-list__table">
+
       <app-data-table
         [columns]="columns"
         [rows]="rows()"
         [isLoading]="isLoading()"
         [emptyMessage]="'admin.discounts.empty' | translate"
       >
+
         <ng-template #actions let-row>
+
           <div class="admin-page__row-actions">
+
+            <!-- EDIT -->
             <button
               type="button"
               class="row-action row-action--edit"
               (click)="openEditForm(row)"
+              [attr.aria-label]="
+                ('admin.labels.edit' | translate) + ' ' + row.name
+              "
+              [title]="'admin.labels.edit' | translate"
             >
-              {{ 'admin.labels.edit' | translate }}
+
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z" />
+              </svg>
+
             </button>
 
+
+            <!-- DELETE -->
             <button
               type="button"
               class="row-action row-action--delete"
               (click)="deleteDiscount(row)"
               [disabled]="isDeleting() === row.id"
+              [attr.aria-label]="
+                ('admin.labels.delete' | translate) + ' ' + row.name
+              "
+              [title]="'admin.labels.delete' | translate"
             >
-              {{
-                isDeleting() === row.id
-                  ? ('admin.labels.deleting' | translate)
-                  : ('admin.labels.delete' | translate)
-              }}
+
+              @if (isDeleting() === row.id) {
+
+                <span class="row-action__spinner"></span>
+
+              } @else {
+
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M3 6h18" />
+                  <path d="M8 6V4h8v2" />
+                  <path d="M19 6l-1 14H6L5 6" />
+                  <path d="M10 11v5" />
+                  <path d="M14 11v5" />
+                </svg>
+
+              }
+
             </button>
+
           </div>
+
         </ng-template>
+
       </app-data-table>
+
     </div>
+
   </section>
+
 </section>

@@ -1,5 +1,15 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
+
 import { toSignal } from '@angular/core/rxjs-interop';
+
 import {
   AbstractControl,
   FormBuilder,
@@ -21,6 +31,7 @@ import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 
 import { TranslatePipe } from '@ngx-translate/core';
 
+
 const DISCOUNT_TYPE_LABELS: Record<number, string> = {
   0: 'Percentage',
   1: 'Fixed amount',
@@ -32,13 +43,16 @@ const TARGET_LABELS: Record<number, string> = {
   2: 'Brand',
 };
 
+
 interface DiscountRow extends DiscountResponse {
   targetName: string;
 }
 
+
 function dateRangeValidator(
   group: AbstractControl,
 ): ValidationErrors | null {
+
   const start = group.get('startDate')?.value;
   const end = group.get('endDate')?.value;
 
@@ -51,37 +65,78 @@ function dateRangeValidator(
     : { dateRange: true };
 }
 
+
 @Component({
   selector: 'app-admin-discounts-page',
   standalone: true,
+
   imports: [
     ReactiveFormsModule,
     DataTableComponent,
     TranslatePipe,
   ],
+
   templateUrl: './discounts.page.html',
   styleUrl: './discounts.page.css',
 })
 export class DiscountsPage implements OnInit {
+
   private readonly fb = inject(FormBuilder);
-  private readonly discountService = inject(AdminDiscountService);
-  private readonly catalogService = inject(CatalogService);
 
-  readonly discounts = signal<DiscountResponse[]>([]);
+  private readonly discountService =
+    inject(AdminDiscountService);
 
-  readonly isLoading = signal(true);
-  readonly listError = signal<string | null>(null);
-  readonly isDeleting = signal<number | null>(null);
+  private readonly catalogService =
+    inject(CatalogService);
 
-  readonly isFormOpen = signal(false);
+  private readonly elementRef =
+    inject(ElementRef);
+
+
+  // =========================================================
+  // STATE
+  // =========================================================
+
+  readonly discounts =
+    signal<DiscountResponse[]>([]);
+
+  readonly isLoading =
+    signal(true);
+
+  readonly listError =
+    signal<string | null>(null);
+
+  readonly isDeleting =
+    signal<number | null>(null);
+
+
+  readonly isFormOpen =
+    signal(false);
+
   readonly editingDiscount =
     signal<DiscountResponse | null>(null);
 
-  readonly isSubmitting = signal(false);
-  readonly formError = signal<string | null>(null);
+  readonly isSubmitting =
+    signal(false);
 
-  readonly discountTypeLabels = DISCOUNT_TYPE_LABELS;
-  readonly targetLabels = TARGET_LABELS;
+  readonly formError =
+    signal<string | null>(null);
+
+
+  readonly isPickerOpen =
+    signal(false);
+
+
+  readonly discountTypeLabels =
+    DISCOUNT_TYPE_LABELS;
+
+  readonly targetLabels =
+    TARGET_LABELS;
+
+
+  // =========================================================
+  // CATALOG DATA
+  // =========================================================
 
   readonly products =
     signal<{ id: number; name: string }[]>([]);
@@ -92,226 +147,418 @@ export class DiscountsPage implements OnInit {
   readonly brands =
     signal<{ id: number; name: string }[]>([]);
 
-  readonly form = this.fb.nonNullable.group(
-    {
-      name: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(2),
+
+  // =========================================================
+  // FORM
+  // =========================================================
+
+  readonly form =
+    this.fb.nonNullable.group(
+      {
+        name: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(2),
+          ],
         ],
-      ],
 
-      discountType: [
-        0,
-        Validators.required,
-      ],
-
-      discountValue: [
-        0,
-        [
+        discountType: [
+          0,
           Validators.required,
-          Validators.min(0.01),
         ],
-      ],
 
-     maximumDiscount: this.fb.control<number | null>(
-  null,
-  Validators.min(0),
-),
+        discountValue: [
+          0,
+          [
+            Validators.required,
+            Validators.min(0.01),
+          ],
+        ],
 
-      target: [
-        0,
-        Validators.required,
-      ],
+        maximumDiscount:
+          this.fb.control<number | null>(
+            null,
+            Validators.min(0),
+          ),
 
-      targetIds:
-        this.fb.nonNullable.control<number[]>(
-          [],
+        target: [
+          0,
           Validators.required,
-        ),
+        ],
 
-      priority: [
-        0,
-        Validators.min(0),
-      ],
+        targetIds:
+          this.fb.nonNullable.control<number[]>(
+            [],
+            Validators.required,
+          ),
 
-      isActive: [
-        true,
-      ],
+        priority: [
+          0,
+          Validators.min(0),
+        ],
 
-      startDate: [
-        '',
-        Validators.required,
-      ],
+        isActive: [
+          true,
+        ],
 
-      endDate: [
-        '',
-        Validators.required,
-      ],
-    },
-    {
-      validators: dateRangeValidator,
-    },
-  );
+        startDate: [
+          '',
+          Validators.required,
+        ],
 
-  private readonly selectedTarget = toSignal(
-    this.form.controls.target.valueChanges,
-    {
-      initialValue:
-        this.form.controls.target.value,
-    },
-  );
-
-  readonly targetOptions = computed<
-    { id: number; name: string }[]
-  >(() => {
-    switch (this.selectedTarget()) {
-      case 1:
-        return this.categories();
-
-      case 2:
-        return this.brands();
-
-      default:
-        return this.products();
-    }
-  });
-
-  readonly selectedTargetIds = computed<number[]>(
-    () => this.form.controls.targetIds.value,
-  );
-
-  readonly selectedTargetOptions = computed<
-    { id: number; name: string }[]
-  >(() => {
-    const selectedIds =
-      new Set(this.selectedTargetIds());
-
-    return this.targetOptions().filter(
-      (option) => selectedIds.has(option.id),
+        endDate: [
+          '',
+          Validators.required,
+        ],
+      },
+      {
+        validators: dateRangeValidator,
+      },
     );
-  });
 
-  readonly rows = computed<DiscountRow[]>(() => {
-    return this.discounts().map((discount) => ({
-      ...discount,
-      targetName:
-        this.resolveTargetName(discount),
-    }));
-  });
 
-  readonly columns: DataTableColumn<DiscountRow>[] = [
-    {
-      key: 'name',
-      header: 'Name',
-    },
+  // =========================================================
+  // FORM SIGNALS
+  // =========================================================
 
-    {
-      key: 'discountType',
-      header: 'Type',
-      accessor: (row) =>
-        this.discountTypeLabels[
-          row.discountType
-        ] ?? '—',
-    },
+  private readonly selectedTarget =
+    toSignal(
+      this.form.controls.target.valueChanges,
+      {
+        initialValue:
+          this.form.controls.target.value,
+      },
+    );
 
-    {
-      key: 'discountValue',
-      header: 'Value',
-      align: 'right',
-      accessor: (row) =>
-        row.discountType === 0
-          ? `${row.discountValue}%`
-          : `${row.discountValue} EGP`,
-    },
 
-    {
-      key: 'target',
-      header: 'Applies to',
-      accessor: (row) =>
-        `${this.targetLabels[row.target]}: ${row.targetName}`,
-    },
+  private readonly targetIdsValue =
+    toSignal(
+      this.form.controls.targetIds.valueChanges,
+      {
+        initialValue:
+          this.form.controls.targetIds.value,
+      },
+    );
 
-    {
-      key: 'priority',
-      header: 'Priority',
-      align: 'right',
-    },
 
-    {
-      key: 'endDate',
-      header: 'Ends',
-      type: 'date',
-    },
+  readonly targetOptions =
+    computed<
+      { id: number; name: string }[]
+    >(() => {
 
-    {
-      key: 'isActive',
-      header: 'Status',
-      type: 'badge',
-      accessor: (row) =>
-        row.isActive
-          ? 'Active'
-          : 'Inactive',
-    },
-  ];
+      switch (this.selectedTarget()) {
+
+        case 1:
+          return this.categories();
+
+        case 2:
+          return this.brands();
+
+        default:
+          return this.products();
+      }
+
+    });
+
+
+  readonly selectedTargetIds =
+    computed<number[]>(
+      () => this.targetIdsValue(),
+    );
+
+
+  readonly selectedTargetOptions =
+    computed<
+      { id: number; name: string }[]
+    >(() => {
+
+      const selectedIds =
+        new Set(this.selectedTargetIds());
+
+      return this.targetOptions()
+        .filter(option =>
+          selectedIds.has(option.id),
+        );
+
+    });
+
+
+  readonly allTargetsSelected =
+    computed<boolean>(() => {
+
+      const options =
+        this.targetOptions();
+
+      if (options.length === 0) {
+        return false;
+      }
+
+      const selectedIds =
+        new Set(this.selectedTargetIds());
+
+      return options.every(option =>
+        selectedIds.has(option.id),
+      );
+
+    });
+
+
+  // =========================================================
+  // TABLE
+  // =========================================================
+
+  readonly rows =
+    computed<DiscountRow[]>(() => {
+
+      return this.discounts().map(
+        discount => ({
+          ...discount,
+
+          targetName:
+            this.resolveTargetName(
+              discount,
+            ),
+        }),
+      );
+
+    });
+
+
+  readonly columns:
+    DataTableColumn<DiscountRow>[] = [
+
+      {
+        key: 'name',
+        header: 'Name',
+      },
+
+      {
+        key: 'discountType',
+        header: 'Type',
+
+        accessor: row =>
+          this.discountTypeLabels[
+            row.discountType
+          ] ?? '—',
+      },
+
+      {
+        key: 'discountValue',
+        header: 'Value',
+        align: 'right',
+
+        accessor: row =>
+          row.discountType === 0
+            ? `${row.discountValue}%`
+            : `${row.discountValue} EGP`,
+      },
+
+      {
+        key: 'target',
+        header: 'Applies to',
+
+        accessor: row =>
+          `${this.targetLabels[row.target]}: ${row.targetName}`,
+      },
+
+      {
+        key: 'priority',
+        header: 'Priority',
+        align: 'right',
+      },
+
+      {
+        key: 'endDate',
+        header: 'Ends',
+        type: 'date',
+      },
+
+      {
+        key: 'isActive',
+        header: 'Status',
+        type: 'badge',
+
+        accessor: row =>
+          row.isActive
+            ? 'Active'
+            : 'Inactive',
+      },
+    ];
+
+
+  // =========================================================
+  // INIT
+  // =========================================================
 
   ngOnInit(): void {
+
     this.loadCatalogData();
+
     this.load();
+
   }
+
+
+  // =========================================================
+  // CATALOG
+  // =========================================================
 
   private loadCatalogData(): void {
+
     this.catalogService
-      .getProducts({ pageSize: 200 })
-      .subscribe((res) => {
-        if (res.success && res.data) {
+      .getProducts({
+        pageSize: 200,
+      })
+      .subscribe(res => {
+
+        if (
+          res.success &&
+          res.data
+        ) {
+
           this.products.set(
-            res.data.items.map((product) => ({
-              id: product.id,
-              name: product.name,
-            })),
+            res.data.items.map(
+              product => ({
+                id: product.id,
+                name: product.name,
+              }),
+            ),
           );
+
         }
+
       });
 
+
     this.catalogService
-      .getCategories({ pageSize: 200 })
-      .subscribe((res) => {
-        if (res.success && res.data) {
+      .getCategories({
+        pageSize: 200,
+      })
+      .subscribe(res => {
+
+        if (
+          res.success &&
+          res.data
+        ) {
+
           this.categories.set(
-            res.data.items.map((category) => ({
-              id: category.id,
-              name: category.name,
-            })),
+            res.data.items.map(
+              category => ({
+                id: category.id,
+                name: category.name,
+              }),
+            ),
           );
+
         }
+
       });
 
+
     this.catalogService
-      .getBrands({ pageSize: 200 })
-      .subscribe((res) => {
-        if (res.success && res.data) {
+      .getBrands({
+        pageSize: 200,
+      })
+      .subscribe(res => {
+
+        if (
+          res.success &&
+          res.data
+        ) {
+
           this.brands.set(
-            res.data.items.map((brand) => ({
-              id: brand.id,
-              name: brand.name,
-            })),
+            res.data.items.map(
+              brand => ({
+                id: brand.id,
+                name: brand.name,
+              }),
+            ),
           );
+
         }
+
       });
+
   }
+
+
+  // =========================================================
+  // PICKER
+  // =========================================================
+
+  togglePicker(): void {
+
+    this.isPickerOpen.update(
+      open => !open,
+    );
+
+  }
+
+
+  closePicker(): void {
+
+    this.isPickerOpen.set(false);
+
+  }
+
+
+  @HostListener(
+    'document:click',
+    ['$event'],
+  )
+  onDocumentClick(
+    event: MouseEvent,
+  ): void {
+
+    if (!this.isPickerOpen()) {
+      return;
+    }
+
+    const target =
+      event.target as HTMLElement;
+
+    if (
+      !this.elementRef
+        .nativeElement
+        .contains(target)
+    ) {
+
+      this.closePicker();
+
+    }
+
+  }
+
 
   onTargetChange(): void {
-    this.form.controls.targetIds.setValue([]);
-    this.form.controls.targetIds.markAsUntouched();
+
+    this.form.controls.targetIds
+      .setValue([]);
+
+    this.form.controls.targetIds
+      .markAsUntouched();
+
+    this.isPickerOpen.set(false);
+
   }
 
-  isTargetSelected(id: number): boolean {
-    return this.form.controls.targetIds.value.includes(id);
+
+  isTargetSelected(
+    id: number,
+  ): boolean {
+
+    return this.form.controls
+      .targetIds.value
+      .includes(id);
+
   }
 
-  toggleTarget(id: number): void {
+
+  toggleTarget(
+    id: number,
+  ): void {
+
     const control =
       this.form.controls.targetIds;
 
@@ -319,47 +566,95 @@ export class DiscountsPage implements OnInit {
       control.value;
 
     if (current.includes(id)) {
+
       control.setValue(
         current.filter(
-          (targetId) =>
+          targetId =>
             targetId !== id,
         ),
       );
+
     } else {
+
       control.setValue([
         ...current,
         id,
       ]);
+
     }
 
     control.markAsTouched();
     control.markAsDirty();
+
   }
 
-  removeTarget(id: number): void {
+
+  removeTarget(
+    id: number,
+  ): void {
+
     const control =
       this.form.controls.targetIds;
 
     control.setValue(
       control.value.filter(
-        (targetId) =>
+        targetId =>
           targetId !== id,
       ),
     );
 
     control.markAsTouched();
     control.markAsDirty();
+
   }
 
+
   clearTargets(): void {
-    this.form.controls.targetIds.setValue([]);
-    this.form.controls.targetIds.markAsTouched();
-    this.form.controls.targetIds.markAsDirty();
+
+    this.form.controls.targetIds
+      .setValue([]);
+
+    this.form.controls.targetIds
+      .markAsTouched();
+
+    this.form.controls.targetIds
+      .markAsDirty();
+
   }
+
+
+  toggleSelectAllTargets(): void {
+
+    const control =
+      this.form.controls.targetIds;
+
+    if (this.allTargetsSelected()) {
+
+      control.setValue([]);
+
+    } else {
+
+      control.setValue(
+        this.targetOptions()
+          .map(option => option.id),
+      );
+
+    }
+
+    control.markAsTouched();
+    control.markAsDirty();
+
+  }
+
+
+  // =========================================================
+  // TARGET NAME
+  // =========================================================
 
   private resolveTargetName(
     discount: DiscountResponse,
   ): string {
+
     const list =
       discount.target === 0
         ? this.products()
@@ -367,29 +662,43 @@ export class DiscountsPage implements OnInit {
           ? this.categories()
           : this.brands();
 
-    const names = discount.targetIds
-      .map(
-        (targetId) =>
+
+    const names =
+      discount.targetIds.map(
+        targetId =>
           list.find(
-            (item) =>
+            item =>
               item.id === targetId,
-          )?.name ?? `#${targetId}`,
+          )?.name ??
+          `#${targetId}`,
       );
+
 
     return names.length > 0
       ? names.join(', ')
       : '—';
+
   }
 
+
+  // =========================================================
+  // CREATE
+  // =========================================================
+
   openCreateForm(): void {
+
     this.editingDiscount.set(null);
+
     this.formError.set(null);
+
+    this.isPickerOpen.set(false);
+
 
     this.form.reset({
       name: '',
       discountType: 0,
       discountValue: 0,
-maximumDiscount: null,
+      maximumDiscount: null,
       target: 0,
       targetIds: [],
       priority: 0,
@@ -398,54 +707,103 @@ maximumDiscount: null,
       endDate: '',
     });
 
+
     this.isFormOpen.set(true);
+
   }
+
+
+  // =========================================================
+  // EDIT
+  // =========================================================
 
   openEditForm(
     discount: DiscountResponse,
   ): void {
-    this.editingDiscount.set(discount);
+
+    this.editingDiscount.set(
+      discount,
+    );
+
     this.formError.set(null);
 
+    this.isPickerOpen.set(false);
+
+
     this.form.patchValue({
-      name: discount.name,
+
+      name:
+        discount.name,
+
       discountType:
         discount.discountType,
+
       discountValue:
         discount.discountValue,
+
       maximumDiscount:
         discount.maximumDiscount,
-      target: discount.target,
-      targetIds: [
-        ...discount.targetIds,
-      ],
-      priority: discount.priority,
-      isActive: discount.isActive,
+
+      target:
+        discount.target,
+
+      targetIds:
+        [
+          ...discount.targetIds,
+        ],
+
+      priority:
+        discount.priority,
+
+      isActive:
+        discount.isActive,
+
       startDate:
         discount.startDate?.substring(
           0,
           10,
         ),
+
       endDate:
         discount.endDate?.substring(
           0,
           10,
         ),
+
     });
 
+
     this.isFormOpen.set(true);
+
   }
 
+
+  // =========================================================
+  // CLOSE
+  // =========================================================
+
   closeForm(): void {
+
     this.isFormOpen.set(false);
+
     this.editingDiscount.set(null);
+
     this.formError.set(null);
+
+    this.isPickerOpen.set(false);
+
   }
+
+
+  // =========================================================
+  // VALIDATION
+  // =========================================================
 
   controlHasError(
     name: string,
     error: string,
   ): boolean {
+
     const control =
       this.form.get(name);
 
@@ -454,28 +812,44 @@ maximumDiscount: null,
       control.touched &&
       control.hasError(error),
     );
+
   }
 
+
+  // =========================================================
+  // SUBMIT
+  // =========================================================
+
   submit(): void {
+
     if (
       this.form.invalid ||
       this.isSubmitting()
     ) {
+
       this.form.markAllAsTouched();
+
       return;
     }
 
+
     this.isSubmitting.set(true);
+
     this.formError.set(null);
+
 
     const value =
       this.form.getRawValue();
 
+
     const payload = {
+
       ...value,
 
       targetIds: [
-        ...new Set(value.targetIds),
+        ...new Set(
+          value.targetIds,
+        ),
       ],
 
       startDate:
@@ -487,35 +861,53 @@ maximumDiscount: null,
         new Date(
           value.endDate,
         ).toISOString(),
+
     };
+
 
     const existing =
       this.editingDiscount();
 
-    const request$ = existing
-      ? this.discountService.update(
-          existing.id,
-          payload,
-        )
-      : this.discountService.create(
-          payload,
-        );
+
+    const request$ =
+      existing
+
+        ? this.discountService.update(
+            existing.id,
+            payload,
+          )
+
+        : this.discountService.create(
+            payload,
+          );
+
 
     request$.subscribe({
-      next: (res) => {
+
+      next: res => {
+
         this.isSubmitting.set(false);
 
+
         if (res.success) {
+
           this.closeForm();
+
           this.load();
+
         } else {
+
           this.formError.set(
             res.message,
           );
+
         }
+
       },
 
-      error: (error) => {
+
+      error: error => {
+
         this.isSubmitting.set(false);
 
         this.formError.set(
@@ -524,20 +916,31 @@ maximumDiscount: null,
             'Could not save this discount.',
           ),
         );
+
       },
+
     });
+
   }
+
+
+  // =========================================================
+  // DELETE
+  // =========================================================
 
   deleteDiscount(
     discount: DiscountResponse,
   ): void {
+
     if (
       !confirm(
         `Delete discount "${discount.name}"? This cannot be undone.`,
       )
     ) {
+
       return;
     }
+
 
     this.isDeleting.set(
       discount.id,
@@ -545,22 +948,33 @@ maximumDiscount: null,
 
     this.listError.set(null);
 
+
     this.discountService
       .delete(discount.id)
       .subscribe({
-        next: (res) => {
+
+        next: res => {
+
           this.isDeleting.set(null);
 
+
           if (res.success) {
+
             this.load();
+
           } else {
+
             this.listError.set(
               res.message,
             );
+
           }
+
         },
 
-        error: (error) => {
+
+        error: error => {
+
           this.isDeleting.set(null);
 
           this.listError.set(
@@ -569,31 +983,50 @@ maximumDiscount: null,
               'Could not delete this discount.',
             ),
           );
+
         },
+
       });
+
   }
 
+
+  // =========================================================
+  // LOAD
+  // =========================================================
+
   private load(): void {
+
     this.isLoading.set(true);
+
     this.listError.set(null);
+
 
     this.discountService
       .getAll()
       .subscribe({
-        next: (res) => {
+
+        next: res => {
+
           if (
             res.success &&
             res.data
           ) {
+
             this.discounts.set(
               res.data,
             );
+
           }
 
+
           this.isLoading.set(false);
+
         },
 
-        error: (error) => {
+
+        error: error => {
+
           this.isLoading.set(false);
 
           this.listError.set(
@@ -602,7 +1035,11 @@ maximumDiscount: null,
               'Could not load discounts.',
             ),
           );
+
         },
+
       });
+
   }
+
 }

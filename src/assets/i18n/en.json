@@ -885,7 +885,9 @@
       "product": "Product",
       "category": "Category",
       "brand": "Brand",
-      "selectOne": "Select one"
+      "selectOne": "Select one",
+      "selectAll": "Select all",
+  "deselectAll": "Deselect all"
     },
     "shipping": {
       "title": "Shipping areas",
@@ -903,30 +905,48 @@
       "costRequired": "Shipping cost is required.",
       "add": "Add area"
     },
-    "discounts": {
-      "title": "Discounts",
-      "new": "New discount",
-      "newTitle": "New discount",
-      "editTitle": "Edit discount",
-      "type": "Discount type",
-      "maximum": "Maximum discount",
-      "priority": "Priority",
-      "appliesTo": "Applies to",
-      "select": "Select",
-      "selectOne": "Select one",
-      "startDate": "Start date",
-      "endDate": "End date",
-      "isActive": "Discount is active",
-      "create": "Create discount",
-      "empty": "No discounts found.",
-      "validation": {
-        "nameRequired": "Name is required.",
-        "valueRequired": "Value is required.",
-        "startDateRequired": "Start date is required.",
-        "endDateRequired": "End date is required.",
-        "dateRange": "End date must be after start date."
-      }
-    },
+   "discounts": {
+  "title": "Discounts",
+  "new": "New discount",
+  "newTitle": "New discount",
+  "editTitle": "Edit discount",
+
+  "form": {
+    "updateSubtitle": "Update the discount campaign details.",
+    "createSubtitle": "Create a new promotional campaign for your store.",
+    "detailsDescription": "Define the discount value and campaign settings.",
+    "targetDescription": "Choose the products, categories, or brands included in the discount.",
+    "datesDescription": "Define when the promotion becomes active.",
+    "activeDescription": "The discount will be available to customers while active.",
+    "campaignsDescription": "Manage your active and scheduled promotional campaigns.",
+    "campaigns": "Campaigns"
+  },
+
+  "type": "Discount type",
+  "maximum": "Maximum discount",
+  "priority": "Priority",
+  "appliesTo": "Applies to",
+  "selectTarget": "Select targets",
+  "select": "Select",
+  "selectOne": "Select one",
+  "noOptions": "No options available.",
+
+  "startDate": "Start date",
+  "endDate": "End date",
+
+  "isActive": "Discount is active",
+
+  "create": "Create discount",
+  "empty": "No discounts found.",
+
+  "validation": {
+    "nameRequired": "Name is required.",
+    "valueRequired": "Discount value is required.",
+    "startDateRequired": "Start date is required.",
+    "endDateRequired": "End date is required.",
+    "dateRange": "End date must be after start date."
+  }
+},
     "products": {
       "title": "Products Management",
       "subtitle": "Manage catalog items, variants, and product media",

@@ -887,7 +887,9 @@
       "product": "منتج",
       "category": "تصنيف",
       "brand": "علامة تجارية",
-      "selectOne": "اختر عنصرًا"
+      "selectOne": "اختر عنصرًا",
+      "selectAll": "تحديد الكل",
+  "deselectAll": "إلغاء تحديد الكل"
     },
     "shipping": {
       "title": "مناطق الشحن",
@@ -906,29 +908,47 @@
       "add": "إضافة منطقة"
     },
     "discounts": {
-      "title": "الخصومات",
-      "new": "خصم جديد",
-      "newTitle": "خصم جديد",
-      "editTitle": "تعديل الخصم",
-      "type": "نوع الخصم",
-      "maximum": "أقصى خصم (ج.م)",
-      "priority": "الأولوية",
-      "appliesTo": "يُطبق على",
-      "select": "اختر",
-      "selectOne": "اختر عنصرًا",
-      "startDate": "تاريخ البدء",
-      "endDate": "تاريخ الانتهاء",
-      "isActive": "الخصم نشط",
-      "create": "إنشاء الخصم",
-      "empty": "لا توجد خصومات.",
-      "validation": {
-        "nameRequired": "الاسم مطلوب.",
-        "valueRequired": "القيمة مطلوبة.",
-        "startDateRequired": "تاريخ البدء مطلوب.",
-        "endDateRequired": "تاريخ الانتهاء مطلوب.",
-        "dateRange": "تاريخ النهاية لازم يكون بعد تاريخ البداية."
-      }
-    },
+  "title": "الخصومات",
+  "new": "خصم جديد",
+  "newTitle": "خصم جديد",
+  "editTitle": "تعديل الخصم",
+
+  "form": {
+    "updateSubtitle": "تعديل تفاصيل حملة الخصم.",
+    "createSubtitle": "إنشاء حملة ترويجية جديدة للمتجر.",
+    "detailsDescription": "حدد قيمة الخصم وإعدادات الحملة.",
+    "targetDescription": "اختر المنتجات أو التصنيفات أو العلامات التجارية التي يشملها الخصم.",
+    "datesDescription": "حدد الفترة التي يكون فيها الخصم فعالًا.",
+    "activeDescription": "سيكون الخصم متاحًا للعملاء أثناء تفعيله.",
+    "campaignsDescription": "إدارة حملات الخصم الحالية والمجدولة.",
+    "campaigns": "حملات"
+  },
+
+  "type": "نوع الخصم",
+  "maximum": "الحد الأقصى للخصم",
+  "priority": "الأولوية",
+  "appliesTo": "يُطبق على",
+  "selectTarget": "اختر العناصر",
+  "select": "اختر",
+  "selectOne": "اختر عنصرًا",
+  "noOptions": "لا توجد خيارات متاحة.",
+
+  "startDate": "تاريخ البدء",
+  "endDate": "تاريخ الانتهاء",
+
+  "isActive": "الخصم نشط",
+
+  "create": "إنشاء الخصم",
+  "empty": "لا توجد خصومات.",
+
+  "validation": {
+    "nameRequired": "الاسم مطلوب.",
+    "valueRequired": "قيمة الخصم مطلوبة.",
+    "startDateRequired": "تاريخ البدء مطلوب.",
+    "endDateRequired": "تاريخ الانتهاء مطلوب.",
+    "dateRange": "تاريخ الانتهاء يجب أن يكون بعد تاريخ البدء."
+  }
+},
     "products": {
       "title": "إدارة المنتجات",
       "subtitle": "إدارة عناصر الكتالوج والمتغيرات ووسائط المنتجات",
