@@ -255,146 +255,169 @@
 .product-details-page__summary {
   position: relative;
   overflow: hidden;
-
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: 20px;
-
   padding: 2rem;
-
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-
   box-shadow: var(--shadow-sm);
 }
+
 /* =========================================================
-   Product Details Discount Ribbon
-   LTR  -> Top Right
-   RTL  -> Top Left
+   PRODUCT DETAILS DISCOUNT CORNER
    ========================================================= */
+
+/*
+  Fixed version: instead of maintaining separate LTR and RTL
+  coordinates (which drift out of sync whenever one side gets
+  tweaked and the other doesn't — this was the root cause of
+  the ribbon breaking on language switch), we build the ribbon
+  once assuming LTR, then mirror the whole box with a single
+  scaleX(-1) for RTL. One set of numbers, always in sync.
+*/
 
 .product-details-page__discount-ribbon {
   position: absolute;
+  top: 0;
+  inset-inline-end: 0;
+  width: 76px;
+  height: 76px;
+  z-index: 20;
+  pointer-events: none;
+  font-size: 0;
+}
 
-  top: 18px;
-  right: -34px;
-  left: auto;
+/*
+  The actual ribbon
+*/
+.product-details-page__discount-ribbon::before {
+  content: '';
+  position: absolute;
+  width: 105px;
+  height: 22px;
+  top: 16px;
+  right: -28px;
+  background: linear-gradient(
+    135deg,
+    #e4c15e 0%,
+    #c9a24b 55%,
+    #a98032 100%
+  );
+  box-shadow:
+    0 3px 8px rgba(0, 0, 0, 0.25);
+  transform: rotate(45deg);
+}
 
-  z-index: 5;
-
-  width: 125px;
-  padding: 0.38rem 0.5rem;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: var(--gold-gradient);
-  color: var(--secondary-dark);
-
-  font-size: 0.72rem;
+/*
+  Discount text
+*/
+.product-details-page__discount-ribbon::after {
+  content: attr(data-discount);
+  position: absolute;
+  top: 19px;
+  right: 5px;
+  width: 55px;
+  color: #17130d;
+  font-size: 0.80rem;
   font-weight: 800;
-  letter-spacing: 0.04em;
   line-height: 1;
-
   text-align: center;
   white-space: nowrap;
-
   transform: rotate(45deg);
-
-  box-shadow:
-    0 5px 14px rgba(0, 0, 0, 0.25),
-    0 0 10px rgba(201, 162, 75, 0.16);
-
-  pointer-events: none;
-}
-
-/* Ribbon folds */
-.product-details-page__discount-ribbon::before,
-.product-details-page__discount-ribbon::after {
-  content: '';
-
-  position: absolute;
-  bottom: -5px;
-
-  width: 0;
-  height: 0;
-
-  border-top: 5px solid var(--primary-dark);
-}
-
-.product-details-page__discount-ribbon::before {
-  left: 0;
-  right: auto;
-
-  border-right: 5px solid transparent;
-  border-left: 0;
-}
-
-.product-details-page__discount-ribbon::after {
-  right: 0;
-  left: auto;
-
-  border-left: 5px solid transparent;
-  border-right: 0;
 }
 
 /* =========================================================
-   RTL
+   RTL — mirror the whole ribbon instead of re-deriving coords
    ========================================================= */
 
 :host-context([dir='rtl'])
-  .product-details-page__discount-ribbon {
-  top: 18px;
-
-  left: -34px;
-  right: auto;
-
-  transform: rotate(-45deg);
+.product-details-page__discount-ribbon {
+  transform: scaleX(-1);
 }
 
-/* RTL ribbon folds */
+/* scaleX(-1) also flips the discount text itself (mirrored
+   glyphs), so we flip it back on top of the ribbon rotation */
 :host-context([dir='rtl'])
-  .product-details-page__discount-ribbon::before {
-  left: auto;
-  right: 0;
-
-  border-right: 0;
-  border-left: 5px solid transparent;
+.product-details-page__discount-ribbon::after {
+  transform: rotate(45deg) scaleX(-1);
 }
 
-:host-context([dir='rtl'])
-  .product-details-page__discount-ribbon::after {
-  right: auto;
-  left: 0;
+/* =========================================================
+   Reserve space for the ribbon
+   ========================================================= */
 
-  border-left: 0;
-  border-right: 5px solid transparent;
+.product-details-page__summary:has(
+  .product-details-page__discount-ribbon
+) {
+  padding-top: 3.5rem;
 }
 
 /* =========================================================
    Mobile
    ========================================================= */
 
-@media (max-width: 560px) {
-  .product-details-page__discount-ribbon {
-    top: 16px;
-    right: -36px;
-    left: auto;
+@media (max-width: 768px) {
 
-    width: 120px;
-    font-size: 0.68rem;
+  .product-details-page__discount-ribbon {
+    width: 68px;
+    height: 68px;
   }
 
-  :host-context([dir='rtl'])
-    .product-details-page__discount-ribbon {
-    left: -36px;
-    right: auto;
+  .product-details-page__discount-ribbon::before {
+    width: 92px;
+    height: 20px;
+    top: 14px;
+    right: -25px;
+  }
 
-    transform: rotate(-45deg);
+  .product-details-page__discount-ribbon::after {
+    top: 17px;
+    right: 4px;
+    width: 48px;
+    font-size: 0.54rem;
+  }
+
+  .product-details-page__summary:has(
+    .product-details-page__discount-ribbon
+  ) {
+    padding-top: 3.25rem;
   }
 }
+
+/* =========================================================
+   Very small phones
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+  .product-details-page__discount-ribbon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .product-details-page__discount-ribbon::before {
+    width: 82px;
+    height: 18px;
+    top: 12px;
+    right: -22px;
+  }
+
+  .product-details-page__discount-ribbon::after {
+    top: 15px;
+    right: 3px;
+    width: 44px;
+    font-size: 0.5rem;
+  }
+
+  .product-details-page__summary:has(
+    .product-details-page__discount-ribbon
+  ) {
+    padding-top: 3rem;
+  }
+}
+
 /* =========================================================
    Brand / Title
    ========================================================= */
@@ -668,6 +691,8 @@
   .product-details-page__summary {
     padding: 1rem;
     transition: var(--transition-fast);
+    position: relative;
+    overflow: hidden;
   }
 
   .product-details-page__summary:hover {
@@ -694,13 +719,6 @@
 
   .product-details-page__discount {
     min-height: 27px;
-    font-size: 0.68rem;
-  }
-
-  .product-details-page__discount-ribbon {
-    top: 16px;
-    inset-inline-start: -38px;
-    width: 120px;
     font-size: 0.68rem;
   }
 

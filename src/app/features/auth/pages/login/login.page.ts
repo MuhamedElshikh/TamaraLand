@@ -25,7 +25,6 @@ export class LoginPage implements AfterViewInit, OnDestroy {
 
   protected readonly isSubmitting = signal(false);
   protected readonly isGoogleSubmitting = signal(false);
-  protected readonly isFacebookSubmitting = signal(false);
   protected readonly isGoogleReady = signal(false);
   protected readonly errorMessage = signal<string | null>(null);
   protected readonly isPasswordVisible = signal(false);
@@ -99,7 +98,7 @@ export class LoginPage implements AfterViewInit, OnDestroy {
    * (من غير await ولا setTimeout) عشان البراوزر ميبلكش البوب أب.
    */
   protected signInWithGoogle(): void {
-    if (this.isGoogleSubmitting() || this.isSubmitting() || this.isFacebookSubmitting()) {
+    if (this.isGoogleSubmitting() || this.isSubmitting()) {
       return;
     }
 
@@ -140,32 +139,7 @@ export class LoginPage implements AfterViewInit, OnDestroy {
     void this.router.navigateByUrl(this.authService.isAdmin() ? '/admin' : '/');
   }
 
-  protected signInWithFacebook(): void {
-    if (this.isFacebookSubmitting() || this.isSubmitting() || this.isGoogleSubmitting()) return;
-
-    this.isFacebookSubmitting.set(true);
-    this.errorMessage.set(null);
-
-    this.socialAuthService
-      .login('facebook')
-      .pipe(finalize(() => this.isFacebookSubmitting.set(false)))
-      .subscribe({
-        next: (response: ApiResponse<AuthResponse>) => {
-          const token = response.data?.accessToken ?? this.authService.token();
-          if (token) {
-            this.analytics.login('facebook');
-            void this.router.navigateByUrl(this.authService.isAdmin() ? '/admin' : '/');
-            return;
-          }
-          this.errorMessage.set(extractErrorMessage(response.message, 'Facebook login failed.'));
-        },
-        error: (error) => {
-          this.errorMessage.set(
-            extractErrorMessage(error?.message || error?.error?.Message, 'Failed to sign in with Facebook.')
-          );
-        },
-      });
-  }
+ 
 
   protected controlHasError(name: 'email' | 'password', errorKey?: string): boolean {
     const control = this.form.controls[name];

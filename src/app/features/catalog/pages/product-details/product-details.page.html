@@ -73,22 +73,21 @@
 
         <div class="product-details-page__summary">
 
-          @if (hasDiscount()) {
-            <span
-              class="product-details-page__discount-ribbon"
-              aria-hidden="true"
-            >
-              -{{ discountPercent() }}%
-            </span>
-          }
+       
+@if (hasDiscount()) {
+  <span
+    class="product-details-page__discount-ribbon"
+    [attr.data-discount]="'-' + discountPercent() + '%'">
+  </span>
+}
 
-          <span class="product-details-page__brand">
-            {{ product()?.arabicBrandName || product()?.brandName }}
-          </span>
+  <span class="product-details-page__brand">
+    {{ product()?.arabicBrandName || product()?.brandName }}
+  </span>
 
-          <h2 class="product-details-page__title">
-            {{ product() | localizedName }}
-          </h2>
+  <h2 class="product-details-page__title">
+    {{ product() | localizedName }}
+  </h2>
 
           <!-- Pricing -->
           <div class="product-details-page__price-wrapper">

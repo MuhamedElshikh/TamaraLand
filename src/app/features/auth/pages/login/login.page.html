@@ -18,7 +18,7 @@
     <div class="social-auth">
 
       <button class="social-btn social-btn--google" type="button"
-        [disabled]="!isGoogleReady() || isGoogleSubmitting() || isSubmitting() || isFacebookSubmitting()"
+        [disabled]="!isGoogleReady() || isGoogleSubmitting() || isSubmitting() "
         (click)="signInWithGoogle()">
         @if (isGoogleSubmitting()) {
         <span class="auth-submit__spinner"></span>
@@ -77,7 +77,7 @@
       </label>
 
       <button class="auth-submit" type="submit"
-        [disabled]="isSubmitting() || isGoogleSubmitting() || isFacebookSubmitting()">
+        [disabled]="isSubmitting() || isGoogleSubmitting()">
         @if (isSubmitting()) {
         <span class="auth-submit__spinner"></span>
         <span>{{ 'login.buttons.loading' | translate }}</span>

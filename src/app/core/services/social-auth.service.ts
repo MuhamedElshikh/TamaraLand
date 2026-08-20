@@ -36,7 +36,7 @@ declare global {
 
 export type SocialProvider =
   | 'google'
-  | 'facebook'
+ 
   | 'apple'
   | 'microsoft'
   | 'twitter';
@@ -58,7 +58,6 @@ export class SocialAuthService {
   private readonly zone = inject(NgZone);
 
   private isGoogleLoaded = false;
-  private isFacebookLoaded = false;
 
   /** العنصر الحقيقي بتاع جوجل اللي بيستقبل الكليك (جوّه الهوست المخفي) */
   private googleClickTarget: HTMLElement | null = null;
@@ -69,24 +68,6 @@ export class SocialAuthService {
   /** الصفحة بتسمع منه عشان توقف اللودر وتنقل المستخدم */
   public readonly googleAuth$ = this.googleAuthSubject.asObservable();
 
-  login(
-    provider: SocialProvider
-  ): Observable<ApiResponse<AuthResponse>> {
-
-    switch (provider) {
-
-      case 'facebook':
-        return this.loginWithFacebook();
-
-      default:
-        return throwError(
-          () =>
-            new Error(
-              `Provider ${provider} is not supported yet.`
-            )
-        );
-    }
-  }
 
   // ==========================================
   // GOOGLE
@@ -351,107 +332,6 @@ export class SocialAuthService {
       };
 
       document.head.appendChild(script);
-    });
-  }
-
-  // ==========================================
-  // FACEBOOK
-  // ==========================================
-
-  private loginWithFacebook(): Observable<ApiResponse<AuthResponse>> {
-
-    return from(this.loadFacebookScript()).pipe(
-
-      switchMap(() => this.getFacebookAccessToken()),
-
-      switchMap((accessToken) =>
-        this.authService.loginWithFacebook(accessToken)
-      ),
-
-      tap((res) => {
-        if (res.success) {
-          this.analyticsService.login('facebook');
-        }
-      }),
-
-      catchError((err) =>
-        throwError(
-          () =>
-            new Error(
-              err?.message ||
-              'Facebook authentication was cancelled or failed.'
-            )
-        )
-      )
-    );
-  }
-
-  private loadFacebookScript(): Promise<void> {
-
-    if (this.isFacebookLoaded || typeof window === 'undefined') {
-      return Promise.resolve();
-    }
-
-    return new Promise((resolve, reject) => {
-
-      if (document.getElementById('facebook-jssdk')) {
-        this.isFacebookLoaded = true;
-        resolve();
-        return;
-      }
-
-      const appId =
-        environment.socialAuth?.facebookAppId || 'YOUR_FACEBOOK_APP_ID';
-
-      window.fbAsyncInit = () => {
-
-        window.FB.init({
-          appId,
-          cookie: true,
-          xfbml: true,
-          version: 'v19.0',
-        });
-
-        this.isFacebookLoaded = true;
-        resolve();
-      };
-
-      const script = document.createElement('script');
-
-      script.id = 'facebook-jssdk';
-      script.src = 'https://connect.facebook.net/en_US/sdk.js';
-      script.async = true;
-      script.defer = true;
-
-      script.onerror = () =>
-        reject(new Error('Failed to load Facebook SDK.'));
-
-      document.head.appendChild(script);
-    });
-  }
-
-  private getFacebookAccessToken(): Promise<string> {
-
-    return new Promise((resolve, reject) => {
-
-      if (!window.FB) {
-        reject(new Error('Facebook SDK is not loaded.'));
-        return;
-      }
-
-      window.FB.login(
-        (response: any) => {
-
-          if (response.authResponse?.accessToken) {
-            resolve(response.authResponse.accessToken);
-          } else {
-            reject(
-              new Error('Facebook authentication was cancelled or declined.')
-            );
-          }
-        },
-        { scope: 'public_profile,email' }
-      );
     });
   }
 }

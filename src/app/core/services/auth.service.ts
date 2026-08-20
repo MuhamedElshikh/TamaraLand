@@ -63,23 +63,6 @@ private readonly clarity: ClarityService = new ClarityService();
     );
 }
 
-
-
-  loginWithFacebook(accessToken: string): Observable<ApiResponse<AuthResponse>> {
-    return this.http.post<ApiResponse<AuthResponse>>(`${API_BASE_URL}/api/Auth/facebook`, { accessToken }).pipe(
-      tap(res => {
-        if (res.success && res.data) {
-         const token = res.data.accessToken;
-
-this._token.set(token);
-localStorage.setItem('usertoken', token);
-
-this.setupAnalytics(token);
-this.analytics.login('facebook');        }
-      })
-    );
-  }
-
 register(
   data: RegisterRequest
 ): Observable<ApiResponse<AuthResponse>> {
