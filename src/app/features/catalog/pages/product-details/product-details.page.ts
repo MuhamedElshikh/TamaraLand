@@ -85,6 +85,69 @@ export class ProductDetailsPage implements AfterViewInit {
 
   readonly product = signal<ProductDetailsResponse | null>(null);
   readonly selectedVariant = signal<{ color: string; size: string; variantId?: number; price?: number } | null>(null);
+  readonly currentVariant = computed(() => {
+  const current = this.product();
+  const selected = this.selectedVariant();
+
+  return (
+    current?.variants?.find(
+      (item) => item.id === selected?.variantId
+    ) ??
+    current?.variants?.[0] ??
+    null
+  );
+});
+
+readonly finalPrice = computed(() => {
+  const current = this.product();
+  const variant = this.currentVariant();
+
+  return Number(
+    variant?.price ??
+    current?.price ??
+    0
+  );
+});
+
+readonly originalPrice = computed(() => {
+  const current = this.product();
+  const variant = this.currentVariant();
+
+  return Number(
+    variant?.originalPrice ??
+    current?.originalPrice ??
+    0
+  );
+});
+
+readonly hasDiscount = computed(() => {
+  const finalPrice = this.finalPrice();
+  const originalPrice = this.originalPrice();
+
+  return (
+    originalPrice > 0 &&
+    finalPrice > 0 &&
+    finalPrice < originalPrice
+  );
+});
+
+readonly discountPercent = computed(() => {
+  const originalPrice = this.originalPrice();
+  const finalPrice = this.finalPrice();
+
+  if (
+    originalPrice <= 0 ||
+    finalPrice >= originalPrice
+  ) {
+    return 0;
+  }
+
+  return Math.round(
+    ((originalPrice - finalPrice) /
+      originalPrice) *
+      100
+  );
+});
   readonly isAddingToCart = signal(false);
   readonly cartMessage = signal<string | null>(null);
 
@@ -111,28 +174,24 @@ export class ProductDetailsPage implements AfterViewInit {
 
   return items;
 });
-  readonly priceLabel = computed(() => {
-    const current = this.product();
-    const selected = this.selectedVariant();
-    const variant = current?.variants?.find((item) => item.id === selected?.variantId) ?? current?.variants?.[0];
-    const price = variant?.price ?? current?.price ?? current?.originalPrice ?? 0;
+ readonly priceLabel = computed(() => {
+  const price = this.finalPrice();
 
-    if (!current && !variant) {
-      return 'Price available soon';
-    }
+  if (!this.product() && price === 0) {
+    return 'Price available soon';
+  }
 
-    return `EGP ${Number(price || 0).toLocaleString()}`;
-  });
+  return `EGP ${price.toLocaleString()}`;
+});
 
-  readonly stock = computed(() => {
+ readonly stock = computed(() => {
   const current = this.product();
-  const selected = this.selectedVariant();
+  const variant = this.currentVariant();
 
-  const variant =
-    current?.variants?.find(item => item.id === selected?.variantId)
-    ?? current?.variants?.[0];
-
-  return Number(variant?.stock ?? (current?.inStock ? 1 : 0));
+  return Number(
+    variant?.stock ??
+    (current?.inStock ? 1 : 0)
+  );
 });
 
   readonly rating = computed(() =>

@@ -66,10 +66,14 @@
     }
   },
   "featuredProducts": {
-    "justLanded": "Just landed",
-    "newArrivals": "New arrivals",
-    "viewAll": "View all",
-    "noProducts": "No products available yet."
+    "justLanded": "Exclusive Pick",
+    "newArrivals": "Featured Collections",
+    "viewAll": "View All",
+    "noProducts": "No products available currently.",
+    "tabAll": "All",
+    "tabNew": "New Arrivals",
+    "tabTop": "Top Rated",
+    "tabOffers": "Exclusive Offers"
   },
   "hero": {
     "eyebrow": "LUXURY FASHION",
@@ -83,38 +87,38 @@
   "productCard": {
     "addToCart": "Add to Cart",
     "adding": "Adding...",
-    "added": "Added \u2713",
+    "added": "Added ✓",
     "tryAgain": "Try Again",
     "addToWishlist": "Add to Wishlist",
     "removeFromWishlist": "Remove from Wishlist",
     "currency": "EGP"
   },
   "filters": {
-  "title": "Refine Your Selection",
-  "subtitle": "Discover pieces tailored to your style with elegant filtering.",
-  "filters": "Filters",
-  "active": "active",
-  "search": "Search",
-  "searchPlaceholder": "Search products...",
-  "categories": "Categories",
-  "allCategories": "All Categories",
-  "brands": "Brands",
-  "allBrands": "All Brands",
-  "priceRange": "Price Range",
-  "min": "Min",
-  "max": "Max",
-  "maxAllowedPriceHint": "Prices on this page are capped at {{max}} EGP",
-  "applyPrice": "Apply Price",
-  "availability": "Availability",
-  "inStockOnly": "In Stock Only",
-  "sortBy": "Sort By",
-  "featured": "Featured",
-  "newest": "Newest",
-  "priceLowHigh": "Price: Low \u2192 High",
-  "priceHighLow": "Price: High \u2192 Low",
-  "bestDiscount": "Best Discount",
-  "clearAll": "Clear All"
-},
+    "title": "Refine Your Selection",
+    "subtitle": "Discover pieces tailored to your style with elegant filtering.",
+    "filters": "Filters",
+    "active": "active",
+    "search": "Search",
+    "searchPlaceholder": "Search products...",
+    "categories": "Categories",
+    "allCategories": "All Categories",
+    "brands": "Brands",
+    "allBrands": "All Brands",
+    "priceRange": "Price Range",
+    "min": "Min",
+    "max": "Max",
+    "maxAllowedPriceHint": "Prices on this page are capped at {{max}} EGP",
+    "applyPrice": "Apply Price",
+    "availability": "Availability",
+    "inStockOnly": "In Stock Only",
+    "sortBy": "Sort By",
+    "featured": "Featured",
+    "newest": "Newest",
+    "priceLowHigh": "Price: Low → High",
+    "priceHighLow": "Price: High → Low",
+    "bestDiscount": "Best Discount",
+    "clearAll": "Clear All"
+  },
   "gallery": {
     "noImage": "No Image"
   },
@@ -577,7 +581,7 @@
     "title": "Your Orders",
     "allStatuses": "All Statuses",
     "noOrders": "No orders found.",
-    "orderPlacedSuccessfully": "Your order was placed successfully! \ud83c\udf89"
+    "orderPlacedSuccessfully": "Your order was placed successfully! 🎉"
   },
   "verifyPhone": {
     "title": "Verify Phone Number",
@@ -606,27 +610,27 @@
     "discoverProducts": "Discover Products"
   },
   "catalogs": {
-  "products": {
-    "title": "All Products",
-    "kicker": "Catalog",
-    "subtitle": "Explore curated pieces with refined filters and elegant browsing."
+    "products": {
+      "title": "All Products",
+      "kicker": "Catalog",
+      "subtitle": "Explore curated pieces with refined filters and elegant browsing."
+    },
+    "newIn": {
+      "title": "New In",
+      "kicker": "Latest Arrivals",
+      "subtitle": "Discover the newest pieces added to the Tamara Land collection."
+    },
+    "sale": {
+      "title": "Sale",
+      "kicker": "Exclusive Offers",
+      "subtitle": "Shop premium styles at exclusive prices for a limited time."
+    },
+    "under800": {
+      "title": "Under 800",
+      "kicker": "Smart Picks",
+      "subtitle": "Beautiful pieces, all priced under 800 EGP."
+    }
   },
-  "newIn": {
-    "title": "New In",
-    "kicker": "Latest Arrivals",
-    "subtitle": "Discover the newest pieces added to the Tamara Land collection."
-  },
-  "sale": {
-    "title": "Sale",
-    "kicker": "Exclusive Offers",
-    "subtitle": "Shop premium styles at exclusive prices for a limited time."
-  },
-  "under800": {
-    "title": "Under 800",
-    "kicker": "Smart Picks",
-    "subtitle": "Beautiful pieces, all priced under 800 EGP."
-  }
-},
   "contact": {
     "kicker": "Get In Touch",
     "title": "Contact Us",
@@ -675,7 +679,7 @@
     "sections": {
       "time": {
         "title": "Delivery Time",
-        "body": "Orders are typically delivered within 2\u20134 business days from the time of confirmation. Remote governorates may take an additional 1\u20132 days."
+        "body": "Orders are typically delivered within 2–4 business days from the time of confirmation. Remote governorates may take an additional 1–2 days."
       },
       "cost": {
         "title": "Shipping Cost",
@@ -720,7 +724,7 @@
       },
       "refund": {
         "title": "Refund Method",
-        "body": "Approved refunds are issued as store credit or via the original payment method within 5\u20137 business days of receiving the returned item."
+        "body": "Approved refunds are issued as store credit or via the original payment method within 5–7 business days of receiving the returned item."
       },
       "nonReturnable": {
         "title": "Non-Returnable Items",
@@ -739,7 +743,7 @@
       },
       "shipping": {
         "q": "How long does delivery take?",
-        "a": "Most orders are delivered within 2\u20134 business days. Delivery time may vary based on your location and courier availability."
+        "a": "Most orders are delivered within 2–4 business days. Delivery time may vary based on your location and courier availability."
       },
       "returns": {
         "q": "Can I return an item?",
@@ -856,7 +860,10 @@
     "inactive": "Inactive",
     "edit": "Edit",
     "delete": "Delete",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "saving": "Saving…",
+    "saveChanges": "Save changes",
+    "deleting": "Deleting…"
   },
   "admin": {
     "labels": {
@@ -901,16 +908,24 @@
       "new": "New discount",
       "newTitle": "New discount",
       "editTitle": "Edit discount",
-      "nameRequired": "Name is required.",
       "type": "Discount type",
-      "maximum": "Maximum discount (EGP)",
+      "maximum": "Maximum discount",
+      "priority": "Priority",
       "appliesTo": "Applies to",
-      "selectTarget": "Select",
-      "startRequired": "Start date is required.",
-      "endRequired": "End date is required.",
-      "active": "Discount is active",
+      "select": "Select",
+      "selectOne": "Select one",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "isActive": "Discount is active",
       "create": "Create discount",
-      "empty": "No discounts found."
+      "empty": "No discounts found.",
+      "validation": {
+        "nameRequired": "Name is required.",
+        "valueRequired": "Value is required.",
+        "startDateRequired": "Start date is required.",
+        "endDateRequired": "End date is required.",
+        "dateRange": "End date must be after start date."
+      }
     },
     "products": {
       "title": "Products Management",
@@ -1098,7 +1113,7 @@
     },
     "dashboard": {
       "kicker": "Admin dashboard",
-      "welcome": "Welcome back \ud83d\udc4b",
+      "welcome": "Welcome back 👋",
       "subtitle": "Track your store performance, customer activity, and visitor analytics in one place.",
       "today": "Today",
       "lastSync": "Last sync",
@@ -1310,16 +1325,6 @@
     "bentoCard2Subtitle": "Stuffed with premium roasted nuts and gold leaf details",
     "bentoCard3Title": "Hospitality & Event Packs",
     "bentoCard3Subtitle": "Fresh & elegant selections for your guests"
-  },
-  "featuredProducts": {
-    "justLanded": "Exclusive Pick",
-    "newArrivals": "Featured Collections",
-    "viewAll": "View All",
-    "noProducts": "No products available currently.",
-    "tabAll": "All",
-    "tabNew": "New Arrivals",
-    "tabTop": "Top Rated",
-    "tabOffers": "Exclusive Offers"
   },
   "productDetailsExt": {
     "tabDescription": "Product Details & Ingredients",

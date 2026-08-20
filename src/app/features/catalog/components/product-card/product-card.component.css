@@ -33,21 +33,64 @@
 .product-card:hover .img-container img {
   transform: scale(1.08);
 }
-
+/* =========================================================
+   Discount Corner Ribbon
+   ========================================================= */
 .product-card__badge {
   position: absolute;
-  top: 0.6rem;
-  inset-inline-start: 0.6rem;
-  padding: 0.3rem 0.7rem;
-  border-radius: var(--radius-full);
+  top: 18px;
+  inset-inline-start: -34px;
+
+  z-index: 4;
+
+  width: 125px;
+  padding: 0.38rem 0.5rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   background: var(--gold-gradient);
   color: var(--secondary-dark);
+
   font-size: 0.72rem;
-  font-weight: 700;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  z-index: 2;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1;
+
+  text-align: center;
+  white-space: nowrap;
+
+  transform: rotate(-45deg);
+
+  box-shadow:
+    0 5px 14px rgba(0, 0, 0, 0.25),
+    0 0 10px rgba(201, 162, 75, 0.16);
+
+  pointer-events: none;
+}
+.product-card__badge::before,
+.product-card__badge::after {
+  content: '';
+  position: absolute;
+
+  bottom: -5px;
+
+  width: 0;
+  height: 0;
+
+  border-top: 5px solid var(--primary-dark);
 }
 
+.product-card__badge::before {
+  inset-inline-start: 0;
+  border-inline-end: 5px solid transparent;
+}
+
+.product-card__badge::after {
+  inset-inline-end: 0;
+  border-inline-start: 5px solid transparent;
+}
 .product-card__info {
   padding: 0.9rem 1rem 1.1rem;
 }
@@ -195,4 +238,7 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
+}
+:host-context([dir='rtl']) .product-card__badge {
+  transform: rotate(45deg);
 }

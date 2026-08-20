@@ -1,17 +1,27 @@
 <section class="product-details-page">
-  @if (!product()) {
-    <p class="section-copy">{{ 'productDetails.productNotFound' | translate }}</p>
-  } @else {
-    <header class="product-details-page__hero">
-      <app-breadcrumbs [items]="breadcrumbs()" />
-      <div>
-<p class="section-kicker">
-  {{ product()?.arabicCategoryName | localizedField:product()?.categoryName }} . <span class="product-details-page__brand">
-  {{ product()?.arabicBrandName | localizedField:product()?.brandName }}
-</span>
-</p>        
 
-<h1 class="section-title">{{ product() | localizedName }} </h1>
+  @if (!product()) {
+    <p class="section-copy">
+      {{ 'productDetails.productNotFound' | translate }}
+    </p>
+  } @else {
+
+    <header class="product-details-page__hero">
+
+      <app-breadcrumbs [items]="breadcrumbs()" />
+
+      <div>
+        <p class="section-kicker">
+          {{ product()?.arabicCategoryName | localizedField: product()?.categoryName }}
+          .
+          <span class="product-details-page__brand">
+            {{ product()?.arabicBrandName | localizedField: product()?.brandName }}
+          </span>
+        </p>
+
+        <h1 class="section-title">
+          {{ product() | localizedName }}
+        </h1>
       </div>
 
       <button
@@ -19,188 +29,260 @@
         class="wishlist-toggle"
         [class.wishlist-toggle--active]="isInWishlist()"
         (click)="toggleWishlist()"
-[attr.aria-label]="isInWishlist()? ('productDetails.removeWishlist' | translate): ('productDetails.addWishlist' | translate)
-"      >
-        <svg width="22" height="22" viewBox="0 0 24 24" [attr.fill]="isInWishlist() ? 'currentColor' : 'none'">
-          <path d="M12 20s-7-4.35-9.5-8.5C.8 8 2.4 4.5 6 4.5c2 0 3.4 1.1 6 3.6 2.6-2.5 4-3.6 6-3.6 3.6 0 5.2 3.5 3.5 7-2.5 4.15-9.5 8.5-9.5 8.5z" stroke="currentColor" stroke-width="1.8"/>
+        [attr.aria-label]="
+          isInWishlist()
+            ? ('productDetails.removeWishlist' | translate)
+            : ('productDetails.addWishlist' | translate)
+        "
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          [attr.fill]="isInWishlist() ? 'currentColor' : 'none'"
+        >
+          <path
+            d="M12 20s-7-4.35-9.5-8.5C.8 8 2.4 4.5 6 4.5c2 0 3.4 1.1 6 3.6 2.6-2.5 4-3.6 6-3.6 3.6 0 5.2 3.5 3.5 7-2.5 4.15-9.5 8.5-9.5 8.5z"
+            stroke="currentColor"
+            stroke-width="1.8"
+          />
         </svg>
       </button>
+
     </header>
 
     <div class="product-details-page__content">
+
+      <!-- Gallery -->
       <div class="product-details-page__gallery">
-        <app-product-gallery [images]="product()?.images || []" [title]="product() ? (product() | localizedName) : ('productDetails.productImages' | translate)"     [fallbackImage]="product()?.imageUrl || '/assets/placeholder-product.jpg'" />
+        <app-product-gallery
+          [images]="product()?.images || []"
+          [title]="
+            product()
+              ? (product() | localizedName)
+              : ('productDetails.productImages' | translate)
+          "
+          [fallbackImage]="
+            product()?.imageUrl || '/assets/placeholder-product.jpg'
+          "
+        />
       </div>
 
+      <!-- Product info -->
       <div class="product-details-page__aside">
-      <div class="product-details-page__summary">
 
-  <span class="product-details-page__brand">
-{{ product()?.arabicBrandName || product()?.brandName }}  </span>
+        <div class="product-details-page__summary">
 
-  <h2 class="product-details-page__title">
-    {{ product() | localizedName }}
-  </h2>
+          @if (hasDiscount()) {
+            <span
+              class="product-details-page__discount-ribbon"
+              aria-hidden="true"
+            >
+              -{{ discountPercent() }}%
+            </span>
+          }
 
-  <div class="product-details-page__price-wrapper">
+          <span class="product-details-page__brand">
+            {{ product()?.arabicBrandName || product()?.brandName }}
+          </span>
 
-    <span class="product-details-page__price">
-      {{ priceLabel() }}
-    </span>
-  <app-product-variant-selector
-      [variants]="product()?.variants || []"
-      (selectionChange)="onVariantSelected($event)">
-  </app-product-variant-selector>
+          <h2 class="product-details-page__title">
+            {{ product() | localizedName }}
+          </h2>
 
-  <button
-      class="btn btn-primary product-details-page__cart-btn"
-      type="button"
-      (click)="addToCart()"
-      [disabled]="isAddingToCart()">
+          <!-- Pricing -->
+          <div class="product-details-page__price-wrapper">
 
-{{ isAddingToCart()? ('productDetails.adding' | translate): ('productDetails.addToCart' | translate)}}
-  </button>
+            <div class="product-details-page__pricing">
 
-  @if(cartMessage()){
+              <div class="product-details-page__price-row">
 
-      <p class="product-details-page__cart-msg">
+                <span class="product-details-page__price">
+                  {{ priceLabel() }}
+                </span>
 
-{{ cartMessage() | translate }}
-      </p>
+                @if (hasDiscount()) {
+                  <span class="product-details-page__price-old">
+                    EGP {{ originalPrice().toLocaleString() }}
+                  </span>
+                }
 
-  }
-  </div>
-  @if (product()?.description) {
-    <div class="product-details-page__description">
-      <h3 class="product-details-page__description-title">
-        {{ 'productDetails.description' | translate }}
-      </h3>
-      <p class="product-details-page__description-text">
-        {{ product()?.description }}
-      </p>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Variants -->
+          <app-product-variant-selector
+            [variants]="product()?.variants || []"
+            (selectionChange)="onVariantSelected($event)"
+          />
+
+          <!-- Cart -->
+          <button
+            class="btn btn-primary product-details-page__cart-btn"
+            type="button"
+            (click)="addToCart()"
+            [disabled]="isAddingToCart()"
+          >
+            {{
+              isAddingToCart()
+                ? ('productDetails.adding' | translate)
+                : ('productDetails.addToCart' | translate)
+            }}
+          </button>
+
+          @if (cartMessage()) {
+            <p class="product-details-page__cart-msg">
+              {{ cartMessage() | translate }}
+            </p>
+          }
+
+          <!-- Description -->
+          @if (product()?.description) {
+            <div class="product-details-page__description">
+
+              <h3 class="product-details-page__description-title">
+                {{ 'productDetails.description' | translate }}
+              </h3>
+
+              <p class="product-details-page__description-text">
+                {{ product()?.description }}
+              </p>
+
+            </div>
+          }
+
+          <!-- Stats -->
+          <div class="product-details-page__stats">
+
+            <div class="stat-card">
+              <div class="stat-card__value">
+                ⭐ {{ rating().toFixed(1) }}/5
+              </div>
+
+              <div class="stat-card__label">
+                {{ 'productDetails.rating' | translate }}
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card__value">
+                👁 {{ product()?.viewsCount ?? 0 }}
+              </div>
+
+              <div class="stat-card__label">
+                {{ 'productDetails.views' | translate }}
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card__value">
+                💬 {{ product()?.reviewsCount ?? 0 }}
+              </div>
+
+              <div class="stat-card__label">
+                {{ 'productDetails.reviews' | translate }}
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card__value">
+                @if (stock() > 0) {
+                  {{ 'productDetails.inStock' | translate }}
+                } @else {
+                  {{ 'productDetails.outOfStock' | translate }}
+                }
+              </div>
+
+              <div class="stat-card__label">
+                {{ 'productDetails.availability' | translate }}
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Selected variant -->
+          @if (selectedVariant()) {
+            <div class="product-selected-variant">
+
+              <span>
+                {{ 'productDetails.selected' | translate }}
+              </span>
+
+              <strong>
+                {{ selectedVariant()?.color }}
+              </strong>
+
+              <span aria-hidden="true">•</span>
+
+              <strong>
+                {{ selectedVariant()?.size }}
+              </strong>
+
+            </div>
+          }
+
+        </div>
+
+        <app-review-form
+          [productId]="product()?.id"
+        />
+
+      </div>
+
     </div>
-  }
-  <div class="product-details-page__stats">
 
-    <div class="stat-card">
-
-      <div class="stat-card__value">
-
-⭐ {{ rating().toFixed(1) }}/5
-      </div>
-
-      <div class="stat-card__label">
-
-{{ 'productDetails.rating' | translate }}
-      </div>
-
-    </div>
-
-    <div class="stat-card">
-
-      <div class="stat-card__value">
-
-        👁 {{ product()?.viewsCount ?? 0 }}
-
-      </div>
-
-      <div class="stat-card__label">
-
-        {{ 'productDetails.views' | translate }}
-
-      </div>
-
-    </div>
-
-    <div class="stat-card">
-
-      <div class="stat-card__value">
-
-        💬 {{ product()?.reviewsCount ?? 0 }}
-
-      </div>
-
-      <div class="stat-card__label">
-
-        {{ 'productDetails.reviews' | translate }}
-
-      </div>
-
-    </div>
-
-    <div class="stat-card">
-
-      <div class="stat-card__value">
-
-     @if (stock() > 0) {
-   {{ 'productDetails.inStock' | translate }}
-} @else {
-  {{ 'productDetails.outOfStock' | translate }}
-}
-
-      </div>
-
-      <div class="stat-card__label">
-
-{{ 'productDetails.availability' | translate }}
-      </div>
-
-    </div>
-
-  </div>
-
-  @if (selectedVariant()) {
-
-    <div class="product-selected-variant">
-
-      {{ 'productDetails.selected' | translate }}
-
-      <strong>
-
-        {{ selectedVariant()?.color }}
-
-      </strong>
-
-      •
-
-      <strong>
-
-        {{ selectedVariant()?.size }}
-
-      </strong>
-
-    </div>
-
-  }
-
-</div>
-        @if (cartMessage()) {
-          <p class="section-copy">{{ cartMessage() }}</p>
-        }
-        <app-review-form [productId]="product()?.id" />
-      </div>
-    </div>
-
+    <!-- Reviews -->
     <div class="product-details-page__reviews">
-      <app-review-list [productId]="product()?.id" />
+      <app-review-list
+        [productId]="product()?.id"
+      />
     </div>
 
+    <!-- Related products -->
     @if (product()?.relatedProducts?.length) {
+
       <div class="product-details-page__related">
-        <h3 class="product-details-page__related-title">{{ 'productDetails.relatedProducts' | translate }}</h3>
+
+        <h3 class="product-details-page__related-title">
+          {{ 'productDetails.relatedProducts' | translate }}
+        </h3>
 
         <div class="slider-wrapper">
+
           <button
             type="button"
             class="slider-nav slider-nav--prev"
             (click)="scrollRelatedSlider(-1)"
             [disabled]="!canScrollPrev()"
-            aria-label="Previous">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            aria-label="Previous"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m15 18-6-6 6-6" />
+            </svg>
           </button>
 
-          <div class="product-slider" #relatedSliderTrack (scroll)="onRelatedSliderScroll()">
-            @for (related of product()!.relatedProducts; track related.id) {
+          <div
+            class="product-slider"
+            #relatedSliderTrack
+            (scroll)="onRelatedSliderScroll()"
+          >
+            @for (
+              related of product()!.relatedProducts;
+              track related.id
+            ) {
               <div class="slider-item">
                 <app-product-card [product]="related" />
               </div>
@@ -212,30 +294,79 @@
             class="slider-nav slider-nav--next"
             (click)="scrollRelatedSlider(1)"
             [disabled]="!canScrollNext()"
-            aria-label="Next">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            aria-label="Next"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m9 18 6-6-6-6" />
+            </svg>
           </button>
+
         </div>
       </div>
     }
+
   }
 
+  <!-- Mobile sticky bar -->
   @if (showStickyBar() && product()) {
+
     <div class="product-sticky-bar">
+
       <div class="product-sticky-bar__info">
-        <img [src]="product()?.imageUrl || '/assets/placeholder-product.jpg'" [alt]="product() | localizedName" class="product-sticky-bar__img" />
+
+        <img
+          [src]="product()?.imageUrl || '/assets/placeholder-product.jpg'"
+          [alt]="product() | localizedName"
+          class="product-sticky-bar__img"
+        />
+
         <div>
-          <p class="product-sticky-bar__title">{{ product() | localizedName }}</p>
-          <p class="product-sticky-bar__price">{{ priceLabel() }}</p>
+
+          <p class="product-sticky-bar__title">
+            {{ product() | localizedName }}
+          </p>
+
+          <div class="product-sticky-bar__price-wrapper">
+            <p class="product-sticky-bar__price">
+              {{ priceLabel() }}
+            </p>
+
+            @if (hasDiscount()) {
+              <span class="product-sticky-bar__price-old">
+                EGP {{ originalPrice().toLocaleString() }}
+              </span>
+            }
+          </div>
+
         </div>
+
       </div>
+
       <button
         type="button"
         class="btn btn-primary product-sticky-bar__btn"
         (click)="addToCart()"
-        [disabled]="isAddingToCart()">
-        {{ isAddingToCart()? ('productDetails.adding' | translate): ('productDetails.addToCart' | translate) }}
+        [disabled]="isAddingToCart()"
+      >
+        {{
+          isAddingToCart()
+            ? ('productDetails.adding' | translate)
+            : ('productDetails.addToCart' | translate)
+        }}
       </button>
+
     </div>
+
   }
+
 </section>

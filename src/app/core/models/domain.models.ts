@@ -358,11 +358,11 @@ export interface DashboardChartPoint {
 export interface DiscountResponse {
   id: number;
   name: string;
-  discountType: number; // 0=Percentage, 1=Fixed
+  discountType: number;
   discountValue: number;
-  maximumDiscount: number;
-  target: number; // 0=Product, 1=Category, 2=Brand
-  targetId: number;
+  maximumDiscount: number | null;
+  target: number;
+  targetIds: number[];
   priority: number;
   startDate: string;
   endDate: string;
@@ -373,15 +373,15 @@ export interface CreateDiscountRequest {
   name: string;
   discountType: number;
   discountValue: number;
-  maximumDiscount: number;
+  maximumDiscount: number | null;
   target: number;
-  targetId: number;
+  targetIds: number[];
   priority: number;
   startDate: string;
   endDate: string;
   isActive: boolean;
 }
- 
+
 export type UpdateDiscountRequest = CreateDiscountRequest;
 
 // ---- Coupons ----

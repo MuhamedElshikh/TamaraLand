@@ -74,10 +74,14 @@
     }
   },
   "featuredProducts": {
-    "justLanded": "وصل حديثًا",
-    "newArrivals": "أحدث المنتجات",
+    "justLanded": "مجموعات حصرية",
+    "newArrivals": "تشكيلات فاخرة لكم",
     "viewAll": "عرض الكل",
-    "noProducts": "لا توجد منتجات متاحة حاليًا."
+    "noProducts": "لا توجد منتجات متوفرة حالياً.",
+    "tabAll": "الكل",
+    "tabNew": "الوصل حديثاً",
+    "tabTop": "الأعلى تقييماً",
+    "tabOffers": "العروض الحصرية"
   },
   "hero": {
     "eyebrow": "أزياء فاخرة",
@@ -91,38 +95,38 @@
   "productCard": {
     "addToCart": "أضف إلى السلة",
     "adding": "جارٍ الإضافة...",
-    "added": "تمت الإضافة \u2713",
+    "added": "تمت الإضافة ✓",
     "tryAgain": "حاول مرة أخرى",
     "addToWishlist": "إضافة إلى المفضلة",
     "removeFromWishlist": "إزالة من المفضلة",
     "currency": "ج.م"
   },
- "filters": {
-  "title": "خصص اختيارك",
-  "subtitle": "اكتشف المنتجات المناسبة لذوقك باستخدام خيارات التصفية.",
-  "filters": "التصفية",
-  "active": "نشط",
-  "search": "بحث",
-  "searchPlaceholder": "ابحث عن المنتجات...",
-  "categories": "الأقسام",
-  "allCategories": "كل الأقسام",
-  "brands": "العلامات التجارية",
-  "allBrands": "كل العلامات",
-  "priceRange": "نطاق السعر",
-  "min": "الحد الأدنى",
-  "max": "الحد الأقصى",
-  "maxAllowedPriceHint": "أسعار هذه الصفحة محددة بحد أقصى {{max}} جنيه",
-  "applyPrice": "تطبيق السعر",
-  "availability": "التوفر",
-  "inStockOnly": "المتوفر فقط",
-  "sortBy": "ترتيب حسب",
-  "featured": "الأبرز",
-  "newest": "الأحدث",
-  "priceLowHigh": "السعر: من الأقل للأعلى",
-  "priceHighLow": "السعر: من الأعلى للأقل",
-  "bestDiscount": "أفضل خصم",
-  "clearAll": "مسح الكل"
-},
+  "filters": {
+    "title": "خصص اختيارك",
+    "subtitle": "اكتشف المنتجات المناسبة لذوقك باستخدام خيارات التصفية.",
+    "filters": "التصفية",
+    "active": "نشط",
+    "search": "بحث",
+    "searchPlaceholder": "ابحث عن المنتجات...",
+    "categories": "الأقسام",
+    "allCategories": "كل الأقسام",
+    "brands": "العلامات التجارية",
+    "allBrands": "كل العلامات",
+    "priceRange": "نطاق السعر",
+    "min": "الحد الأدنى",
+    "max": "الحد الأقصى",
+    "maxAllowedPriceHint": "أسعار هذه الصفحة محددة بحد أقصى {{max}} جنيه",
+    "applyPrice": "تطبيق السعر",
+    "availability": "التوفر",
+    "inStockOnly": "المتوفر فقط",
+    "sortBy": "ترتيب حسب",
+    "featured": "الأبرز",
+    "newest": "الأحدث",
+    "priceLowHigh": "السعر: من الأقل للأعلى",
+    "priceHighLow": "السعر: من الأعلى للأقل",
+    "bestDiscount": "أفضل خصم",
+    "clearAll": "مسح الكل"
+  },
   "gallery": {
     "noImage": "لا توجد صورة"
   },
@@ -579,7 +583,7 @@
     "title": "طلباتي",
     "allStatuses": "كل الحالات",
     "noOrders": "لا توجد طلبات.",
-    "orderPlacedSuccessfully": "تم إنشاء طلبك بنجاح! \ud83c\udf89"
+    "orderPlacedSuccessfully": "تم إنشاء طلبك بنجاح! 🎉"
   },
   "verifyPhone": {
     "title": "تأكيد رقم الهاتف",
@@ -607,28 +611,28 @@
     "empty": "لم تقم بحفظ أي منتجات بعد.",
     "discoverProducts": "اكتشف المنتجات"
   },
- "catalogs": {
-  "products": {
-    "title": "جميع المنتجات",
-    "kicker": "الكتالوج",
-    "subtitle": "استكشف منتجاتنا المختارة بعناية باستخدام أدوات تصفية متقدمة."
+  "catalogs": {
+    "products": {
+      "title": "جميع المنتجات",
+      "kicker": "الكتالوج",
+      "subtitle": "استكشف منتجاتنا المختارة بعناية باستخدام أدوات تصفية متقدمة."
+    },
+    "newIn": {
+      "title": "وصل حديثًا",
+      "kicker": "أحدث الإضافات",
+      "subtitle": "اكتشف أحدث المنتجات المضافة إلى مجموعة تمارا لاند."
+    },
+    "sale": {
+      "title": "العروض",
+      "kicker": "عروض حصرية",
+      "subtitle": "تسوق منتجات مميزة بأسعار خاصة لفترة محدودة."
+    },
+    "under800": {
+      "title": "أقل من 800",
+      "kicker": "اختيارات ذكية",
+      "subtitle": "قطع جميلة، كلها بسعر أقل من 800 جنيه."
+    }
   },
-  "newIn": {
-    "title": "وصل حديثًا",
-    "kicker": "أحدث الإضافات",
-    "subtitle": "اكتشف أحدث المنتجات المضافة إلى مجموعة تمارا لاند."
-  },
-  "sale": {
-    "title": "العروض",
-    "kicker": "عروض حصرية",
-    "subtitle": "تسوق منتجات مميزة بأسعار خاصة لفترة محدودة."
-  },
-  "under800": {
-    "title": "أقل من 800",
-    "kicker": "اختيارات ذكية",
-    "subtitle": "قطع جميلة، كلها بسعر أقل من 800 جنيه."
-  }
-},
   "contact": {
     "kicker": "تواصل معنا",
     "title": "اتصل بنا",
@@ -858,7 +862,10 @@
     "inactive": "غير نشط",
     "edit": "تعديل",
     "delete": "حذف",
-    "refresh": "تحديث"
+    "refresh": "تحديث",
+    "saving": "جارٍ الحفظ...",
+    "saveChanges": "حفظ التغييرات",
+    "deleting": "جارٍ الحذف..."
   },
   "admin": {
     "labels": {
@@ -903,16 +910,24 @@
       "new": "خصم جديد",
       "newTitle": "خصم جديد",
       "editTitle": "تعديل الخصم",
-      "nameRequired": "الاسم مطلوب.",
       "type": "نوع الخصم",
       "maximum": "أقصى خصم (ج.م)",
+      "priority": "الأولوية",
       "appliesTo": "يُطبق على",
-      "selectTarget": "اختر",
-      "startRequired": "تاريخ البدء مطلوب.",
-      "endRequired": "تاريخ الانتهاء مطلوب.",
-      "active": "الخصم نشط",
+      "select": "اختر",
+      "selectOne": "اختر عنصرًا",
+      "startDate": "تاريخ البدء",
+      "endDate": "تاريخ الانتهاء",
+      "isActive": "الخصم نشط",
       "create": "إنشاء الخصم",
-      "empty": "لا توجد خصومات."
+      "empty": "لا توجد خصومات.",
+      "validation": {
+        "nameRequired": "الاسم مطلوب.",
+        "valueRequired": "القيمة مطلوبة.",
+        "startDateRequired": "تاريخ البدء مطلوب.",
+        "endDateRequired": "تاريخ الانتهاء مطلوب.",
+        "dateRange": "تاريخ النهاية لازم يكون بعد تاريخ البداية."
+      }
     },
     "products": {
       "title": "إدارة المنتجات",
@@ -1100,7 +1115,7 @@
     },
     "dashboard": {
       "kicker": "لوحة التحكم",
-      "welcome": "مرحبًا بعودتك \ud83d\udc4b",
+      "welcome": "مرحبًا بعودتك 👋",
       "subtitle": "راقب أداء المتجر ونشاط العملاء وتحليلات الزوار من مكان واحد.",
       "today": "اليوم",
       "lastSync": "آخر تزامن",
@@ -1302,16 +1317,6 @@
       "status": "الحالة",
       "allStatus": "كل الحالات"
     }
-  },
-  "featuredProducts": {
-    "justLanded": "مجموعات حصرية",
-    "newArrivals": "تشكيلات فاخرة لكم",
-    "viewAll": "عرض الكل",
-    "noProducts": "لا توجد منتجات متوفرة حالياً.",
-    "tabAll": "الكل",
-    "tabNew": "الوصل حديثاً",
-    "tabTop": "الأعلى تقييماً",
-    "tabOffers": "العروض الحصرية"
   },
   "productDetailsExt": {
     "tabDescription": "تفاصيل المنتج والمكونات",

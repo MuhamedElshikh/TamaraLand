@@ -1,10 +1,7 @@
 <a [routerLink]="['/products', product.id]" class="product-card" [attr.aria-label]="product | localizedName">
   <div class="img-container">
     <img [src]="imageUrl" [alt]="product | localizedName" loading="lazy" />
-    @if (discountPercent > 0) {
-      <span class="product-card__badge">-{{ discountPercent }}%</span>
-    }
-
+<span class="product-card__badge">-{{ discountPercent }}%</span>
     <button
       type="button"
       class="product-card__wishlist-btn"

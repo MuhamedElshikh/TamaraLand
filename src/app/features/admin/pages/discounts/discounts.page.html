@@ -1,139 +1,510 @@
 <section class="admin-discounts-page">
   <header class="admin-page__hero">
-    <div>
-      <p class="section-kicker">{{ 'admin.labels.marketing' | translate }}</p>
-      <h1 class="section-title">{{ 'admin.discounts.title' | translate }}</h1>
+    <div class="admin-page__hero-content">
+      <p class="section-kicker">
+        {{ 'admin.labels.marketing' | translate }}
+      </p>
+
+      <h1 class="section-title">
+        {{ 'admin.discounts.title' | translate }}
+      </h1>
     </div>
+
     @if (!isFormOpen()) {
-      <button type="button" class="btn btn-primary" (click)="openCreateForm()">+ {{ 'admin.discounts.new' | translate }}</button>
+      <button
+        type="button"
+        class="btn btn-primary admin-page__create-btn"
+        (click)="openCreateForm()"
+      >
+        <span class="admin-page__create-icon">+</span>
+        <span>
+          {{ 'admin.discounts.new' | translate }}
+        </span>
+      </button>
     }
   </header>
 
   @if (listError()) {
-    <p class="admin-page__error">{{ listError() }}</p>
+    <div
+      class="admin-page__alert admin-page__alert--error"
+      role="alert"
+    >
+      <span class="admin-page__alert-icon">!</span>
+      <span>{{ listError() }}</span>
+    </div>
   }
 
   @if (isFormOpen()) {
-    <form class="scaffold-card discount-form" [formGroup]="form" (ngSubmit)="submit()">
-      <h3 class="discount-form__title">{{ editingDiscount() ? 'Edit discount' : 'New discount' }}</h3>
+    <form
+      class="discount-form"
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+    >
+      <div class="discount-form__header">
+        <div>
+          <span class="discount-form__eyebrow">
+            {{ editingDiscount()
+              ? ('admin.labels.edit' | translate)
+              : ('admin.discounts.new' | translate)
+            }}
+          </span>
+
+          <h2 class="discount-form__title">
+            {{ editingDiscount()
+              ? ('admin.discounts.editTitle' | translate)
+              : ('admin.discounts.newTitle' | translate)
+            }}
+          </h2>
+        </div>
+
+        <button
+          type="button"
+          class="discount-form__close"
+          (click)="closeForm()"
+          aria-label="Close"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="discount-form__divider"></div>
 
       @if (formError()) {
-        <p class="admin-page__error">{{ formError() }}</p>
+        <div
+          class="admin-page__alert admin-page__alert--error"
+          role="alert"
+        >
+          <span class="admin-page__alert-icon">!</span>
+          <span>{{ formError() }}</span>
+        </div>
       }
 
-      <label class="field">
-        <span>{{ 'admin.labels.name' | translate }}</span>
-        <input type="text" formControlName="name" placeholder="Summer sale" />
-        @if (controlHasError('name', 'required')) {
-          <small>Name is required.</small>
-        }
-      </label>
+      <div class="discount-form__section">
+        <div class="discount-form__section-heading">
+          <span class="discount-form__section-number">
+            01
+          </span>
 
-      <div class="field-grid">
-        <label class="field">
-          <span>{{ 'admin.discounts.type' | translate }}</span>
-          <select formControlName="discountType">
-            <option [ngValue]="0">{{ 'admin.labels.percentage' | translate }}</option>
-            <option [ngValue]="1">{{ 'admin.labels.fixedAmount' | translate }}</option>
-          </select>
-        </label>
+          <div>
+            <h3>
+              {{ 'admin.discounts.newTitle' | translate }}
+            </h3>
+          </div>
+        </div>
 
-        <label class="field">
-          <span>{{ 'admin.labels.value' | translate }}</span>
-          <input type="number" formControlName="discountValue" min="0.01" step="0.01" />
-          @if (controlHasError('discountValue', 'required')) {
-            <small>Value is required.</small>
-          }
-        </label>
+        <div class="discount-form__fields">
+          <label class="field field--full">
+            <span>
+              {{ 'admin.labels.name' | translate }}
+            </span>
+
+            <input
+              type="text"
+              formControlName="name"
+              placeholder="Summer sale"
+              autocomplete="off"
+            />
+
+            @if (controlHasError('name', 'required')) {
+              <small>
+                {{ 'admin.discounts.validation.nameRequired' | translate }}
+              </small>
+            }
+
+            @if (controlHasError('name', 'minlength')) {
+              <small>
+                {{ 'admin.discounts.validation.nameRequired' | translate }}
+              </small>
+            }
+          </label>
+
+          <label class="field">
+            <span>
+              {{ 'admin.discounts.type' | translate }}
+            </span>
+
+            <select formControlName="discountType">
+              <option [ngValue]="0">
+                {{ 'admin.labels.percentage' | translate }}
+              </option>
+
+              <option [ngValue]="1">
+                {{ 'admin.labels.fixedAmount' | translate }}
+              </option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>
+              {{ 'admin.labels.value' | translate }}
+            </span>
+
+            <div class="field__input-wrap">
+              <input
+                type="number"
+                formControlName="discountValue"
+                min="0.01"
+                step="0.01"
+              />
+
+              <span class="field__suffix">
+                {{
+                  form.controls.discountType.value === 0
+                    ? '%'
+                    : 'EGP'
+                }}
+              </span>
+            </div>
+
+            @if (controlHasError('discountValue', 'required')) {
+              <small>
+                {{ 'admin.discounts.validation.valueRequired' | translate }}
+              </small>
+            }
+
+            @if (controlHasError('discountValue', 'min')) {
+              <small>
+                {{ 'admin.discounts.validation.valueRequired' | translate }}
+              </small>
+            }
+          </label>
+
+          <label class="field">
+            <span>
+              {{ 'admin.discounts.maximum' | translate }}
+            </span>
+
+            <div class="field__input-wrap">
+              <input
+                type="number"
+                formControlName="maximumDiscount"
+                min="0"
+                step="0.01"
+              />
+
+              <span class="field__suffix">
+                EGP
+              </span>
+            </div>
+          </label>
+
+          <label class="field">
+            <span>
+              {{ 'admin.discounts.priority' | translate }}
+            </span>
+
+            <input
+              type="number"
+              formControlName="priority"
+              min="0"
+            />
+          </label>
+        </div>
       </div>
 
-      <div class="field-grid">
-        <label class="field">
-          <span>{{ 'admin.discounts.maximum' | translate }}</span>
-          <input type="number" formControlName="maximumDiscount" min="0" step="0.01" />
-        </label>
+      <div class="discount-form__section">
+        <div class="discount-form__section-heading">
+          <span class="discount-form__section-number">
+            02
+          </span>
 
-        <label class="field">
-          <span>Priority</span>
-          <input type="number" formControlName="priority" min="0" />
-        </label>
+          <div>
+            <h3>
+              {{ 'admin.discounts.appliesTo' | translate }}
+            </h3>
+          </div>
+        </div>
+
+        <div class="discount-form__fields">
+          <label class="field field--full">
+            <span>
+              {{ 'admin.discounts.appliesTo' | translate }}
+            </span>
+
+            <select
+              formControlName="target"
+              (change)="onTargetChange()"
+            >
+              <option [ngValue]="0">
+                {{ 'admin.labels.product' | translate }}
+              </option>
+
+              <option [ngValue]="1">
+                {{ 'admin.labels.category' | translate }}
+              </option>
+
+              <option [ngValue]="2">
+                {{ 'admin.labels.brand' | translate }}
+              </option>
+            </select>
+          </label>
+
+          <div class="field field--full">
+            <div class="target-picker__heading">
+              <span>
+                {{ 'admin.discounts.select' | translate }}
+                {{
+                  targetLabels[
+                    form.controls.target.value
+                  ]
+                }}
+              </span>
+
+              <span class="target-picker__count">
+                {{ selectedTargetIds().length }}
+              </span>
+            </div>
+
+            <div
+              class="target-picker"
+              [class.target-picker--error]="
+                controlHasError('targetIds', 'required')
+              "
+            >
+              <div class="target-picker__selected">
+                @if (selectedTargetOptions().length > 0) {
+                  @for (
+                    option of selectedTargetOptions();
+                    track option.id
+                  ) {
+                    <button
+                      type="button"
+                      class="target-chip"
+                      (click)="removeTarget(option.id)"
+                    >
+                      <span>
+                        {{ option.name }}
+                      </span>
+
+                      <span
+                        class="target-chip__remove"
+                        aria-hidden="true"
+                      >
+                        ×
+                      </span>
+                    </button>
+                  }
+                } @else {
+                  <span class="target-picker__placeholder">
+                    {{ 'admin.discounts.selectOne' | translate }}
+                  </span>
+                }
+              </div>
+
+              @if (targetOptions().length > 0) {
+                <div class="target-picker__options">
+                  @for (
+                    option of targetOptions();
+                    track option.id
+                  ) {
+                    <label
+                      class="target-option"
+                      [class.target-option--selected]="
+                        isTargetSelected(option.id)
+                      "
+                    >
+                      <input
+                        type="checkbox"
+                        [checked]="
+                          isTargetSelected(option.id)
+                        "
+                        (change)="
+                          toggleTarget(option.id)
+                        "
+                      />
+
+                      <span class="target-option__box">
+                        <span class="target-option__check">
+                          ✓
+                        </span>
+                      </span>
+
+                      <span class="target-option__name">
+                        {{ option.name }}
+                      </span>
+
+                      <span
+                        class="target-option__id"
+                      >
+                        #{{ option.id }}
+                      </span>
+                    </label>
+                  }
+                </div>
+              }
+            </div>
+
+            @if (controlHasError('targetIds', 'required')) {
+              <small>
+                {{ 'admin.discounts.selectOne' | translate }}
+              </small>
+            }
+          </div>
+        </div>
       </div>
 
-      <div class="field-grid">
-        <label class="field">
-          <span>Applies to</span>
-          <select formControlName="target">
-            <option [ngValue]="0">Product</option>
-            <option [ngValue]="1">Category</option>
-            <option [ngValue]="2">Brand</option>
-          </select>
-        </label>
+      <div class="discount-form__section">
+        <div class="discount-form__section-heading">
+          <span class="discount-form__section-number">
+            03
+          </span>
 
-        <label class="field">
-          <span>Select {{ targetLabels[form.get('target')?.value ?? 0] }}</span>
-         <select formControlName="targetId">
+          <div>
+            <h3>
+              {{ 'admin.discounts.startDate' | translate }}
+            </h3>
+          </div>
+        </div>
 
-  <option [ngValue]="0" disabled>
-    Select one
-  </option>
+        <div class="discount-form__fields">
+          <label class="field">
+            <span>
+              {{ 'admin.discounts.startDate' | translate }}
+            </span>
 
-  @for (opt of targetOptions(); track opt.id) {
+            <input
+              type="date"
+              formControlName="startDate"
+            />
 
-    <option [ngValue]="opt.id">
-      {{ opt.name }}
-    </option>
+            @if (controlHasError('startDate', 'required')) {
+              <small>
+                {{ 'admin.discounts.validation.startDateRequired' | translate }}
+              </small>
+            }
+          </label>
 
-  }
+          <label class="field">
+            <span>
+              {{ 'admin.discounts.endDate' | translate }}
+            </span>
 
-</select>
-        </label>
+            <input
+              type="date"
+              formControlName="endDate"
+            />
+
+            @if (controlHasError('endDate', 'required')) {
+              <small>
+                {{ 'admin.discounts.validation.endDateRequired' | translate }}
+              </small>
+            }
+
+            @if (
+              form.hasError('dateRange') &&
+              form.get('endDate')?.touched
+            ) {
+              <small>
+                {{ 'admin.discounts.validation.dateRange' | translate }}
+              </small>
+            }
+          </label>
+        </div>
       </div>
 
-      <div class="field-grid">
-        <label class="field">
-          <span>Start date</span>
-          <input type="date" formControlName="startDate" />
-          @if (controlHasError('startDate', 'required')) {
-            <small>Start date is required.</small>
-          }
-        </label>
+      <div class="discount-form__status">
+        <label class="status-toggle">
+          <input
+            type="checkbox"
+            formControlName="isActive"
+          />
 
-        <label class="field">
-          <span>End date</span>
-          <input type="date" formControlName="endDate" />
-          @if (controlHasError('endDate', 'required')) {
-            <small>End date is required.</small>
-          }
+          <span class="status-toggle__track">
+            <span class="status-toggle__thumb"></span>
+          </span>
+
+          <span class="status-toggle__content">
+            <strong>
+              {{ 'admin.discounts.isActive' | translate }}
+            </strong>
+          </span>
         </label>
       </div>
-
-      <label class="discount-form__checkbox">
-        <input type="checkbox" formControlName="isActive" />
-        <span>Discount is active</span>
-      </label>
 
       <div class="discount-form__actions">
-        <button class="btn btn-primary" type="submit" [disabled]="isSubmitting()">
-          {{ isSubmitting() ? 'Saving…' : (editingDiscount() ? 'Save changes' : 'Create discount') }}
+        <button
+          class="btn btn-primary"
+          type="submit"
+          [disabled]="isSubmitting()"
+        >
+          @if (isSubmitting()) {
+            <span class="btn__spinner"></span>
+
+            <span>
+              {{ 'admin.labels.saving' | translate }}
+            </span>
+          } @else {
+            <span>
+              {{
+                editingDiscount()
+                  ? ('admin.labels.saveChanges' | translate)
+                  : ('admin.discounts.create' | translate)
+              }}
+            </span>
+          }
         </button>
-        <button class="btn btn-outline" type="button" (click)="closeForm()">Cancel</button>
+
+        <button
+          class="btn btn-outline"
+          type="button"
+          (click)="closeForm()"
+          [disabled]="isSubmitting()"
+        >
+          {{ 'admin.labels.cancel' | translate }}
+        </button>
       </div>
     </form>
   }
 
-  <app-data-table [columns]="columns" [rows]="rows()" [isLoading]="isLoading()" emptyMessage="No discounts found.">
-    <ng-template #actions let-row>
-      <div class="admin-page__row-actions">
-        <button type="button" (click)="openEditForm(row)">Edit</button>
-        <button
-          type="button"
-          class="admin-page__delete"
-          (click)="deleteDiscount(row)"
-          [disabled]="isDeleting() === row.id"
-        >
-          {{ isDeleting() === row.id ? 'Deleting…' : 'Delete' }}
-        </button>
+  <section class="discount-list">
+    <div class="discount-list__header">
+      <div>
+        <span class="discount-list__eyebrow">
+          {{ 'admin.labels.marketing' | translate }}
+        </span>
+
+        <h2>
+          {{ 'admin.discounts.title' | translate }}
+        </h2>
       </div>
-    </ng-template>
-  </app-data-table>
+
+      <span class="discount-list__count">
+        {{ discounts().length }}
+      </span>
+    </div>
+
+    <div class="discount-list__table">
+      <app-data-table
+        [columns]="columns"
+        [rows]="rows()"
+        [isLoading]="isLoading()"
+        [emptyMessage]="'admin.discounts.empty' | translate"
+      >
+        <ng-template #actions let-row>
+          <div class="admin-page__row-actions">
+            <button
+              type="button"
+              class="row-action row-action--edit"
+              (click)="openEditForm(row)"
+            >
+              {{ 'admin.labels.edit' | translate }}
+            </button>
+
+            <button
+              type="button"
+              class="row-action row-action--delete"
+              (click)="deleteDiscount(row)"
+              [disabled]="isDeleting() === row.id"
+            >
+              {{
+                isDeleting() === row.id
+                  ? ('admin.labels.deleting' | translate)
+                  : ('admin.labels.delete' | translate)
+              }}
+            </button>
+          </div>
+        </ng-template>
+      </app-data-table>
+    </div>
+  </section>
 </section>
