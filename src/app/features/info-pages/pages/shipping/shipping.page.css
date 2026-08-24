@@ -1,1 +1,11 @@
 /* ---- Shipping page just uses shared static-page styles ---- */
+.info-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding-bottom: 4rem;
+}
+
+.info-page__hero {
+  padding: 1.25rem 1rem 0.25rem;
+}
