@@ -119,23 +119,56 @@
           />
 
           <!-- Cart -->
-          <button
-            class="btn btn-primary product-details-page__cart-btn"
-            type="button"
-            (click)="addToCart()"
-            [disabled]="isAddingToCart()"
-          >
-            {{
-              isAddingToCart()
-                ? ('productDetails.adding' | translate)
-                : ('productDetails.addToCart' | translate)
-            }}
-          </button>
+          @if (isInCart()) {
+            <div
+              class="product-details-page__qty-stepper"
+              [class.product-details-page__qty-stepper--busy]="isUpdatingQty()"
+            >
+              <button
+                type="button"
+                (click)="decreaseQuantity()"
+                [disabled]="isUpdatingQty()"
+                [attr.aria-label]="'cart.decreaseQuantity' | translate"
+              >
+                −
+              </button>
 
-          @if (cartMessage()) {
-            <p class="product-details-page__cart-msg">
-              {{ cartMessage() | translate }}
-            </p>
+              <span>{{ cartQuantity() }}</span>
+
+              <button
+                type="button"
+                (click)="increaseQuantity()"
+                [disabled]="isUpdatingQty() || isAtMaxStock()"
+                [attr.aria-label]="'cart.increaseQuantity' | translate"
+              >
+                +
+              </button>
+            </div>
+
+            @if (isAtMaxStock()) {
+              <p class="product-details-page__cart-msg">
+                {{ 'cart.maxStockReached' | translate }}
+              </p>
+            }
+          } @else {
+            <button
+              class="btn btn-primary product-details-page__cart-btn"
+              type="button"
+              (click)="addToCart()"
+              [disabled]="isAddingToCart()"
+            >
+              {{
+                isAddingToCart()
+                  ? ('productDetails.adding' | translate)
+                  : ('productDetails.addToCart' | translate)
+              }}
+            </button>
+
+            @if (cartMessage()) {
+              <p class="product-details-page__cart-msg">
+                {{ cartMessage() | translate }}
+              </p>
+            }
           }
 
           <!-- Description -->
@@ -351,18 +384,45 @@
 
       </div>
 
-      <button
-        type="button"
-        class="btn btn-primary product-sticky-bar__btn"
-        (click)="addToCart()"
-        [disabled]="isAddingToCart()"
-      >
-        {{
-          isAddingToCart()
-            ? ('productDetails.adding' | translate)
-            : ('productDetails.addToCart' | translate)
-        }}
-      </button>
+      @if (isInCart()) {
+        <div
+          class="product-sticky-bar__qty-stepper"
+          [class.product-details-page__qty-stepper--busy]="isUpdatingQty()"
+        >
+          <button
+            type="button"
+            (click)="decreaseQuantity()"
+            [disabled]="isUpdatingQty()"
+            [attr.aria-label]="'cart.decreaseQuantity' | translate"
+          >
+            −
+          </button>
+
+          <span>{{ cartQuantity() }}</span>
+
+          <button
+            type="button"
+            (click)="increaseQuantity()"
+            [disabled]="isUpdatingQty() || isAtMaxStock()"
+            [attr.aria-label]="'cart.increaseQuantity' | translate"
+          >
+            +
+          </button>
+        </div>
+      } @else {
+        <button
+          type="button"
+          class="btn btn-primary product-sticky-bar__btn"
+          (click)="addToCart()"
+          [disabled]="isAddingToCart()"
+        >
+          {{
+            isAddingToCart()
+              ? ('productDetails.adding' | translate)
+              : ('productDetails.addToCart' | translate)
+          }}
+        </button>
+      }
 
     </div>
 

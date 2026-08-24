@@ -54,15 +54,15 @@
 
       <span>{{ item.quantity }}</span>
 
-      <button
-        type="button"
-        (click)="increase()"
-        [disabled]="isUpdating()"
-        [attr.aria-label]="'cart.increaseQuantity' | translate">
+     <button
+  type="button"
+  (click)="increase()"
+  [disabled]="isUpdating() || isAtMaxStock"
+  [attr.aria-label]="'cart.increaseQuantity' | translate">
 
-        +
+  +
 
-      </button>
+</button>
 
     </div>
 

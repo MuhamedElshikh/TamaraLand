@@ -327,7 +327,124 @@
   white-space: nowrap;
   transform: rotate(45deg);
 }
+/* =========================================================
+   Quantity Stepper (Add to Cart replacement)
+   ========================================================= */
 
+.product-details-page__qty-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  width: 100%;
+  height: 52px;
+
+  border-radius: 14px;
+  border: 1px solid var(--primary);
+  background: rgba(201, 162, 75, 0.08);
+
+  padding: 0 1.25rem;
+
+  transition: var(--transition-fast);
+}
+
+.product-details-page__qty-stepper--busy {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.product-details-page__qty-stepper span {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  min-width: 1.5rem;
+  text-align: center;
+}
+
+.product-details-page__qty-stepper button {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  border: 1px solid var(--primary);
+  background: transparent;
+
+  color: var(--primary);
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1;
+
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.product-details-page__qty-stepper button:hover:not(:disabled) {
+  background: var(--primary);
+  color: #17130d;
+}
+
+.product-details-page__qty-stepper button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Sticky bar variant — compact version */
+
+.product-sticky-bar__qty-stepper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  border-radius: 10px;
+  border: 1px solid var(--primary);
+  background: rgba(201, 162, 75, 0.1);
+
+  padding: 0.35rem 0.75rem;
+  flex-shrink: 0;
+}
+
+.product-sticky-bar__qty-stepper span {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffffff;
+  min-width: 1rem;
+  text-align: center;
+}
+
+.product-sticky-bar__qty-stepper button {
+  width: 26px;
+  height: 26px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  border: 1px solid var(--primary);
+  background: transparent;
+
+  color: var(--primary);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.product-sticky-bar__qty-stepper button:hover:not(:disabled) {
+  background: var(--primary);
+  color: #17130d;
+}
+
+.product-sticky-bar__qty-stepper button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
 /* =========================================================
    RTL — mirror the whole ribbon instead of re-deriving coords
    ========================================================= */

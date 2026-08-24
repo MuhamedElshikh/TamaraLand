@@ -1,7 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { switchMap, tap, map } from 'rxjs/operators'; // ✅ ضفنا map
+import { switchMap, tap, map } from 'rxjs/operators';
 import { API_BASE_URL } from '../constants/api.constants';
 import { ApiResponse } from '../models/api-response.model';
 import {
@@ -20,7 +20,6 @@ export class CartService {
   private readonly _cart = signal<CartResponse | null>(null);
   readonly cart = this._cart.asReadonly();
 
-  // ✅ الرسائل strings جاهزة من الـ backend (زي ما هو معرّف في CartResponse)
   private readonly _messages = signal<string[]>([]);
   readonly messages = this._messages.asReadonly();
 
@@ -36,9 +35,6 @@ export class CartService {
     };
   }
 
-  /**
-   * الميثود المركزية: تجيب الكارت وتحدّث الـ signals.
-   */
   private fetchCart(): Observable<CartResponse> {
     return this.http
       .get<ApiResponse<CartResponse>>(`${API_BASE_URL}/api/Cart`, this.getGuestIdParams())
@@ -85,9 +81,10 @@ export class CartService {
   }
 
   removeItem(productVariantId: number): Observable<void> {
+    // ✅ اتصلحت — كانت فيها URL متقطعة/متكررة بالغلط
     return this.http
       .delete<ApiResponse<void>>(
-        `APIBASEURL/api/Cart/items/{API_BASE_URL}/api/Cart/items/APIB​ASEU​RL/api/Cart/items/{productVariantId}`,
+        `${API_BASE_URL}/api/Cart/items/${productVariantId}`,
         this.getGuestIdParams(),
       )
       .pipe(
@@ -100,7 +97,6 @@ export class CartService {
     return this.http
       .delete<ApiResponse<void>>(`${API_BASE_URL}/api/Cart`, this.getGuestIdParams())
       .pipe(
-        // بنجيب الكارت الفاضي من السيرفر عشان ناخد messages + totals الصح
         switchMap(() => this.fetchCart()),
         map(() => void 0),
       );

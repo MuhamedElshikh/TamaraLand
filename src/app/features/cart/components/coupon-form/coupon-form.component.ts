@@ -19,8 +19,7 @@ export class CouponFormComponent {
   readonly errorMessage = signal<string | null>(null);
 
   private readonly toast = inject(ToastService);
-
-  constructor(private readonly cartService: CartService) {}
+  private readonly cartService = inject(CartService);
 
   apply(): void {
     const trimmed = this.code().trim();
@@ -29,17 +28,12 @@ export class CouponFormComponent {
     this.isSubmitting.set(true);
     this.errorMessage.set(null);
 
+    // ✅ الـ next معناه إن الكوبون اتطبق + الكارت اتعمل له refresh
     this.cartService.applyCoupon({ code: trimmed }).subscribe({
-      next: (res) => {
+      next: () => {
         this.isSubmitting.set(false);
-        if (res.success) {
-          this.code.set('');
-          this.toast.success('Coupon applied successfully!');
-        } else {
-          this.errorMessage.set(res.message);
-          this.toast.error(res.message || 'Failed to apply coupon');
-          console.log(res.errors)
-        }
+        this.code.set('');
+        this.toast.success('Coupon applied successfully!');
       },
       error: (err) => {
         this.isSubmitting.set(false);
@@ -56,14 +50,9 @@ export class CouponFormComponent {
     this.errorMessage.set(null);
 
     this.cartService.removeCoupon().subscribe({
-      next: (res) => {
+      next: () => {
         this.isSubmitting.set(false);
-        if (res.success) {
-          this.toast.success('Coupon removed successfully');
-        } else {
-          this.errorMessage.set(res.message);
-          this.toast.error(res.message || 'Failed to remove coupon');
-        }
+        this.toast.success('Coupon removed successfully');
       },
       error: () => {
         this.isSubmitting.set(false);

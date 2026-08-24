@@ -4,16 +4,18 @@
 export interface CartItemResponse {
   productVariantId: number;
   productId: number;
-productName: string;
-arabicName: string;
-brandName: string;
-arabicBrandName: string;
-categoryName: string;
-arabicCategoryName: string;  variantSku?: string;
+  productName: string;
+  arabicName: string;
+  brandName: string;
+  arabicBrandName: string;
+  categoryName: string;
+  arabicCategoryName: string;
+  variantSku?: string;
   color?: string;
   size?: string;
   imageUrl?: string;
   quantity: number;
+  availableStock: number;   // ✅ جديد
   unitPrice: number;
   subTotal: number;
 }
