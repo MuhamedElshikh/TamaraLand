@@ -9,7 +9,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 @Component({
   selector: 'app-cart-page',
   standalone: true,
-  imports: [RouterLink, CartItemComponent, CartSummaryComponent, CouponFormComponent,TranslatePipe],
+  imports: [RouterLink, CartItemComponent, CartSummaryComponent, CouponFormComponent, TranslatePipe],
   templateUrl: './cart.page.html',
   styleUrl: './cart.page.css',
 })
@@ -17,6 +17,10 @@ export class CartPage implements OnInit {
   private readonly cartService = inject(CartService);
 
   readonly cart = this.cartService.cart;
+
+  // ✅ جديد: الرسائل من الـ Backend (تحذيرات المخزون)
+  readonly messages = this.cartService.messages;
+
   readonly isLoading = signal(true);
 
   ngOnInit(): void {
