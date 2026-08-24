@@ -485,6 +485,7 @@
   "cart": {
     "sku": "رمز المنتج",
     "each": "للوحدة",
+    "maxStockReached":"وصلت لاقصى كمية متاحة",
     "increaseQuantity": "زيادة الكمية",
     "decreaseQuantity": "تقليل الكمية",
     "remove": "حذف",

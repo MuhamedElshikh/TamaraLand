@@ -483,6 +483,7 @@
   "cart": {
     "sku": "SKU",
     "each": "each",
+    "maxStockReached":"max Stock Reached",
     "increaseQuantity": "Increase quantity",
     "decreaseQuantity": "Decrease quantity",
     "remove": "Remove",
