@@ -28,7 +28,7 @@ export class ProductCardComponent implements OnInit {
 
   readonly isAdding = signal(false);
   readonly addState = signal<'idle' | 'added' | 'error'>('idle');
-
+readonly isUpdatingCart = signal(false);
   readonly isInWishlist = signal(false);
   readonly isTogglingWishlist = signal(false);
 
@@ -66,8 +66,32 @@ export class ProductCardComponent implements OnInit {
   get ratingValue(): number {
     return Number(this.product?.rating ?? 0);
   }
+get cartItems() {
+  return this.cartService.cart()?.items ?? [];
+}
 
-  get reviewCount(): number {
+get productCartItems() {
+  return (
+    this.cartService.cart()?.items.filter(
+      item => item.productId === this.product.id
+    ) ?? []
+  );
+}
+
+get isInCart(): boolean {
+  return this.productCartItems.length > 0;
+}
+
+get hasMultipleCartVariants(): boolean {
+  return this.productCartItems.length > 1;
+}
+
+get cartQuantity(): number {
+  return this.productCartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
+}  get reviewCount(): number {
     return Number(this.product?.reviewsCount ?? 0);
   }
 
@@ -143,4 +167,53 @@ export class ProductCardComponent implements OnInit {
     // Navigate to Product Details page to select options & trigger Product Details view strictly on the details page
     void this.router.navigate(['/products', this.product.id]);
   }
+increaseCartQuantity(event: Event): void {
+  event.preventDefault();
+  event.stopPropagation();
+
+  if (
+    this.isUpdatingCart() ||
+    !this.isInCart ||
+    this.hasMultipleCartVariants
+  ) {
+    return;
+  }
+
+  this.isUpdatingCart.set(true);
+
+  this.cartService.increaseProduct(this.product.id).subscribe({
+    next: () => {
+      this.isUpdatingCart.set(false);
+    },
+    error: () => {
+      this.isUpdatingCart.set(false);
+      this.toast.error('Failed to update cart');
+    },
+  });
+}
+
+decreaseCartQuantity(event: Event): void {
+  event.preventDefault();
+  event.stopPropagation();
+
+  if (
+    this.isUpdatingCart() ||
+    !this.isInCart ||
+    this.hasMultipleCartVariants
+  ) {
+    return;
+  }
+
+  this.isUpdatingCart.set(true);
+
+  this.cartService.decreaseProduct(this.product.id).subscribe({
+    next: () => {
+      this.isUpdatingCart.set(false);
+    },
+    error: () => {
+      this.isUpdatingCart.set(false);
+      this.toast.error('Failed to update cart');
+    },
+  });
+}
 }

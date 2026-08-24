@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { switchMap, tap, map } from 'rxjs/operators';
 import { API_BASE_URL } from '../constants/api.constants';
 import { ApiResponse } from '../models/api-response.model';
@@ -119,4 +119,54 @@ export class CartService {
         map(() => void 0),
       );
   }
+  increaseProduct(productId: number): Observable<void> {
+  const items = this._cart()?.items.filter(
+    item => item.productId === productId
+  ) ?? [];
+
+  // لو مفيش Variant للمنتج، مفيش حاجة نعملها
+  if (items.length === 0) {
+    return of(void 0);
+  }
+
+  // لو فيه أكتر من Variant، الـ Product Card مش هيعدل الكمية
+  // لأننا مش عارفين المستخدم يقصد أنهي Variant
+  if (items.length > 1) {
+    return of(void 0);
+  }
+
+  const item = items[0];
+
+  return this.updateItem({
+    productVariantId: item.productVariantId,
+    quantity: item.quantity + 1,
+  });
+}
+
+decreaseProduct(productId: number): Observable<void> {
+  const items = this._cart()?.items.filter(
+    item => item.productId === productId
+  ) ?? [];
+
+  if (items.length === 0) {
+    return of(void 0);
+  }
+
+  // أكثر من Variant → Product Card مش هيعدل
+  if (items.length > 1) {
+    return of(void 0);
+  }
+
+  const item = items[0];
+
+  if (item.quantity > 1) {
+    return this.updateItem({
+      productVariantId: item.productVariantId,
+      quantity: item.quantity - 1,
+    });
+  }
+
+  // quantity === 1
+  return this.removeItem(item.productVariantId);
+}
 }
