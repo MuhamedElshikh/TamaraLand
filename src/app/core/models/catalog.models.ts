@@ -64,7 +64,7 @@ export interface ProductCardResponse {
   imageUrl?: string;
   viewsCount: number;
   originalPrice: number;
-  description:string;
+  description: string;
   price: number;
   hasDiscount: boolean;
   rating: number;
@@ -74,6 +74,11 @@ export interface ProductCardResponse {
   arabicBrandName: string;
   categoryName: string;
   arabicCategoryName: string;
+
+  // ✅ جديد
+  variantsCount: number;
+  singleVariantId?: number | null;
+  singleVariantStock: number;
 }
 export type ProductSearchSuggestionType =
   | 'product'

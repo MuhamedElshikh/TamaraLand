@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnDestroy, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription, finalize } from 'rxjs';
 import { AuthFormShellComponent } from '../../components/auth-form-shell/auth-form-shell.component';
 import { ErrorMessageComponent } from '../../../../shared/components/error-message/error-message.component';
@@ -34,6 +34,12 @@ export class LoginPage implements AfterViewInit, OnDestroy {
   private readonly authService = inject(AuthService);
   private readonly socialAuthService = inject(SocialAuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+
+  // ✅ جديد: لو جاي من صفحة محتاجة تسجيل دخول (زي الـ Checkout)،
+  // الـ authGuard بيحطها هنا كـ Query Param، وإحنا بنرجّعله بعد النجاح
+  // بقت protected عشان الـ Template يقدر يسحبها ويحطها في لينك الـ Register
+  protected readonly returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
 
   protected readonly form = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
@@ -79,7 +85,7 @@ export class LoginPage implements AfterViewInit, OnDestroy {
           const token = response.data?.accessToken ?? this.authService.token();
           if (token) {
             this.analytics.login('email');
-            void this.router.navigateByUrl(this.authService.isAdmin() ? '/admin' : '/');
+            this.navigateAfterLogin();
             return;
           }
 
@@ -136,10 +142,19 @@ export class LoginPage implements AfterViewInit, OnDestroy {
     }
 
     this.analytics.login('google');
-    void this.router.navigateByUrl(this.authService.isAdmin() ? '/admin' : '/');
+    this.navigateAfterLogin();
   }
 
- 
+  // ✅ جديد: نقطة واحدة موحدة لتحديد فين نروح بعد أي نوع تسجيل دخول
+  // returnUrl (لو موجود) بياخد أولوية دايمًا على أي منطق تاني
+  private navigateAfterLogin(): void {
+    if (this.returnUrl) {
+      void this.router.navigateByUrl(this.returnUrl);
+      return;
+    }
+
+    void this.router.navigateByUrl(this.authService.isAdmin() ? '/admin' : '/');
+  }
 
   protected controlHasError(name: 'email' | 'password', errorKey?: string): boolean {
     const control = this.form.controls[name];

@@ -16,6 +16,7 @@
 
     <a
       routerLink="/addresses"
+      [queryParams]="{ returnUrl: '/checkout' }"
       class="checkout-block__manage-link">
 
       {{ 'checkout.address.manageAddresses' | translate }}
@@ -40,6 +41,7 @@
 
       <a
         routerLink="/addresses"
+        [queryParams]="{ returnUrl: '/checkout' }"
         class="btn btn-primary">
 
         {{ 'checkout.address.addAddress' | translate }}

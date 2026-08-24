@@ -88,12 +88,16 @@
     </form>
 
     <footer class="auth-footer">
-      <a routerLink="/forgot-password">
+      <a
+        routerLink="/forgot-password"
+        [queryParams]="returnUrl ? { returnUrl } : {}">
         {{ 'login.footer.forgotPassword' | translate }}
       </a>
       <p>
         {{ 'login.footer.newHere' | translate }}
-        <a routerLink="/register">
+        <a
+          routerLink="/register"
+          [queryParams]="returnUrl ? { returnUrl } : {}">
           {{ 'login.footer.createAccount' | translate }}
         </a>
       </p>

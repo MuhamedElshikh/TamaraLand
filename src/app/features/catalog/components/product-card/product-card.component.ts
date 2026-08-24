@@ -12,7 +12,7 @@ import { ToastService } from '../../../../shared/toast/toast.service';
 @Component({
   selector: 'app-product-card',
   standalone: true,
-  imports: [CommonModule, RouterLink,TranslatePipe,LocalizedNamePipe],
+  imports: [CommonModule, RouterLink, TranslatePipe, LocalizedNamePipe],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.css',
 })
@@ -28,7 +28,7 @@ export class ProductCardComponent implements OnInit {
 
   readonly isAdding = signal(false);
   readonly addState = signal<'idle' | 'added' | 'error'>('idle');
-readonly isUpdatingCart = signal(false);
+  readonly isUpdatingCart = signal(false);
   readonly isInWishlist = signal(false);
   readonly isTogglingWishlist = signal(false);
 
@@ -66,33 +66,53 @@ readonly isUpdatingCart = signal(false);
   get ratingValue(): number {
     return Number(this.product?.rating ?? 0);
   }
-get cartItems() {
-  return this.cartService.cart()?.items ?? [];
-}
 
-get productCartItems() {
-  return (
-    this.cartService.cart()?.items.filter(
-      item => item.productId === this.product.id
-    ) ?? []
-  );
-}
+  get cartItems() {
+    return this.cartService.cart()?.items ?? [];
+  }
 
-get isInCart(): boolean {
-  return this.productCartItems.length > 0;
-}
+  get productCartItems() {
+    return (
+      this.cartService.cart()?.items.filter(
+        item => item.productId === this.product.id,
+      ) ?? []
+    );
+  }
 
-get hasMultipleCartVariants(): boolean {
-  return this.productCartItems.length > 1;
-}
+  get isInCart(): boolean {
+    return this.productCartItems.length > 0;
+  }
 
-get cartQuantity(): number {
-  return this.productCartItems.reduce(
-    (total, item) => total + item.quantity,
-    0
-  );
-}  get reviewCount(): number {
+  get hasMultipleCartVariants(): boolean {
+    return this.productCartItems.length > 1;
+  }
+
+  get cartQuantity(): number {
+    return this.productCartItems.reduce(
+      (total, item) => total + item.quantity,
+      0,
+    );
+  }
+
+  get reviewCount(): number {
     return Number(this.product?.reviewsCount ?? 0);
+  }
+
+  // ✅ جديد: المنتج عنده Variant واحد بس (نقدر نضيف مباشرة من الكارد من غير Navigate)
+  get hasSingleVariant(): boolean {
+    return this.product.variantsCount === 1 && this.product.singleVariantId != null;
+  }
+
+  // ✅ جديد: لو Variant واحد وخلص من المخزون، نقفل زرار الإضافة تمامًا
+  get isSingleVariantOutOfStock(): boolean {
+    return this.hasSingleVariant && this.product.singleVariantStock <= 0;
+  }
+
+  // ✅ جديد: وصلنا لأقصى مخزون متاح للـ Variant ده في الكارت (بيقفل زرار +)
+  get isAtMaxStock(): boolean {
+    if (this.productCartItems.length !== 1) return false;
+    const item = this.productCartItems[0];
+    return item.quantity >= item.availableStock;
   }
 
   // ---- Wishlist ----
@@ -112,44 +132,38 @@ get cartQuantity(): number {
       : this.wishlistService.addToWishlist(this.product.id);
 
     request$.subscribe({
-    next: (res) => {
-  this.isTogglingWishlist.set(false);
+      next: (res) => {
+        this.isTogglingWishlist.set(false);
 
-  if (res.success) {
-
-    if (wasInWishlist) {
-      this.toast.success('Removed from wishlist');
-      this.analytics.removeWishlist({
-        id: this.product.id,
-        name: this.product.name,
-        category: this.product.categoryName,
-        brand: this.product.brandName,
-        price: this.product.price,
-        originalPrice: this.product.originalPrice,
-        discount: Math.max(0,this.product.originalPrice - this.product.price
-)
-      });
-    } else {
-      this.toast.success('Added to wishlist');
-      this.analytics.wishlist({
-        id: this.product.id,
-        name: this.product.name,
-        category: this.product.categoryName,
-        brand: this.product.brandName,
-        price: this.product.price,
-        originalPrice: this.product.originalPrice,
-        discount:Math.max(0,this.product.originalPrice - this.product.price
-)
-      });
-    }
-
-  } else {
-
-    this.isInWishlist.set(wasInWishlist);
-    this.toast.error(res.message || 'Failed to update wishlist');
-
-  }
-},
+        if (res.success) {
+          if (wasInWishlist) {
+            this.toast.success('Removed from wishlist');
+            this.analytics.removeWishlist({
+              id: this.product.id,
+              name: this.product.name,
+              category: this.product.categoryName,
+              brand: this.product.brandName,
+              price: this.product.price,
+              originalPrice: this.product.originalPrice,
+              discount: Math.max(0, this.product.originalPrice - this.product.price),
+            });
+          } else {
+            this.toast.success('Added to wishlist');
+            this.analytics.wishlist({
+              id: this.product.id,
+              name: this.product.name,
+              category: this.product.categoryName,
+              brand: this.product.brandName,
+              price: this.product.price,
+              originalPrice: this.product.originalPrice,
+              discount: Math.max(0, this.product.originalPrice - this.product.price),
+            });
+          }
+        } else {
+          this.isInWishlist.set(wasInWishlist);
+          this.toast.error(res.message || 'Failed to update wishlist');
+        }
+      },
       error: () => {
         this.isTogglingWishlist.set(false);
         this.isInWishlist.set(wasInWishlist);
@@ -164,56 +178,96 @@ get cartQuantity(): number {
     event.preventDefault();
     event.stopPropagation();
 
-    // Navigate to Product Details page to select options & trigger Product Details view strictly on the details page
+    // ✅ Variant واحد بس → نضيفه مباشرة من غير Navigate
+    if (this.hasSingleVariant) {
+      this.addSingleVariantToCart();
+      return;
+    }
+
+    // ✅ أكتر من Variant → لازم يختار لون/مقاس من صفحة التفاصيل
     void this.router.navigate(['/products', this.product.id]);
   }
-increaseCartQuantity(event: Event): void {
-  event.preventDefault();
-  event.stopPropagation();
 
-  if (
-    this.isUpdatingCart() ||
-    !this.isInCart ||
-    this.hasMultipleCartVariants
-  ) {
-    return;
+  private addSingleVariantToCart(): void {
+    if (this.isAdding() || this.isSingleVariantOutOfStock || !this.product.singleVariantId) {
+      return;
+    }
+
+    this.isAdding.set(true);
+
+    this.cartService
+      .addItem({ productVariantId: this.product.singleVariantId, quantity: 1 })
+      .subscribe({
+        next: () => {
+          this.isAdding.set(false);
+          this.toast.success('Added to cart');
+
+          this.analytics.addToCart({
+            id: this.product.id,
+            name: this.product.name,
+            category: this.product.categoryName,
+            brand: this.product.brandName,
+            quantity: 1,
+            price: this.product.price,
+            originalPrice: this.product.originalPrice,
+            discount: Math.max(0, this.product.originalPrice - this.product.price),
+          });
+        },
+        error: () => {
+          this.isAdding.set(false);
+          this.toast.error('Failed to add to cart');
+        },
+      });
   }
 
-  this.isUpdatingCart.set(true);
+  increaseCartQuantity(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
 
-  this.cartService.increaseProduct(this.product.id).subscribe({
-    next: () => {
-      this.isUpdatingCart.set(false);
-    },
-    error: () => {
-      this.isUpdatingCart.set(false);
-      this.toast.error('Failed to update cart');
-    },
-  });
-}
+    if (
+      this.isUpdatingCart() ||
+      !this.isInCart ||
+      this.hasMultipleCartVariants ||
+      this.isAtMaxStock
+    ) {
+      return;
+    }
 
-decreaseCartQuantity(event: Event): void {
-  event.preventDefault();
-  event.stopPropagation();
+    this.isUpdatingCart.set(true);
 
-  if (
-    this.isUpdatingCart() ||
-    !this.isInCart ||
-    this.hasMultipleCartVariants
-  ) {
-    return;
+    this.cartService.increaseProduct(this.product.id).subscribe({
+      next: () => {
+        this.isUpdatingCart.set(false);
+      },
+      error: () => {
+        this.isUpdatingCart.set(false);
+        this.toast.error('Failed to update cart');
+      },
+    });
   }
 
-  this.isUpdatingCart.set(true);
+  decreaseCartQuantity(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
 
-  this.cartService.decreaseProduct(this.product.id).subscribe({
-    next: () => {
-      this.isUpdatingCart.set(false);
-    },
-    error: () => {
-      this.isUpdatingCart.set(false);
-      this.toast.error('Failed to update cart');
-    },
-  });
-}
+    if (
+      this.isUpdatingCart() ||
+      !this.isInCart ||
+      this.hasMultipleCartVariants
+    ) {
+      return;
+    }
+
+    this.isUpdatingCart.set(true);
+
+    this.cartService.decreaseProduct(this.product.id).subscribe({
+      next: () => {
+        this.isUpdatingCart.set(false);
+      },
+      error: () => {
+        this.isUpdatingCart.set(false);
+        this.toast.error('Failed to update cart');
+      },
+    });
+  }
 }

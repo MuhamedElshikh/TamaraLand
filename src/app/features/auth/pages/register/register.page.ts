@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AuthFormShellComponent } from '../../components/auth-form-shell/auth-form-shell.component';
 import { ErrorMessageComponent } from '../../../../shared/components/error-message/error-message.component';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { inject, signal } from '@angular/core';
 import { AuthService } from '../../../../core/services/auth.service';
 import { ApiResponse } from '../../../../core/models/api-response.model';
@@ -26,7 +26,12 @@ export class RegisterPage {
   protected readonly isPasswordVisible = signal(false);
   protected readonly isConfirmPasswordVisible = signal(false);
   private readonly fb = inject(FormBuilder);
-private readonly analytics = inject(AnalyticsService);
+  private readonly analytics = inject(AnalyticsService);
+  private readonly route = inject(ActivatedRoute);
+
+  // ✅ جديد: نفس منطق صفحة الـ Login — لو جاي من صفحة محتاجة تسجيل
+  // (زي الـ Checkout عن طريق authGuard)، نرجّعله بعد نجاح التسجيل
+protected readonly returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
   protected readonly form = this.fb.nonNullable.group(
     {
       firstName: ['', [Validators.required, Validators.minLength(2)]],
@@ -63,7 +68,7 @@ private readonly analytics = inject(AnalyticsService);
 
         if (token) {
           this.analytics.signUp('email');
-          void this.router.navigateByUrl(this.authService.isAdmin() ? '/admin' : '/');
+          this.navigateAfterRegister();
           return;
         }
 
@@ -75,6 +80,16 @@ private readonly analytics = inject(AnalyticsService);
         this.errorMessage.set(extractErrorMessage(error.error.Message, 'Something went wrong while creating your account.'));
       },
       });
+  }
+
+  // ✅ جديد: نفس فكرة navigateAfterLogin بتاعة صفحة الـ Login
+  private navigateAfterRegister(): void {
+    if (this.returnUrl) {
+      void this.router.navigateByUrl(this.returnUrl);
+      return;
+    }
+
+    void this.router.navigateByUrl(this.authService.isAdmin() ? '/admin' : '/');
   }
 
   protected controlHasError(
