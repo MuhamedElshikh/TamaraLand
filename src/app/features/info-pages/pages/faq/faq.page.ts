@@ -18,7 +18,6 @@ export class FaqPage {
   readonly faqs = signal<FaqItem[]>([
     { question: 'faq.items.order.q', answer: 'faq.items.order.a', open: false },
     { question: 'faq.items.shipping.q', answer: 'faq.items.shipping.a', open: false },
-    { question: 'faq.items.returns.q', answer: 'faq.items.returns.a', open: false },
     { question: 'faq.items.sizes.q', answer: 'faq.items.sizes.a', open: false },
     { question: 'faq.items.payment.q', answer: 'faq.items.payment.a', open: false },
     { question: 'faq.items.cancel.q', answer: 'faq.items.cancel.a', open: false },

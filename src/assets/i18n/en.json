@@ -53,7 +53,6 @@
       "title": "Support",
       "contact": "Contact",
       "shipping": "Shipping",
-      "returns": "Returns",
       "faq": "FAQ"
     },
     "contact": {
@@ -695,43 +694,7 @@
       }
     }
   },
-  "returns": {
-    "kicker": "Hassle-Free Returns",
-    "title": "Returns & Exchanges",
-    "subtitle": "Not happy with your order? We'll make it right. Here's how our returns process works.",
-    "steps": {
-      "contact": {
-        "title": "Contact Support",
-        "body": "Reach out via WhatsApp or email within the return window."
-      },
-      "pack": {
-        "title": "Pack Your Items",
-        "body": "Return items in their original packaging with all tags attached."
-      },
-      "refund": {
-        "title": "Receive Your Refund",
-        "body": "Once received and inspected, your refund or exchange is processed."
-      }
-    },
-    "sections": {
-      "window": {
-        "title": "Return Window",
-        "body": "You may return or exchange items within 14 days from the date of delivery. Items must be unused and in their original condition."
-      },
-      "conditions": {
-        "title": "Return Conditions",
-        "body": "Items must be unworn, unwashed, and undamaged with all original tags attached. Items returned in poor condition will not be accepted."
-      },
-      "refund": {
-        "title": "Refund Method",
-        "body": "Approved refunds are issued as store credit or via the original payment method within 5–7 business days of receiving the returned item."
-      },
-      "nonReturnable": {
-        "title": "Non-Returnable Items",
-        "body": "Intimate apparel, swimwear, jewellery, and sale items are final sale and cannot be returned or exchanged for hygiene and safety reasons."
-      }
-    }
-  },
+ 
   "faq": {
     "kicker": "Help Center",
     "title": "Frequently Asked Questions",
@@ -744,10 +707,6 @@
       "shipping": {
         "q": "How long does delivery take?",
         "a": "Most orders are delivered within 2–4 business days. Delivery time may vary based on your location and courier availability."
-      },
-      "returns": {
-        "q": "Can I return an item?",
-        "a": "Yes. Items can be returned within 14 days of delivery, provided they are unused, unwashed, and in original packaging. Some items like swimwear are non-returnable."
       },
       "sizes": {
         "q": "How do I find the right size?",

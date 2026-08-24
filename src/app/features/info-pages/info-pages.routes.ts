@@ -12,11 +12,6 @@ export const INFO_ROUTES: Routes = [
       import('./pages/shipping/shipping.page').then((m) => m.ShippingPage),
   },
   {
-    path: 'returns',
-    loadComponent: () =>
-      import('./pages/returns/returns.page').then((m) => m.ReturnsPage),
-  },
-  {
     path: 'faq',
     loadComponent: () =>
       import('./pages/faq/faq.page').then((m) => m.FaqPage),
