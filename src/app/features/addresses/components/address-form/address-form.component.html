@@ -17,6 +17,10 @@
     </p>
   }
 
+  <!-- =======================================================
+       Personal Information
+       ======================================================= -->
+
   <div class="field-grid">
 
     <label class="field">
@@ -37,6 +41,20 @@
         controlHasError(
           'fullName',
           'required'
+        )
+      ) {
+        <small>
+          {{
+            'addressForm.validation.fullNameRequired'
+              | translate
+          }}
+        </small>
+      }
+
+      @if (
+        controlHasError(
+          'fullName',
+          'minlength'
         )
       ) {
         <small>
@@ -94,12 +112,19 @@
 
   </div>
 
+
+  <!-- =======================================================
+       Location Picker
+       ======================================================= -->
+
   <app-address-map-picker
     [initialLat]="
-      existingAddress?.latitude ?? 30.0444
+      existingAddress?.latitude ??
+      30.0444
     "
     [initialLng]="
-      existingAddress?.longitude ?? 31.2357
+      existingAddress?.longitude ??
+      31.2357
     "
     [initialLocationSelected]="
       existingAddress?.latitude != null &&
@@ -111,6 +136,8 @@
           ' - ' +
           existingAddress.area +
           ' - ' +
+          existingAddress.shiyakha +
+          ' - ' +
           existingAddress.street
         : ''
     "
@@ -118,6 +145,11 @@
       onLocationPicked($event)
     ">
   </app-address-map-picker>
+
+
+  <!-- =======================================================
+       Coordinates Validation
+       ======================================================= -->
 
   @if (
     controlHasError(
@@ -140,116 +172,109 @@
     </small>
   }
 
-  <div class="field-grid">
 
-    <label class="field">
+  <!-- =======================================================
+       Location Resolving
+       ======================================================= -->
 
-      <span>
-        {{ 'addressForm.governorate' | translate }}
-      </span>
+  @if (isResolvingLocation()) {
 
-      <select
-        formControlName="governorate">
+    <div
+      class="address-form__location-status">
 
-        <option
-          value=""
-          disabled>
+{{ 'addressForm.locationStatus.resolving' | translate }}
+    </div>
 
-          {{
-            'addressForm.selectGovernorate'
-              | translate
-          }}
+  }
 
-        </option>
 
-        @for (
-          governorate of governorates();
-          track governorate
-        ) {
+  <!-- =======================================================
+       Location Resolve Error
+       ======================================================= -->
 
-          <option [value]="governorate">
-            {{ governorate }}
-          </option>
+  @if (locationError()) {
 
-        }
+    <div
+      class="address-form__location-error">
 
-      </select>
+      {{ locationError() }}
 
-      @if (
-        controlHasError(
-          'governorate',
-          'required'
-        )
-      ) {
-        <small>
-          {{
-            'addressForm.validation.governorateRequired'
-              | translate
-          }}
-        </small>
-      }
+    </div>
 
-    </label>
+  }
 
-    <label class="field">
 
-      <span>
-        {{ 'addressForm.area' | translate }}
-      </span>
+  <!-- =======================================================
+       Official Resolved Location
+       ======================================================= -->
 
-      <select
-        formControlName="areaId">
+  @if (resolvedLocation(); as location) {
 
-        <option
-          [ngValue]="0"
-          disabled>
+    <section
+      class="address-form__location-result">
 
-          {{
-            'addressForm.selectArea'
-              | translate
-          }}
+      <div
+        class="address-form__location-result-header">
 
-        </option>
+        <strong>
+{{ 'addressForm.resolvedLocation.title' | translate }}
+        </strong>
 
-        @for (
-          area of areasForSelectedGovernorate();
-          track area.id
-        ) {
+        <span aria-hidden="true">
+          ✓
+        </span>
 
-          <option [ngValue]="area.id">
+      </div>
 
-            {{ area.name }}
+      <div
+        class="address-form__location-result-grid">
 
-            (+{{ area.shippingCost | number }}
-            EGP shipping)
+        <div>
 
-          </option>
+          <small>
+{{ 'addressForm.resolvedLocation.governorate' | translate }}
+          </small>
 
-        }
+          <strong>
+            {{ location.governorateNameAr }}
+          </strong>
 
-      </select>
+        </div>
 
-      @if (
-        controlHasError(
-          'areaId',
-          'required'
-        ) ||
-        controlHasError(
-          'areaId',
-          'min'
-        )
-      ) {
-        <small>
-          {{
-            'addressForm.validation.areaRequired'
-              | translate
-          }}
-        </small>
-      }
+        <div>
 
-    </label>
+          <small>
+{{ 'addressForm.resolvedLocation.area' | translate }}
+          </small>
 
-  </div>
+          <strong>
+            {{ location.areaNameAr }}
+          </strong>
+
+        </div>
+
+        <div>
+
+          <small>
+            {{ 'addressForm.resolvedLocation.shiyakha' | translate }}
+          </small>
+
+          <strong>
+            {{ location.shiyakhaNameAr }}
+          </strong>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  }
+
+
+  <!-- =======================================================
+       Detailed Address
+       ======================================================= -->
 
   <label class="field">
 
@@ -281,7 +306,13 @@
 
   </label>
 
-  <div class="field-grid field-grid--three">
+
+  <!-- =======================================================
+       Building / Floor / Apartment
+       ======================================================= -->
+
+  <div
+    class="field-grid field-grid--three">
 
     <label class="field">
 
@@ -361,6 +392,11 @@
 
   </div>
 
+
+  <!-- =======================================================
+       Notes
+       ======================================================= -->
+
   <label class="field">
 
     <span>
@@ -378,6 +414,11 @@
 
   </label>
 
+
+  <!-- =======================================================
+       Default Address
+       ======================================================= -->
+
   <label
     class="address-form__checkbox">
 
@@ -391,20 +432,35 @@
 
   </label>
 
-  <div class="address-form__actions">
+
+  <!-- =======================================================
+       Actions
+       ======================================================= -->
+
+  <div
+    class="address-form__actions">
 
     <button
       type="submit"
       class="btn btn-primary"
-      [disabled]="isSubmitting()">
+      [disabled]="
+        isSubmitting() ||
+        isResolvingLocation()
+      ">
 
       {{
         isSubmitting()
           ? ('addressForm.saving' | translate)
           : (
               existingAddress
-                ? ('addressForm.saveChanges' | translate)
-                : ('addressForm.addAddress' | translate)
+                ? (
+                    'addressForm.saveChanges'
+                    | translate
+                  )
+                : (
+                    'addressForm.addAddress'
+                    | translate
+                  )
             )
       }}
 
@@ -413,7 +469,8 @@
     <button
       type="button"
       class="btn btn-outline"
-      (click)="cancel()">
+      (click)="cancel()"
+      [disabled]="isSubmitting()">
 
       {{ 'addressForm.cancel' | translate }}
 

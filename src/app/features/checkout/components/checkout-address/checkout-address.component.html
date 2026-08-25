@@ -87,10 +87,16 @@
             </p>
 
             <p class="checkout-address__lines">
-              {{ address.street }},
-              {{ address.area }},
-              {{ address.governorate }}
-            </p>
+
+  {{ address.street }},
+
+  {{ address.shiyakha }},
+
+  {{ address.area }},
+
+  {{ address.governorate }}
+
+</p>
 
             @if (isVerified(address)) {
 

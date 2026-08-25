@@ -72,9 +72,12 @@ export interface AddressResponse {
   phoneNumber: string;
 
   areaId: number;
+  area: string;
+
+  shiyakhaId: number;
+  shiyakha: string;
 
   governorate: string;
-  area: string;
 
   shippingCost: number;
   isDeliveryAvailable: boolean;
@@ -89,17 +92,39 @@ export interface AddressResponse {
 
   isDefault: boolean;
 
-  latitude?: number | null;
-  longitude?: number | null;
+  latitude: number;
+  longitude: number;
 
   isPhoneVerified: boolean;
+}
+export interface GovernorateLookupResponse {
+  id: number;
+  nameAr: string;
+  nameEn: string;
+}
+export interface AreaShiyakhaResponse {
+  id: number;
+  nameAr: string;
+  nameEn: string;
+}
+
+export interface AreaResponse {
+  id: number;
+  governorateId: number;
+  governorate: string;
+
+  nameAr: string;
+  nameEn: string;
+
+  shiyakhas: AreaShiyakhaResponse[];
+
+  shippingCost: number;
+  isDeliveryAvailable: boolean;
 }
 
 export interface CreateAddressRequest {
   fullName: string;
   phoneNumber: string;
-
-  areaId: number;
 
   street: string;
 
@@ -109,8 +134,8 @@ export interface CreateAddressRequest {
 
   notes?: string | null;
 
-  latitude?: number | null;
-  longitude?: number | null;
+  latitude: number;
+  longitude: number;
 
   isDefault: boolean;
 }
@@ -148,6 +173,31 @@ export interface AreaFilterRequest {
   search?: string;
   governorateId?: number;
   isDeliveryAvailable?: boolean;
+}
+//=====location=====
+export interface ResolveLocationRequest {
+  latitude: number;
+  longitude: number;
+}
+
+export interface ResolveLocationResponse {
+  isResolved: boolean;
+  isDeliveryAvailable: boolean;
+
+  areaId: number;
+  areaNameAr: string;
+  areaNameEn: string;
+
+  shiyakhaId: number;
+  shiyakhaNameAr: string;
+  shiyakhaNameEn: string;
+
+  governorateId: number;
+  governorateNameAr: string;
+  governorateNameEn: string;
+
+  shippingCost: number;
+  status: string;
 }
 // ---- Orders ----
 export type OrderStatusName =
@@ -249,6 +299,7 @@ export interface OrderDetailsResponse {
   fullName: string;
   phoneNumber: string;
   governorate: string;
+    shiyakha: string;
   area: string;
   street: string;
   building?: string;

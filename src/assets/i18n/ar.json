@@ -243,58 +243,72 @@
     "deleting": "جارٍ الحذف...",
     "delete": "حذف"
   },
-  "addressForm": {
-    "editTitle": "تعديل العنوان",
-    "addTitle": "إضافة عنوان جديد",
-    "map": {
-      "searchPlaceholder": "دور على عنوانك...",
-      "dragHint": "اسحب العلامة لمكانك بالظبط",
-      "useMyLocation": "استخدام موقعي",
-      "locating": "جاري تحديد موقعك...",
-      "changeLocation": "تغيير الموقع",
-      "chooseLocation": "اختيار الموقع",
-      "close": "إغلاق الخريطة",
-      "location": "الموقع",
-      "noLocation": "لم يتم اختيار موقع"
-    },
-    "fullName": "الاسم بالكامل",
-    "phoneNumber": "رقم الهاتف",
+ "addressForm": {
+  "editTitle": "تعديل العنوان",
+  "addTitle": "إضافة عنوان جديد",
+
+  "map": {
+    "searchPlaceholder": "دور على عنوانك...",
+    "dragHint": "اسحب العلامة لمكانك بالظبط",
+    "useMyLocation": "استخدام موقعي",
+    "locating": "جاري تحديد موقعك...",
+    "changeLocation": "تغيير الموقع",
+    "chooseLocation": "اختيار الموقع",
+    "close": "إغلاق الخريطة",
+    "location": "الموقع",
+    "noLocation": "لم يتم اختيار موقع"
+  },
+
+  "fullName": "الاسم بالكامل",
+  "phoneNumber": "رقم الهاتف",
+  "governorate": "المحافظة",
+  "area": "المنطقة",
+  "shiyakha": "الشيخة",
+  "street": "الشارع",
+  "building": "المبنى",
+  "floor": "الدور",
+  "apartment": "الشقة",
+  "notes": "ملاحظات (اختياري)",
+
+  "resolvedLocation": {
+    "title": "الموقع المحدد",
     "governorate": "المحافظة",
     "area": "المنطقة",
-    "street": "الشارع",
-    "building": "المبنى",
-    "floor": "الدور",
-    "apartment": "الشقة",
-    "notes": "ملاحظات (اختياري)",
-    "placeholder": {
-      "fullName": "الاسم بالكامل",
-      "phone": "01xxxxxxxxx",
-      "street": "اسم الشارع",
-      "building": "رقم المبنى",
-      "floor": "اختياري",
-      "apartment": "رقم الشقة",
-      "notes": "تعليمات التوصيل..."
-    },
-    "selectGovernorate": "اختر المحافظة",
-    "selectArea": "اختر المنطقة",
-    "shipping": "تكلفة الشحن {{cost}} جنيه",
-    "setDefault": "تعيين كعنوان افتراضي",
-    "saving": "جارٍ الحفظ...",
-    "saveChanges": "حفظ التعديلات",
-    "addAddress": "إضافة العنوان",
-    "cancel": "إلغاء",
-    "validation": {
-      "fullNameRequired": "الاسم بالكامل مطلوب.",
-      "phoneRequired": "رقم الهاتف مطلوب.",
-      "phoneInvalid": "يرجى إدخال رقم هاتف صحيح.",
-      "governorateRequired": "يرجى اختيار المحافظة.",
-      "areaRequired": "يرجى اختيار المنطقة.",
-      "streetRequired": "الشارع مطلوب.",
-      "buildingRequired": "رقم المبنى مطلوب.",
-      "apartmentRequired": "رقم الشقة مطلوب.",
-      "locationRequired": "يرجى اختيار موقعك على الخريطة."
-    }
+    "shiyakha": "الشيخة"
   },
+
+  "locationStatus": {
+    "resolving": "جاري تحديد المنطقة...",
+    "error": "تعذر تحديد المنطقة لهذا الموقع.",
+    "required": "يرجى اختيار موقعك على الخريطة."
+  },
+
+  "placeholder": {
+    "fullName": "الاسم بالكامل",
+    "phone": "01xxxxxxxxx",
+    "street": "اسم الشارع",
+    "building": "رقم المبنى",
+    "floor": "اختياري",
+    "apartment": "رقم الشقة",
+    "notes": "تعليمات التوصيل..."
+  },
+
+  "setDefault": "تعيين كعنوان افتراضي",
+  "saving": "جارٍ الحفظ...",
+  "saveChanges": "حفظ التعديلات",
+  "addAddress": "إضافة العنوان",
+  "cancel": "إلغاء",
+
+  "validation": {
+    "fullNameRequired": "الاسم بالكامل مطلوب.",
+    "phoneRequired": "رقم الهاتف مطلوب.",
+    "phoneInvalid": "يرجى إدخال رقم هاتف صحيح.",
+    "streetRequired": "الشارع مطلوب.",
+    "buildingRequired": "رقم المبنى مطلوب.",
+    "apartmentRequired": "رقم الشقة مطلوب.",
+    "locationRequired": "يرجى اختيار موقعك على الخريطة."
+  }
+},
   "auth": {
     "brand": "تمارا لاند",
     "headline": "كوني فخورة بكونك امرأة.",
@@ -527,15 +541,29 @@
       "verifyNow": "تحقق الآن"
     },
     "shipping": {
-      "step": "الخطوة ٢",
-      "title": "منطقة الشحن",
-      "selectAddressFirst": "اختر عنوان التوصيل أولاً لعرض خيارات الشحن.",
-      "notAvailable": "عذرًا، لا نقوم بالتوصيل إلى",
-      "notAvailableSuffix": "حتى الآن. يرجى اختيار عنوان آخر.",
-      "governorate": "المحافظة",
-      "area": "المنطقة",
-      "selectArea": "اختر المنطقة"
-    },
+  "step": "الخطوة ٢",
+  "title": "منطقة الشحن",
+  "selectAddressFirst": "اختر عنوان التوصيل أولاً لعرض خيارات الشحن.",
+
+  "notAvailableTitle": "التوصيل غير متاح حاليًا لهذه المنطقة",
+  "notAvailableDescription": "منطقتك مسجلة لدينا، لكن التوصيل إليها غير متاح في الوقت الحالي. يمكنك التواصل معنا على واتساب وسنراجع إمكانية فتح التوصيل لهذه المنطقة.",
+
+  "addressDetails": "تفاصيل العنوان",
+  "governorate": "المحافظة",
+  "area": "المنطقة",
+  "shiyakha": "الشيخة",
+  "street": "الشارع",
+  "building": "المبنى",
+  "floor": "الدور",
+  "apartment": "الشقة",
+  "notes": "ملاحظات",
+
+  "contactWhatsApp": "تواصل معنا على واتساب",
+  "openingWhatsApp": "فتح واتساب...",
+
+  "available": "التوصيل متاح لهذه المنطقة",
+  "shippingCost": "تكلفة الشحن"
+},
     "summary": {
       "title": "ملخص الطلب",
       "items": "المنتجات",
@@ -850,22 +878,32 @@
       "selectAll": "تحديد الكل",
   "deselectAll": "إلغاء تحديد الكل"
     },
-    "shipping": {
-      "title": "مناطق الشحن",
-      "new": "منطقة جديدة",
-      "newTitle": "منطقة شحن جديدة",
-      "editTitle": "تعديل منطقة الشحن",
-      "governorate": "المحافظة",
-      "area": "اسم المنطقة",
-      "cost": "تكلفة الشحن (ج.م)",
-      "areaActive": "المنطقة نشطة",
-      "searchPlaceholder": "ابحث بالمحافظة أو المنطقة...",
-      "empty": "لا توجد مناطق شحن.",
-      "governorateRequired": "المحافظة مطلوبة.",
-      "areaRequired": "اسم المنطقة مطلوب.",
-      "costRequired": "تكلفة الشحن مطلوبة.",
-      "add": "إضافة منطقة"
-    },
+ "shipping": {
+  "title": "مناطق الشحن",
+  "editTitle": "تعديل إعدادات الشحن",
+
+  "governorate": "المحافظة",
+  "area": "المنطقة",
+  "shiyakhas": "الشياخات",
+
+  "cost": "تكلفة الشحن (جنيه)",
+  "areaActive": "التوصيل متاح لهذه المنطقة",
+
+  "searchPlaceholder": "ابحث باسم المحافظة أو المنطقة...",
+
+  "allGovernorates": "كل المحافظات",
+  "allStatuses": "كل الحالات",
+  "available": "التوصيل متاح",
+  "unavailable": "التوصيل غير متاح",
+  "clearFilters": "مسح الفلاتر",
+
+  "empty": "لا توجد مناطق مطابقة لخيارات البحث أو الفلترة.",
+
+  "noShiyakhas": "لا توجد شياخات مرتبطة بهذه المنطقة.",
+
+  "costRequired": "تكلفة الشحن مطلوبة.",
+  "costInvalid": "تكلفة الشحن لا يمكن أن تكون سالبة."
+},
     "discounts": {
   "title": "الخصومات",
   "new": "خصم جديد",

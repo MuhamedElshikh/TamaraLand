@@ -1,8 +1,13 @@
 <section class="admin-shipping-page">
 
+  <!-- =======================================================
+       Page Header
+       ======================================================= -->
+
   <header class="admin-page__hero">
 
     <div>
+
       <p class="section-kicker">
         {{ 'admin.labels.logistics' | translate }}
       </p>
@@ -10,9 +15,15 @@
       <h1 class="section-title">
         {{ 'admin.shipping.title' | translate }}
       </h1>
+
     </div>
 
   </header>
+
+
+  <!-- =======================================================
+       Errors
+       ======================================================= -->
 
   @if (listError()) {
 
@@ -21,6 +32,11 @@
     </p>
 
   }
+
+
+  <!-- =======================================================
+       Edit Shipping Settings
+       ======================================================= -->
 
   @if (isFormOpen() && editingArea(); as area) {
 
@@ -33,6 +49,7 @@
         {{ 'admin.shipping.editTitle' | translate }}
       </h3>
 
+
       @if (formError()) {
 
         <p class="admin-page__error">
@@ -40,6 +57,11 @@
         </p>
 
       }
+
+
+      <!-- =====================================================
+           Read-only Location Information
+           ===================================================== -->
 
       <div class="field-grid">
 
@@ -56,6 +78,7 @@
 
         </label>
 
+
         <label class="field">
 
           <span>
@@ -71,6 +94,54 @@
 
       </div>
 
+
+      <!-- =====================================================
+           Shiyakhas
+           ===================================================== -->
+
+      <div class="shipping-form__shiyakhas">
+
+        <span class="shipping-form__shiyakhas-label">
+          {{ 'admin.shipping.shiyakhas' | translate }}
+        </span>
+
+
+        @if (area.shiyakhas.length > 0) {
+
+          <div class="shipping-form__shiyakhas-list">
+
+            @for (
+              shiyakha of area.shiyakhas;
+              track shiyakha.id
+            ) {
+
+              <span class="shipping-form__shiyakha">
+
+                {{ shiyakha.nameAr }}
+
+              </span>
+
+            }
+
+          </div>
+
+        } @else {
+
+          <div class="shipping-form__shiyakhas-empty">
+
+            {{ 'admin.shipping.noShiyakhas' | translate }}
+
+          </div>
+
+        }
+
+      </div>
+
+
+      <!-- =====================================================
+           Shipping Cost
+           ===================================================== -->
+
       <label class="field">
 
         <span>
@@ -82,6 +153,7 @@
           formControlName="shippingCost"
           min="0"
           step="0.01" />
+
 
         @if (
           controlHasError(
@@ -96,6 +168,7 @@
 
         }
 
+
         @if (
           controlHasError(
             'shippingCost',
@@ -104,12 +177,17 @@
         ) {
 
           <small>
-            Shipping cost cannot be negative.
+            {{ 'admin.shipping.costInvalid' | translate }}
           </small>
 
         }
 
       </label>
+
+
+      <!-- =====================================================
+           Delivery Availability
+           ===================================================== -->
 
       <label
         class="shipping-form__checkbox">
@@ -123,6 +201,11 @@
         </span>
 
       </label>
+
+
+      <!-- =====================================================
+           Actions
+           ===================================================== -->
 
       <div class="shipping-form__actions">
 
@@ -139,10 +222,12 @@
 
         </button>
 
+
         <button
           class="btn btn-outline"
           type="button"
-          (click)="closeForm()">
+          (click)="closeForm()"
+          [disabled]="isSubmitting()">
 
           {{ 'admin.labels.cancel' | translate }}
 
@@ -154,7 +239,14 @@
 
   }
 
+
+  <!-- =======================================================
+       Filters
+       ======================================================= -->
+
   <div class="admin-page__toolbar">
+
+    <!-- Search -->
 
     <input
       type="text"
@@ -170,7 +262,115 @@
         )
       " />
 
+
+    <!-- Governorate -->
+
+    <select
+      class="admin-page__filter"
+      [value]="governorateId() ?? ''"
+      [disabled]="isGovernoratesLoading()"
+      (change)="
+        onGovernorateChange(
+          $any($event.target).value
+        )
+      ">
+
+      <option value="">
+
+        {{
+          'admin.shipping.allGovernorates'
+            | translate
+        }}
+
+      </option>
+
+
+      @for (
+        governorate of governorates();
+        track governorate.id
+      ) {
+
+        <option
+          [value]="governorate.id">
+
+          {{ governorate.nameAr }}
+
+        </option>
+
+      }
+
+    </select>
+
+
+    <!-- Delivery Status -->
+
+    <select
+      class="admin-page__filter"
+      [value]="
+        isDeliveryAvailable() === null
+          ? ''
+          : isDeliveryAvailable()
+            ? 'true'
+            : 'false'
+      "
+      (change)="
+        onDeliveryStatusChange(
+          $any($event.target).value
+        )
+      ">
+
+      <option value="">
+
+        {{
+          'admin.shipping.allStatuses'
+            | translate
+        }}
+
+      </option>
+
+
+      <option value="true">
+
+        {{
+          'admin.shipping.available'
+            | translate
+        }}
+
+      </option>
+
+
+      <option value="false">
+
+        {{
+          'admin.shipping.unavailable'
+            | translate
+        }}
+
+      </option>
+
+    </select>
+
+
+    <!-- Clear -->
+
+    <button
+      type="button"
+      class="btn btn-outline"
+      (click)="clearFilters()">
+
+      {{
+        'admin.shipping.clearFilters'
+          | translate
+      }}
+
+    </button>
+
   </div>
+
+
+  <!-- =======================================================
+       Areas Table
+       ======================================================= -->
 
   <app-data-table
     [columns]="columns"
@@ -197,6 +397,11 @@
     </ng-template>
 
   </app-data-table>
+
+
+  <!-- =======================================================
+       Pagination
+       ======================================================= -->
 
   <app-pagination
     [currentPage]="pageNumber()"

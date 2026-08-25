@@ -5,7 +5,6 @@ import {
   OnInit,
   Output,
   EventEmitter,
-  computed,
   inject,
   signal,
   DestroyRef,
@@ -20,15 +19,16 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { AddressService } from '../../../../core/services/address.service';
+import { LocationService } from '../../../../core/services/LocationService.service';
 
 import {
   AddressResponse,
-  AreaLookupItem,
+  ResolveLocationResponse,
+  CreateAddressRequest,
 } from '../../../../core/models/domain.models';
 
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 
-import { DecimalPipe } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import {
@@ -41,7 +41,6 @@ import {
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    DecimalPipe,
     TranslatePipe,
     AddressMapPickerComponent,
   ],
@@ -51,14 +50,29 @@ import {
 export class AddressFormComponent
   implements OnInit, OnChanges
 {
-  private readonly fb = inject(FormBuilder);
-  private readonly addressService = inject(AddressService);
-  private readonly destroyRef = inject(DestroyRef);
+  private readonly fb =
+    inject(FormBuilder);
 
-  @Input() existingAddress: AddressResponse | null = null;
+  private readonly addressService =
+    inject(AddressService);
 
-  @Output() saved = new EventEmitter<void>();
-  @Output() cancelled = new EventEmitter<void>();
+  private readonly locationService =
+    inject(LocationService);
+
+  private readonly destroyRef =
+    inject(DestroyRef);
+
+  @Input()
+  existingAddress: AddressResponse | null =
+    null;
+
+  @Output()
+  saved =
+    new EventEmitter<void>();
+
+  @Output()
+  cancelled =
+    new EventEmitter<void>();
 
   readonly isSubmitting =
     signal(false);
@@ -66,34 +80,24 @@ export class AddressFormComponent
   readonly errorMessage =
     signal<string | null>(null);
 
-  // =========================
-  // Area Lookup
-  // =========================
+  // =========================================================
+  // Resolved official location
+  // =========================================================
 
-  readonly areaLookup =
-    this.addressService.areaLookup;
-
-  readonly governorates = computed(() =>
-    this.areaLookup().map(
-      x => x.governorate
-    )
-  );
-
-  readonly selectedGovernorate =
-    signal('');
-
-  readonly areasForSelectedGovernorate =
-    computed(() =>
-      this.areaLookup().find(
-        x =>
-          x.governorate ===
-          this.selectedGovernorate()
-      )?.areas ?? []
+  readonly resolvedLocation =
+    signal<ResolveLocationResponse | null>(
+      null
     );
 
-  // =========================
+  readonly isResolvingLocation =
+    signal(false);
+
+  readonly locationError =
+    signal<string | null>(null);
+
+  // =========================================================
   // Form
-  // =========================
+  // =========================================================
 
   readonly form =
     this.fb.nonNullable.group({
@@ -115,19 +119,6 @@ export class AddressFormComponent
         ],
       ],
 
-      governorate: [
-        '',
-        Validators.required,
-      ],
-
-      areaId: [
-        0,
-        [
-          Validators.required,
-          Validators.min(1),
-        ],
-      ],
-
       street: [
         '',
         Validators.required,
@@ -138,16 +129,22 @@ export class AddressFormComponent
         Validators.required,
       ],
 
-      floor: [''],
+      floor: [
+        '',
+      ],
 
       apartment: [
         '',
         Validators.required,
       ],
 
-      notes: [''],
+      notes: [
+        '',
+      ],
 
-      isDefault: [false],
+      isDefault: [
+        false,
+      ],
 
       latitude: [
         null as number | null,
@@ -160,151 +157,123 @@ export class AddressFormComponent
       ],
     });
 
-  // =========================
+  // =========================================================
   // Map
-  // =========================
+  // =========================================================
 
   onLocationPicked(
     location: PickedLocation
   ): void {
     this.form.patchValue({
-      latitude: location.lat,
-      longitude: location.lng,
+      latitude:
+        location.lat,
+
+      longitude:
+        location.lng,
     });
 
-    if (location.governorate) {
-      this.setGovernorateFromLocation(
-        location.governorate
-      );
-    }
+    this.locationError.set(null);
 
+    this.resolvedLocation.set(
+      null
+    );
+
+    // Nominatim is only used as a helper
+    // for street/building information.
     if (location.street) {
       this.form.patchValue({
-        street: location.street,
+        street:
+          location.street,
       });
     }
 
     if (location.building) {
       this.form.patchValue({
-        building: location.building,
+        building:
+          location.building,
       });
     }
 
-    if (location.area) {
-      this.setAreaFromLocation(
-        location.area
-      );
-    }
+    this.resolveLocation(
+      location.lat,
+      location.lng
+    );
   }
 
-  private normalizeLocationName(
-    value: string
-  ): string {
-    return value
-      .trim()
-      .replace(/^محافظة\s+/u, '')
-      .replace(/\s+/g, ' ')
-      .toLowerCase();
-  }
-
-  private setGovernorateFromLocation(
-    governorate: string
+  private resolveLocation(
+    latitude: number,
+    longitude: number
   ): void {
-    const normalized =
-      this.normalizeLocationName(
-        governorate
-      );
-
-    const match =
-      this.governorates().find(
-        gov =>
-          this.normalizeLocationName(
-            gov
-          ) === normalized
-      );
-
-    if (!match) {
-      return;
-    }
-
-    this.form
-      .get('governorate')
-      ?.setValue(match);
-
-    this.selectedGovernorate.set(
-      match
+    this.isResolvingLocation.set(
+      true
     );
 
-    this.form
-      .get('areaId')
-      ?.setValue(0);
-  }
-
-  private setAreaFromLocation(
-    areaName: string
-  ): void {
-    const areas =
-      this.areasForSelectedGovernorate();
-
-    const normalized =
-      this.normalizeLocationName(
-        areaName
-      );
-
-    const match = areas.find(
-      (area: AreaLookupItem) =>
-        this.normalizeLocationName(
-          area.name
-        ) === normalized
+    this.locationError.set(
+      null
     );
 
-    if (!match) {
-      return;
-    }
-
-    this.form
-      .get('areaId')
-      ?.setValue(match.id);
-  }
-
-  // =========================
-  // Lifecycle
-  // =========================
-
-  ngOnInit(): void {
-    if (
-      this.areaLookup().length === 0
-    ) {
-      this.addressService
-        .getAreaLookup()
-        .pipe(
-          takeUntilDestroyed(
-            this.destroyRef
-          )
-        )
-        .subscribe();
-    }
-
-    this.form
-      .get('governorate')
-      ?.valueChanges
+    this.locationService
+      .resolve({
+        latitude,
+        longitude,
+      })
       .pipe(
         takeUntilDestroyed(
           this.destroyRef
         )
       )
-      .subscribe(
-        governorate => {
-          this.selectedGovernorate.set(
-            governorate
+      .subscribe({
+        next: (response) => {
+          this.isResolvingLocation.set(
+            false
           );
 
-          this.form
-            .get('areaId')
-            ?.setValue(0);
-        }
-      );
+          if (
+            !response.success ||
+            !response.data ||
+            !response.data.isResolved
+          ) {
+            this.resolvedLocation.set(
+              null
+            );
 
+            this.locationError.set(
+              response.message ||
+              'Could not determine the delivery area for this location.'
+            );
+
+            return;
+          }
+
+          this.resolvedLocation.set(
+            response.data
+          );
+        },
+
+        error: (error) => {
+          this.isResolvingLocation.set(
+            false
+          );
+
+          this.resolvedLocation.set(
+            null
+          );
+
+          this.locationError.set(
+            extractErrorMessage(
+              error,
+              'Could not determine the delivery area for this location.'
+            )
+          );
+        },
+      });
+  }
+
+  // =========================================================
+  // Lifecycle
+  // =========================================================
+
+  ngOnInit(): void {
     this.patchFormFromExisting();
   }
 
@@ -314,22 +283,6 @@ export class AddressFormComponent
 
   private patchFormFromExisting(): void {
     if (this.existingAddress) {
-      const governorate =
-        this.existingAddress.governorate;
-
-      this.form
-        .get('governorate')
-        ?.setValue(
-          governorate,
-          {
-            emitEvent: false,
-          }
-        );
-
-      this.selectedGovernorate.set(
-        governorate
-      );
-
       this.form.patchValue({
         fullName:
           this.existingAddress.fullName,
@@ -337,23 +290,24 @@ export class AddressFormComponent
         phoneNumber:
           this.existingAddress.phoneNumber,
 
-        areaId:
-          this.existingAddress.areaId,
-
         street:
           this.existingAddress.street,
 
         building:
-          this.existingAddress.building ?? '',
+          this.existingAddress.building ??
+          '',
 
         floor:
-          this.existingAddress.floor ?? '',
+          this.existingAddress.floor ??
+          '',
 
         apartment:
-          this.existingAddress.apartment ?? '',
+          this.existingAddress.apartment ??
+          '',
 
         notes:
-          this.existingAddress.notes ?? '',
+          this.existingAddress.notes ??
+          '',
 
         latitude:
           this.existingAddress.latitude,
@@ -365,16 +319,70 @@ export class AddressFormComponent
           this.existingAddress.isDefault,
       });
 
+      // Existing address is already resolved
+      // by the backend.
+      this.resolvedLocation.set({
+        isResolved: true,
+
+        isDeliveryAvailable:
+          this.existingAddress
+            .isDeliveryAvailable,
+
+        areaId:
+          this.existingAddress.areaId,
+
+        areaNameAr:
+          this.existingAddress.area,
+
+        areaNameEn:
+          this.existingAddress.area,
+
+        shiyakhaId:
+          this.existingAddress.shiyakhaId,
+
+        shiyakhaNameAr:
+          this.existingAddress.shiyakha,
+
+        shiyakhaNameEn:
+          this.existingAddress.shiyakha,
+
+        governorateId: 0,
+
+        governorateNameAr:
+          this.existingAddress.governorate,
+
+        governorateNameEn:
+          this.existingAddress.governorate,
+
+        shippingCost:
+          this.existingAddress
+            .shippingCost,
+
+        status:
+          this.existingAddress
+            .isDeliveryAvailable
+            ? 'Available'
+            : 'DeliveryUnavailable',
+      });
+
+      this.locationError.set(
+        null
+      );
+
       return;
     }
 
-    this.selectedGovernorate.set('');
+    this.resolvedLocation.set(
+      null
+    );
+
+    this.locationError.set(
+      null
+    );
 
     this.form.reset({
       fullName: '',
       phoneNumber: '',
-      governorate: '',
-      areaId: 0,
       street: '',
       building: '',
       floor: '',
@@ -386,9 +394,9 @@ export class AddressFormComponent
     });
   }
 
-  // =========================
+  // =========================================================
   // Validation
-  // =========================
+  // =========================================================
 
   controlHasError(
     name: string,
@@ -404,9 +412,9 @@ export class AddressFormComponent
     );
   }
 
-  // =========================
+  // =========================================================
   // Submit
-  // =========================
+  // =========================================================
 
   submit(): void {
     if (
@@ -414,29 +422,82 @@ export class AddressFormComponent
       this.isSubmitting()
     ) {
       this.form.markAllAsTouched();
+
       return;
     }
 
-    this.isSubmitting.set(true);
-    this.errorMessage.set(null);
+    if (
+      this.isResolvingLocation()
+    ) {
+      return;
+    }
+
+    const location =
+      this.resolvedLocation();
+
+    if (
+      !location ||
+      !location.isResolved
+    ) {
+      this.locationError.set(
+        'Please select a valid location on the map.'
+      );
+
+      return;
+    }
 
     const raw =
       this.form.getRawValue();
 
-    const payload = {
-      fullName: raw.fullName,
-      phoneNumber: raw.phoneNumber,
-      areaId: raw.areaId,
-      street: raw.street,
-      building: raw.building,
-      floor: raw.floor,
-      apartment: raw.apartment,
-      notes: raw.notes,
+    if (
+      raw.latitude === null ||
+      raw.longitude === null
+    ) {
+      this.locationError.set(
+        'Please select a location on the map.'
+      );
+
+      return;
+    }
+
+    this.isSubmitting.set(
+      true
+    );
+
+    this.errorMessage.set(
+      null
+    );
+
+    const payload: CreateAddressRequest = {
+      fullName:
+        raw.fullName,
+
+      phoneNumber:
+        raw.phoneNumber,
+
+      street:
+        raw.street,
+
+      building:
+        raw.building || null,
+
+      floor:
+        raw.floor || null,
+
+      apartment:
+        raw.apartment || null,
+
+      notes:
+        raw.notes || null,
+
       latitude:
-        raw.latitude ?? undefined,
+        raw.latitude,
+
       longitude:
-        raw.longitude ?? undefined,
-      isDefault: raw.isDefault,
+        raw.longitude,
+
+      isDefault:
+        raw.isDefault,
     };
 
     const request$ =
@@ -456,24 +517,29 @@ export class AddressFormComponent
         )
       )
       .subscribe({
-        next: res => {
-          this.isSubmitting.set(false);
+        next: (response) => {
+          this.isSubmitting.set(
+            false
+          );
 
-          if (res.success) {
+          if (response.success) {
             this.saved.emit();
-          } else {
-            this.errorMessage.set(
-              res.message
-            );
+            return;
           }
+
+          this.errorMessage.set(
+            response.message
+          );
         },
 
-        error: err => {
-          this.isSubmitting.set(false);
+        error: (error) => {
+          this.isSubmitting.set(
+            false
+          );
 
           this.errorMessage.set(
             extractErrorMessage(
-              err,
+              error,
               'Could not save this address.'
             )
           );

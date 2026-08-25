@@ -242,57 +242,71 @@
     "loading": "جارٍ تحميل العناوين..."
   },
   "addressForm": {
-    "editTitle": "Edit Address",
-    "addTitle": "Add a New Address",
-    "map": {
-      "searchPlaceholder": "Search for your address...",
-      "dragHint": "Drag the marker to your exact location",
-      "useMyLocation": "Use my location",
-      "locating": "Locating...",
-      "changeLocation": "Change Location",
-      "chooseLocation": "Choose Location",
-      "close": "Close Map",
-      "location": "Location",
-      "noLocation": "No location selected"
-    },
-    "fullName": "Full Name",
-    "phoneNumber": "Phone Number",
+  "editTitle": "Edit Address",
+  "addTitle": "Add a New Address",
+
+  "map": {
+    "searchPlaceholder": "Search for your address...",
+    "dragHint": "Drag the marker to your exact location",
+    "useMyLocation": "Use my location",
+    "locating": "Locating...",
+    "changeLocation": "Change Location",
+    "chooseLocation": "Choose Location",
+    "close": "Close Map",
+    "location": "Location",
+    "noLocation": "No location selected"
+  },
+
+  "fullName": "Full Name",
+  "phoneNumber": "Phone Number",
+  "governorate": "Governorate",
+  "area": "Area",
+  "shiyakha": "Shiyakha",
+  "street": "Street",
+  "building": "Building",
+  "floor": "Floor",
+  "apartment": "Apartment",
+  "notes": "Notes (Optional)",
+
+  "resolvedLocation": {
+    "title": "Selected Location",
     "governorate": "Governorate",
     "area": "Area",
-    "street": "Street",
-    "building": "Building",
-    "floor": "Floor",
-    "apartment": "Apartment",
-    "notes": "Notes (Optional)",
-    "placeholder": {
-      "fullName": "Full name",
-      "phone": "01xxxxxxxxx",
-      "street": "Street name",
-      "building": "Building number",
-      "floor": "Optional",
-      "apartment": "Apartment number",
-      "notes": "Delivery instructions..."
-    },
-    "selectGovernorate": "Select Governorate",
-    "selectArea": "Select Area",
-    "shipping": "{{cost}} EGP shipping",
-    "setDefault": "Set as Default Address",
-    "saving": "Saving...",
-    "saveChanges": "Save Changes",
-    "addAddress": "Add Address",
-    "cancel": "Cancel",
-    "validation": {
-      "fullNameRequired": "Full name is required.",
-      "phoneRequired": "Phone number is required.",
-      "phoneInvalid": "Enter a valid phone number.",
-      "governorateRequired": "Please select a governorate.",
-      "areaRequired": "Please select an area.",
-      "streetRequired": "Street is required.",
-      "buildingRequired": "Building number is required.",
-      "apartmentRequired": "Apartment number is required.",
-      "locationRequired": "Please select your location on the map."
-    }
+    "shiyakha": "Shiyakha"
   },
+
+  "locationStatus": {
+    "resolving": "Determining your area...",
+    "error": "We couldn't determine the area for this location.",
+    "required": "Please select your location on the map."
+  },
+
+  "placeholder": {
+    "fullName": "Full name",
+    "phone": "01xxxxxxxxx",
+    "street": "Street name",
+    "building": "Building number",
+    "floor": "Optional",
+    "apartment": "Apartment number",
+    "notes": "Delivery instructions..."
+  },
+
+  "setDefault": "Set as Default Address",
+  "saving": "Saving...",
+  "saveChanges": "Save Changes",
+  "addAddress": "Add Address",
+  "cancel": "Cancel",
+
+  "validation": {
+    "fullNameRequired": "Full name is required.",
+    "phoneRequired": "Phone number is required.",
+    "phoneInvalid": "Enter a valid phone number.",
+    "streetRequired": "Street is required.",
+    "buildingRequired": "Building number is required.",
+    "apartmentRequired": "Apartment number is required.",
+    "locationRequired": "Please select your location on the map."
+  }
+},
   "auth": {
     "brand": "Tamara Land",
     "headline": "Be Proud to Be a Woman.",
@@ -525,15 +539,29 @@
       "verifyNow": "Verify Now"
     },
     "shipping": {
-      "step": "Step 2",
-      "title": "Shipping Area",
-      "selectAddressFirst": "Select a delivery address first to see shipping options.",
-      "notAvailable": "Sorry, we don't deliver to",
-      "notAvailableSuffix": "yet. Please choose a different address.",
-      "governorate": "Governorate",
-      "area": "Area",
-      "selectArea": "Select area"
-    },
+  "step": "Step 2",
+  "title": "Shipping Area",
+  "selectAddressFirst": "Select a delivery address first to see shipping options.",
+
+  "notAvailableTitle": "Delivery is currently unavailable for this area",
+  "notAvailableDescription": "Your area is registered in our system, but delivery is not currently available. You can contact us on WhatsApp and we'll review the possibility of opening delivery for your area.",
+
+  "addressDetails": "Address Details",
+  "governorate": "Governorate",
+  "area": "Area",
+  "shiyakha": "Shiyakha",
+  "street": "Street",
+  "building": "Building",
+  "floor": "Floor",
+  "apartment": "Apartment",
+  "notes": "Notes",
+
+  "contactWhatsApp": "Contact us on WhatsApp",
+  "openingWhatsApp": "Opening WhatsApp...",
+
+  "available": "Delivery is available for this area",
+  "shippingCost": "Shipping Cost"
+},
     "summary": {
       "title": "Order Summary",
       "items": "Items",
@@ -849,22 +877,32 @@
       "selectAll": "Select all",
   "deselectAll": "Deselect all"
     },
-    "shipping": {
-      "title": "Shipping areas",
-      "new": "New area",
-      "newTitle": "New shipping area",
-      "editTitle": "Edit shipping area",
-      "governorate": "Governorate",
-      "area": "Area name",
-      "cost": "Shipping cost (EGP)",
-      "areaActive": "Area is active",
-      "searchPlaceholder": "Search governorate or area...",
-      "empty": "No shipping areas found.",
-      "governorateRequired": "Governorate is required.",
-      "areaRequired": "Area name is required.",
-      "costRequired": "Shipping cost is required.",
-      "add": "Add area"
-    },
+ "shipping": {
+  "title": "Shipping Areas",
+  "editTitle": "Edit Shipping Settings",
+
+  "governorate": "Governorate",
+  "area": "Area",
+  "shiyakhas": "Shiyakhas",
+
+  "cost": "Shipping Cost (EGP)",
+  "areaActive": "Delivery is available for this area",
+
+  "searchPlaceholder": "Search by governorate or area...",
+
+  "allGovernorates": "All Governorates",
+  "allStatuses": "All Statuses",
+  "available": "Delivery Available",
+  "unavailable": "Delivery Unavailable",
+  "clearFilters": "Clear Filters",
+
+  "empty": "No areas match the current search or filters.",
+
+  "noShiyakhas": "No Shiyakhas are linked to this area.",
+
+  "costRequired": "Shipping cost is required.",
+  "costInvalid": "Shipping cost cannot be negative."
+},
    "discounts": {
   "title": "Discounts",
   "new": "New discount",

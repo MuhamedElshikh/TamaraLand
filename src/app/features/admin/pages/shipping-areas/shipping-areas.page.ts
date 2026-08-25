@@ -23,6 +23,7 @@ import { AreaService } from '../../../../core/services/area.service';
 import {
   AreaFilterRequest,
   AreaResponse,
+  GovernorateLookupResponse,
 } from '../../../../core/models/domain.models';
 
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
@@ -43,15 +44,26 @@ const PAGE_SIZE = 15;
   templateUrl: './shipping-areas.page.html',
   styleUrl: './shipping-areas.page.css',
 })
-export class ShippingAreasPage implements OnInit {
-  private readonly fb = inject(FormBuilder);
-  private readonly areaService = inject(AreaService);
+export class ShippingAreasPage
+  implements OnInit
+{
+  private readonly fb =
+    inject(FormBuilder);
+
+  private readonly areaService =
+    inject(AreaService);
 
   readonly areas =
     signal<AreaResponse[]>([]);
 
+  readonly governorates =
+    signal<GovernorateLookupResponse[]>([]);
+
   readonly isLoading =
     signal(true);
+
+  readonly isGovernoratesLoading =
+    signal(false);
 
   readonly totalPages =
     signal(1);
@@ -61,6 +73,12 @@ export class ShippingAreasPage implements OnInit {
 
   readonly search =
     signal('');
+
+  readonly governorateId =
+    signal<number | null>(null);
+
+  readonly isDeliveryAvailable =
+    signal<boolean | null>(null);
 
   readonly listError =
     signal<string | null>(null);
@@ -77,33 +95,42 @@ export class ShippingAreasPage implements OnInit {
   readonly formError =
     signal<string | null>(null);
 
-  readonly columns:
-    DataTableColumn<AreaResponse>[] = [
-      {
-        key: 'governorate',
-        header: 'Governorate',
-      },
-      {
-        key: 'nameAr',
-        header: 'Area',
-      },
-      {
-        key: 'shippingCost',
-        header: 'Shipping cost',
-        type: 'currency',
-        align: 'right',
-      },
-      {
-        key: 'isDeliveryAvailable',
-        header: 'Status',
-        type: 'badge',
-        accessor: (row) =>
-          row.isDeliveryAvailable
-            ? 'Active'
-            : 'Inactive',
-      },
-    ];
+ readonly columns:
+  DataTableColumn<AreaResponse>[] = [
+    {
+      key: 'governorate',
+      header: 'Governorate',
+    },
 
+    {
+      key: 'nameAr',
+      header: 'Area',
+    },
+
+    {
+      key: 'shiyakhas',
+      header: 'Shiyakhas',
+      accessor: (row) =>
+        `${row.shiyakhas?.length ?? 0}`,
+    },
+
+    {
+      key: 'shippingCost',
+      header: 'Shipping cost',
+      type: 'currency',
+      align: 'right',
+    },
+
+    {
+      key: 'isDeliveryAvailable',
+      header: 'Delivery',
+      type: 'badge',
+      accessor: (row) =>
+        row.isDeliveryAvailable
+          ? 'Available'
+          : 'Unavailable',
+    },
+  ];
   readonly form =
     this.fb.nonNullable.group({
       shippingCost: [
@@ -120,13 +147,53 @@ export class ShippingAreasPage implements OnInit {
     });
 
   ngOnInit(): void {
+    this.loadGovernorates();
     this.load(1);
   }
 
   onSearch(
     value: string
   ): void {
-    this.search.set(value);
+    this.search.set(
+      value
+    );
+
+    this.load(1);
+  }
+
+  onGovernorateChange(
+    value: string
+  ): void {
+    this.governorateId.set(
+      value
+        ? Number(value)
+        : null
+    );
+
+    this.load(1);
+  }
+
+  onDeliveryStatusChange(
+    value: string
+  ): void {
+    if (value === '') {
+      this.isDeliveryAvailable.set(
+        null
+      );
+    } else {
+      this.isDeliveryAvailable.set(
+        value === 'true'
+      );
+    }
+
+    this.load(1);
+  }
+
+  clearFilters(): void {
+    this.search.set('');
+    this.governorateId.set(null);
+    this.isDeliveryAvailable.set(null);
+
     this.load(1);
   }
 
@@ -144,8 +211,13 @@ export class ShippingAreasPage implements OnInit {
   openEditForm(
     area: AreaResponse
   ): void {
-    this.editingArea.set(area);
-    this.formError.set(null);
+    this.editingArea.set(
+      area
+    );
+
+    this.formError.set(
+      null
+    );
 
     this.form.patchValue({
       shippingCost:
@@ -155,13 +227,23 @@ export class ShippingAreasPage implements OnInit {
         area.isDeliveryAvailable,
     });
 
-    this.isFormOpen.set(true);
+    this.isFormOpen.set(
+      true
+    );
   }
 
   closeForm(): void {
-    this.isFormOpen.set(false);
-    this.editingArea.set(null);
-    this.formError.set(null);
+    this.isFormOpen.set(
+      false
+    );
+
+    this.editingArea.set(
+      null
+    );
+
+    this.formError.set(
+      null
+    );
   }
 
   controlHasError(
@@ -194,8 +276,13 @@ export class ShippingAreasPage implements OnInit {
       return;
     }
 
-    this.isSubmitting.set(true);
-    this.formError.set(null);
+    this.isSubmitting.set(
+      true
+    );
+
+    this.formError.set(
+      null
+    );
 
     const value =
       this.form.getRawValue();
@@ -213,22 +300,29 @@ export class ShippingAreasPage implements OnInit {
       )
       .subscribe({
         next: (res) => {
-          this.isSubmitting.set(false);
+          this.isSubmitting.set(
+            false
+          );
 
           if (res.success) {
             this.closeForm();
+
             this.load(
               this.pageNumber()
             );
-          } else {
-            this.formError.set(
-              res.message
-            );
+
+            return;
           }
+
+          this.formError.set(
+            res.message
+          );
         },
 
         error: (err) => {
-          this.isSubmitting.set(false);
+          this.isSubmitting.set(
+            false
+          );
 
           this.formError.set(
             extractErrorMessage(
@@ -240,10 +334,58 @@ export class ShippingAreasPage implements OnInit {
       });
   }
 
+  private loadGovernorates(): void {
+    this.isGovernoratesLoading.set(
+      true
+    );
+
+    this.areaService
+      .getGovernorates()
+      .subscribe({
+        next: (res) => {
+          this.isGovernoratesLoading.set(
+            false
+          );
+
+          if (
+            res.success &&
+            res.data
+          ) {
+            this.governorates.set(
+              res.data
+            );
+
+            return;
+          }
+
+          this.governorates.set(
+            []
+          );
+        },
+
+        error: () => {
+          this.isGovernoratesLoading.set(
+            false
+          );
+
+          this.governorates.set(
+            []
+          );
+        },
+      });
+  }
+
   private load(
     pageNumber: number
   ): void {
-    this.isLoading.set(true);
+    this.isLoading.set(
+      true
+    );
+
+    this.listError.set(
+      null
+    );
+
     this.pageNumber.set(
       pageNumber
     );
@@ -251,12 +393,21 @@ export class ShippingAreasPage implements OnInit {
     const request:
       AreaFilterRequest = {
       search:
-        this.search() ||
+        this.search().trim() ||
+        undefined,
+
+      governorateId:
+        this.governorateId() ??
+        undefined,
+
+      isDeliveryAvailable:
+        this.isDeliveryAvailable() ??
         undefined,
 
       pageNumber,
 
-      pageSize: PAGE_SIZE,
+      pageSize:
+        PAGE_SIZE,
     };
 
     this.areaService
@@ -274,11 +425,20 @@ export class ShippingAreasPage implements OnInit {
             this.totalPages.set(
               Math.max(
                 1,
-                Math.ceil(
-                  res.data.totalCount /
-                    res.data.pageSize
-                )
+                res.data.totalPages
               )
+            );
+          } else {
+            this.areas.set(
+              []
+            );
+
+            this.totalPages.set(
+              1
+            );
+
+            this.listError.set(
+              res.message
             );
           }
 
@@ -288,7 +448,17 @@ export class ShippingAreasPage implements OnInit {
         },
 
         error: (err) => {
-          this.isLoading.set(false);
+          this.isLoading.set(
+            false
+          );
+
+          this.areas.set(
+            []
+          );
+
+          this.totalPages.set(
+            1
+          );
 
           this.listError.set(
             extractErrorMessage(
