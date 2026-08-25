@@ -67,58 +67,88 @@ arabicCategoryName: string;
 // ---- Address ----
 export interface AddressResponse {
   id: number;
+
   fullName: string;
   phoneNumber: string;
+
+  areaId: number;
+
   governorate: string;
   area: string;
-  street: string;
-  building?: string;
-  floor?: string;
-  apartment?: string;
-  notes?: string;
-  isDefault: boolean;
-  isPhoneVerified: boolean;
-  latitude?: number;
-  longitude?: number;
-}
 
+  shippingCost: number;
+  isDeliveryAvailable: boolean;
+
+  street: string;
+
+  building?: string | null;
+  floor?: string | null;
+  apartment?: string | null;
+
+  notes?: string | null;
+
+  isDefault: boolean;
+
+  latitude?: number | null;
+  longitude?: number | null;
+
+  isPhoneVerified: boolean;
+}
 
 export interface CreateAddressRequest {
   fullName: string;
   phoneNumber: string;
-  governorate: string;
-  area: string;
+
+  areaId: number;
+
   street: string;
-  building?: string;
-  floor?: string;
-  apartment?: string;
-  notes?: string;
+
+  building?: string | null;
+  floor?: string | null;
+  apartment?: string | null;
+
+  notes?: string | null;
+
+  latitude?: number | null;
+  longitude?: number | null;
+
   isDefault: boolean;
-  latitude?: number;
-  longitude?: number;
 }
 
-export type UpdateAddressRequest = CreateAddressRequest;
-
-// ---- Shipping ----
-export interface ShippingAreaResponse {
-  id: number;
-  governorate: string;
-  areaName: string;
-  shippingCost: number;
+export interface UpdateAddressRequest
+  extends CreateAddressRequest {
 }
 
-export interface ShippingAreaItem {
+export interface AreaLookupItem {
   id: number;
   name: string;
   shippingCost: number;
 }
 
-export interface ShippingLookupResponse {
+export interface AreaLookupResponse {
   governorate: string;
-  areas: ShippingAreaItem[];
+  areas: AreaLookupItem[];
 }
 
+export interface AreaResponse {
+  id: number;
+
+  governorateId: number;
+  governorate: string;
+
+  nameAr: string;
+  nameEn: string;
+
+  shippingCost: number;
+  isDeliveryAvailable: boolean;
+}
+export interface AreaFilterRequest {
+  pageNumber?: number;
+  pageSize?: number;
+  search?: string;
+  governorateId?: number;
+  isDeliveryAvailable?: boolean;
+}
 // ---- Orders ----
 export type OrderStatusName =
   | 'orders.status.pending'
@@ -162,8 +192,7 @@ export const paymentStatus: Record<number, PaymentStatusName> = {
 
 export interface CheckoutRequest {
   addressId: number;
-  shippingAreaId: number;
-  paymentMethod: number; // 0=Cash
+  paymentMethod: number;
 }
 
 export interface CheckoutSummaryResponse {
@@ -604,30 +633,14 @@ export interface ProductAdminResponse {
   images?: AdminProductImageResponse[];
 }
 
-export interface ShippingAreaAdminResponse {
-  id: number;
-  governorate: string;
-  area: string;
-  shippingCost: number;
-  isActive: boolean;
-}
 
-export interface CreateShippingAreaRequest {
-  governorate: string;
-  area: string;
-  shippingCost: number;
-  isActive: boolean;
-}
 
-export type UpdateShippingAreaRequest = CreateShippingAreaRequest;
+
+
+
 
 // ⚠️ افتراض - عدّل حسب شكل ShippingAreaFilterRequest الحقيقي لو مختلف
-export interface ShippingAreaFilterRequest {
-  governorate?: string;
-  search?: string;
-  pageNumber?: number;
-  pageSize?: number;
-}
+
 // ---- Admin Users ----
 export interface AdminUserResponse {
   id: number;

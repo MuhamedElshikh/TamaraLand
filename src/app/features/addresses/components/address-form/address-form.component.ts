@@ -1,176 +1,309 @@
-import { Component, Input, OnChanges, OnInit, Output, EventEmitter, computed, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  EventEmitter,
+  computed,
+  inject,
+  signal,
+  DestroyRef,
+} from '@angular/core';
+
+import {
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
 import { AddressService } from '../../../../core/services/address.service';
-import { AddressResponse } from '../../../../core/models/domain.models';
+
+import {
+  AddressResponse,
+  AreaLookupItem,
+} from '../../../../core/models/domain.models';
+
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
+
 import { DecimalPipe } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
-import { PickedLocation, AddressMapPickerComponent } from '../address-map-picker.component/address-map-picker.component';
+
+import {
+  PickedLocation,
+  AddressMapPickerComponent,
+} from '../address-map-picker.component/address-map-picker.component';
 
 @Component({
   selector: 'app-address-form',
   standalone: true,
-  imports: [ReactiveFormsModule, DecimalPipe, TranslatePipe, AddressMapPickerComponent],
+  imports: [
+    ReactiveFormsModule,
+    DecimalPipe,
+    TranslatePipe,
+    AddressMapPickerComponent,
+  ],
   templateUrl: './address-form.component.html',
   styleUrl: './address-form.component.css',
 })
-export class AddressFormComponent implements OnInit, OnChanges {
+export class AddressFormComponent
+  implements OnInit, OnChanges
+{
   private readonly fb = inject(FormBuilder);
   private readonly addressService = inject(AddressService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  /** لو موجود، الفورم بيشتغل في وضع التعديل. لو null، وضع الإضافة */
   @Input() existingAddress: AddressResponse | null = null;
 
   @Output() saved = new EventEmitter<void>();
   @Output() cancelled = new EventEmitter<void>();
 
-  readonly isSubmitting = signal(false);
-  readonly errorMessage = signal<string | null>(null);
+  readonly isSubmitting =
+    signal(false);
 
-  readonly shippingLookup = this.addressService.shippingLookup;
+  readonly errorMessage =
+    signal<string | null>(null);
 
-  readonly governorates = computed(() => this.shippingLookup().map((g) => g.governorate));
+  // =========================
+  // Area Lookup
+  // =========================
 
-  // بنتابع المحافظة المختارة بـ signal منفصل، مش بقراءة form.value جوه computed
-  // لأن computed() بيتبع signals بس، مش تغييرات الـ Reactive Forms
-  readonly selectedGovernorate = signal('');
+  readonly areaLookup =
+    this.addressService.areaLookup;
 
-  readonly areasForSelectedGovernorate = computed(() => {
-    return this.shippingLookup().find((g) => g.governorate === this.selectedGovernorate())?.areas ?? [];
-  });
+  readonly governorates = computed(() =>
+    this.areaLookup().map(
+      x => x.governorate
+    )
+  );
 
-  readonly form = this.fb.nonNullable.group({
-    fullName: ['', [Validators.required, Validators.minLength(2)]],
-    phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9+\s-]{8,15}$/)]],
-    governorate: ['', Validators.required],
-    area: ['', Validators.required],
-    street: ['', Validators.required],
-   building: ['', Validators.required],
-    floor: [''],
-    apartment: ['', Validators.required],
-    notes: [''],
-    isDefault: [false],
-     latitude: [
-  null as number | null,
-  Validators.required,
-],
+  readonly selectedGovernorate =
+    signal('');
 
-longitude: [
-  null as number | null,
-  Validators.required,
-],
-  });
- onLocationPicked(location: PickedLocation): void {
-
-  this.form.patchValue({
-    latitude: location.lat,
-    longitude: location.lng,
-  });
-
-  if (location.governorate) {
-    this.setGovernorateFromLocation(
-      location.governorate
+  readonly areasForSelectedGovernorate =
+    computed(() =>
+      this.areaLookup().find(
+        x =>
+          x.governorate ===
+          this.selectedGovernorate()
+      )?.areas ?? []
     );
-  }
 
-  if (location.street) {
-    this.form.patchValue({
-      street: location.street,
+  // =========================
+  // Form
+  // =========================
+
+  readonly form =
+    this.fb.nonNullable.group({
+      fullName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+        ],
+      ],
+
+      phoneNumber: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(
+            /^[0-9+\s-]{8,15}$/
+          ),
+        ],
+      ],
+
+      governorate: [
+        '',
+        Validators.required,
+      ],
+
+      areaId: [
+        0,
+        [
+          Validators.required,
+          Validators.min(1),
+        ],
+      ],
+
+      street: [
+        '',
+        Validators.required,
+      ],
+
+      building: [
+        '',
+        Validators.required,
+      ],
+
+      floor: [''],
+
+      apartment: [
+        '',
+        Validators.required,
+      ],
+
+      notes: [''],
+
+      isDefault: [false],
+
+      latitude: [
+        null as number | null,
+        Validators.required,
+      ],
+
+      longitude: [
+        null as number | null,
+        Validators.required,
+      ],
     });
-  }
 
-  if (location.building) {
+  // =========================
+  // Map
+  // =========================
+
+  onLocationPicked(
+    location: PickedLocation
+  ): void {
     this.form.patchValue({
-      building: location.building,
+      latitude: location.lat,
+      longitude: location.lng,
     });
+
+    if (location.governorate) {
+      this.setGovernorateFromLocation(
+        location.governorate
+      );
+    }
+
+    if (location.street) {
+      this.form.patchValue({
+        street: location.street,
+      });
+    }
+
+    if (location.building) {
+      this.form.patchValue({
+        building: location.building,
+      });
+    }
+
+    if (location.area) {
+      this.setAreaFromLocation(
+        location.area
+      );
+    }
   }
 
-  if (location.area) {
-    // بعد تحديد المحافظة، الـ computed
-    // هيكون شايف areas الجديدة
-    this.setAreaFromLocation(
-      location.area
-    );
-  }
-}
-private normalizeLocationName(
-  value: string
-): string {
-  return value
-    .trim()
-    .replace(/^محافظة\s+/u, '')
-    .replace(/\s+/g, ' ')
-    .toLowerCase();
-}
-private setGovernorateFromLocation(
-  governorate: string
-): void {
-
-  const normalized =
-    this.normalizeLocationName(
-      governorate
-    );
-
-  const match =
-    this.governorates().find(
-      gov =>
-        this.normalizeLocationName(gov) ===
-        normalized
-    );
-
-  if (!match) {
-    return;
+  private normalizeLocationName(
+    value: string
+  ): string {
+    return value
+      .trim()
+      .replace(/^محافظة\s+/u, '')
+      .replace(/\s+/g, ' ')
+      .toLowerCase();
   }
 
-  this.form
-    .get('governorate')
-    ?.setValue(match);
+  private setGovernorateFromLocation(
+    governorate: string
+  ): void {
+    const normalized =
+      this.normalizeLocationName(
+        governorate
+      );
 
-  this.selectedGovernorate.set(match);
+    const match =
+      this.governorates().find(
+        gov =>
+          this.normalizeLocationName(
+            gov
+          ) === normalized
+      );
 
-  this.form
-    .get('area')
-    ?.setValue('');
-}
-private setAreaFromLocation(
-  areaName: string
-): void {
+    if (!match) {
+      return;
+    }
 
-  const areas =
-    this.areasForSelectedGovernorate();
+    this.form
+      .get('governorate')
+      ?.setValue(match);
 
-  const normalized =
-    this.normalizeLocationName(
-      areaName
+    this.selectedGovernorate.set(
+      match
     );
 
-  const match =
-    areas.find(
-      area =>
+    this.form
+      .get('areaId')
+      ?.setValue(0);
+  }
+
+  private setAreaFromLocation(
+    areaName: string
+  ): void {
+    const areas =
+      this.areasForSelectedGovernorate();
+
+    const normalized =
+      this.normalizeLocationName(
+        areaName
+      );
+
+    const match = areas.find(
+      (area: AreaLookupItem) =>
         this.normalizeLocationName(
           area.name
         ) === normalized
     );
 
-  if (!match) {
-    return;
-  }
-
-  this.form
-    .get('area')
-    ?.setValue(match.name);
-}
-
-  ngOnInit(): void {
-    if (this.shippingLookup().length === 0) {
-      this.addressService.getShippingLookup().subscribe();
+    if (!match) {
+      return;
     }
 
-    // كل ما تتغيّر المحافظة، نحدّث الـ signal ونصفّر المنطقة عشان مايفضلش قيمة من محافظة تانية
-    this.form.get('governorate')?.valueChanges.subscribe((gov) => {
-      this.selectedGovernorate.set(gov);
-      this.form.get('area')?.setValue('');
-    });
+    this.form
+      .get('areaId')
+      ?.setValue(match.id);
+  }
+
+  // =========================
+  // Lifecycle
+  // =========================
+
+  ngOnInit(): void {
+    if (
+      this.areaLookup().length === 0
+    ) {
+      this.addressService
+        .getAreaLookup()
+        .pipe(
+          takeUntilDestroyed(
+            this.destroyRef
+          )
+        )
+        .subscribe();
+    }
+
+    this.form
+      .get('governorate')
+      ?.valueChanges
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe(
+        governorate => {
+          this.selectedGovernorate.set(
+            governorate
+          );
+
+          this.form
+            .get('areaId')
+            ?.setValue(0);
+        }
+      );
 
     this.patchFormFromExisting();
   }
@@ -181,84 +314,172 @@ private setAreaFromLocation(
 
   private patchFormFromExisting(): void {
     if (this.existingAddress) {
-      // بنحدّث المحافظة الأول من غير ما نطلق valueChanges، عشان الـ subscription
-      // اللي بيصفّر المنطقة مايمسحش المنطقة المحفوظة فعلاً وقت التعديل
-      this.form.get('governorate')?.setValue(this.existingAddress.governorate, { emitEvent: false });
-      this.selectedGovernorate.set(this.existingAddress.governorate);
+      const governorate =
+        this.existingAddress.governorate;
+
+      this.form
+        .get('governorate')
+        ?.setValue(
+          governorate,
+          {
+            emitEvent: false,
+          }
+        );
+
+      this.selectedGovernorate.set(
+        governorate
+      );
 
       this.form.patchValue({
-        fullName: this.existingAddress.fullName,
-        phoneNumber: this.existingAddress.phoneNumber,
-        area: this.existingAddress.area,
-        street: this.existingAddress.street,
-        building: this.existingAddress.building || '',
-        floor: this.existingAddress.floor || '',
-        apartment: this.existingAddress.apartment || '',
-        notes: this.existingAddress.notes || '',
+        fullName:
+          this.existingAddress.fullName,
+
+        phoneNumber:
+          this.existingAddress.phoneNumber,
+
+        areaId:
+          this.existingAddress.areaId,
+
+        street:
+          this.existingAddress.street,
+
+        building:
+          this.existingAddress.building ?? '',
+
+        floor:
+          this.existingAddress.floor ?? '',
+
+        apartment:
+          this.existingAddress.apartment ?? '',
+
+        notes:
+          this.existingAddress.notes ?? '',
+
         latitude:
-  this.existingAddress.latitude,
+          this.existingAddress.latitude,
 
-longitude:
-  this.existingAddress.longitude,
-        isDefault: this.existingAddress.isDefault,
+        longitude:
+          this.existingAddress.longitude,
+
+        isDefault:
+          this.existingAddress.isDefault,
       });
-    } else {
-      this.selectedGovernorate.set('');
-      this.form.reset({
-        fullName: '',
-        phoneNumber: '',
-        governorate: '',
-        area: '',
-        street: '',
-        building: '',
-        floor: '',
-        apartment: '',
-        notes: '',
-        isDefault: false,
-      });
+
+      return;
     }
+
+    this.selectedGovernorate.set('');
+
+    this.form.reset({
+      fullName: '',
+      phoneNumber: '',
+      governorate: '',
+      areaId: 0,
+      street: '',
+      building: '',
+      floor: '',
+      apartment: '',
+      notes: '',
+      isDefault: false,
+      latitude: null,
+      longitude: null,
+    });
   }
 
-  controlHasError(name: string, error: string): boolean {
-    const control = this.form.get(name);
-    return Boolean(control && control.touched && control.hasError(error));
+  // =========================
+  // Validation
+  // =========================
+
+  controlHasError(
+    name: string,
+    error: string
+  ): boolean {
+    const control =
+      this.form.get(name);
+
+    return Boolean(
+      control &&
+      control.touched &&
+      control.hasError(error)
+    );
   }
+
+  // =========================
+  // Submit
+  // =========================
 
   submit(): void {
-  if (this.form.invalid || this.isSubmitting()) {
-    this.form.markAllAsTouched();
-    return;
+    if (
+      this.form.invalid ||
+      this.isSubmitting()
+    ) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    this.isSubmitting.set(true);
+    this.errorMessage.set(null);
+
+    const raw =
+      this.form.getRawValue();
+
+    const payload = {
+      fullName: raw.fullName,
+      phoneNumber: raw.phoneNumber,
+      areaId: raw.areaId,
+      street: raw.street,
+      building: raw.building,
+      floor: raw.floor,
+      apartment: raw.apartment,
+      notes: raw.notes,
+      latitude:
+        raw.latitude ?? undefined,
+      longitude:
+        raw.longitude ?? undefined,
+      isDefault: raw.isDefault,
+    };
+
+    const request$ =
+      this.existingAddress
+        ? this.addressService.updateAddress(
+            this.existingAddress.id,
+            payload
+          )
+        : this.addressService.createAddress(
+            payload
+          );
+
+    request$
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe({
+        next: res => {
+          this.isSubmitting.set(false);
+
+          if (res.success) {
+            this.saved.emit();
+          } else {
+            this.errorMessage.set(
+              res.message
+            );
+          }
+        },
+
+        error: err => {
+          this.isSubmitting.set(false);
+
+          this.errorMessage.set(
+            extractErrorMessage(
+              err,
+              'Could not save this address.'
+            )
+          );
+        },
+      });
   }
-
-  this.isSubmitting.set(true);
-  this.errorMessage.set(null);
-
-  const raw = this.form.getRawValue();
-  const payload = {
-    ...raw,
-    latitude: raw.latitude ?? undefined,
-    longitude: raw.longitude ?? undefined,
-  };
-
-  const request$ = this.existingAddress
-    ? this.addressService.updateAddress(this.existingAddress.id, payload)
-    : this.addressService.createAddress(payload);
-
-  request$.subscribe({
-    next: (res) => {
-      this.isSubmitting.set(false);
-      if (res.success) {
-        this.saved.emit();
-      } else {
-        this.errorMessage.set(res.message);
-      }
-    },
-    error: (err) => {
-      this.isSubmitting.set(false);
-      this.errorMessage.set(extractErrorMessage(err, 'Could not save this address.'));
-    },
-  });
-}
 
   cancel(): void {
     this.cancelled.emit();

@@ -1,38 +1,83 @@
-import { Component, Input, Output, EventEmitter, computed, input } from '@angular/core';
-import { CartResponse, ShippingAreaItem } from '../../../../core/models/domain.models';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  computed,
+  input,
+} from '@angular/core';
+
 import { DecimalPipe } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
+
+import {
+  AddressResponse,
+  CartResponse,
+} from '../../../../core/models/domain.models';
 
 @Component({
   selector: 'app-checkout-summary',
   standalone: true,
-    imports:[DecimalPipe,TranslatePipe],
+  imports: [
+    DecimalPipe,
+    TranslatePipe,
+  ],
   templateUrl: './checkout-summary.component.html',
   styleUrl: './checkout-summary.component.css',
 })
 export class CheckoutSummaryComponent {
-  // بقوا signal-based inputs عشان الـ computed() تحت تقدر تتابعهم صح
-  cart = input<CartResponse | null>(null);
-  shippingArea = input<ShippingAreaItem | null>(null);
+  readonly cart =
+    input<CartResponse | null>(null);
 
-  @Input() canPlaceOrder = false;
-  @Input() isSubmitting = false;
-  @Input() errorMessage: string | null = null;
+  readonly selectedAddress =
+    input<AddressResponse | null>(null);
 
-  @Output() placeOrder = new EventEmitter<void>();
+  @Input()
+  canPlaceOrder = false;
 
-  // 0 = Cash، باقي الطرق مش شغالة لسه (متاحة مستقبلًا)
+  @Input()
+  isSubmitting = false;
+
+  @Input()
+  errorMessage: string | null = null;
+
+  @Output()
+  placeOrder =
+    new EventEmitter<void>();
+
   readonly paymentMethod = 0;
 
-  readonly estimatedTotal = computed(() => {
-    const c = this.cart();
-    if (!c) return 0;
-    const shippingCost = this.shippingArea()?.shippingCost ?? 0;
-    return Math.max(0, c.subTotal - c.discount + shippingCost);
-  });
+  readonly shippingCost = computed(
+    () =>
+      this.selectedAddress()
+        ?.shippingCost ?? 0
+  );
+
+  readonly estimatedTotal =
+    computed(() => {
+      const cart =
+        this.cart();
+
+      if (!cart) {
+        return 0;
+      }
+
+      return Math.max(
+        0,
+        cart.subTotal -
+          cart.discount +
+          this.shippingCost()
+      );
+    });
 
   onPlaceOrder(): void {
-    if (!this.canPlaceOrder || this.isSubmitting) return;
+    if (
+      !this.canPlaceOrder ||
+      this.isSubmitting
+    ) {
+      return;
+    }
+
     this.placeOrder.emit();
   }
 }

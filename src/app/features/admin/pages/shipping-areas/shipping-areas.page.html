@@ -1,91 +1,206 @@
 <section class="admin-shipping-page">
+
   <header class="admin-page__hero">
+
     <div>
-      <p class="section-kicker">{{ 'admin.labels.logistics' | translate }}</p>
-      <h1 class="section-title">{{ 'admin.shipping.title' | translate }}</h1>
+      <p class="section-kicker">
+        {{ 'admin.labels.logistics' | translate }}
+      </p>
+
+      <h1 class="section-title">
+        {{ 'admin.shipping.title' | translate }}
+      </h1>
     </div>
-    @if (!isFormOpen()) {
-      <button type="button" class="btn btn-primary" (click)="openCreateForm()">+ {{ 'admin.shipping.new' | translate }}</button>
-    }
+
   </header>
 
   @if (listError()) {
-    <p class="admin-page__error">{{ listError() }}</p>
+
+    <p class="admin-page__error">
+      {{ listError() }}
+    </p>
+
   }
 
-  @if (isFormOpen()) {
-    <form class="scaffold-card shipping-form" [formGroup]="form" (ngSubmit)="submit()">
-      <h3 class="shipping-form__title">{{ (editingArea() ? 'admin.shipping.editTitle' : 'admin.shipping.newTitle') | translate }}</h3>
+  @if (isFormOpen() && editingArea(); as area) {
+
+    <form
+      class="scaffold-card shipping-form"
+      [formGroup]="form"
+      (ngSubmit)="submit()">
+
+      <h3 class="shipping-form__title">
+        {{ 'admin.shipping.editTitle' | translate }}
+      </h3>
 
       @if (formError()) {
-        <p class="admin-page__error">{{ formError() }}</p>
+
+        <p class="admin-page__error">
+          {{ formError() }}
+        </p>
+
       }
 
       <div class="field-grid">
+
         <label class="field">
-          <span>{{ 'admin.shipping.governorate' | translate }}</span>
-          <input type="text" formControlName="governorate" placeholder="القاهرة" />
-          @if (controlHasError('governorate', 'required')) {
-            <small>{{ 'admin.shipping.governorateRequired' | translate }}</small>
-          }
+
+          <span>
+            {{ 'admin.shipping.governorate' | translate }}
+          </span>
+
+          <input
+            type="text"
+            [value]="area.governorate"
+            disabled />
+
         </label>
 
         <label class="field">
-          <span>{{ 'admin.shipping.area' | translate }}</span>
-          <input type="text" formControlName="area" placeholder="مدينة نصر" />
-          @if (controlHasError('area', 'required')) {
-            <small>{{ 'admin.shipping.areaRequired' | translate }}</small>
-          }
+
+          <span>
+            {{ 'admin.shipping.area' | translate }}
+          </span>
+
+          <input
+            type="text"
+            [value]="area.nameAr"
+            disabled />
+
         </label>
+
       </div>
 
       <label class="field">
-        <span>{{ 'admin.shipping.cost' | translate }}</span>
-        <input type="number" formControlName="shippingCost" min="0" step="0.01" />
-        @if (controlHasError('shippingCost', 'required')) {
-          <small>{{ 'admin.shipping.costRequired' | translate }}</small>
+
+        <span>
+          {{ 'admin.shipping.cost' | translate }}
+        </span>
+
+        <input
+          type="number"
+          formControlName="shippingCost"
+          min="0"
+          step="0.01" />
+
+        @if (
+          controlHasError(
+            'shippingCost',
+            'required'
+          )
+        ) {
+
+          <small>
+            {{ 'admin.shipping.costRequired' | translate }}
+          </small>
+
         }
+
+        @if (
+          controlHasError(
+            'shippingCost',
+            'min'
+          )
+        ) {
+
+          <small>
+            Shipping cost cannot be negative.
+          </small>
+
+        }
+
       </label>
 
-      <label class="shipping-form__checkbox">
-        <input type="checkbox" formControlName="isActive" />
-        <span>{{ 'admin.shipping.areaActive' | translate }}</span>
+      <label
+        class="shipping-form__checkbox">
+
+        <input
+          type="checkbox"
+          formControlName="isDeliveryAvailable" />
+
+        <span>
+          {{ 'admin.shipping.areaActive' | translate }}
+        </span>
+
       </label>
 
       <div class="shipping-form__actions">
-        <button class="btn btn-primary" type="submit" [disabled]="isSubmitting()">
-          {{ (isSubmitting() ? 'admin.labels.saving' : (editingArea() ? 'admin.labels.saveChanges' : 'admin.shipping.add')) | translate }}
+
+        <button
+          class="btn btn-primary"
+          type="submit"
+          [disabled]="isSubmitting()">
+
+          {{
+            isSubmitting()
+              ? ('admin.labels.saving' | translate)
+              : ('admin.labels.saveChanges' | translate)
+          }}
+
         </button>
-        <button class="btn btn-outline" type="button" (click)="closeForm()">{{ 'admin.labels.cancel' | translate }}</button>
+
+        <button
+          class="btn btn-outline"
+          type="button"
+          (click)="closeForm()">
+
+          {{ 'admin.labels.cancel' | translate }}
+
+        </button>
+
       </div>
+
     </form>
+
   }
 
   <div class="admin-page__toolbar">
+
     <input
       type="text"
       class="admin-page__search"
-      [placeholder]="'admin.shipping.searchPlaceholder' | translate"
+      [placeholder]="
+        'admin.shipping.searchPlaceholder'
+          | translate
+      "
       [value]="search()"
-      (input)="onSearch($any($event.target).value)"
-    />
+      (input)="
+        onSearch(
+          $any($event.target).value
+        )
+      " />
+
   </div>
 
-  <app-data-table [columns]="columns" [rows]="areas()" [isLoading]="isLoading()" [emptyMessage]="'admin.shipping.empty' | translate">
+  <app-data-table
+    [columns]="columns"
+    [rows]="areas()"
+    [isLoading]="isLoading()"
+    [emptyMessage]="
+      'admin.shipping.empty' | translate
+    ">
+
     <ng-template #actions let-row>
+
       <div class="admin-page__row-actions">
-        <button type="button" (click)="openEditForm(row)">{{ 'admin.labels.edit' | translate }}</button>
+
         <button
           type="button"
-          class="admin-page__delete"
-          (click)="deleteArea(row)"
-          [disabled]="isDeleting() === row.id"
-        >
-          {{ (isDeleting() === row.id ? 'admin.labels.deleting' : 'admin.labels.delete') | translate }}
+          (click)="openEditForm(row)">
+
+          {{ 'admin.labels.edit' | translate }}
+
         </button>
+
       </div>
+
     </ng-template>
+
   </app-data-table>
 
-  <app-pagination [currentPage]="pageNumber()" [totalPages]="totalPages()" (pageChange)="onPageChange($event)" />
+  <app-pagination
+    [currentPage]="pageNumber()"
+    [totalPages]="totalPages()"
+    (pageChange)="onPageChange($event)" />
+
 </section>

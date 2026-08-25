@@ -14,21 +14,13 @@
 
   </div>
 
-  @if (!governorate()) {
+  @if (noAddressSelected()) {
 
     <p class="section-copy">
       {{ 'checkout.shipping.selectAddressFirst' | translate }}
     </p>
 
-  } @else if (noShippingAvailable()) {
-
-    <p class="checkout-shipping__error">
-      {{ 'checkout.shipping.notAvailable' | translate }}
-      "{{ governorate() }}"
-      {{ 'checkout.shipping.notAvailableSuffix' | translate }}
-    </p>
-
-  } @else if (areaNotAvailable()) {
+  } @else if (deliveryNotAvailable()) {
 
     <p class="checkout-shipping__error">
       {{ 'checkout.shipping.areaNotAvailable' | translate }}
@@ -48,8 +40,7 @@
         <input
           type="text"
           [value]="governorate()"
-          disabled
-        />
+          disabled />
 
       </label>
 
@@ -61,22 +52,19 @@
 
         <input
           type="text"
-          [value]="matchedArea()?.name ?? area()"
-          disabled
-        />
+          [value]="area()"
+          disabled />
 
       </label>
 
     </div>
 
-    @if (matchedArea()) {
+    <div class="checkout-shipping__cost">
 
-      <div class="checkout-shipping__cost">
-        {{ matchedArea()!.shippingCost | number }}
-        EGP
-      </div>
+      {{ shippingCost() | number }}
+      EGP
 
-    }
+    </div>
 
   }
 

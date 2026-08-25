@@ -46,14 +46,13 @@
           (addressSelected)="onAddressSelected($event)" />
 
         <app-checkout-shipping
-          [selectedAddress]="selectedAddress()"
-          (areaSelected)="onAreaSelected($event)" />
+          [selectedAddress]="selectedAddress()" />
 
       </div>
 
       <app-checkout-summary
         [cart]="cart()"
-        [shippingArea]="selectedShippingArea()"
+        [selectedAddress]="selectedAddress()"
         [canPlaceOrder]="canPlaceOrder()"
         [isSubmitting]="isSubmitting()"
         [errorMessage]="errorMessage()"

@@ -19,7 +19,8 @@
 
   @if (cart() && cart()!.discount > 0) {
 
-    <div class="checkout-summary__row checkout-summary__row--discount">
+    <div
+      class="checkout-summary__row checkout-summary__row--discount">
 
       <span>
         {{ 'checkout.summary.discount' | translate }}
@@ -39,10 +40,10 @@
       {{ 'checkout.summary.shipping' | translate }}
     </span>
 
-    @if (shippingArea()) {
+    @if (selectedAddress()) {
 
       <span>
-        {{ shippingArea()!.shippingCost | number }} EGP
+        {{ shippingCost() | number }} EGP
       </span>
 
     } @else {
@@ -55,7 +56,8 @@
 
   </div>
 
-  <div class="checkout-summary__row checkout-summary__row--total">
+  <div
+    class="checkout-summary__row checkout-summary__row--total">
 
     <span>
       {{ 'checkout.summary.estimatedTotal' | translate }}
@@ -73,7 +75,8 @@
       {{ 'checkout.summary.paymentMethod' | translate }}
     </p>
 
-    <label class="checkout-summary__payment-option checkout-summary__payment-option--active">
+    <label
+      class="checkout-summary__payment-option checkout-summary__payment-option--active">
 
       <input
         type="radio"
@@ -94,9 +97,11 @@
   </div>
 
   @if (errorMessage) {
+
     <p class="checkout-summary__error">
       {{ errorMessage }}
     </p>
+
   }
 
   <button

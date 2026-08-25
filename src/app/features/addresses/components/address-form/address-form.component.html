@@ -1,152 +1,424 @@
-<form class="address-form" [formGroup]="form" (ngSubmit)="submit()">
-  <h3 class="address-form__title">{{ existingAddress
-    ? ('addressForm.editTitle' | translate)
-    : ('addressForm.addTitle' | translate)
-}}</h3>
+<form
+  class="address-form"
+  [formGroup]="form"
+  (ngSubmit)="submit()">
+
+  <h3 class="address-form__title">
+    {{
+      existingAddress
+        ? ('addressForm.editTitle' | translate)
+        : ('addressForm.addTitle' | translate)
+    }}
+  </h3>
 
   @if (errorMessage()) {
-    <p class="address-form__error">{{ errorMessage() }}</p>
+    <p class="address-form__error">
+      {{ errorMessage() }}
+    </p>
   }
 
   <div class="field-grid">
+
     <label class="field">
-      <span><span>{{ 'addressForm.fullName' | translate }}</span></span>
-      <input type="text" formControlName="fullName" placeholder="{{ 'addressForm.placeholder.fullName' | translate }}" />
-      @if (controlHasError('fullName', 'required')) {
-        <small>{{ 'addressForm.validation.fullNameRequired' | translate }}</small>
+
+      <span>
+        {{ 'addressForm.fullName' | translate }}
+      </span>
+
+      <input
+        type="text"
+        formControlName="fullName"
+        [placeholder]="
+          'addressForm.placeholder.fullName'
+            | translate
+        " />
+
+      @if (
+        controlHasError(
+          'fullName',
+          'required'
+        )
+      ) {
+        <small>
+          {{
+            'addressForm.validation.fullNameRequired'
+              | translate
+          }}
+        </small>
       }
+
     </label>
 
     <label class="field">
-      <span>{{ 'addressForm.phoneNumber' | translate }}</span>
-      <input type="tel" formControlName="phoneNumber" placeholder="{{ 'addressForm.placeholder.phone' | translate }}" />
-      @if (controlHasError('phoneNumber', 'required')) {
-        <small>{{ 'addressForm.validation.phoneRequired' | translate }}</small>
-      } @else if (controlHasError('phoneNumber', 'pattern')) {
-        <small>{{ 'addressForm.validation.phoneInvalid' | translate }}</small>
+
+      <span>
+        {{ 'addressForm.phoneNumber' | translate }}
+      </span>
+
+      <input
+        type="tel"
+        formControlName="phoneNumber"
+        [placeholder]="
+          'addressForm.placeholder.phone'
+            | translate
+        " />
+
+      @if (
+        controlHasError(
+          'phoneNumber',
+          'required'
+        )
+      ) {
+        <small>
+          {{
+            'addressForm.validation.phoneRequired'
+              | translate
+          }}
+        </small>
+
+      } @else if (
+        controlHasError(
+          'phoneNumber',
+          'pattern'
+        )
+      ) {
+        <small>
+          {{
+            'addressForm.validation.phoneInvalid'
+              | translate
+          }}
+        </small>
       }
+
     </label>
+
   </div>
-<app-address-map-picker
-  [initialLat]="existingAddress?.latitude ?? 30.0444"
-  [initialLng]="existingAddress?.longitude ?? 31.2357"
-  [initialLocationSelected]="
-    existingAddress?.latitude != null &&
-    existingAddress?.longitude != null
-  "
-  [initialLocationText]="
-    existingAddress
-      ? existingAddress.governorate +
-        ' - ' +
-        existingAddress.area +
-        ' - ' +
-        existingAddress.street
-      : ''
-  "
-  (locationPicked)="onLocationPicked($event)"
-></app-address-map-picker>
 
-@if (
-  controlHasError('latitude', 'required') ||
-  controlHasError('longitude', 'required')
-) {
-  <small class="location-validation-error">
-    {{ 'addressForm.validation.locationRequired' | translate }}
-  </small>
-}
+  <app-address-map-picker
+    [initialLat]="
+      existingAddress?.latitude ?? 30.0444
+    "
+    [initialLng]="
+      existingAddress?.longitude ?? 31.2357
+    "
+    [initialLocationSelected]="
+      existingAddress?.latitude != null &&
+      existingAddress?.longitude != null
+    "
+    [initialLocationText]="
+      existingAddress
+        ? existingAddress.governorate +
+          ' - ' +
+          existingAddress.area +
+          ' - ' +
+          existingAddress.street
+        : ''
+    "
+    (locationPicked)="
+      onLocationPicked($event)
+    ">
+  </app-address-map-picker>
+
+  @if (
+    controlHasError(
+      'latitude',
+      'required'
+    ) ||
+    controlHasError(
+      'longitude',
+      'required'
+    )
+  ) {
+    <small
+      class="location-validation-error">
+
+      {{
+        'addressForm.validation.locationRequired'
+          | translate
+      }}
+
+    </small>
+  }
+
   <div class="field-grid">
+
     <label class="field">
-      <span>{{ 'addressForm.governorate' | translate }}</span>
-      <select formControlName="governorate">
-        <option value="" disabled>{{ 'addressForm.selectGovernorate' | translate }} </option>
-        @for (gov of governorates(); track gov) {
-          <option [value]="gov">{{ gov }}</option>
+
+      <span>
+        {{ 'addressForm.governorate' | translate }}
+      </span>
+
+      <select
+        formControlName="governorate">
+
+        <option
+          value=""
+          disabled>
+
+          {{
+            'addressForm.selectGovernorate'
+              | translate
+          }}
+
+        </option>
+
+        @for (
+          governorate of governorates();
+          track governorate
+        ) {
+
+          <option [value]="governorate">
+            {{ governorate }}
+          </option>
+
         }
+
       </select>
-      @if (controlHasError('governorate', 'required')) {
-        <small>{{ 'addressForm.validation.governorateRequired' | translate }}</small>
+
+      @if (
+        controlHasError(
+          'governorate',
+          'required'
+        )
+      ) {
+        <small>
+          {{
+            'addressForm.validation.governorateRequired'
+              | translate
+          }}
+        </small>
       }
+
     </label>
 
     <label class="field">
-      <span>{{ 'addressForm.area' | translate }}</span>
-      <select formControlName="area" [disabled]="!form.get('governorate')?.value">
-        <option value="" disabled>{{ 'addressForm.selectArea' | translate }}</option>
-        @for (area of areasForSelectedGovernorate(); track area.id) {
-          <option [value]="area.name">{{ area.name }} (+{{ area.shippingCost | number }} EGP shipping)</option>
+
+      <span>
+        {{ 'addressForm.area' | translate }}
+      </span>
+
+      <select
+        formControlName="areaId">
+
+        <option
+          [ngValue]="0"
+          disabled>
+
+          {{
+            'addressForm.selectArea'
+              | translate
+          }}
+
+        </option>
+
+        @for (
+          area of areasForSelectedGovernorate();
+          track area.id
+        ) {
+
+          <option [ngValue]="area.id">
+
+            {{ area.name }}
+
+            (+{{ area.shippingCost | number }}
+            EGP shipping)
+
+          </option>
+
         }
+
       </select>
-      @if (controlHasError('area', 'required')) {
-        <small>{{ 'addressForm.validation.areaRequired' | translate }}</small>
+
+      @if (
+        controlHasError(
+          'areaId',
+          'required'
+        ) ||
+        controlHasError(
+          'areaId',
+          'min'
+        )
+      ) {
+        <small>
+          {{
+            'addressForm.validation.areaRequired'
+              | translate
+          }}
+        </small>
       }
+
     </label>
+
   </div>
 
   <label class="field">
-    <span>{{ 'addressForm.street' | translate }}</span>
-    <input type="text" formControlName="street" placeholder="{{ 'addressForm.placeholder.street' | translate }}" />
-    @if (controlHasError('street', 'required')) {
-      <small>{{ 'addressForm.validation.streetRequired' | translate }}</small>
+
+    <span>
+      {{ 'addressForm.street' | translate }}
+    </span>
+
+    <input
+      type="text"
+      formControlName="street"
+      [placeholder]="
+        'addressForm.placeholder.street'
+          | translate
+      " />
+
+    @if (
+      controlHasError(
+        'street',
+        'required'
+      )
+    ) {
+      <small>
+        {{
+          'addressForm.validation.streetRequired'
+            | translate
+        }}
+      </small>
     }
+
   </label>
 
   <div class="field-grid field-grid--three">
-    <label class="field">
-  <span>{{ 'addressForm.building' | translate }}</span>
 
-  <input
-    type="text"
-    formControlName="building"
-    placeholder="{{ 'addressForm.placeholder.building' | translate }}"
-  />
-
-  @if (controlHasError('building', 'required')) {
-    <small>
-      {{ 'addressForm.validation.buildingRequired' | translate }}
-    </small>
-  }
-</label>
     <label class="field">
-      <span>{{ 'addressForm.floor' | translate }}</span>
-      <input type="text" formControlName="floor" placeholder="{{ 'addressForm.placeholder.floor' | translate }}" />
+
+      <span>
+        {{ 'addressForm.building' | translate }}
+      </span>
+
+      <input
+        type="text"
+        formControlName="building"
+        [placeholder]="
+          'addressForm.placeholder.building'
+            | translate
+        " />
+
+      @if (
+        controlHasError(
+          'building',
+          'required'
+        )
+      ) {
+        <small>
+          {{
+            'addressForm.validation.buildingRequired'
+              | translate
+          }}
+        </small>
+      }
+
     </label>
-   <label class="field">
-  <span>{{ 'addressForm.apartment' | translate }}</span>
 
-  <input
-    type="text"
-    formControlName="apartment"
-    placeholder="{{ 'addressForm.placeholder.apartment' | translate }}"
-  />
+    <label class="field">
 
-  @if (controlHasError('apartment', 'required')) {
-    <small>
-      {{ 'addressForm.validation.apartmentRequired' | translate }}
-    </small>
-  }
-</label>
+      <span>
+        {{ 'addressForm.floor' | translate }}
+      </span>
+
+      <input
+        type="text"
+        formControlName="floor"
+        [placeholder]="
+          'addressForm.placeholder.floor'
+            | translate
+        " />
+
+    </label>
+
+    <label class="field">
+
+      <span>
+        {{ 'addressForm.apartment' | translate }}
+      </span>
+
+      <input
+        type="text"
+        formControlName="apartment"
+        [placeholder]="
+          'addressForm.placeholder.apartment'
+            | translate
+        " />
+
+      @if (
+        controlHasError(
+          'apartment',
+          'required'
+        )
+      ) {
+        <small>
+          {{
+            'addressForm.validation.apartmentRequired'
+              | translate
+          }}
+        </small>
+      }
+
+    </label>
+
   </div>
 
   <label class="field">
-    <span>{{ 'addressForm.notes' | translate }}</span>
-    <textarea formControlName="notes" rows="2" placeholder="{{ 'addressForm.placeholder.notes' | translate }}"></textarea>
+
+    <span>
+      {{ 'addressForm.notes' | translate }}
+    </span>
+
+    <textarea
+      formControlName="notes"
+      rows="2"
+      [placeholder]="
+        'addressForm.placeholder.notes'
+          | translate
+      ">
+    </textarea>
+
   </label>
 
-  <label class="address-form__checkbox">
-    <input type="checkbox" formControlName="isDefault" />
-    <span>{{ 'addressForm.setDefault' | translate }}</span>
+  <label
+    class="address-form__checkbox">
+
+    <input
+      type="checkbox"
+      formControlName="isDefault" />
+
+    <span>
+      {{ 'addressForm.setDefault' | translate }}
+    </span>
+
   </label>
 
   <div class="address-form__actions">
-    <button type="submit" class="btn btn-primary" [disabled]="isSubmitting()">
-{{ isSubmitting()
-    ? ('addressForm.saving' | translate)
-    : (
-        existingAddress
-          ? ('addressForm.saveChanges' | translate)
-          : ('addressForm.addAddress' | translate)
-      )
-}}    </button>
-    <button type="button" class="btn btn-outline" (click)="cancel()">{{ 'addressForm.cancel' | translate }}</button>
+
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="isSubmitting()">
+
+      {{
+        isSubmitting()
+          ? ('addressForm.saving' | translate)
+          : (
+              existingAddress
+                ? ('addressForm.saveChanges' | translate)
+                : ('addressForm.addAddress' | translate)
+            )
+      }}
+
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-outline"
+      (click)="cancel()">
+
+      {{ 'addressForm.cancel' | translate }}
+
+    </button>
+
   </div>
+
 </form>
