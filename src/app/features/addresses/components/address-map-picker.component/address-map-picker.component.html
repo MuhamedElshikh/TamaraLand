@@ -46,40 +46,6 @@
 
     <div class="map-picker__map-container">
 
-      <div class="map-picker__search-wrapper">
-
-        <input
-          type="text"
-          [formControl]="searchControl"
-          class="map-picker__search"
-          placeholder="{{ 'addressForm.map.searchPlaceholder' | translate }}"
-          autocomplete="off"
-        />
-
-        @if (showResults) {
-
-          <ul class="map-picker__results">
-
-            @for (
-              result of results;
-              track result.display_name
-            ) {
-
-              <li
-                (click)="selectResult(result)"
-              >
-                {{ result.display_name }}
-              </li>
-
-            }
-
-          </ul>
-
-        }
-
-      </div>
-
-
       <button
         type="button"
         class="map-picker__locate-btn"

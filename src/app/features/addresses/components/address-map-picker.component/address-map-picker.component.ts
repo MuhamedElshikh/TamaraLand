@@ -6,24 +6,22 @@ import {
   OnInit,
   AfterViewInit,
   OnDestroy,
-  inject,
   signal,
 } from '@angular/core';
 
-import { HttpClient } from '@angular/common/http';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 import {
   debounceTime,
   distinctUntilChanged,
-  switchMap,
   filter,
 } from 'rxjs/operators';
 
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { TranslatePipe } from '@ngx-translate/core';
-import * as L from 'leaflet';
+import { setOptions, importLibrary } from '@googlemaps/js-api-loader';
+import { environment } from '../../../../../environments/environment';
 
 export interface PickedLocation {
   lat: number;
@@ -36,29 +34,6 @@ export interface PickedLocation {
   building?: string;
 }
 
-interface NominatimAddress {
-  state?: string;
-  state_district?: string;
-  city?: string;
-  town?: string;
-  municipality?: string;
-
-  suburb?: string;
-  neighbourhood?: string;
-  quarter?: string;
-  city_district?: string;
-
-  road?: string;
-  house_number?: string;
-}
-
-interface NominatimResult {
-  lat: string;
-  lon: string;
-  display_name: string;
-  address?: NominatimAddress;
-}
-
 @Component({
   selector: 'app-address-map-picker',
   standalone: true,
@@ -69,8 +44,6 @@ interface NominatimResult {
 export class AddressMapPickerComponent
   implements OnInit, AfterViewInit, OnDestroy {
 
-  private readonly http = inject(HttpClient);
-
   @Input() initialLat = 30.0444;
   @Input() initialLng = 31.2357;
 
@@ -79,15 +52,18 @@ export class AddressMapPickerComponent
 
   @Output() locationPicked = new EventEmitter<PickedLocation>();
 
-  private map?: L.Map;
-  private marker?: L.Marker;
+  private map?: google.maps.Map;
+  private marker?: google.maps.Marker;
+  private geocoder?: google.maps.Geocoder;
+  private autocompleteService?: google.maps.places.AutocompleteService;
+  private placesService?: google.maps.places.PlacesService;
+  private sessionToken?: google.maps.places.AutocompleteSessionToken;
 
   private sub = new Subscription();
 
   readonly searchControl = new FormControl('');
-  readonly searchResults = new Subject<NominatimResult[]>();
 
-  results: NominatimResult[] = [];
+  results: google.maps.places.AutocompletePrediction[] = [];
   showResults = false;
 
   readonly mapOpen = signal(false);
@@ -95,9 +71,9 @@ export class AddressMapPickerComponent
   readonly locationError = signal<string | null>(null);
 
   readonly selectedLocationText = signal('');
-
+private static googleMapsOptionsSet = false;
   private mapInitialized = false;
-
+  private googleMapsLoaded = false;
   ngOnInit(): void {
     if (this.initialLocationSelected) {
       this.selectedLocationText.set(
@@ -113,14 +89,10 @@ export class AddressMapPickerComponent
               !!val && val.trim().length > 2
           ),
           debounceTime(600),
-          distinctUntilChanged(),
-          switchMap((query) =>
-            this.searchAddress(query.trim())
-          )
+          distinctUntilChanged()
         )
-        .subscribe((results) => {
-          this.results = results;
-          this.showResults = results.length > 0;
+        .subscribe((query) => {
+          this.searchAddress(query.trim());
         })
     );
   }
@@ -132,7 +104,6 @@ export class AddressMapPickerComponent
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
-    this.map?.remove();
   }
 
   openMap(): void {
@@ -142,8 +113,8 @@ export class AddressMapPickerComponent
     setTimeout(() => {
       if (!this.mapInitialized) {
         this.initMap();
-      } else {
-        this.map?.invalidateSize();
+      } else if (this.map) {
+        google.maps.event.trigger(this.map, 'resize');
       }
     });
   }
@@ -166,209 +137,252 @@ export class AddressMapPickerComponent
     }
   }
 
-  private initMap(): void {
-    if (this.mapInitialized) {
+ private async initMap(): Promise<void> {
+  if (this.mapInitialized) {
+    return;
+  }
+
+  if (!AddressMapPickerComponent.googleMapsOptionsSet) {
+    setOptions({
+      key: environment.googleMapsApiKey,
+      v: 'weekly',
+      language: 'ar',
+      region: 'EG',
+    });
+
+    AddressMapPickerComponent.googleMapsOptionsSet = true;
+  }
+
+  const [{ Map }, , , { Marker }] = await Promise.all([
+    importLibrary('maps'),
+    importLibrary('places'),
+    importLibrary('geocoding'),
+    importLibrary('marker'),
+  ]);
+
+  this.map = new Map(
+    document.getElementById('address-map') as HTMLElement,
+    {
+      center: { lat: this.initialLat, lng: this.initialLng },
+      zoom: 14,
+      streetViewControl: false,
+      mapTypeControl: false,
+      fullscreenControl: false,
+    }
+  );
+
+  this.geocoder = new google.maps.Geocoder();
+  this.autocompleteService = new google.maps.places.AutocompleteService();
+  this.placesService = new google.maps.places.PlacesService(this.map);
+
+  this.marker = new Marker({
+    position: { lat: this.initialLat, lng: this.initialLng },
+    map: this.map,
+    draggable: true,
+  });
+
+  this.marker.addListener('dragend', () => {
+    const pos = this.marker!.getPosition();
+
+    if (pos) {
+      this.reverseGeocode(pos.lat(), pos.lng());
+    }
+  });
+
+  this.map.addListener(
+    'click',
+    (e: google.maps.MapMouseEvent) => {
+      if (!e.latLng) {
+        return;
+      }
+
+      this.marker!.setPosition(e.latLng);
+
+      this.reverseGeocode(
+        e.latLng.lat(),
+        e.latLng.lng()
+      );
+    }
+  );
+
+  this.mapInitialized = true;
+
+  setTimeout(() => {
+    if (this.map) {
+      google.maps.event.trigger(this.map, 'resize');
+    }
+  }, 100);
+}
+
+  private searchAddress(query: string): void {
+    if (!this.autocompleteService) {
       return;
     }
 
-    const iconDefault = L.icon({
-      iconUrl: 'assets/leaflet/marker-icon.png',
-      iconRetinaUrl: 'assets/leaflet/marker-icon-2x.png',
-      shadowUrl: 'assets/leaflet/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-    });
-
-    L.Marker.prototype.options.icon = iconDefault;
-
-    this.map = L.map('address-map').setView(
-      [this.initialLat, this.initialLng],
-      14
-    );
-
-    L.tileLayer(
-      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      {
-        attribution: '&copy; OpenStreetMap contributors',
-        maxZoom: 19,
-      }
-    ).addTo(this.map);
-
-    this.marker = L.marker(
-      [this.initialLat, this.initialLng],
-      {
-        draggable: true,
-      }
-    ).addTo(this.map);
-
-    this.marker.on('dragend', () => {
-      const pos = this.marker!.getLatLng();
-
-      this.reverseGeocode(
-        pos.lat,
-        pos.lng
-      );
-    });
-
-    this.map.on(
-      'click',
-      (e: L.LeafletMouseEvent) => {
-        this.marker!.setLatLng(e.latlng);
-
-        this.reverseGeocode(
-          e.latlng.lat,
-          e.latlng.lng
-        );
-      }
-    );
-
-    this.mapInitialized = true;
-
-    setTimeout(() => {
-      this.map?.invalidateSize();
-    }, 100);
-  }
-
- private searchAddress(query: string) {
-  return this.http.get<NominatimResult[]>(
-    'https://nominatim.openstreetmap.org/search',
-    {
-      params: {
-        q: query,
-        format: 'json',
-        addressdetails: '1',
-        countrycodes: 'eg',
-        limit: '5',
-        'accept-language': 'ar',
-      },
+    if (!this.sessionToken) {
+      this.sessionToken =
+        new google.maps.places.AutocompleteSessionToken();
     }
-  );
-}
 
-  selectResult(result: NominatimResult): void {
-    const lat = parseFloat(result.lat);
-    const lng = parseFloat(result.lon);
+    this.autocompleteService.getPlacePredictions(
+      {
+        input: query,
+        componentRestrictions: { country: 'eg' },
+        language: 'ar',
+        sessionToken: this.sessionToken,
+      },
+      (predictions, status) => {
+        if (
+          status !== google.maps.places.PlacesServiceStatus.OK ||
+          !predictions
+        ) {
+          this.results = [];
+          this.showResults = false;
+          return;
+        }
 
-    this.map?.setView(
-      [lat, lng],
-      16
+        this.results = predictions;
+        this.showResults = predictions.length > 0;
+      }
     );
-
-    this.marker?.setLatLng([
-      lat,
-      lng,
-    ]);
-
-    this.showResults = false;
-
-    this.reverseGeocode(lat, lng);
   }
 
-  private reverseGeocode(
-  lat: number,
-  lng: number
-): void {
+  selectResult(
+    result: google.maps.places.AutocompletePrediction
+  ): void {
+    if (!this.placesService) {
+      return;
+    }
 
-  this.http
-    .get<{
-      display_name: string;
-      address?: NominatimAddress;
-    }>(
-      'https://nominatim.openstreetmap.org/reverse',
+    this.placesService.getDetails(
       {
-        params: {
-          lat: lat.toString(),
-          lon: lng.toString(),
-          format: 'json',
-          addressdetails: '1',
-          'accept-language': 'ar',
-        },
-      }
-    )
-    .subscribe({
-      next: (res) => {
+        placeId: result.place_id,
+        fields: ['geometry', 'address_component', 'formatted_address'],
+        sessionToken: this.sessionToken,
+      },
+      (place, status) => {
+        this.sessionToken = undefined;
 
-        const address = res.address;
+        if (
+          status !== google.maps.places.PlacesServiceStatus.OK ||
+          !place?.geometry?.location
+        ) {
+          return;
+        }
+
+        const lat = place.geometry.location.lat();
+        const lng = place.geometry.location.lng();
+
+        this.map?.setCenter({ lat, lng });
+        this.map?.setZoom(16);
+        this.marker?.setPosition({ lat, lng });
+
+        this.showResults = false;
 
         const location: PickedLocation = {
           lat,
           lng,
-
-          formattedAddress:
-            res.display_name,
-
-          governorate:
-            this.extractGovernorate(address),
-
+          formattedAddress: place.formatted_address || '',
+          governorate: this.extractComponent(
+            place.address_components,
+            'administrative_area_level_1'
+          ),
           area:
-            this.extractArea(address),
-
-          street:
-            address?.road,
-
-          building:
-            address?.house_number,
+            this.extractComponent(
+              place.address_components,
+              'sublocality_level_1'
+            ) ??
+            this.extractComponent(
+              place.address_components,
+              'neighborhood'
+            ),
+          street: this.extractComponent(
+            place.address_components,
+            'route'
+          ),
+          building: this.extractComponent(
+            place.address_components,
+            'street_number'
+          ),
         };
 
-        this.selectedLocationText.set(
-          res.display_name
-        );
-
+        this.selectedLocationText.set(location.formattedAddress);
         this.locationPicked.emit(location);
-
         this.closeMap();
-      },
-
-      error: () => {
-
-        this.selectedLocationText.set(
-          `${lat.toFixed(6)}, ${lng.toFixed(6)}`
-        );
-
-        this.locationPicked.emit({
-          lat,
-          lng,
-          formattedAddress: '',
-        });
-      },
-    });
-}
-
-  private extractGovernorate(
-    address?: NominatimAddress
-  ): string | undefined {
-
-    if (!address) {
-      return undefined;
-    }
-
-    return (
-      address.state ||
-      address.state_district ||
-      address.city ||
-      address.town ||
-      address.municipality
+      }
     );
   }
 
-  private extractArea(
-    address?: NominatimAddress
-  ): string | undefined {
-
-    if (!address) {
-      return undefined;
+  private reverseGeocode(lat: number, lng: number): void {
+    if (!this.geocoder) {
+      return;
     }
 
-    return (
-      address.suburb ||
-      address.neighbourhood ||
-      address.quarter ||
-      address.city_district
+    this.geocoder.geocode(
+      { location: { lat, lng }, language: 'ar' },
+      (results, status) => {
+        if (
+          status !== google.maps.GeocoderStatus.OK ||
+          !results ||
+          results.length === 0
+        ) {
+          this.selectedLocationText.set(
+            `${lat.toFixed(6)}, ${lng.toFixed(6)}`
+          );
+
+          this.locationPicked.emit({
+            lat,
+            lng,
+            formattedAddress: '',
+          });
+
+          return;
+        }
+
+        const place = results[0];
+
+        const location: PickedLocation = {
+          lat,
+          lng,
+          formattedAddress: place.formatted_address,
+          governorate: this.extractComponent(
+            place.address_components,
+            'administrative_area_level_1'
+          ),
+          area:
+            this.extractComponent(
+              place.address_components,
+              'sublocality_level_1'
+            ) ??
+            this.extractComponent(
+              place.address_components,
+              'neighborhood'
+            ),
+          street: this.extractComponent(
+            place.address_components,
+            'route'
+          ),
+          building: this.extractComponent(
+            place.address_components,
+            'street_number'
+          ),
+        };
+
+        this.selectedLocationText.set(location.formattedAddress);
+        this.locationPicked.emit(location);
+        this.closeMap();
+      }
     );
+  }
+
+  private extractComponent(
+    components: google.maps.GeocoderAddressComponent[] | undefined,
+    type: string
+  ): string | undefined {
+    return components?.find((c) => c.types.includes(type))?.long_name;
   }
 
   useMyLocation(): void {
-
     if (!navigator.geolocation) {
       this.locationError.set(
         'المتصفح ده مش بيدعم تحديد الموقع.'
@@ -381,37 +395,22 @@ export class AddressMapPickerComponent
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
 
-        const lat =
-          position.coords.latitude;
+        this.map?.setCenter({ lat, lng });
+        this.map?.setZoom(16);
+        this.marker?.setPosition({ lat, lng });
 
-        const lng =
-          position.coords.longitude;
-
-        this.map?.setView(
-          [lat, lng],
-          16
-        );
-
-        this.marker?.setLatLng([
-          lat,
-          lng,
-        ]);
-
-        this.reverseGeocode(
-          lat,
-          lng
-        );
+        this.reverseGeocode(lat, lng);
 
         this.isLocating.set(false);
       },
 
       (error) => {
-
         this.isLocating.set(false);
 
         switch (error.code) {
-
           case error.PERMISSION_DENIED:
             this.locationError.set(
               'محتاجين إذن الوصول لموقعك عشان نقدر نحدده.'

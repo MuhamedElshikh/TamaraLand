@@ -232,17 +232,23 @@
     "productsCount": "{{count}} منتج",
     "noProducts": "لا توجد منتجات مطابقة للفلاتر الحالية."
   },
-  "address": {
-    "default": "الافتراضي",
-    "building": "مبنى",
-    "floor": "الدور",
-    "apartment": "شقة",
-    "settingDefault": "جارٍ التعيين...",
-    "setDefault": "تعيين كافتراضي",
-    "edit": "تعديل",
-    "deleting": "جارٍ الحذف...",
-    "delete": "حذف"
-  },
+ "address": {
+  "kicker": "التوصيل",
+  "title": "عناوينك",
+  "addAddress": "إضافة عنوان",
+  "addFirstAddress": "أضف أول عنوان",
+  "empty": "لم تقم بإضافة أي عنوان حتى الآن.",
+  "loading": "جارٍ تحميل العناوين...",
+  "default": "الافتراضي",
+  "building": "مبنى",
+  "floor": "الدور",
+  "apartment": "شقة",
+  "settingDefault": "جارٍ التعيين...",
+  "setDefault": "تعيين كافتراضي",
+  "edit": "تعديل",
+  "deleting": "جارٍ الحذف...",
+  "delete": "حذف"
+},
  "addressForm": {
   "editTitle": "تعديل العنوان",
   "addTitle": "إضافة عنوان جديد",

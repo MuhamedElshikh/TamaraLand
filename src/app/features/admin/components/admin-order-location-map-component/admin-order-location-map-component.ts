@@ -5,7 +5,8 @@ import {
   OnDestroy,
 } from '@angular/core';
 
-import * as L from 'leaflet';
+import { setOptions, importLibrary } from '@googlemaps/js-api-loader';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-admin-order-location-map',
@@ -26,52 +27,60 @@ export class AdminOrderLocationMapComponent
   @Input() floor = '';
   @Input() apartment = '';
 
-  private map?: L.Map;
-  private marker?: L.Marker;
+  private map?: google.maps.Map;
+  private marker?: google.maps.Marker;
+
+  private static googleMapsOptionsSet = false;
 
   ngAfterViewInit(): void {
     this.initMap();
   }
 
   ngOnDestroy(): void {
-    this.map?.remove();
+    // مفيش حاجة تتشال يدويًا مع Google Maps
+    // (مختلف عن Leaflet اللي كان محتاج map.remove())
   }
 
-  private initMap(): void {
-    const iconDefault = L.icon({
-      iconUrl: 'assets/leaflet/marker-icon.png',
-      iconRetinaUrl: 'assets/leaflet/marker-icon-2x.png',
-      shadowUrl: 'assets/leaflet/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-    });
+  private async initMap(): Promise<void> {
+    if (!AdminOrderLocationMapComponent.googleMapsOptionsSet) {
+      setOptions({
+        key: environment.googleMapsApiKey,
+        v: 'weekly',
+        language: 'ar',
+        region: 'EG',
+      });
 
-    L.Marker.prototype.options.icon = iconDefault;
+      AdminOrderLocationMapComponent.googleMapsOptionsSet = true;
+    }
 
-    this.map = L.map('admin-order-location-map', {
-      zoomControl: true,
-      dragging: true,
-      scrollWheelZoom: true,
-    }).setView(
-      [this.latitude, this.longitude],
-      16
+    const [{ Map }, { Marker }] = await Promise.all([
+      importLibrary('maps'),
+      importLibrary('marker'),
+    ]);
+
+    this.map = new Map(
+      document.getElementById('admin-order-location-map') as HTMLElement,
+      {
+        center: { lat: this.latitude, lng: this.longitude },
+        zoom: 16,
+        zoomControl: true,
+        draggable: true,
+        scrollwheel: true,
+        streetViewControl: false,
+        mapTypeControl: false,
+        fullscreenControl: false,
+      }
     );
 
-    L.tileLayer(
-      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      {
-        attribution: '&copy; OpenStreetMap contributors',
-        maxZoom: 19,
-      }
-    ).addTo(this.map);
-
-    this.marker = L.marker([
-      this.latitude,
-      this.longitude,
-    ]).addTo(this.map);
+    this.marker = new Marker({
+      position: { lat: this.latitude, lng: this.longitude },
+      map: this.map,
+    });
 
     setTimeout(() => {
-      this.map?.invalidateSize();
+      if (this.map) {
+        google.maps.event.trigger(this.map, 'resize');
+      }
     }, 100);
   }
 }

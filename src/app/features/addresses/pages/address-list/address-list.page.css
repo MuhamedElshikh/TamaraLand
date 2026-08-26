@@ -1,7 +1,9 @@
 .addresses-page {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.75rem;
+
+  padding: 1.5rem clamp(1rem, 4vw, 2rem) 3rem;
 }
 
 .addresses-page__hero {
@@ -10,23 +12,29 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1.25rem 0 0.25rem;
+
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .addresses-page__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 .addresses-page__empty {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 3rem 1.5rem;
+  align-items: center;
+  text-align: center;
+  gap: 1.25rem;
+
+  padding: 3.5rem 1.75rem;
+
   border: 1px dashed var(--border-color);
   border-radius: var(--radius-lg);
+  background: var(--secondary);
 }
 
 @keyframes skeletonPulse {
@@ -36,14 +44,38 @@
 
 .addresses-page__skeleton {
   height: 160px;
+
   border-radius: var(--radius-md);
   background: var(--secondary-light);
   border: 1px solid var(--border-color);
+
   animation: skeletonPulse 1.4s ease-in-out infinite;
 }
 
 @media (max-width: 640px) {
+  .addresses-page {
+    padding: 1rem 1rem 2.5rem;
+    gap: 1.25rem;
+  }
+
+  .addresses-page__hero {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+
+    padding-bottom: 1rem;
+  }
+
+  .addresses-page__hero .btn {
+    width: 100%;
+  }
+
   .addresses-page__grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .addresses-page__empty {
+    padding: 2.5rem 1.25rem;
   }
 }
