@@ -1,43 +1,110 @@
 .admin-location-map {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 1rem;
+}
+
+.admin-location-map__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .admin-location-map__address {
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  padding: 12px 14px;
-  background: var(--secondary-light);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
+  gap: 0.35rem;
 }
 
 .admin-location-map__label {
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #6b7280;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
+  letter-spacing: 0.04em;
 }
 
 .admin-location-map__value {
-  font-size: 0.9rem;
-  line-height: 1.6;
-  color: var(--text-primary);
+  color: #1f2937;
+  line-height: 1.5;
+}
+
+.admin-location-map__share {
+  flex-shrink: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  padding: 0.65rem 1rem;
+
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+
+  background: #fff;
+  color: #374151;
+
+  font-size: 0.875rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.admin-location-map__share:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.admin-location-map__share:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .admin-location-map__map {
   width: 100%;
-  height: 360px;
-  border-radius: var(--radius-md);
+  height: 400px;
+  border-radius: 0.75rem;
   overflow: hidden;
-  border: 1px solid var(--border-color);
+}
+
+.admin-location-map__share-message {
+  font-size: 0.8rem;
+  color: #16a34a;
+}
+
+.share-spinner {
+  width: 14px;
+  height: 14px;
+
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+
+  border-radius: 50%;
+
+  animation: share-spin 0.7s linear infinite;
+}
+
+@keyframes share-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 640px) {
-  .admin-location-map__map {
-    height: 280px;
+  .admin-location-map__header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin-location-map__share {
+    width: 100%;
   }
 }

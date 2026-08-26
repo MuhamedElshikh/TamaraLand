@@ -32,13 +32,77 @@ export class AdminOrderLocationMapComponent
 
   private static googleMapsOptionsSet = false;
 
+  isSharing = false;
+  shareMessage = '';
+
   ngAfterViewInit(): void {
     this.initMap();
   }
 
-  ngOnDestroy(): void {
-    // مفيش حاجة تتشال يدويًا مع Google Maps
-    // (مختلف عن Leaflet اللي كان محتاج map.remove())
+  ngOnDestroy(): void {}
+
+  async shareLocation(): Promise<void> {
+    if (
+      this.latitude == null ||
+      this.longitude == null
+    ) {
+      return;
+    }
+
+    const mapsUrl =
+      `https://www.google.com/maps/search/?api=1&query=${this.latitude},${this.longitude}`;
+
+    const address = this.buildAddress();
+
+    const shareText = [
+      'Customer Delivery Location',
+      address ? `Address: ${address}` : '',
+      `Location: ${mapsUrl}`,
+    ]
+      .filter(Boolean)
+      .join('\n');
+
+    this.isSharing = true;
+    this.shareMessage = '';
+
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: 'Customer Delivery Location',
+          text: shareText,
+        });
+      } else {
+        await navigator.clipboard.writeText(shareText);
+        this.shareMessage = 'Location link copied to clipboard.';
+      }
+    } catch (error) {
+      // User cancelled the native share dialog.
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(shareText);
+        this.shareMessage = 'Location link copied to clipboard.';
+      } catch {
+        this.shareMessage = 'Unable to share the location.';
+      }
+    } finally {
+      this.isSharing = false;
+    }
+  }
+
+  private buildAddress(): string {
+    return [
+      this.governorate,
+      this.area,
+      this.street,
+      this.building ? `Bldg ${this.building}` : '',
+      this.floor ? `Floor ${this.floor}` : '',
+      this.apartment ? `Apt ${this.apartment}` : '',
+    ]
+      .filter(Boolean)
+      .join(' - ');
   }
 
   private async initMap(): Promise<void> {
@@ -61,7 +125,10 @@ export class AdminOrderLocationMapComponent
     this.map = new Map(
       document.getElementById('admin-order-location-map') as HTMLElement,
       {
-        center: { lat: this.latitude, lng: this.longitude },
+        center: {
+          lat: this.latitude,
+          lng: this.longitude,
+        },
         zoom: 16,
         zoomControl: true,
         draggable: true,
@@ -73,7 +140,10 @@ export class AdminOrderLocationMapComponent
     );
 
     this.marker = new Marker({
-      position: { lat: this.latitude, lng: this.longitude },
+      position: {
+        lat: this.latitude,
+        lng: this.longitude,
+      },
       map: this.map,
     });
 
