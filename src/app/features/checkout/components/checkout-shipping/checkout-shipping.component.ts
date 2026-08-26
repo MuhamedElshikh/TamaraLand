@@ -143,7 +143,7 @@ export class CheckoutShippingComponent {
       `رقم الهاتف: ${address.phoneNumber}`,
       `المحافظة: ${address.governorate}`,
       `المنطقة: ${address.area}`,
-      `الشيخة: ${address.shiyakha}`,
+      `الحي: ${address.shiyakha}`,
       `الشارع: ${address.street}`,
     ];
 
