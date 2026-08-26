@@ -261,7 +261,7 @@
   "phoneNumber": "Phone Number",
   "governorate": "Governorate",
   "area": "Area",
-  "shiyakha": "Shiyakha",
+  "district": "district",
   "street": "Street",
   "building": "Building",
   "floor": "Floor",
@@ -272,7 +272,7 @@
     "title": "Selected Location",
     "governorate": "Governorate",
     "area": "Area",
-    "shiyakha": "Shiyakha"
+    "district": "district"
   },
 
   "locationStatus": {
@@ -549,7 +549,7 @@
   "addressDetails": "Address Details",
   "governorate": "Governorate",
   "area": "Area",
-  "shiyakha": "Shiyakha",
+  "district": "district",
   "street": "Street",
   "building": "Building",
   "floor": "Floor",
@@ -883,7 +883,7 @@
 
   "governorate": "Governorate",
   "area": "Area",
-  "shiyakhas": "Shiyakhas",
+  "district": "district",
 
   "cost": "Shipping Cost (EGP)",
   "areaActive": "Delivery is available for this area",
@@ -898,7 +898,7 @@
 
   "empty": "No areas match the current search or filters.",
 
-  "noShiyakhas": "No Shiyakhas are linked to this area.",
+  "nodistricts": "No districts are linked to this area.",
 
   "costRequired": "Shipping cost is required.",
   "costInvalid": "Shipping cost cannot be negative."
