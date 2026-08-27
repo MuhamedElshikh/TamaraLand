@@ -9,6 +9,8 @@ import {
   CategoryFilterRequest,
   BrandFilterRequest,
   CategoryResponse,
+  ColorResponse,
+  SizeResponse,
   BrandResponse,
 } from '../models/catalog.models';
 import {
@@ -243,4 +245,19 @@ return this.http.put<ApiResponse<void>>(
   deleteBrand(id: number): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(`${this.brandUrl}/${id}`);
   }
+  // ---- Colors ----
+
+getColors(): Observable<ApiResponse<ColorResponse[]>> {
+  return this.http.get<ApiResponse<ColorResponse[]>>(
+    `${API_BASE_URL}/api/Color`
+  );
+}
+
+// ---- Sizes ----
+
+getSizes(): Observable<ApiResponse<SizeResponse[]>> {
+  return this.http.get<ApiResponse<SizeResponse[]>>(
+    `${API_BASE_URL}/api/Size`
+  );
+}
 }

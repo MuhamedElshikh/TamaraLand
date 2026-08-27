@@ -4,19 +4,36 @@
 export interface CartItemResponse {
   productVariantId: number;
   productId: number;
+
   productName: string;
   arabicName: string;
-  brandName: string;
-  arabicBrandName: string;
-  categoryName: string;
-  arabicCategoryName: string;
-  variantSku?: string;
-  color?: string;
-  size?: string;
-  imageUrl?: string;
+
+  brandName?: string | null;
+  arabicBrandName?: string | null;
+
+  categoryName?: string | null;
+  arabicCategoryName?: string | null;
+
+  imageUrl?: string | null;
+
+  color?: string | null;
+  arabicColor?: string | null;
+
+  colorHexCode?: string | null;
+  colorSecondaryHexCode?: string | null;
+
+  size?: string | null;
+
+  sku?: string | null;
+
   quantity: number;
-  availableStock: number;   // ✅ جديد
+  availableStock: number;
+
+  originalUnitPrice: number;
   unitPrice: number;
+
+  productDiscount: number;
+
   subTotal: number;
 }
 
@@ -575,8 +592,8 @@ export interface BrandUpsertResponse {
 
 }
 export interface CreateProductVariantRequest {
-  color?: string;
-  size?: string;
+  colorId: number;
+  sizeId: number;
   price: number;
   stock: number;
   sku: string;
@@ -585,10 +602,9 @@ export interface CreateProductVariantRequest {
   hip: number;
   length: number;
 }
-
 export interface CreateProductRequest {
   name: string;
-  arabicName:string;
+  arabicName: string;
   description?: string;
   categoryId: number;
   brandId: number;
@@ -597,10 +613,10 @@ export interface CreateProductRequest {
 
 export interface UpdateProductVariantRequest {
   id?: number;
-  color?: string;
-  size?: string;
-  costPrice?: number;
-  compareAtPrice?: number;
+  colorId: number;
+  sizeId: number;
+  costPrice: number;
+  compareAtPrice?: number | null;
   price: number;
   stock: number;
   bust: number;
@@ -622,26 +638,31 @@ export interface UpdateProductRequest {
 }
 
 export interface ProductVariantRequest {
-  sku: string;
-  color?: string;
-  size?: string;
+  colorId: number;
+  sizeId: number;
   stock: number;
   price: number;
   bust: number;
   waist: number;
   hip: number;
   length: number;
-    isPublished:boolean;
+  sku: string;
 }
 
 export interface AdminProductVariantResponse {
-   id: number;
+  id: number;
   productId?: number;
+
+  colorId: number;
+  colorName: string;
+  colorArabicName: string;
+  colorHexCode?: string | null;
+  colorSecondaryHexCode?: string | null;
+  sizeId: number;
+  sizeName: string;
   sku: string;
-  color?: string;
-  size?: string;
   costPrice?: number;
-  compareAtPrice?: number;
+  compareAtPrice?: number | null;
   price: number;
   originalPrice?: number;
   finalPrice?: number;

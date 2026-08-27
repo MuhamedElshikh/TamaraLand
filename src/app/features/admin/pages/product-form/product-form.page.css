@@ -539,3 +539,96 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+/* =========================================================
+   Variant Color Preview
+   ========================================================= */
+
+.selected-color-preview {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.65rem;
+  padding: 0.45rem 0.65rem;
+
+  width: fit-content;
+
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+
+  background: var(--bg-card);
+  color: var(--text-secondary);
+
+  font-size: 0.8rem;
+}
+
+.selected-color-preview__swatch {
+  width: 24px;
+  height: 24px;
+
+  flex: 0 0 24px;
+
+  border-radius: 50%;
+
+  border: 1px solid var(--border-color);
+
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.2);
+
+  display: inline-block;
+}
+
+/* =========================================================
+   Variant Table Color Cell
+   ========================================================= */
+
+.variant-color-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.variant-color-cell__swatch {
+  width: 28px;
+  height: 28px;
+
+  flex: 0 0 28px;
+
+  border-radius: 50%;
+
+  border: 1px solid var(--border-color);
+
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.2);
+
+  display: inline-block;
+}
+
+/* =========================================================
+   Optional: Improve Select Focus
+   ========================================================= */
+
+.form-select:focus {
+  border-color: var(--primary);
+  box-shadow:
+    0 0 0 3px rgba(201, 162, 75, 0.12);
+}
+
+/* =========================================================
+   Mobile
+   ========================================================= */
+
+@media (max-width: 560px) {
+  .selected-color-preview {
+    max-width: 100%;
+  }
+
+  .variant-color-cell {
+    gap: 0.45rem;
+  }
+
+  .variant-color-cell__swatch {
+    width: 24px;
+    height: 24px;
+    flex-basis: 24px;
+  }
+}

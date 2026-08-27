@@ -4,6 +4,8 @@ import {
   Input,
   Output,
   OnInit,
+  OnChanges,
+  SimpleChanges,
   AfterViewInit,
   OnDestroy,
   inject,
@@ -68,7 +70,7 @@ interface NominatimResult {
   styleUrl: './address-map-picker.component.css',
 })
 export class AddressMapPickerComponent
-  implements OnInit, AfterViewInit, OnDestroy {
+  implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
   private readonly http = inject(HttpClient);
 
@@ -126,7 +128,41 @@ export class AddressMapPickerComponent
         })
     );
   }
+ngOnChanges(changes: SimpleChanges): void {
+  if (
+    changes['initialLocationSelected'] ||
+    changes['initialLocationText']
+  ) {
+    if (this.initialLocationSelected) {
+      this.selectedLocationText.set(
+        this.initialLocationText || 'Location selected'
+      );
+    } else {
+      this.selectedLocationText.set('');
+    }
+  }
 
+  if (
+    changes['initialLat'] ||
+    changes['initialLng']
+  ) {
+    if (
+      this.initialLat != null &&
+      this.initialLng != null &&
+      this.mapInitialized &&
+      this.map &&
+      this.marker
+    ) {
+      const position = {
+        lat: this.initialLat,
+        lng: this.initialLng,
+      };
+
+      this.map.setCenter(position);
+      this.marker.setPosition(position);
+    }
+  }
+}
   ngAfterViewInit(): void {
     // Map is intentionally NOT initialized here.
     // It will initialize only when the user opens it.
@@ -168,76 +204,86 @@ export class AddressMapPickerComponent
   }
 
   private async initMap(): Promise<void> {
-    if (this.mapInitialized) {
-      return;
-    }
-
-    if (!AddressMapPickerComponent.googleMapsOptionsSet) {
-      setOptions({
-        key: environment.googleMapsApiKey,
-        v: 'weekly',
-        language: 'ar',
-        region: 'EG',
-      });
-
-      AddressMapPickerComponent.googleMapsOptionsSet = true;
-    }
-
-    // بنحمّل مكتبتين بس (maps + marker) — من غير places ولا geocoding
-    const [{ Map }, { Marker }] = await Promise.all([
-      importLibrary('maps'),
-      importLibrary('marker'),
-    ]);
-
-    this.map = new Map(
-      document.getElementById('address-map') as HTMLElement,
-      {
-        center: { lat: this.initialLat, lng: this.initialLng },
-        zoom: 14,
-        streetViewControl: false,
-        mapTypeControl: false,
-        fullscreenControl: false,
-      }
-    );
-
-    this.marker = new Marker({
-      position: { lat: this.initialLat, lng: this.initialLng },
-      map: this.map,
-      draggable: true,
-    });
-
-    this.marker.addListener('dragend', () => {
-      const pos = this.marker!.getPosition();
-
-      if (pos) {
-        this.reverseGeocode(pos.lat(), pos.lng());
-      }
-    });
-
-    this.map.addListener(
-      'click',
-      (e: google.maps.MapMouseEvent) => {
-        if (!e.latLng) {
-          return;
-        }
-
-        this.marker!.setPosition(e.latLng);
-
-        this.reverseGeocode(
-          e.latLng.lat(),
-          e.latLng.lng()
-        );
-      }
-    );
-
-    this.mapInitialized = true;
-
-    setTimeout(() => {
-      if (this.map) {
-        google.maps.event.trigger(this.map, 'resize');
-      }
-    }, 100);
+  if (this.mapInitialized) {
+    return;
   }
+
+  if (!AddressMapPickerComponent.googleMapsOptionsSet) {
+    setOptions({
+      key: environment.googleMapsApiKey,
+      v: 'weekly',
+      language: 'ar',
+      region: 'EG',
+    });
+
+    AddressMapPickerComponent.googleMapsOptionsSet = true;
+  }
+
+  const [{ Map }, { Marker }] = await Promise.all([
+    importLibrary('maps'),
+    importLibrary('marker'),
+  ]);
+
+  const position = {
+    lat: this.initialLat,
+    lng: this.initialLng,
+  };
+
+  this.map = new Map(
+    document.getElementById('address-map') as HTMLElement,
+    {
+      center: position,
+      zoom: 14,
+      streetViewControl: false,
+      mapTypeControl: false,
+      fullscreenControl: false,
+    }
+  );
+
+  this.marker = new Marker({
+    position,
+    map: this.map,
+    draggable: true,
+  });
+
+  this.marker.addListener('dragend', () => {
+    const pos = this.marker!.getPosition();
+
+    if (pos) {
+      this.reverseGeocode(
+        pos.lat(),
+        pos.lng()
+      );
+    }
+  });
+
+  this.map.addListener(
+    'click',
+    (e: google.maps.MapMouseEvent) => {
+      if (!e.latLng) {
+        return;
+      }
+
+      this.marker!.setPosition(e.latLng);
+
+      this.reverseGeocode(
+        e.latLng.lat(),
+        e.latLng.lng()
+      );
+    }
+  );
+
+  this.mapInitialized = true;
+
+  setTimeout(() => {
+    if (this.map) {
+      google.maps.event.trigger(
+        this.map,
+        'resize'
+      );
+    }
+  }, 100);
+}
 
   // ===========================================================
   // البحث + الـ reverse geocoding — الاتنين عن طريق Nominatim

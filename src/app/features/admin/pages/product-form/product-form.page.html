@@ -1,16 +1,34 @@
 <div class="admin-page">
   <header class="admin-page__header">
     <div class="header-title-group">
-      <a routerLink="/admin/products" class="btn-back" [title]="'admin.products.backToList' | translate">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <a
+        routerLink="/admin/products"
+        class="btn-back"
+        [title]="'admin.products.backToList' | translate"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
           <line x1="19" y1="12" x2="5" y2="12"></line>
           <polyline points="12 19 5 12 12 5"></polyline>
         </svg>
       </a>
+
       <div>
         <h1 class="admin-page__title">
-          {{ isEditMode() ? ('admin.products.edit' | translate) : ('admin.products.add' | translate) }}
+          {{
+            isEditMode()
+              ? ('admin.products.edit' | translate)
+              : ('admin.products.add' | translate)
+          }}
         </h1>
+
         <p class="admin-page__subtitle">
           {{ 'admin.products.subtitle' | translate }}
         </p>
@@ -19,168 +37,598 @@
   </header>
 
   @if (successMessage()) {
-    <div class="alert alert-success">{{ successMessage() }}</div>
+    <div class="alert alert-success">
+      {{ successMessage() }}
+    </div>
   }
 
   @if (errorMessage()) {
-    <div class="alert alert-danger">{{ errorMessage() }}</div>
+    <div class="alert alert-danger">
+      {{ errorMessage() }}
+    </div>
   }
 
-  <form [formGroup]="productForm" (ngSubmit)="onSubmitProduct()">
+  <form
+    [formGroup]="productForm"
+    (ngSubmit)="onSubmitProduct()"
+  >
+    <!-- =========================================================
+         GENERAL INFORMATION
+         ========================================================= -->
+
     <div class="scaffold-card mb-4">
       <h2 class="card-title">General Information</h2>
+
       <div class="form-grid">
+        <!-- Product Name -->
         <div class="form-group form-group--full">
-          <label class="form-label" for="product-name">Product Name *</label>
-          <input id="product-name" type="text" class="form-control" formControlName="name" placeholder="e.g. Royal Oud Perfume" />
-          @if (productForm.get('name')?.touched && productForm.get('name')?.invalid) {
-            <span class="field-error">Product name is required (minimum 2 characters).</span>
+          <label
+            class="form-label"
+            for="product-name"
+          >
+            Product Name *
+          </label>
+
+          <input
+            id="product-name"
+            type="text"
+            class="form-control"
+            formControlName="name"
+            placeholder="e.g. Royal Oud Perfume"
+          />
+
+          @if (
+            productForm.get('name')?.touched &&
+            productForm.get('name')?.invalid
+          ) {
+            <span class="field-error">
+              Product name is required (minimum 2 characters).
+            </span>
           }
         </div>
 
-<div class="form-group form-group--full">
-  <label class="form-label" for="product-arabic-name">Arabic Name</label>
-  <input id="product-arabic-name" type="text" class="form-control" dir="rtl" formControlName="arabicName" placeholder="مثال: عطر عود ملكي" />
-</div>
+        <!-- Arabic Name -->
+        <div class="form-group form-group--full">
+          <label
+            class="form-label"
+            for="product-arabic-name"
+          >
+            Arabic Name
+          </label>
+
+          <input
+            id="product-arabic-name"
+            type="text"
+            class="form-control"
+            dir="rtl"
+            formControlName="arabicName"
+            placeholder="مثال: عطر عود ملكي"
+          />
+        </div>
+
+        <!-- Category -->
         <div class="form-group">
-          <label class="form-label" for="product-category">Category *</label>
-          <select id="product-category" class="form-control form-select" formControlName="categoryId">
-            <option value="" disabled>Select Category</option>
+          <label
+            class="form-label"
+            for="product-category"
+          >
+            Category *
+          </label>
+
+          <select
+            id="product-category"
+            class="form-control form-select"
+            formControlName="categoryId"
+          >
+            <option
+              value=""
+              disabled
+            >
+              Select Category
+            </option>
+
             @for (cat of categories(); track cat.id) {
-              <option [ngValue]="cat.id">{{ cat.name }} ({{ cat.arabicName }})</option>
+              <option [ngValue]="cat.id">
+                {{ cat.name }} ({{ cat.arabicName }})
+              </option>
             }
           </select>
-          @if (productForm.get('categoryId')?.touched && productForm.get('categoryId')?.invalid) {
-            <span class="field-error">Please select a category.</span>
+
+          @if (
+            productForm.get('categoryId')?.touched &&
+            productForm.get('categoryId')?.invalid
+          ) {
+            <span class="field-error">
+              Please select a category.
+            </span>
           }
         </div>
 
+        <!-- Brand -->
         <div class="form-group">
-          <label class="form-label" for="product-brand">Brand *</label>
-          <select id="product-brand" class="form-control form-select" formControlName="brandId">
-            <option value="" disabled>Select Brand</option>
+          <label
+            class="form-label"
+            for="product-brand"
+          >
+            Brand *
+          </label>
+
+          <select
+            id="product-brand"
+            class="form-control form-select"
+            formControlName="brandId"
+          >
+            <option
+              value=""
+              disabled
+            >
+              Select Brand
+            </option>
+
             @for (brand of brands(); track brand.id) {
-              <option [ngValue]="brand.id">{{ brand.name }} ({{ brand.arabicName }})</option>
+              <option [ngValue]="brand.id">
+                {{ brand.name }} ({{ brand.arabicName }})
+              </option>
             }
           </select>
-          @if (productForm.get('brandId')?.touched && productForm.get('brandId')?.invalid) {
-            <span class="field-error">Please select a brand.</span>
+
+          @if (
+            productForm.get('brandId')?.touched &&
+            productForm.get('brandId')?.invalid
+          ) {
+            <span class="field-error">
+              Please select a brand.
+            </span>
           }
         </div>
 
+        <!-- Slug -->
         @if (isEditMode()) {
           <div class="form-group form-group--full">
-            <label class="form-label" for="product-slug">Slug URL</label>
-            <input id="product-slug" type="text" class="form-control" formControlName="slug" placeholder="e.g. royal-oud-perfume" />
+            <label
+              class="form-label"
+              for="product-slug"
+            >
+              Slug URL
+            </label>
+
+            <input
+              id="product-slug"
+              type="text"
+              class="form-control"
+              formControlName="slug"
+              placeholder="e.g. royal-oud-perfume"
+            />
           </div>
         }
 
+        <!-- Description -->
         <div class="form-group form-group--full">
-          <label class="form-label" for="product-description">Description</label>
-          <textarea id="product-description" rows="4" class="form-control" formControlName="description" placeholder="Enter detailed product description..."></textarea>
+          <label
+            class="form-label"
+            for="product-description"
+          >
+            Description
+          </label>
+
+          <textarea
+            id="product-description"
+            rows="4"
+            class="form-control"
+            formControlName="description"
+            placeholder="Enter detailed product description..."
+          ></textarea>
         </div>
 
+        <!-- Published -->
         @if (isEditMode()) {
           <div class="form-group form-group--full">
             <label class="checkbox-label">
-              <input type="checkbox" formControlName="isPublished" />
-              <span>Product is Active and visible in store</span>
+              <input
+                type="checkbox"
+                formControlName="isPublished"
+              />
+
+              <span>
+                Product is Active and visible in store
+              </span>
             </label>
           </div>
         }
       </div>
     </div>
 
+    <!-- =========================================================
+         PRODUCT VARIANTS
+         ========================================================= -->
+
     <div class="scaffold-card mb-4">
       <div class="card-header-flex">
         <div>
-          <h2 class="card-title">Product Variants *</h2>
-          <p class="card-subtitle">At least 1 variant is required (SKU, Price, Stock, and Measurements)</p>
+          <h2 class="card-title">
+            Product Variants *
+          </h2>
+
+          <p class="card-subtitle">
+            At least 1 variant is required
+            (SKU, Price, Stock, and Measurements)
+          </p>
         </div>
-        <button type="button" class="btn btn-secondary btn-sm" (click)="toggleVariantForm()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+        <button
+          type="button"
+          class="btn btn-secondary btn-sm"
+          (click)="toggleVariantForm()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <line x1="12" y1="5" x2="12" y2="19"></line>
             <line x1="5" y1="12" x2="19" y2="12"></line>
           </svg>
-          {{ showVariantForm() ? 'Cancel' : (editingVariantIndex() !== null ? 'Cancel Edit' : 'Add Variant') }}
+
+          {{
+            showVariantForm()
+              ? 'Cancel'
+              : (
+                  editingVariantIndex() !== null
+                    ? 'Cancel Edit'
+                    : 'Add Variant'
+                )
+          }}
         </button>
       </div>
 
       @if (showVariantForm()) {
         <div class="nested-form-box mb-4">
           <h3 class="nested-form-title">
-            {{ editingVariantIndex() !== null ? 'Edit Variant' : 'New Variant Information' }}
+            {{
+              editingVariantIndex() !== null
+                ? 'Edit Variant'
+                : 'New Variant Information'
+            }}
           </h3>
 
           @if (variantError()) {
-            <div class="alert alert-danger mb-3">{{ variantError() }}</div>
+            <div class="alert alert-danger mb-3">
+              {{ variantError() }}
+            </div>
           }
 
           <div [formGroup]="variantForm">
             <div class="form-grid">
+
+              <!-- SKU -->
               <div class="form-group">
-                <label class="form-label" for="v-sku">SKU *</label>
-                <input id="v-sku" type="text" class="form-control" formControlName="sku" placeholder="e.g. PRD-001-BLK" />
-                @if (variantForm.get('sku')?.touched && variantForm.get('sku')?.invalid) {
-                  <span class="field-error">SKU is required.</span>
+                <label
+                  class="form-label"
+                  for="v-sku"
+                >
+                  SKU *
+                </label>
+
+                <input
+                  id="v-sku"
+                  type="text"
+                  class="form-control"
+                  formControlName="sku"
+                  placeholder="e.g. PRD-001-BLK"
+                />
+
+                @if (
+                  variantForm.get('sku')?.touched &&
+                  variantForm.get('sku')?.invalid
+                ) {
+                  <span class="field-error">
+                    SKU is required.
+                  </span>
                 }
               </div>
 
+              <!-- Price -->
               <div class="form-group">
-                <label class="form-label" for="v-price">Price (EGP) *</label>
-                <input id="v-price" type="number" class="form-control" formControlName="price" min="0.01" step="0.01" />
-                @if (variantForm.get('price')?.touched && variantForm.get('price')?.invalid) {
-                  <span class="field-error">Price must be greater than 0.</span>
+                <label
+                  class="form-label"
+                  for="v-price"
+                >
+                  Price (EGP) *
+                </label>
+
+                <input
+                  id="v-price"
+                  type="number"
+                  class="form-control"
+                  formControlName="price"
+                  min="0.01"
+                  step="0.01"
+                />
+
+                @if (
+                  variantForm.get('price')?.touched &&
+                  variantForm.get('price')?.invalid
+                ) {
+                  <span class="field-error">
+                    Price must be greater than 0.
+                  </span>
                 }
               </div>
 
+              <!-- Stock -->
               <div class="form-group">
-                <label class="form-label" for="v-stock">Stock Quantity *</label>
-                <input id="v-stock" type="number" class="form-control" formControlName="stock" min="0" />
+                <label
+                  class="form-label"
+                  for="v-stock"
+                >
+                  Stock Quantity *
+                </label>
+
+                <input
+                  id="v-stock"
+                  type="number"
+                  class="form-control"
+                  formControlName="stock"
+                  min="0"
+                />
+
+                @if (
+                  variantForm.get('stock')?.touched &&
+                  variantForm.get('stock')?.invalid
+                ) {
+                  <span class="field-error">
+                    Stock cannot be negative.
+                  </span>
+                }
               </div>
 
+              <!-- Color -->
               <div class="form-group">
-                <label class="form-label" for="v-color">Color</label>
-                <input id="v-color" type="text" class="form-control" formControlName="color" placeholder="e.g. Black / Gold" />
+                <label
+                  class="form-label"
+                  for="v-color"
+                >
+                  Color *
+                </label>
+
+                <select
+                  id="v-color"
+                  class="form-control form-select"
+                  formControlName="colorId"
+                >
+                  <option [ngValue]="null">
+                    Select Color
+                  </option>
+
+                  @for (color of colors(); track color.id) {
+                    <option [ngValue]="color.id">
+                      {{ color.name }}
+                      @if (color.arabicName && color.arabicName !== color.name) {
+                        — {{ color.arabicName }}
+                      }
+                    </option>
+                  }
+                </select>
+
+                @if (
+                  variantForm.get('colorId')?.touched &&
+                  variantForm.get('colorId')?.invalid
+                ) {
+                  <span class="field-error">
+                    Please select a color.
+                  </span>
+                }
+
+               @if (variantForm.get('colorId')?.value; as selectedColorId) {
+  @if (getColorById(selectedColorId); as selectedColor) {
+    <div class="selected-color-preview">
+      <span
+        class="selected-color-preview__swatch"
+        [style.background]="
+          selectedColor.secondaryHexCode
+            ? 'linear-gradient(135deg, ' +
+              (selectedColor.hexCode || '#ffffff') +
+              ' 0%, ' +
+              (selectedColor.hexCode || '#ffffff') +
+              ' 50%, ' +
+              (selectedColor.secondaryHexCode || '#000000') +
+              ' 50%, ' +
+              (selectedColor.secondaryHexCode || '#000000') +
+              ' 100%)'
+            : (selectedColor.hexCode || '#ffffff')
+        "
+      ></span>
+
+      <span>
+        {{ selectedColor.name }}
+      </span>
+    </div>
+  }
+}
               </div>
 
+              <!-- Size -->
               <div class="form-group">
-                <label class="form-label" for="v-size">Size</label>
-                <input id="v-size" type="text" class="form-control" formControlName="size" placeholder="e.g. Large / 100ml" />
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="v-bust">Bust (cm)</label>
-                <input id="v-bust" type="number" class="form-control" formControlName="bust" min="0" step="0.1" />
+                <label
+                  class="form-label"
+                  for="v-size"
+                >
+                  Size *
+                </label>
+
+                <select
+                  id="v-size"
+                  class="form-control form-select"
+                  formControlName="sizeId"
+                >
+                  <option [ngValue]="null">
+                    Select Size
+                  </option>
+
+                  @for (size of sizes(); track size.id) {
+                    <option [ngValue]="size.id">
+                      {{ size.name }}
+                    </option>
+                  }
+                </select>
+
+                @if (
+                  variantForm.get('sizeId')?.touched &&
+                  variantForm.get('sizeId')?.invalid
+                ) {
+                  <span class="field-error">
+                    Please select a size.
+                  </span>
+                }
               </div>
 
+              <!-- Bust -->
               <div class="form-group">
-                <label class="form-label" for="v-waist">Waist (cm)</label>
-                <input id="v-waist" type="number" class="form-control" formControlName="waist" min="0" step="0.1" />
+                <label
+                  class="form-label"
+                  for="v-bust"
+                >
+                  Bust (cm)
+                </label>
+
+                <input
+                  id="v-bust"
+                  type="number"
+                  class="form-control"
+                  formControlName="bust"
+                  min="0"
+                  step="0.1"
+                />
               </div>
 
+              <!-- Waist -->
               <div class="form-group">
-                <label class="form-label" for="v-hip">Hip (cm)</label>
-                <input id="v-hip" type="number" class="form-control" formControlName="hip" min="0" step="0.1" />
+                <label
+                  class="form-label"
+                  for="v-waist"
+                >
+                  Waist (cm)
+                </label>
+
+                <input
+                  id="v-waist"
+                  type="number"
+                  class="form-control"
+                  formControlName="waist"
+                  min="0"
+                  step="0.1"
+                />
               </div>
 
+              <!-- Hip -->
               <div class="form-group">
-                <label class="form-label" for="v-length">Length (cm)</label>
-                <input id="v-length" type="number" class="form-control" formControlName="length" min="0" step="0.1" />
+                <label
+                  class="form-label"
+                  for="v-hip"
+                >
+                  Hip (cm)
+                </label>
+
+                <input
+                  id="v-hip"
+                  type="number"
+                  class="form-control"
+                  formControlName="hip"
+                  min="0"
+                  step="0.1"
+                />
               </div>
+
+              <!-- Length -->
+              <div class="form-group">
+                <label
+                  class="form-label"
+                  for="v-length"
+                >
+                  Length (cm)
+                </label>
+
+                <input
+                  id="v-length"
+                  type="number"
+                  class="form-control"
+                  formControlName="length"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+
+              <!-- Cost Price -->
+              @if (isEditMode()) {
+                <div class="form-group">
+                  <label
+                    class="form-label"
+                    for="v-cost-price"
+                  >
+                    Cost Price (EGP)
+                  </label>
+
+                  <input
+                    id="v-cost-price"
+                    type="number"
+                    class="form-control"
+                    formControlName="costPrice"
+                    min="0"
+                    step="0.01"
+                  />
+                </div>
+
+                <!-- Compare At Price -->
+                <div class="form-group">
+                  <label
+                    class="form-label"
+                    for="v-compare-price"
+                  >
+                    Compare At Price (EGP)
+                  </label>
+
+                  <input
+                    id="v-compare-price"
+                    type="number"
+                    class="form-control"
+                    formControlName="compareAtPrice"
+                    min="0"
+                    step="0.01"
+                  />
+                </div>
+              }
             </div>
 
             <div class="form-actions mt-3">
-              <button type="button" class="btn btn-primary btn-sm" (click)="onAddOrUpdateVariant()">
-                {{ editingVariantIndex() !== null ? 'Update Variant' : 'Confirm Variant' }}
+              <button
+                type="button"
+                class="btn btn-primary btn-sm"
+                (click)="onAddOrUpdateVariant()"
+              >
+                {{
+                  editingVariantIndex() !== null
+                    ? 'Update Variant'
+                    : 'Confirm Variant'
+                }}
               </button>
             </div>
           </div>
         </div>
       }
 
+      <!-- =======================================================
+           VARIANTS TABLE
+           ======================================================= -->
+
       @if (variants().length === 0) {
         <div class="empty-placeholder">
-          No variants added yet. Please click <strong>"Add Variant"</strong> above to add at least one variant before saving.
+          No variants added yet. Please click
+          <strong>"Add Variant"</strong>
+          above to add at least one variant before saving.
         </div>
       } @else {
         <div class="table-responsive">
@@ -196,35 +644,126 @@
                 <th class="text-end">Actions</th>
               </tr>
             </thead>
+
             <tbody>
               @for (v of variants(); track $index) {
                 <tr>
-                  <td><code>{{ v.sku }}</code></td>
-                  <td>{{ v.color || '—' }}</td>
-                  <td>{{ v.size || '—' }}</td>
+                  <!-- SKU -->
                   <td>
-                    <span [class.text-danger]="v.stock === 0" [class.text-warning]="v.stock > 0 && v.stock < 5">
+                    <code>{{ v.sku }}</code>
+                  </td>
+
+                  <!-- Color -->
+                  <td>
+                    <div class="variant-color-cell">
+                      <span
+                        class="variant-color-cell__swatch"
+                        [style.background]="
+                          v.colorSecondaryHexCode
+                            ? 'linear-gradient(135deg, ' +
+                              (v.colorHexCode || '#ffffff') +
+                              ' 0%, ' +
+                              (v.colorHexCode || '#ffffff') +
+                              ' 50%, ' +
+                              (v.colorSecondaryHexCode || '#000000') +
+                              ' 50%, ' +
+                              (v.colorSecondaryHexCode || '#000000') +
+                              ' 100%)'
+                            : (v.colorHexCode || '#ffffff')
+                        "
+                      ></span>
+
+                      <span>
+                        {{ v.colorName || '—' }}
+                      </span>
+                    </div>
+                  </td>
+
+                  <!-- Size -->
+                  <td>
+                    {{ v.sizeName || '—' }}
+                  </td>
+
+                  <!-- Stock -->
+                  <td>
+                    <span
+                      [class.text-danger]="v.stock === 0"
+                      [class.text-warning]="
+                        v.stock > 0 && v.stock < 5
+                      "
+                    >
                       {{ v.stock }}
                     </span>
                   </td>
-                  <td><strong>{{ v.price | number }} EGP</strong></td>
+
+                  <!-- Price -->
+                  <td>
+                    <strong>
+                      {{ v.price | number }} EGP
+                    </strong>
+                  </td>
+
+                  <!-- Measurements -->
                   <td>
                     <small>
-                      B:{{ v.bust || 0 }} / W:{{ v.waist || 0 }} / H:{{ v.hip || 0 }} / L:{{ v.length || 0 }}
+                      B:{{ v.bust || 0 }}
+                      /
+                      W:{{ v.waist || 0 }}
+                      /
+                      H:{{ v.hip || 0 }}
+                      /
+                      L:{{ v.length || 0 }}
                     </small>
                   </td>
+
+                  <!-- Actions -->
                   <td class="text-end">
                     <div class="action-buttons">
-                      <button type="button" class="btn-icon btn-icon--edit" (click)="onEditVariant(v, $index)" title="Edit Variant">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                      <button
+                        type="button"
+                        class="btn-icon btn-icon--edit"
+                        (click)="onEditVariant(v, $index)"
+                        title="Edit Variant"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <path
+                            d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                          ></path>
+
+                          <path
+                            d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                          ></path>
                         </svg>
                       </button>
-                      <button type="button" class="btn-icon btn-icon--delete" (click)="onRemoveVariant($index)" title="Remove Variant">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+                      <button
+                        type="button"
+                        class="btn-icon btn-icon--delete"
+                        (click)="onRemoveVariant($index)"
+                        title="Remove Variant"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
                           <polyline points="3 6 5 6 21 6"></polyline>
-                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+
+                          <path
+                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                          ></path>
                         </svg>
                       </button>
                     </div>
@@ -237,76 +776,146 @@
       }
     </div>
 
+    <!-- =========================================================
+         SAVE PRODUCT
+         ========================================================= -->
+
     <div class="form-actions mb-4">
-      <button type="submit" class="btn btn-primary" [disabled]="isSubmitting()">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="isSubmitting()"
+      >
         @if (isSubmitting()) {
-          <span class="spinner-sm"></span> {{ 'admin.products.savingProduct' | translate }}
+          <span class="spinner-sm"></span>
+          {{ 'admin.products.savingProduct' | translate }}
         } @else {
-          {{ isEditMode() ? ('admin.products.edit' | translate) : ('admin.products.add' | translate) }}
+          {{
+            isEditMode()
+              ? ('admin.products.edit' | translate)
+              : ('admin.products.add' | translate)
+          }}
         }
       </button>
-      <a routerLink="/admin/products" class="btn btn-secondary">{{ 'admin.labels.cancel' | translate }}</a>
+
+      <a
+        routerLink="/admin/products"
+        class="btn btn-secondary"
+      >
+        {{ 'admin.labels.cancel' | translate }}
+      </a>
     </div>
   </form>
+
+  <!-- ===========================================================
+       IMAGE GALLERY
+       =========================================================== -->
 
   @if (isEditMode() && productId()) {
     <div class="scaffold-card">
       <div class="card-header-flex">
         <div>
-          <h2 class="card-title">Image Gallery</h2>
-          <p class="card-subtitle">Upload product images and select the main thumbnail</p>
+          <h2 class="card-title">
+            Image Gallery
+          </h2>
+
+          <p class="card-subtitle">
+            Upload product images and select the main thumbnail
+          </p>
         </div>
       </div>
 
       <div class="nested-form-box">
-  <h3 class="nested-form-title">Upload New Images</h3>
-  @if (imageError()) {
-    <div class="alert alert-danger mb-3">{{ imageError() }}</div>
-  }
-  <div class="upload-flex-row">
-    <input
-      type="file"
-      accept="image/*"
-      multiple
-      class="form-control file-input"
-      (change)="onFilesSelected($event)" />
+        <h3 class="nested-form-title">
+          Upload New Images
+        </h3>
 
-    @if (selectedFiles.length > 0) {
-      <span class="selected-count">{{ selectedFiles.length }} image(s) selected</span>
-    }
+        @if (imageError()) {
+          <div class="alert alert-danger mb-3">
+            {{ imageError() }}
+          </div>
+        }
 
-    <button
-      type="button"
-      class="btn btn-primary btn-sm"
-      [disabled]="selectedFiles.length === 0 || isUploadingImage()"
-      (click)="onUploadImages()">
-      @if (isUploadingImage()) {
-        <span class="spinner-sm"></span> Uploading...
-      } @else {
-        Upload Image(s)
-      }
-    </button>
-  </div>
-</div>
+        <div class="upload-flex-row">
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            class="form-control file-input"
+            (change)="onFilesSelected($event)"
+          />
+
+          @if (selectedFiles.length > 0) {
+            <span class="selected-count">
+              {{ selectedFiles.length }} image(s) selected
+            </span>
+          }
+
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            [disabled]="
+              selectedFiles.length === 0 ||
+              isUploadingImage()
+            "
+            (click)="onUploadImages()"
+          >
+            @if (isUploadingImage()) {
+              <span class="spinner-sm"></span>
+              Uploading...
+            } @else {
+              Upload Image(s)
+            }
+          </button>
+        </div>
+      </div>
+
       @if (isLoadingImages()) {
-        <div class="loading-placeholder">Loading gallery images...</div>
+        <div class="loading-placeholder">
+          Loading gallery images...
+        </div>
       } @else if (images().length === 0) {
-        <div class="empty-placeholder">No images uploaded for this product yet.</div>
+        <div class="empty-placeholder">
+          No images uploaded for this product yet.
+        </div>
       } @else {
         <div class="image-gallery-grid">
           @for (img of images(); track img.id) {
-            <div class="gallery-card" [class.gallery-card--main]="img.isMain">
+            <div
+              class="gallery-card"
+              [class.gallery-card--main]="img.isMain"
+            >
               <div class="gallery-img-wrap">
-                <img [src]="img.imageUrl" [alt]="'Product Image ' + img.id" />
+                <img
+                  [src]="img.imageUrl"
+                  [alt]="'Product Image ' + img.id"
+                />
+
                 @if (img.isMain) {
-                  <span class="main-badge">Main</span>
+                  <span class="main-badge">
+                    Main
+                  </span>
                 }
               </div>
+
               <div class="gallery-card-actions">
                 @if (!img.isMain) {
-                  <button type="button" class="btn-text" (click)="onSetMainImage(img.id)">Set Main</button>
+                  <button
+                    type="button"
+                    class="btn-text"
+                    (click)="onSetMainImage(img.id)"
+                  >
+                    Set Main
+                  </button>
                 }
-                <button type="button" class="btn-text btn-text--danger" (click)="onDeleteImage(img.id)">Delete</button>
+
+                <button
+                  type="button"
+                  class="btn-text btn-text--danger"
+                  (click)="onDeleteImage(img.id)"
+                >
+                  Delete
+                </button>
               </div>
             </div>
           }

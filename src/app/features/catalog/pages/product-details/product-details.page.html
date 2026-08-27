@@ -1,27 +1,45 @@
 <section class="product-details-page">
 
   @if (!product()) {
+
     <p class="section-copy">
       {{ 'productDetails.productNotFound' | translate }}
     </p>
+
   } @else {
+
+    <!-- =======================================================
+         HERO
+         ======================================================= -->
 
     <header class="product-details-page__hero">
 
-      <app-breadcrumbs [items]="breadcrumbs()" />
+      <app-breadcrumbs
+        [items]="breadcrumbs()"
+      />
 
       <div>
+
         <p class="section-kicker">
-          {{ product()?.arabicCategoryName | localizedField: product()?.categoryName }}
+          {{
+            product()?.arabicCategoryName
+              | localizedField: product()?.categoryName
+          }}
+
           .
+
           <span class="product-details-page__brand">
-            {{ product()?.arabicBrandName | localizedField: product()?.brandName }}
+            {{
+              product()?.arabicBrandName
+                | localizedField: product()?.brandName
+            }}
           </span>
         </p>
 
         <h1 class="section-title">
           {{ product() | localizedName }}
         </h1>
+
       </div>
 
       <button
@@ -39,7 +57,11 @@
           width="22"
           height="22"
           viewBox="0 0 24 24"
-          [attr.fill]="isInWishlist() ? 'currentColor' : 'none'"
+          [attr.fill]="
+            isInWishlist()
+              ? 'currentColor'
+              : 'none'
+          "
         >
           <path
             d="M12 20s-7-4.35-9.5-8.5C.8 8 2.4 4.5 6 4.5c2 0 3.4 1.1 6 3.6 2.6-2.5 4-3.6 6-3.6 3.6 0 5.2 3.5 3.5 7-2.5 4.15-9.5 8.5-9.5 8.5z"
@@ -51,10 +73,17 @@
 
     </header>
 
+
+    <!-- =======================================================
+         MAIN CONTENT
+         ======================================================= -->
+
     <div class="product-details-page__content">
 
       <!-- Gallery -->
+
       <div class="product-details-page__gallery">
+
         <app-product-gallery
           [images]="product()?.images || []"
           [title]="
@@ -63,47 +92,78 @@
               : ('productDetails.productImages' | translate)
           "
           [fallbackImage]="
-            product()?.imageUrl || '/assets/placeholder-product.jpg'
+            product()?.imageUrl ||
+            '/assets/placeholder-product.jpg'
           "
         />
+
       </div>
 
-      <!-- Product info -->
+
+      <!-- Product Info -->
+
       <div class="product-details-page__aside">
 
         <div class="product-details-page__summary">
 
-       
-@if (hasDiscount()) {
-  <span
-    class="product-details-page__discount-ribbon"
-    [attr.data-discount]="'-' + discountPercent() + '%'">
-  </span>
-}
+          <!-- Discount -->
 
-  <span class="product-details-page__brand">
-    {{ product()?.arabicBrandName || product()?.brandName }}
-  </span>
+          @if (hasDiscount()) {
 
-  <h2 class="product-details-page__title">
-    {{ product() | localizedName }}
-  </h2>
+            <span
+              class="product-details-page__discount-ribbon"
+              [attr.data-discount]="
+                '-' + discountPercent() + '%'
+              "
+            ></span>
 
-          <!-- Pricing -->
+          }
+
+
+          <!-- Brand -->
+
+          <span class="product-details-page__brand">
+            {{
+              product()?.arabicBrandName ||
+              product()?.brandName
+            }}
+          </span>
+
+
+          <!-- Title -->
+
+          <h2 class="product-details-page__title">
+            {{ product() | localizedName }}
+          </h2>
+
+
+          <!-- =================================================
+               Pricing
+               ================================================= -->
+
           <div class="product-details-page__price-wrapper">
 
             <div class="product-details-page__pricing">
 
               <div class="product-details-page__price-row">
 
-                <span class="product-details-page__price">
+                <span
+                  class="product-details-page__price"
+                >
                   {{ priceLabel() }}
                 </span>
 
                 @if (hasDiscount()) {
-                  <span class="product-details-page__price-old">
-                    EGP {{ originalPrice().toLocaleString() }}
+
+                  <span
+                    class="product-details-page__price-old"
+                  >
+                    EGP
+                    {{
+                      originalPrice().toLocaleString()
+                    }}
                   </span>
+
                 }
 
               </div>
@@ -112,84 +172,146 @@
 
           </div>
 
-          <!-- Variants -->
+
+          <!-- =================================================
+               Variant Selector
+               ================================================= -->
+
           <app-product-variant-selector
-            [variants]="product()?.variants || []"
-            (selectionChange)="onVariantSelected($event)"
+            [variants]="
+              product()?.variants || []
+            "
+            (selectionChange)="
+              onVariantSelected($event)
+            "
           />
 
-          <!-- Cart -->
+
+          <!-- =================================================
+               Cart
+               ================================================= -->
+
           @if (isInCart()) {
+
             <div
               class="product-details-page__qty-stepper"
-              [class.product-details-page__qty-stepper--busy]="isUpdatingQty()"
+              [class.product-details-page__qty-stepper--busy]="
+                isUpdatingQty()
+              "
             >
+
               <button
                 type="button"
                 (click)="decreaseQuantity()"
                 [disabled]="isUpdatingQty()"
-                [attr.aria-label]="'cart.decreaseQuantity' | translate"
+                [attr.aria-label]="
+                  'cart.decreaseQuantity' | translate
+                "
               >
                 −
               </button>
 
-              <span>{{ cartQuantity() }}</span>
+              <span>
+                {{ cartQuantity() }}
+              </span>
 
               <button
                 type="button"
                 (click)="increaseQuantity()"
-                [disabled]="isUpdatingQty() || isAtMaxStock()"
-                [attr.aria-label]="'cart.increaseQuantity' | translate"
+                [disabled]="
+                  isUpdatingQty() ||
+                  isAtMaxStock()
+                "
+                [attr.aria-label]="
+                  'cart.increaseQuantity' | translate
+                "
               >
                 +
               </button>
+
             </div>
 
             @if (isAtMaxStock()) {
-              <p class="product-details-page__cart-msg">
+
+              <p
+                class="product-details-page__cart-msg"
+              >
                 {{ 'cart.maxStockReached' | translate }}
               </p>
+
             }
+
           } @else {
+
             <button
               class="btn btn-primary product-details-page__cart-btn"
               type="button"
               (click)="addToCart()"
-              [disabled]="isAddingToCart()"
+              [disabled]="
+                isAddingToCart() ||
+                !selectedVariant()?.variantId
+              "
             >
+
               {{
                 isAddingToCart()
                   ? ('productDetails.adding' | translate)
                   : ('productDetails.addToCart' | translate)
               }}
+
             </button>
 
             @if (cartMessage()) {
-              <p class="product-details-page__cart-msg">
+
+              <p
+                class="product-details-page__cart-msg"
+              >
                 {{ cartMessage() | translate }}
               </p>
+
             }
+
           }
 
-          <!-- Description -->
-          @if (product()?.description) {
-            <div class="product-details-page__description">
 
-              <h3 class="product-details-page__description-title">
-                {{ 'productDetails.description' | translate }}
+          <!-- =================================================
+               Description
+               ================================================= -->
+
+          @if (product()?.description) {
+
+            <div
+              class="product-details-page__description"
+            >
+
+              <h3
+                class="product-details-page__description-title"
+              >
+                {{
+                  'productDetails.description'
+                    | translate
+                }}
               </h3>
 
-              <p class="product-details-page__description-text">
+              <p
+                class="product-details-page__description-text"
+              >
                 {{ product()?.description }}
               </p>
 
             </div>
+
           }
 
-          <!-- Stats -->
+
+          <!-- =================================================
+               Stats
+               ================================================= -->
+
           <div class="product-details-page__stats">
 
             <div class="stat-card">
+
               <div class="stat-card__value">
                 ⭐ {{ rating().toFixed(1) }}/5
               </div>
@@ -197,9 +319,12 @@
               <div class="stat-card__label">
                 {{ 'productDetails.rating' | translate }}
               </div>
+
             </div>
 
+
             <div class="stat-card">
+
               <div class="stat-card__value">
                 👁 {{ product()?.viewsCount ?? 0 }}
               </div>
@@ -207,9 +332,12 @@
               <div class="stat-card__label">
                 {{ 'productDetails.views' | translate }}
               </div>
+
             </div>
 
+
             <div class="stat-card">
+
               <div class="stat-card__value">
                 💬 {{ product()?.reviewsCount ?? 0 }}
               </div>
@@ -217,46 +345,74 @@
               <div class="stat-card__label">
                 {{ 'productDetails.reviews' | translate }}
               </div>
+
             </div>
 
+
             <div class="stat-card">
+
               <div class="stat-card__value">
+
                 @if (stock() > 0) {
+
                   {{ 'productDetails.inStock' | translate }}
+
                 } @else {
+
                   {{ 'productDetails.outOfStock' | translate }}
+
                 }
+
               </div>
 
               <div class="stat-card__label">
                 {{ 'productDetails.availability' | translate }}
               </div>
+
             </div>
 
           </div>
 
-          <!-- Selected variant -->
-          @if (selectedVariant()) {
-            <div class="product-selected-variant">
+
+          <!-- =================================================
+               Selected Variant
+               ================================================= -->
+
+          @if (selectedVariant(); as selected) {
+
+            <div
+              class="product-selected-variant"
+            >
 
               <span>
-                {{ 'productDetails.selected' | translate }}
+                {{
+                  'productDetails.selected'
+                    | translate
+                }}
               </span>
 
               <strong>
-                {{ selectedVariant()?.color }}
+                {{ selected.colorName }}
               </strong>
 
-              <span aria-hidden="true">•</span>
+              <span
+                aria-hidden="true"
+              >
+                •
+              </span>
 
               <strong>
-                {{ selectedVariant()?.size }}
+                {{ selected.sizeName }}
               </strong>
 
             </div>
+
           }
 
         </div>
+
+
+        <!-- Reviews Form -->
 
         <app-review-form
           [productId]="product()?.id"
@@ -266,20 +422,37 @@
 
     </div>
 
-    <!-- Reviews -->
+
+    <!-- =======================================================
+         REVIEWS
+         ======================================================= -->
+
     <div class="product-details-page__reviews">
+
       <app-review-list
         [productId]="product()?.id"
       />
+
     </div>
 
-    <!-- Related products -->
-    @if (product()?.relatedProducts?.length) {
+
+    <!-- =======================================================
+         RELATED PRODUCTS
+         ======================================================= -->
+
+    @if (
+      product()?.relatedProducts?.length
+    ) {
 
       <div class="product-details-page__related">
 
-        <h3 class="product-details-page__related-title">
-          {{ 'productDetails.relatedProducts' | translate }}
+        <h3
+          class="product-details-page__related-title"
+        >
+          {{
+            'productDetails.relatedProducts'
+              | translate
+          }}
         </h3>
 
         <div class="slider-wrapper">
@@ -306,20 +479,30 @@
             </svg>
           </button>
 
+
           <div
             class="product-slider"
             #relatedSliderTrack
             (scroll)="onRelatedSliderScroll()"
           >
+
             @for (
               related of product()!.relatedProducts;
               track related.id
             ) {
+
               <div class="slider-item">
-                <app-product-card [product]="related" />
+
+                <app-product-card
+                  [product]="related"
+                />
+
               </div>
+
             }
+
           </div>
+
 
           <button
             type="button"
@@ -344,84 +527,139 @@
           </button>
 
         </div>
+
       </div>
+
     }
+
 
   }
 
-  <!-- Mobile sticky bar -->
-  @if (showStickyBar() && product()) {
+
+  <!-- =========================================================
+       MOBILE STICKY BAR
+       ========================================================= -->
+
+  @if (
+    showStickyBar() &&
+    product()
+  ) {
 
     <div class="product-sticky-bar">
 
-      <div class="product-sticky-bar__info">
+      <div
+        class="product-sticky-bar__info"
+      >
 
         <img
-          [src]="product()?.imageUrl || '/assets/placeholder-product.jpg'"
-          [alt]="product() | localizedName"
+          [src]="
+            product()?.imageUrl ||
+            '/assets/placeholder-product.jpg'
+          "
+          [alt]="
+            product() | localizedName
+          "
           class="product-sticky-bar__img"
         />
 
         <div>
 
-          <p class="product-sticky-bar__title">
+          <p
+            class="product-sticky-bar__title"
+          >
             {{ product() | localizedName }}
           </p>
 
-          <div class="product-sticky-bar__price-wrapper">
-            <p class="product-sticky-bar__price">
+          <div
+            class="product-sticky-bar__price-wrapper"
+          >
+
+            <p
+              class="product-sticky-bar__price"
+            >
               {{ priceLabel() }}
             </p>
 
             @if (hasDiscount()) {
-              <span class="product-sticky-bar__price-old">
-                EGP {{ originalPrice().toLocaleString() }}
+
+              <span
+                class="product-sticky-bar__price-old"
+              >
+                EGP
+                {{
+                  originalPrice().toLocaleString()
+                }}
               </span>
+
             }
+
           </div>
 
         </div>
 
       </div>
 
+
       @if (isInCart()) {
+
         <div
           class="product-sticky-bar__qty-stepper"
-          [class.product-details-page__qty-stepper--busy]="isUpdatingQty()"
+          [class.product-details-page__qty-stepper--busy]="
+            isUpdatingQty()
+          "
         >
+
           <button
             type="button"
             (click)="decreaseQuantity()"
             [disabled]="isUpdatingQty()"
-            [attr.aria-label]="'cart.decreaseQuantity' | translate"
+            [attr.aria-label]="
+              'cart.decreaseQuantity' | translate
+            "
           >
             −
           </button>
 
-          <span>{{ cartQuantity() }}</span>
+          <span>
+            {{ cartQuantity() }}
+          </span>
 
           <button
             type="button"
             (click)="increaseQuantity()"
-            [disabled]="isUpdatingQty() || isAtMaxStock()"
-            [attr.aria-label]="'cart.increaseQuantity' | translate"
+            [disabled]="
+              isUpdatingQty() ||
+              isAtMaxStock()
+            "
+            [attr.aria-label]="
+              'cart.increaseQuantity' | translate
+            "
           >
             +
           </button>
+
         </div>
+
       } @else {
+
         <button
           type="button"
           class="btn btn-primary product-sticky-bar__btn"
           (click)="addToCart()"
-          [disabled]="isAddingToCart()"
+          [disabled]="
+            isAddingToCart() ||
+            !selectedVariant()?.variantId
+          "
         >
+
           {{
             isAddingToCart()
               ? ('productDetails.adding' | translate)
               : ('productDetails.addToCart' | translate)
           }}
+
         </button>
+
       }
 
     </div>

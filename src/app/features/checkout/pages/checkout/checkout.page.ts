@@ -50,9 +50,8 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './checkout.page.html',
   styleUrl: './checkout.page.css',
 })
-export class CheckoutPage
-  implements OnInit
-{
+export class CheckoutPage implements OnInit {
+
   private readonly cartService =
     inject(CartService);
 
@@ -65,16 +64,29 @@ export class CheckoutPage
   private readonly analyticsService =
     inject(AnalyticsService);
 
+
+  // =========================================================
+  // CART
+  // =========================================================
+
   readonly cart =
     this.cartService.cart;
 
   readonly isLoadingCart =
     signal(true);
 
+
+  // =========================================================
+  // ADDRESS
+  // =========================================================
+
   readonly selectedAddress =
-    signal<AddressResponse | null>(
-      null
-    );
+    signal<AddressResponse | null>(null);
+
+
+  // =========================================================
+  // SUBMIT
+  // =========================================================
 
   readonly isSubmitting =
     signal(false);
@@ -82,8 +94,14 @@ export class CheckoutPage
   readonly errorMessage =
     signal<string | null>(null);
 
+
+  // =========================================================
+  // CAN PLACE ORDER
+  // =========================================================
+
   readonly canPlaceOrder =
     computed(() => {
+
       const address =
         this.selectedAddress();
 
@@ -99,73 +117,102 @@ export class CheckoutPage
       );
     });
 
+
+  // =========================================================
+  // INIT
+  // =========================================================
+
   ngOnInit(): void {
+
     this.cartService
       .getCart()
       .subscribe({
+
         next: () => {
-          this.isLoadingCart.set(
-            false
-          );
+
+          this.isLoadingCart.set(false);
 
           const cart =
             this.cart();
 
-          if (cart) {
-            this.analyticsService.beginCheckout(
-              cart.items.map(
-                (item) => ({
-                  id:
-                    item.productVariantId,
-
-                  name:
-                    item.productName,
-
-                  category:
-                    item.categoryName,
-
-                  brand:
-                    item.brandName,
-
-                  sku:
-                    item.variantSku,
-
-                  variant:
-                    `${item.color} / ${item.size}`,
-
-                  price:
-                    item.unitPrice,
-
-                  originalPrice:
-                    item.unitPrice /
-                    item.quantity,
-
-                  quantity:
-                    item.quantity,
-                })
-              ),
-              cart.subTotal
-            );
+          if (!cart) {
+            return;
           }
+
+
+          // =====================================================
+          // BEGIN CHECKOUT ANALYTICS
+          // =====================================================
+
+          this.analyticsService.beginCheckout(
+
+            cart.items.map(
+              (item) => ({
+
+                id:
+                  item.productVariantId,
+
+                name:
+                  item.productName,
+
+                category:
+                  item.categoryName ?? undefined,
+
+                brand:
+                  item.brandName ?? undefined,
+
+                sku:
+                  item.sku ?? undefined,
+
+                variant:
+                  [
+                    item.color,
+                    item.size,
+                  ]
+                    .filter(Boolean)
+                    .join(' / '),
+
+                price:
+                  item.unitPrice,
+
+                originalPrice:
+                  item.originalUnitPrice,
+
+                quantity:
+                  item.quantity,
+              })
+            ),
+
+            cart.subTotal
+          );
         },
 
         error: () => {
-          this.isLoadingCart.set(
-            false
-          );
+
+          this.isLoadingCart.set(false);
         },
       });
   }
 
+
+  // =========================================================
+  // ADDRESS SELECTED
+  // =========================================================
+
   onAddressSelected(
     address: AddressResponse | null
   ): void {
-    this.selectedAddress.set(
-      address
-    );
+
+    this.selectedAddress.set(address);
   }
 
+
+  // =========================================================
+  // PLACE ORDER
+  // =========================================================
+
   placeOrder(): void {
+
     const address =
       this.selectedAddress();
 
@@ -176,13 +223,11 @@ export class CheckoutPage
       return;
     }
 
-    this.isSubmitting.set(
-      true
-    );
 
-    this.errorMessage.set(
-      null
-    );
+    this.isSubmitting.set(true);
+
+    this.errorMessage.set(null);
+
 
     this.orderService
       .checkout({
@@ -192,15 +237,17 @@ export class CheckoutPage
         paymentMethod: 0,
       })
       .subscribe({
+
         next: (res) => {
-          this.isSubmitting.set(
-            false
-          );
+
+          this.isSubmitting.set(false);
+
 
           if (
             !res.success ||
             !res.data
           ) {
+
             this.errorMessage.set(
               res.message
             );
@@ -208,22 +255,30 @@ export class CheckoutPage
             return;
           }
 
+
           const cart =
             this.cart();
 
+
           if (cart) {
+
+            // ================================================
+            // PURCHASE ANALYTICS
+            // ================================================
+
             this.analyticsService.purchase(
+
               res.data.toString(),
 
               cart.subTotal,
 
-              cart.couponCode ??
-                null,
+              cart.couponCode ?? null,
 
               address.shippingCost,
 
               cart.items.map(
                 (item) => ({
+
                   id:
                     item.productVariantId,
 
@@ -237,20 +292,30 @@ export class CheckoutPage
                     item.quantity,
 
                   category:
-                    item.categoryName,
+                    item.categoryName ?? undefined,
 
                   brand:
-                    item.brandName,
+                    item.brandName ?? undefined,
 
                   variant:
-                    `${item.color} / ${item.size}`,
+                    [
+                      item.color,
+                      item.size,
+                    ]
+                      .filter(Boolean)
+                      .join(' / '),
 
                   sku:
-                    item.variantSku,
+                    item.sku ?? undefined,
                 })
               )
             );
           }
+
+
+          // ================================================
+          // NAVIGATE TO ORDER
+          // ================================================
 
           this.router.navigate(
             ['/orders', res.data],
@@ -262,10 +327,10 @@ export class CheckoutPage
           );
         },
 
+
         error: (err) => {
-          this.isSubmitting.set(
-            false
-          );
+
+          this.isSubmitting.set(false);
 
           this.errorMessage.set(
             extractErrorMessage(

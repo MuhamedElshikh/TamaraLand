@@ -1,38 +1,98 @@
-<article class="cart-item" [class.cart-item--busy]="isRemoving()">
+<article
+  class="cart-item"
+  [class.cart-item--busy]="isRemoving()"
+>
 
-  <a [routerLink]="['/products', item.productId]" class="cart-item__image">
-    <img [src]="item.imageUrl || fallbackImage" [alt]="item.productName" />
+  <!-- =========================================================
+       IMAGE
+       ========================================================= -->
+
+  <a
+    [routerLink]="['/products', item.productId]"
+    class="cart-item__image"
+  >
+    <img
+      [src]="item.imageUrl || fallbackImage"
+      [alt]="item.productName"
+    />
   </a>
+
+
+  <!-- =========================================================
+       INFO
+       ========================================================= -->
 
   <div class="cart-item__info">
 
-    <a [routerLink]="['/products', item.productId]" class="cart-item__name">
-      {{ item |localizedName }}
+    <a
+      [routerLink]="['/products', item.productId]"
+      class="cart-item__name"
+    >
+      {{ item | localizedName }}
     </a>
 
+
+    <!-- Variant -->
+
     @if (item.color || item.size) {
-      <p class="cart-item__variant">
+
+      <div class="cart-item__variant">
 
         @if (item.color) {
-          {{ item.color }}
+
+          <span class="cart-item__color">
+
+            @if (item.colorHexCode) {
+              <span
+                class="cart-item__color-swatch"
+                [style.background]="
+                  item.colorSecondaryHexCode
+                    ? 'linear-gradient(135deg, ' +
+                      item.colorHexCode +
+                      ' 50%, ' +
+                      item.colorSecondaryHexCode +
+                      ' 50%)'
+                    : item.colorHexCode
+                "
+              ></span>
+            }
+
+            <span>
+{{ item.color }}
+            </span>
+
+          </span>
+
         }
 
         @if (item.color && item.size) {
-          •
+          <span class="cart-item__separator">
+            •
+          </span>
         }
 
         @if (item.size) {
-          {{ item.size }}
+          <span>
+            {{ item.size }}
+          </span>
         }
 
+      </div>
+
+    }
+
+
+    <!-- SKU -->
+
+    @if (item.sku) {
+      <p class="cart-item__sku">
+        {{ 'cart.sku' | translate }}:
+        {{ item.sku }}
       </p>
     }
 
-    @if (item.variantSku) {
-      <p class="cart-item__sku">
-        {{ 'cart.sku' | translate }}: {{ item.variantSku }}
-      </p>
-    }
+
+    <!-- Error -->
 
     @if (errorMessage()) {
       <p class="cart-item__error">
@@ -40,49 +100,74 @@
       </p>
     }
 
+
+    <!-- Quantity -->
+
     <div class="cart-item__qty">
 
       <button
         type="button"
         (click)="decrease()"
         [disabled]="isUpdating() || item.quantity <= 1"
-        [attr.aria-label]="'cart.decreaseQuantity' | translate">
-
+        [attr.aria-label]="'cart.decreaseQuantity' | translate"
+      >
         −
-
       </button>
 
-      <span>{{ item.quantity }}</span>
+      <span>
+        {{ item.quantity }}
+      </span>
 
-     <button
-  type="button"
-  (click)="increase()"
-  [disabled]="isUpdating() || isAtMaxStock"
-  [attr.aria-label]="'cart.increaseQuantity' | translate">
-
-  +
-
-</button>
+      <button
+        type="button"
+        (click)="increase()"
+        [disabled]="isUpdating() || isAtMaxStock"
+        [attr.aria-label]="'cart.increaseQuantity' | translate"
+      >
+        +
+      </button>
 
     </div>
 
   </div>
 
+
+  <!-- =========================================================
+       PRICE / ACTIONS
+       ========================================================= -->
+
   <div class="cart-item__side">
 
-    <p class="cart-item__price">
-      {{ item.subTotal | number }} EGP
-    </p>
+    <div class="cart-item__prices">
+
+      @if (
+        item.originalUnitPrice > item.unitPrice
+      ) {
+        <p class="cart-item__original-price">
+          {{ item.originalUnitPrice | number }} EGP
+        </p>
+      }
+
+      <p class="cart-item__price">
+        {{ item.subTotal | number }} EGP
+      </p>
+
+    </div>
+
 
     <p class="cart-item__unit-price">
-      {{ item.unitPrice | number }} EGP {{ 'cart.each' | translate }}
+      {{ item.unitPrice | number }}
+      EGP
+      {{ 'cart.each' | translate }}
     </p>
+
 
     <button
       type="button"
       class="cart-item__remove"
       (click)="remove()"
-      [disabled]="isRemoving()">
+      [disabled]="isRemoving()"
+    >
 
       {{
         isRemoving()

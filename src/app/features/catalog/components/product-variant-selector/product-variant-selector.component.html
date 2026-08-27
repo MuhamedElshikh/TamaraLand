@@ -1,63 +1,147 @@
 <section class="variant-shell">
-  @if (colors.length > 0) {
+
+  <!-- =========================================================
+       COLORS
+       ========================================================= -->
+
+  @if (colors().length > 0) {
     <div class="variant-group">
-<p class="variant-group__label">{{ 'variant.color' | translate }}</p>
+      <p class="variant-group__label">
+        {{ 'variant.color' | translate }}
+      </p>
+
+     <div class="variant-options variant-options--colors">
+  @for (color of colors(); track color.id) {
+    <button
+      type="button"
+      class="color-swatch"
+      [class.color-swatch--active]="selectedColorId() === color.id"
+      [class.color-swatch--disabled]="isColorDisabled(color.id)"
+      [disabled]="isColorDisabled(color.id)"
+      (click)="selectColor(color.id)"
+      [attr.aria-label]="colorLabel(color)"
+      [attr.title]="colorLabel(color)"
+    >
+      <span
+        class="color-swatch__circle"
+        [style.background]="colorBackground(color)"
+      ></span>
+    </button>
+  }
+</div>
+    </div>
+  }
+
+  <!-- =========================================================
+       SIZES
+       ========================================================= -->
+
+  @if (availableSizes().length > 0) {
+    <div class="variant-group">
+      <p class="variant-group__label">
+        {{ 'variant.size' | translate }}
+      </p>
+
       <div class="variant-options">
-        @for (color of colors; track color) {
+        @for (size of availableSizes(); track size.id) {
           <button
             type="button"
             class="variant-chip"
-            [class.variant-chip--active]="selectedColor() === color"
-            [class.variant-chip--disabled]="isColorDisabled(color)"
-            [disabled]="isColorDisabled(color)"
-            (click)="selectColor(color)"
+            [class.variant-chip--active]="selectedSizeId() === size.id"
+            [class.variant-chip--disabled]="isSizeDisabled(size.id)"
+            [disabled]="isSizeDisabled(size.id)"
+            (click)="selectSize(size.id)"
           >
-            {{ color }}
+            {{ size.name }}
           </button>
         }
       </div>
     </div>
   }
 
-  @if (sizes.length > 0) {
-    <div class="variant-group">
-<p class="variant-group__label"> {{ 'variant.size' | translate }}</p>
-      <div class="variant-options">
-        @for (size of sizes; track size) {
-          <button
-            type="button"
-            class="variant-chip"
-            [class.variant-chip--active]="selectedSize() === size"
-            [class.variant-chip--disabled]="isSizeDisabled(size)"
-            [disabled]="isSizeDisabled(size)"
-            (click)="selectSize(size)"
-          >
-            {{ size }}
-          </button>
-        }
-      </div>
-    </div>
-  }
-
-
+  <!-- =========================================================
+       CURRENT VARIANT STATUS
+       ========================================================= -->
 
   <p class="variant-status">
+
     @if (matchedVariant()?.sku) {
-      <strong>{{ 'variant.sku' | translate }}:</strong> {{ matchedVariant()?.sku }} 
+      <strong>
+        {{ 'variant.sku' | translate }}:
+      </strong>
+
+      {{ matchedVariant()?.sku }}
+
       <span class="dot"></span>
     }
-      <strong>{{ 'variant.stock' | translate }}:</strong> <strong>{{ stockStatusLabel() }}</strong>
+
+    <strong>
+      {{ 'variant.stock' | translate }}:
+    </strong>
+
+    <strong>
+      {{ stockStatusLabel() }}
+    </strong>
   </p>
+
+  <!-- =========================================================
+       SELECTED VARIANT
+       ========================================================= -->
+
+  @if (selectedColor(); as color) {
+    @if (selectedSize(); as size) {
+      <div class="variant-selected-info">
+
+        <div class="variant-selected-info__color">
+          <span
+            class="variant-selected-info__swatch"
+            [style.background]="colorBackground(color)"
+          ></span>
+
+          <span>
+            {{ colorLabel(color) }}
+          </span>
+        </div>
+
+        <span
+          class="variant-selected-info__separator"
+          aria-hidden="true"
+        >
+          •
+        </span>
+
+        <strong>
+          {{ size.name }}
+        </strong>
+      </div>
+    }
+  }
+
+  <!-- =========================================================
+       DIMENSIONS
+       ========================================================= -->
 
   @if (dimensionsLabel(); as dims) {
     <div class="variant-dimensions">
+
       @for (dim of dims; track dim.label) {
         <div class="variant-dimension">
-          <span class="variant-dimension__label"> :{{ dim.label }} : </span>
+
+          <span class="variant-dimension__label">
+            {{ dim.label }}:
+          </span>
+
           <div class="dot"></div>
-          <span class="variant-dimension__value">{{ dim.value }} {{ 'variant.cm' | translate }}</span>
+
+          <span class="variant-dimension__value">
+            {{ dim.value }}
+            {{ 'variant.cm' | translate }}
+          </span>
+
         </div>
       }
+
     </div>
   }
+
 </section>

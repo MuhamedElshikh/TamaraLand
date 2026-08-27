@@ -1,19 +1,12 @@
 /* ================= Product Variant Selector ================= */
 
-.variant-shell{
-
-padding:0;
-
-background:transparent;
-
-border:none;
-
-box-shadow:none;
-
-gap:1rem;
-
-margin-top:.5rem;
-
+.variant-shell {
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  gap: 1.1rem;
+  margin-top: 0.5rem;
 }
 
 .variant-shell__header h3 {
@@ -24,155 +17,398 @@ margin-top:.5rem;
   color: var(--text-primary);
 }
 
+/* =========================================================
+   Variant Groups
+   ========================================================= */
+
 .variant-group {
   display: flex;
   flex-direction: row;
-  gap: 0.35rem;
-  margin-bottom:.75rem;
+  align-items: center;
 
+  gap: 0.9rem;
+
+  margin-bottom: 1rem;
 }
 
 .variant-group__label {
-  font-size: 0.85rem;
+  min-width: 58px;
+
   align-self: center;
-  font-weight: 700;
-  padding-right: 0.9rem;
+
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
+
   color: var(--text-secondary);
+
+  white-space: nowrap;
 }
 
 .variant-options {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 0.55rem;
 }
 
-.variant-chip {
-  padding: 0.55rem 1rem;
-  border-radius: var(--radius-full);
-  border: 1.5px solid var(--border-color);
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  font-family: inherit;
-  font-size: 0.9rem;
-  font-weight: 500;
+/* =========================================================
+   Color Options — الدايرة هي البطلة، من غير Pill ولا اسم ظاهر
+   ========================================================= */
+
+.variant-options--colors {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.color-swatch {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+  padding: 0;
+
+  border: none;
+  background: transparent;
+
   cursor: pointer;
-  transition: var(--transition-fast);
-  white-space: nowrap;
+}
+
+.color-swatch__circle {
+  position: relative;
+
+  width: 32px;
+  height: 32px;
+
+  border-radius: 50%;
+
+  border: 1px solid var(--border-color);
+
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* الحلقة الذهبية بتظهر بس وقت hover أو الاختيار — مش خلفية Pill كاملة */
+
+.color-swatch::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+
+  border-radius: 50%;
+  border: 1px solid transparent;
+
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.color-swatch:hover:not(:disabled) .color-swatch__circle {
+  transform: scale(1.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Active */
+
+.color-swatch--active::before {
+  border-color: var(--primary);
+}
+
+.color-swatch--active .color-swatch__circle {
+  box-shadow:
+    0 0 0 2px var(--bg-card),
+    0 0 0 3px var(--primary),
+    0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* علامة الصح البسيطة فوق اللون النشط */
+
+.color-swatch--active .color-swatch__circle::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+
+  border-radius: 50%;
+
+  background: rgba(0, 0, 0, 0.18);
+
+  -webkit-mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z'/%3E%3C/svg%3E")
+    center / 14px no-repeat;
+  mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z'/%3E%3C/svg%3E")
+    center / 14px no-repeat;
+}
+
+/* Disabled */
+
+.color-swatch:disabled,
+.color-swatch--disabled {
+  cursor: not-allowed;
+}
+
+.color-swatch--disabled .color-swatch__circle {
+  opacity: 0.3;
+  filter: grayscale(0.6);
+}
+
+.color-swatch--disabled .color-swatch__circle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 1px;
+  background: currentColor;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+/* =========================================================
+   Size Options — مربعات رفيعة الحواف بدل Pill عادي
+   ========================================================= */
+
+.variant-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 44px;
+  height: 40px;
+  padding: 0 0.9rem;
+
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+
+  background: transparent;
+
+  color: var(--text-primary);
+
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.18s ease,
+    color 0.18s ease,
+    background 0.18s ease;
 }
 
 .variant-chip:hover:not(:disabled) {
   border-color: var(--primary);
   color: var(--primary);
-  background: rgba(201, 162, 75, 0.06);
 }
 
 .variant-chip--active {
-  background: var(--gold-gradient);
-  color: var(--secondary-dark);
   border-color: var(--primary);
-  font-weight: 600;
+  background: var(--primary);
+  color: var(--secondary-dark);
+  font-weight: 700;
 }
 
 .variant-chip:disabled,
 .variant-chip--disabled {
-  opacity: 0.3;
+  opacity: 0.32;
   cursor: not-allowed;
+  color: var(--text-muted);
   text-decoration: line-through;
-  border-color: var(--border-color);
+  border-style: dashed;
 }
 
-
-/* ---- Status & Info ---- */
+/* =========================================================
+   Status
+   ========================================================= */
 
 .variant-status {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
+
   gap: 0.35rem;
+
   color: var(--text-secondary);
-  font-size: 0.88rem;
+
+  font-size: 0.85rem;
   line-height: 1.5;
+
+  margin-top: 0.4rem;
 }
 
 .variant-status strong {
   color: var(--text-primary);
+  font-weight: 600;
 }
 
-/* ---- Dimensions (Bust / Waist / Hip / Length) ---- */
+.dot {
+  width: 3px;
+  height: 3px;
 
-.variant-dimensions{
-    display:grid;
-    grid-template-columns:repeat(2,minmax(140px,1fr));
-    gap:.75rem 1.5rem;
+  border-radius: 50%;
 
-    padding:1rem;
+  background: var(--text-muted);
 
-    margin-top:.75rem;
+  align-self: center;
+
+  margin-inline: 0.2rem;
 }
 
-.variant-dimension{
-    justify-content:space-between;
+/* =========================================================
+   Selected Variant
+   ========================================================= */
+
+.variant-selected-info {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 0.55rem;
+
+  width: fit-content;
+
+  padding: 0.6rem 0.9rem;
+
+  border-radius: 2px;
+
+  background: transparent;
+
+  border: 1px solid var(--primary);
+  border-inline-start-width: 3px;
+
+  color: var(--text-primary);
+
+  font-size: 0.85rem;
 }
 
-.variant-dimension__label{
-    font-size:.72rem;
-    letter-spacing:.08em;
+.variant-selected-info__color {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 0.5rem;
 }
 
-.variant-dimension__value{
-    font-size:.9rem;
+.variant-selected-info__swatch {
+  width: 18px;
+  height: 18px;
+
+  flex: 0 0 18px;
+
+  border-radius: 50%;
+
+  border: 1px solid var(--border-color);
+}
+
+.variant-selected-info__separator {
+  color: var(--text-muted);
+}
+
+/* =========================================================
+   Dimensions
+   ========================================================= */
+
+.variant-dimensions {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(140px, 1fr));
+
+  gap: 0.75rem 1.5rem;
+
+  padding: 1rem 0 0;
+
+  margin-top: 0.85rem;
+
+  border-top: 1px solid var(--border-color);
+}
+
+.variant-dimension {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  min-width: 0;
+}
+
+.variant-dimension__label {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
 }
 
 .variant-dimension__value {
   color: var(--text-primary);
+
+  font-size: 0.88rem;
   font-weight: 600;
+
+  white-space: nowrap;
 }
 
-/* ---- Responsive ---- */
+/* =========================================================
+   Responsive
+   ========================================================= */
 
 @media (max-width: 560px) {
   .variant-shell {
-    padding: 1.25rem 1rem;
+    padding: 0;
     gap: 1rem;
-    border-radius: var(--radius-md);
   }
 
   .variant-shell__header h3 {
     font-size: 1.15rem;
   }
 
- .variant-chip{
-    min-width:88px;
-    height:46px;
-    padding:0 .9rem;
-}
-  .variant-options {
-    gap: 0.5rem;
+  .variant-group {
+    align-items: flex-start;
+    gap: 0.6rem;
   }
 
-  .variant-price__current {
-    font-size: 1.2rem;
+  .variant-group__label {
+    min-width: 52px;
+    font-size: 0.72rem;
+    margin-top: 0.5rem;
   }
 
-  .variant-dimensions {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 0.75rem;
-    gap: 0.5rem;
+  .color-swatch {
+    width: 36px;
+    height: 36px;
   }
 
-  .variant-dimension {
+  .color-swatch__circle {
+    width: 28px;
+    height: 28px;
+  }
+
+  .variant-chip {
+    height: 38px;
+    padding: 0 0.75rem;
     font-size: 0.8rem;
   }
 }
 
 @media (max-width: 360px) {
-  .variant-dimensions {
-    grid-template-columns: 1fr;
+  .variant-group {
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
-  .variant-chip {
-    padding: 0.45rem 0.75rem;
-    font-size: 0.8rem;
+  .variant-group__label {
+    align-self: flex-start;
+  }
+
+  .variant-dimensions {
+    grid-template-columns: 1fr;
   }
 }

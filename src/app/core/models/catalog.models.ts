@@ -41,16 +41,37 @@ export interface ProductImageResponse {
   imageUrl: string;
   isMain: boolean;
 }
+export interface ColorResponse {
+  id: number;
+  name: string;
+  arabicName: string;
+  hexCode?: string | null;
+  secondaryHexCode?: string | null;
+}
 
+export interface SizeResponse {
+  id: number;
+  name: string;
+  sortOrder: number;
+}
 export interface ProductVariantResponse {
   id: number;
-  color: string;
-  size: string;
+
+  colorId: number;
+  colorName: string;
+  colorArabicName: string;
+  colorHexCode?: string | null;
+  colorSecondaryHexCode?: string | null;
+
+  sizeId: number;
+  sizeName: string;
+
   originalPrice: number;
   price: number;
   hasDiscount: boolean;
   stock: number;
   sku: string;
+
   bust: number;
   waist: number;
   hip: number;
@@ -80,6 +101,7 @@ export interface ProductCardResponse {
   singleVariantId?: number | null;
   singleVariantStock: number;
 }
+
 export type ProductSearchSuggestionType =
   | 'product'
   | 'category'
