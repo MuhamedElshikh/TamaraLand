@@ -1,0 +1,359 @@
+.sizes-page {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.sizes-page__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.sizes-page__eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--primary-light);
+}
+
+.sizes-page__header h1 {
+  margin: 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.4rem;
+  color: var(--text-primary);
+}
+
+.sizes-page__description {
+  margin: 0.45rem 0 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.sizes-page__add-button {
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-full);
+  padding: 0.7rem 1.25rem;
+  background: var(--gold-gradient);
+  color: var(--secondary-dark);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   ALERTS
+   ========================================================= */
+
+.sizes-alert {
+  margin-bottom: 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+}
+
+.sizes-alert--error {
+  color: #c75b5b;
+  border: 1px solid rgba(199, 91, 91, 0.25);
+  background: rgba(199, 91, 91, 0.08);
+}
+
+.sizes-alert--success {
+  color: #5d8c67;
+  border: 1px solid rgba(93, 140, 103, 0.25);
+  background: rgba(93, 140, 103, 0.08);
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.size-form {
+  margin-bottom: 2rem;
+  padding: 1.4rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+}
+
+.size-form__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.size-form__header h2,
+.sizes-list__header h2 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.15rem;
+}
+
+.size-form__header p {
+  margin: 0.3rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.size-form__cancel {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+
+.size-form__grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.form-field > span {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.form-field input {
+  width: 100%;
+  min-height: 42px;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  outline: none;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font: inherit;
+}
+
+.form-field input:focus {
+  border-color: var(--primary);
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.size-form__actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+.button {
+  min-height: 40px;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-full);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button--primary {
+  border: 1px solid var(--primary);
+  background: var(--gold-gradient);
+  color: var(--secondary-dark);
+}
+
+.button--secondary {
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+
+/* =========================================================
+   LIST
+   ========================================================= */
+
+.sizes-list {
+  margin-top: 1.5rem;
+}
+
+.sizes-list__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.sizes-list__header p {
+  margin: 0.25rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+
+/* =========================================================
+   SIZE CARDS
+   ========================================================= */
+
+.sizes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.size-card {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.8rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+}
+
+
+.size-card__order {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--primary-light);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+
+.size-card__content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.size-card__content strong {
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.size-card__content span {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+}
+
+
+.size-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.size-card__actions button {
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.size-card__edit {
+  color: var(--primary-light);
+}
+
+.size-card__delete {
+  color: #d77c7c;
+}
+
+.size-card__edit:hover,
+.size-card__delete:hover {
+  text-decoration: underline;
+}
+
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.sizes-empty {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--text-muted);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+  .sizes-page {
+    padding: 1.25rem;
+  }
+
+  .sizes-page__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .sizes-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+@media (max-width: 560px) {
+
+  .sizes-page {
+    padding: 1rem;
+  }
+
+  .sizes-page__header h1 {
+    font-size: 2rem;
+  }
+
+  .size-form {
+    padding: 1rem;
+  }
+
+  .size-form__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .size-card {
+    grid-template-columns: 42px minmax(0, 1fr);
+  }
+
+  .size-card__actions {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-color);
+  }
+}

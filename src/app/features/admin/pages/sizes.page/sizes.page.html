@@ -1,0 +1,286 @@
+<section class="sizes-page">
+
+  <!-- =====================================================
+       HEADER
+       ===================================================== -->
+
+  <header class="sizes-page__header">
+
+    <div>
+
+      <p class="sizes-page__eyebrow">
+        Catalog
+      </p>
+
+      <h1>
+        Sizes
+      </h1>
+
+      <p class="sizes-page__description">
+        Manage the sizes available for product variants.
+      </p>
+
+    </div>
+
+    @if (editingId() === null) {
+
+      <button
+        type="button"
+        class="sizes-page__add-button"
+        (click)="startCreate()"
+      >
+        + Add Size
+      </button>
+
+    }
+
+  </header>
+
+
+  <!-- =====================================================
+       ALERTS
+       ===================================================== -->
+
+  @if (errorMessage()) {
+
+    <div class="sizes-alert sizes-alert--error">
+      {{ errorMessage() }}
+    </div>
+
+  }
+
+  @if (successMessage()) {
+
+    <div class="sizes-alert sizes-alert--success">
+      {{ successMessage() }}
+    </div>
+
+  }
+
+
+  <!-- =====================================================
+       FORM
+       ===================================================== -->
+
+  <section class="size-form">
+
+    <div class="size-form__header">
+
+      <div>
+
+        <h2>
+          {{
+            editingId() === null
+              ? 'Add Size'
+              : 'Edit Size'
+          }}
+        </h2>
+
+        <p>
+          Define the size name and its display order.
+        </p>
+
+      </div>
+
+      @if (editingId() !== null) {
+
+        <button
+          type="button"
+          class="size-form__cancel"
+          (click)="cancelEdit()"
+        >
+          Cancel
+        </button>
+
+      }
+
+    </div>
+
+
+    <div class="size-form__grid">
+
+      <!-- NAME -->
+
+      <label class="form-field">
+
+        <span>
+          Size Name
+        </span>
+
+        <input
+          type="text"
+          [(ngModel)]="name"
+          placeholder="e.g. XL"
+          maxlength="50"
+        />
+
+      </label>
+
+
+      <!-- SORT ORDER -->
+
+      <label class="form-field">
+
+        <span>
+          Sort Order
+        </span>
+
+        <input
+          type="number"
+          [(ngModel)]="sortOrder"
+          min="0"
+          step="1"
+        />
+
+      </label>
+
+    </div>
+
+
+    <!-- =====================================================
+         ACTIONS
+         ===================================================== -->
+
+    <div class="size-form__actions">
+
+      <button
+        type="button"
+        class="button button--primary"
+        (click)="save()"
+        [disabled]="isSaving()"
+      >
+
+        {{
+          isSaving()
+            ? 'Saving...'
+            : editingId() === null
+              ? 'Create Size'
+              : 'Save Changes'
+        }}
+
+      </button>
+
+
+      @if (editingId() !== null) {
+
+        <button
+          type="button"
+          class="button button--secondary"
+          (click)="cancelEdit()"
+          [disabled]="isSaving()"
+        >
+          Cancel
+        </button>
+
+      }
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       SIZES LIST
+       ===================================================== -->
+
+  <section class="sizes-list">
+
+    <div class="sizes-list__header">
+
+      <div>
+
+        <h2>
+          Available Sizes
+        </h2>
+
+        <p>
+          {{ sizes().length }} sizes
+        </p>
+
+      </div>
+
+    </div>
+
+
+    @if (isLoading()) {
+
+      <div class="sizes-empty">
+        Loading sizes...
+      </div>
+
+    }
+
+    @else if (sizes().length === 0) {
+
+      <div class="sizes-empty">
+        No sizes found.
+      </div>
+
+    }
+
+    @else {
+
+      <div class="sizes-grid">
+
+        @for (
+          size of sizes();
+          track size.id
+        ) {
+
+          <article class="size-card">
+
+            <!-- ORDER -->
+
+            <div class="size-card__order">
+              {{ size.sortOrder }}
+            </div>
+
+
+            <!-- CONTENT -->
+
+            <div class="size-card__content">
+
+              <strong>
+                {{ size.name }}
+              </strong>
+
+              <span>
+                Sort order: {{ size.sortOrder }}
+              </span>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="size-card__actions">
+
+              <button
+                type="button"
+                class="size-card__edit"
+                (click)="edit(size)"
+              >
+                Edit
+              </button>
+
+              <button
+                type="button"
+                class="size-card__delete"
+                (click)="delete(size)"
+              >
+                Delete
+              </button>
+
+            </div>
+
+          </article>
+
+        }
+
+      </div>
+
+    }
+
+  </section>
+
+</section>

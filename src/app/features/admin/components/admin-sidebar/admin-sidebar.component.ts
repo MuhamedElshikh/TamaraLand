@@ -51,7 +51,17 @@ export class AdminSidebarComponent {
       link: '/admin/products',
       icon: 'box',
     },
+{
+  labelKey: 'sidebar.colors',
+  link: '/admin/colors',
+  icon: 'palette',
+},
 
+{
+  labelKey: 'sidebar.sizes',
+  link: '/admin/sizes',
+  icon: 'ruler',
+},
     {
       labelKey: 'sidebar.categories',
       link: '/admin/categories',

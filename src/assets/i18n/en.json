@@ -826,6 +826,8 @@
   "sidebar": {
     "logoAlt": "Tamara Land logo",
     "adminPanel": "Admin panel",
+    "colors": "Colors",
+    "sizes": "Sizes",
     "dashboard": "Dashboard",
     "products": "Products",
     "categories": "Categories",

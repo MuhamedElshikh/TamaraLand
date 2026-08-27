@@ -37,6 +37,28 @@ export interface CartItemResponse {
   subTotal: number;
 }
 
+export interface CreateColorRequest {
+  name: string;
+  arabicName: string;
+  hexCode?: string | null;
+  secondaryHexCode?: string | null;
+}
+
+export interface UpdateColorRequest {
+  name: string;
+  arabicName: string;
+  hexCode?: string | null;
+  secondaryHexCode?: string | null;
+}
+export interface CreateSizeRequest {
+  name: string;
+  sortOrder: number;
+}
+
+export interface UpdateSizeRequest {
+  name: string;
+  sortOrder: number;
+}
 export interface CartResponse {
   items: CartItemResponse[];
   couponCode?: string;

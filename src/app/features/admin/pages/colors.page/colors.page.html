@@ -1,0 +1,357 @@
+<section class="colors-page">
+
+  <header class="colors-page__header">
+
+    <div>
+      <p class="colors-page__eyebrow">
+        Catalog
+      </p>
+
+      <h1>
+        Colors
+      </h1>
+
+      <p class="colors-page__description">
+        Manage the colors available for product variants.
+      </p>
+    </div>
+
+    @if (editingId() === null) {
+      <button
+        type="button"
+        class="colors-page__add-button"
+        (click)="startCreate()"
+      >
+        + Add Color
+      </button>
+    }
+
+  </header>
+
+
+  <!-- Messages -->
+
+  @if (errorMessage()) {
+    <div class="colors-alert colors-alert--error">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  @if (successMessage()) {
+    <div class="colors-alert colors-alert--success">
+      {{ successMessage() }}
+    </div>
+  }
+
+
+  <!-- Form -->
+
+  <section class="color-form">
+
+    <div class="color-form__header">
+
+      <div>
+        <h2>
+          {{ editingId() === null
+            ? 'Add Color'
+            : 'Edit Color'
+          }}
+        </h2>
+
+        <p>
+          Define the color name and its visual representation.
+        </p>
+      </div>
+
+      @if (editingId() !== null) {
+        <button
+          type="button"
+          class="color-form__cancel"
+          (click)="cancelEdit()"
+        >
+          Cancel
+        </button>
+      }
+
+    </div>
+
+
+    <div class="color-form__grid">
+
+      <!-- Name -->
+
+      <label class="form-field">
+
+        <span>
+          Name
+        </span>
+
+        <input
+          type="text"
+          [(ngModel)]="name"
+          placeholder="e.g. White"
+          maxlength="50"
+        />
+
+      </label>
+
+
+      <!-- Arabic Name -->
+
+      <label class="form-field">
+
+        <span>
+          Arabic Name
+        </span>
+
+        <input
+          type="text"
+          [(ngModel)]="arabicName"
+          placeholder="مثال: أبيض"
+          maxlength="50"
+          dir="rtl"
+        />
+
+      </label>
+
+
+      <!-- Primary Hex -->
+
+      <label class="form-field">
+
+        <span>
+          Primary Color
+        </span>
+
+        <div class="hex-input">
+
+          <input
+            type="color"
+            [value]="hexCode || '#FFFFFF'"
+            (input)="hexCode = $any($event.target).value"
+          />
+
+          <input
+            type="text"
+            [(ngModel)]="hexCode"
+            placeholder="#FFFFFF"
+            maxlength="7"
+          />
+
+        </div>
+
+      </label>
+
+
+      <!-- Secondary Hex -->
+
+      <label class="form-field">
+
+        <span>
+          Secondary Color
+          <small>(optional)</small>
+        </span>
+
+        <div class="hex-input">
+
+          <input
+            type="color"
+            [value]="secondaryHexCode || '#FFFFFF'"
+            (input)="secondaryHexCode = $any($event.target).value"
+          />
+
+          <input
+            type="text"
+            [(ngModel)]="secondaryHexCode"
+            placeholder="#000000"
+            maxlength="7"
+          />
+
+        </div>
+
+      </label>
+
+    </div>
+
+
+    <!-- Preview -->
+
+    <div class="color-preview">
+
+      <span
+        class="color-preview__circle"
+        [style.background]="
+          'linear-gradient(135deg, ' +
+          (normalizeHex(hexCode) || '#D1D1D1') +
+          ' 0%, ' +
+          (normalizeHex(hexCode) || '#D1D1D1') +
+          ' 50%, ' +
+          (normalizeHex(secondaryHexCode) || normalizeHex(hexCode) || '#D1D1D1') +
+          ' 50%, ' +
+          (normalizeHex(secondaryHexCode) || normalizeHex(hexCode) || '#D1D1D1') +
+          ' 100%)'
+        "
+      ></span>
+
+      <div>
+        <strong>
+          {{ name || 'Color preview' }}
+        </strong>
+
+        <span>
+          {{ normalizeHex(hexCode) || 'No primary color' }}
+        </span>
+      </div>
+
+    </div>
+
+
+    <div class="color-form__actions">
+
+      <button
+        type="button"
+        class="button button--primary"
+        (click)="save()"
+        [disabled]="isSaving()"
+      >
+        {{ isSaving()
+          ? 'Saving...'
+          : editingId() === null
+            ? 'Create Color'
+            : 'Save Changes'
+        }}
+      </button>
+
+      @if (editingId() !== null) {
+
+        <button
+          type="button"
+          class="button button--secondary"
+          (click)="cancelEdit()"
+          [disabled]="isSaving()"
+        >
+          Cancel
+        </button>
+
+      }
+
+    </div>
+
+  </section>
+
+
+  <!-- Colors List -->
+
+  <section class="colors-list">
+
+    <div class="colors-list__header">
+
+      <div>
+        <h2>
+          Available Colors
+        </h2>
+
+        <p>
+          {{ colors().length }} colors
+        </p>
+      </div>
+
+    </div>
+
+
+    @if (isLoading()) {
+
+      <div class="colors-empty">
+        Loading colors...
+      </div>
+
+    } @else if (colors().length === 0) {
+
+      <div class="colors-empty">
+        No colors found.
+      </div>
+
+    } @else {
+
+      <div class="colors-grid">
+
+        @for (
+          color of colors();
+          track color.id
+        ) {
+
+          <article class="color-card">
+
+            <div class="color-card__swatch-wrapper">
+
+              <span
+                class="color-card__swatch"
+                [style.background]="colorBackground(color)"
+              ></span>
+
+            </div>
+
+
+            <div class="color-card__content">
+
+              <div class="color-card__names">
+
+                <strong>
+                  {{ color.name }}
+                </strong>
+
+                <span dir="rtl">
+                  {{ color.arabicName }}
+                </span>
+
+              </div>
+
+
+              <div class="color-card__codes">
+
+                <span>
+                  {{ color.hexCode || '—' }}
+                </span>
+
+                @if (color.secondaryHexCode) {
+                  <span>
+                    {{ color.secondaryHexCode }}
+                  </span>
+                }
+
+              </div>
+
+            </div>
+
+
+            <div class="color-card__actions">
+
+              <button
+                type="button"
+                class="color-card__edit"
+                (click)="edit(color)"
+              >
+                Edit
+              </button>
+
+              <button
+                type="button"
+                class="color-card__delete"
+                (click)="delete(color)"
+              >
+                Delete
+              </button>
+
+            </div>
+
+          </article>
+
+        }
+
+      </div>
+
+    }
+
+  </section>
+
+</section>

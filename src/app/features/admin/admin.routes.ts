@@ -32,6 +32,21 @@ export const ADMIN_ROUTES: Routes = [
       import('./pages/product-form/product-form.page').then((m) => m.AdminProductFormPage),
   },
   {
+  path: 'colors',
+  loadComponent: () =>
+    import('./pages/colors.page/colors.page').then(
+      (m) => m.AdminColorsPage
+    ),
+},
+{
+  path: 'sizes',
+  loadComponent: () =>
+    import('./pages/sizes.page/sizes.page').then(
+      (m) => m.AdminSizesPage
+    ),
+},
+
+  {
     path: 'discounts',
     loadComponent: () =>
       import('./pages/discounts/discounts.page').then((m) => m.DiscountsPage),
