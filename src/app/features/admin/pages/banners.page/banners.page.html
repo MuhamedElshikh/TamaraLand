@@ -187,7 +187,7 @@
 <!-- ========================================================= -->
 
 <app-data-table
-  [columns]="columns"
+  [columns]="columns()"
   [rows]="banners()"
   [isLoading]="isLoading()"
   emptyMessage="banners.management.noBanners"

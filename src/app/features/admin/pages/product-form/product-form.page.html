@@ -1,3 +1,4 @@
+
 <div class="admin-page">
   <header class="admin-page__header">
     <div class="header-title-group">
@@ -57,7 +58,9 @@
          ========================================================= -->
 
     <div class="scaffold-card mb-4">
-      <h2 class="card-title">General Information</h2>
+      <h2 class="card-title">
+        {{ 'admin.products.generalInformation' | translate }}
+      </h2>
 
       <div class="form-grid">
         <!-- Product Name -->
@@ -386,33 +389,141 @@
                 }
               </div>
 
-              <!-- Color -->
+              <!-- =================================================
+                   COLOR SEARCHABLE SELECT
+                   ================================================= -->
+
               <div class="form-group">
                 <label
                   class="form-label"
-                  for="v-color"
+                  for="v-color-search"
                 >
                   Color *
                 </label>
 
-                <select
-                  id="v-color"
-                  class="form-control form-select"
-                  formControlName="colorId"
-                >
-                  <option [ngValue]="null">
-                    Select Color
-                  </option>
+                <div class="variant-search-select">
 
-                  @for (color of colors(); track color.id) {
-                    <option [ngValue]="color.id">
-                      {{ color.name }}
-                      @if (color.arabicName && color.arabicName !== color.name) {
-                        — {{ color.arabicName }}
+                  <div class="variant-search-select__input-wrap">
+
+                    @if (getSelectedColor(); as selectedColor) {
+                      <span
+                        class="variant-search-select__selected-swatch"
+                        [style.background]="
+                          selectedColor.secondaryHexCode
+                            ? 'linear-gradient(135deg, ' +
+                              (selectedColor.hexCode || '#ffffff') +
+                              ' 0%, ' +
+                              (selectedColor.hexCode || '#ffffff') +
+                              ' 50%, ' +
+                              (selectedColor.secondaryHexCode || '#000000') +
+                              ' 50%, ' +
+                              (selectedColor.secondaryHexCode || '#000000') +
+                              ' 100%)'
+                            : (selectedColor.hexCode || '#ffffff')
+                        "
+                      ></span>
+                    }
+
+                    <input
+                      id="v-color-search"
+                      type="text"
+                      class="form-control variant-search-select__input"
+                      [value]="colorSearch()"
+                      (input)="onColorSearchChange($any($event.target).value)"
+                      (focus)="openColorDropdown()"
+                      placeholder="Search color..."
+                      autocomplete="off"
+                    />
+
+                    <button
+                      type="button"
+                      class="variant-search-select__toggle"
+                      (click)="openColorDropdown()"
+                      aria-label="Open colors"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <polyline
+                          points="6 9 12 15 18 9"
+                        ></polyline>
+                      </svg>
+                    </button>
+
+                  </div>
+
+                  @if (showColorDropdown()) {
+                    <div class="variant-search-select__dropdown">
+
+                      @if (filteredColors().length === 0) {
+                        <div class="variant-search-select__empty">
+                          No colors found.
+                        </div>
+                      } @else {
+
+                        @for (
+                          color of filteredColors();
+                          track color.id
+                        ) {
+                          <button
+                            type="button"
+                            class="variant-search-option"
+                           [class.variant-search-option--selected]="isColorSelected(color.id)"
+                            (click)="selectColor(color)"
+                          >
+                            <span
+                              class="variant-search-option__swatch"
+                              [style.background]="
+                                color.secondaryHexCode
+                                  ? 'linear-gradient(135deg, ' +
+                                    (color.hexCode || '#ffffff') +
+                                    ' 0%, ' +
+                                    (color.hexCode || '#ffffff') +
+                                    ' 50%, ' +
+                                    (color.secondaryHexCode || '#000000') +
+                                    ' 50%, ' +
+                                    (color.secondaryHexCode || '#000000') +
+                                    ' 100%)'
+                                  : (color.hexCode || '#ffffff')
+                              "
+                            ></span>
+
+                            <span class="variant-search-option__content">
+                              <strong>
+                                {{ color.name }}
+                              </strong>
+
+                              @if (
+                                color.arabicName &&
+                                color.arabicName !== color.name
+                              ) {
+                                <small dir="rtl">
+                                  {{ color.arabicName }}
+                                </small>
+                              }
+                            </span>
+
+                            @if (
+                              isColorSelected(color.id)
+                            ) {
+                              <span class="variant-search-option__check">
+                                ✓
+                              </span>
+                            }
+                          </button>
+                        }
+
                       }
-                    </option>
+
+                    </div>
                   }
-                </select>
+                </div>
 
                 @if (
                   variantForm.get('colorId')?.touched &&
@@ -423,58 +534,141 @@
                   </span>
                 }
 
-               @if (variantForm.get('colorId')?.value; as selectedColorId) {
-  @if (getColorById(selectedColorId); as selectedColor) {
-    <div class="selected-color-preview">
-      <span
-        class="selected-color-preview__swatch"
-        [style.background]="
-          selectedColor.secondaryHexCode
-            ? 'linear-gradient(135deg, ' +
-              (selectedColor.hexCode || '#ffffff') +
-              ' 0%, ' +
-              (selectedColor.hexCode || '#ffffff') +
-              ' 50%, ' +
-              (selectedColor.secondaryHexCode || '#000000') +
-              ' 50%, ' +
-              (selectedColor.secondaryHexCode || '#000000') +
-              ' 100%)'
-            : (selectedColor.hexCode || '#ffffff')
-        "
-      ></span>
+                @if (getSelectedColor(); as selectedColor) {
+                  <div class="selected-color-preview">
+                    <span
+                      class="selected-color-preview__swatch"
+                      [style.background]="
+                        selectedColor.secondaryHexCode
+                          ? 'linear-gradient(135deg, ' +
+                            (selectedColor.hexCode || '#ffffff') +
+                            ' 0%, ' +
+                            (selectedColor.hexCode || '#ffffff') +
+                            ' 50%, ' +
+                            (selectedColor.secondaryHexCode || '#000000') +
+                            ' 50%, ' +
+                            (selectedColor.secondaryHexCode || '#000000') +
+                            ' 100%)'
+                          : (selectedColor.hexCode || '#ffffff')
+                      "
+                    ></span>
 
-      <span>
-        {{ selectedColor.name }}
-      </span>
-    </div>
-  }
-}
+                    <span>
+                      {{ selectedColor.name }}
+
+                      @if (
+                        selectedColor.arabicName &&
+                        selectedColor.arabicName !== selectedColor.name
+                      ) {
+                        — {{ selectedColor.arabicName }}
+                      }
+                    </span>
+                  </div>
+                }
               </div>
 
-              <!-- Size -->
+              <!-- =================================================
+                   SIZE SEARCHABLE SELECT
+                   ================================================= -->
+
               <div class="form-group">
                 <label
                   class="form-label"
-                  for="v-size"
+                  for="v-size-search"
                 >
                   Size *
                 </label>
 
-                <select
-                  id="v-size"
-                  class="form-control form-select"
-                  formControlName="sizeId"
-                >
-                  <option [ngValue]="null">
-                    Select Size
-                  </option>
+                <div class="variant-search-select">
 
-                  @for (size of sizes(); track size.id) {
-                    <option [ngValue]="size.id">
-                      {{ size.name }}
-                    </option>
+                  <div class="variant-search-select__input-wrap">
+
+                    <input
+                      id="v-size-search"
+                      type="text"
+                      class="form-control variant-search-select__input"
+                      [value]="sizeSearch()"
+                      (input)="onSizeSearchChange($any($event.target).value)"
+                      (focus)="openSizeDropdown()"
+                      placeholder="Search size..."
+                      autocomplete="off"
+                    />
+
+                    <button
+                      type="button"
+                      class="variant-search-select__toggle"
+                      (click)="openSizeDropdown()"
+                      aria-label="Open sizes"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <polyline
+                          points="6 9 12 15 18 9"
+                        ></polyline>
+                      </svg>
+                    </button>
+
+                  </div>
+
+                  @if (showSizeDropdown()) {
+                    <div class="variant-search-select__dropdown">
+
+                      @if (filteredSizes().length === 0) {
+                        <div class="variant-search-select__empty">
+                          No sizes found.
+                        </div>
+                      } @else {
+
+                        @for (
+                          size of filteredSizes();
+                          track size.id
+                        ) {
+                          <button
+                            type="button"
+                            class="variant-search-option"
+                            [class.variant-search-option--selected]="isSizeSelected(size.id)"
+                            (click)="selectSize(size)"
+                          >
+                            <span class="variant-search-option__content">
+                              <strong>
+                                {{ size.name }}
+                              </strong>
+                            </span>
+
+                            @if (
+                             isSizeSelected(size.id)
+                            ) {
+                              <span class="variant-search-option__check">
+                                ✓
+                              </span>
+                            }
+                          </button>
+                        }
+
+                      }
+
+                    </div>
                   }
-                </select>
+                </div>
+
+                @if (getSelectedSize(); as selectedSize) {
+                  <div class="selected-size-preview">
+                    <span>
+                      Selected:
+                    </span>
+
+                    <strong>
+                      {{ selectedSize.name }}
+                    </strong>
+                  </div>
+                }
 
                 @if (
                   variantForm.get('sizeId')?.touched &&
@@ -601,6 +795,7 @@
                   />
                 </div>
               }
+
             </div>
 
             <div class="form-actions mt-3">
@@ -626,9 +821,7 @@
 
       @if (variants().length === 0) {
         <div class="empty-placeholder">
-          No variants added yet. Please click
-          <strong>"Add Variant"</strong>
-          above to add at least one variant before saving.
+          {{ 'admin.products.noVariants' | translate }}
         </div>
       } @else {
         <div class="table-responsive">
@@ -636,12 +829,14 @@
             <thead>
               <tr>
                 <th>SKU</th>
-                <th>Color</th>
-                <th>Size</th>
-                <th>Stock</th>
-                <th>Price</th>
-                <th>Measurements (cm)</th>
-                <th class="text-end">Actions</th>
+                <th>{{ 'variant.color' | translate }}</th>
+                <th>{{ 'variant.size' | translate }}</th>
+                <th>{{ 'variant.stock' | translate }}</th>
+                <th>{{ 'admin.products.price' | translate }}</th>
+                <th>{{ 'admin.products.measurements' | translate }}</th>
+                <th class="text-end">
+                  {{ 'admin.products.actions' | translate }}
+                </th>
               </tr>
             </thead>
 
@@ -719,6 +914,7 @@
                   <!-- Actions -->
                   <td class="text-end">
                     <div class="action-buttons">
+
                       <button
                         type="button"
                         class="btn-icon btn-icon--edit"
@@ -759,13 +955,16 @@
                           stroke="currentColor"
                           stroke-width="2"
                         >
-                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <polyline
+                            points="3 6 5 6 21 6"
+                          ></polyline>
 
                           <path
                             d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
                           ></path>
                         </svg>
                       </button>
+
                     </div>
                   </td>
                 </tr>
@@ -788,6 +987,7 @@
       >
         @if (isSubmitting()) {
           <span class="spinner-sm"></span>
+
           {{ 'admin.products.savingProduct' | translate }}
         } @else {
           {{

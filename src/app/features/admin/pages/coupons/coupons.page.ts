@@ -1,24 +1,26 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { DataTableComponent, DataTableColumn } from '../../components/data-table/data-table.component';
-import { PaginationComponent } from '../../../../shared/pagination/pagination'; // عدّل المسار
-import { AdminCouponService } from '../../../../core/services/admin-coupon.service'; // عدّل المسار
+import { PaginationComponent } from '../../../../shared/pagination/pagination';
+import { AdminCouponService } from '../../../../core/services/admin-coupon.service';
 import { CouponResponse, CreateCouponRequest } from '../../../../core/models/domain.models';
-import { extractErrorMessage } from '../../../../core/utils/error-message.util'; // عدّل المسار
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 
 const PAGE_SIZE = 15;
-const DISCOUNT_TYPE_LABELS: Record<number, string> = { 0: 'Percentage', 1: 'Fixed amount' };
 
 @Component({
   selector: 'app-admin-coupons-page',
   standalone: true,
-  imports: [ReactiveFormsModule, DataTableComponent, PaginationComponent],
+  imports: [ReactiveFormsModule, DataTableComponent, PaginationComponent, TranslatePipe],
   templateUrl: './coupons.page.html',
   styleUrl: './coupons.page.css',
 })
 export class CouponsPage implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly couponService = inject(AdminCouponService);
+  private readonly translate = inject(TranslateService);
 
   readonly coupons = signal<CouponResponse[]>([]);
   readonly isLoading = signal(true);
@@ -33,32 +35,92 @@ export class CouponsPage implements OnInit {
   readonly isSubmitting = signal(false);
   readonly formError = signal<string | null>(null);
 
-  readonly discountTypeLabels = DISCOUNT_TYPE_LABELS;
+  // يتحدث كل ما اللغة تتغيّر، عشان الأعمدة تتترجم لايف
+  private readonly langChange = toSignal(this.translate.onLangChange, { initialValue: null });
 
-  readonly columns: DataTableColumn<CouponResponse>[] = [
-    { key: 'code', header: 'Code' },
-    { key: 'discountType', header: 'Type', accessor: (r) => this.discountTypeLabels[r.discountType] ?? '—' },
-    {key: 'value',header: 'Value',align: 'right',accessor: (r) => (r.discountType === 0 ? `${r.discountValue}%` : `${r.discountValue} EGP`),
+  readonly columns = computed<DataTableColumn<CouponResponse>[]>(() => {
+    this.langChange();
+
+    return [
+      { key: 'code', header: this.translate.instant('admin.coupons.columns.code') },
+      {
+        key: 'discountType',
+        header: this.translate.instant('admin.coupons.columns.type'),
+        accessor: (r) => this.translate.instant(r.discountType === 0 ? 'admin.labels.percentage' : 'admin.labels.fixedAmount'),
+      },
+      {
+        key: 'value',
+        header: this.translate.instant('admin.coupons.columns.value'),
+        align: 'right',
+        accessor: (r) => (r.discountType === 0
+          ? `${r.discountValue}%`
+          : `${r.discountValue} ${this.translate.instant('orders.currency')}`),
+      },
+      { key: 'minimumOrderAmount', header: this.translate.instant('admin.coupons.columns.minOrder'), type: 'currency', align: 'right' },
+      {
+        key: 'usedCount',
+        header: this.translate.instant('admin.coupons.columns.used'),
+        align: 'right',
+        accessor: (r) => `${r.usedCount} / ${r.usageLimit}`,
+      },
+      { key: 'userUsageLimit', header: this.translate.instant('admin.coupons.columns.perUser'), align: 'right' },
+      { key: 'expiresAt', header: this.translate.instant('admin.coupons.columns.expires'), type: 'date' },
+      {
+        key: 'isActive',
+        header: this.translate.instant('admin.coupons.columns.status'),
+        type: 'badge',
+        accessor: (r) => this.translate.instant(r.isActive ? 'common.active' : 'common.inactive'),
+      },
+    ];
+  });
+
+  readonly form = this.fb.nonNullable.group(
+    {
+      code: ['', [Validators.required, Validators.minLength(3)]],
+      discountType: [0, Validators.required],
+      discountValue: [0, [Validators.required, Validators.min(0.01)]],
+      minimumOrder: [0],
+      maximumDiscount: [0],
+      usageLimit: [1, [Validators.required, Validators.min(1)]],
+      userUsageLimit: [1, [Validators.required, Validators.min(1)]],
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required],
+      isActive: [true],
     },
-    { key: 'minimumOrderAmount', header: 'Min. order', type: 'currency', align: 'right' },
-    { key: 'usedCount', header: 'Used', align: 'right', accessor: (r) => `${r.usedCount} / ${r.usageLimit}` },
-    { key: 'userUsageLimit', header: 'Per User', align: 'right'},
-    { key: 'expiresAt', header: 'Expires', type: 'date' },
-    { key: 'isActive', header: 'Status', type: 'badge', accessor: (r) => (r.isActive ? 'Active' : 'Inactive') },
-  ];
+    { validators: this.dateRangeValidator }
+  );
 
-  readonly form = this.fb.nonNullable.group({
-  code: ['', [Validators.required, Validators.minLength(3)]],
-  discountType: [0, Validators.required],
-  discountValue: [0, [Validators.required, Validators.min(0.01)]],
-  minimumOrder: [0],
-  maximumDiscount: [0],
-  usageLimit: [1, [Validators.required, Validators.min(1)]],
-  userUsageLimit: [1, [Validators.required,Validators.min(1)]],
-  startDate: ['', Validators.required],
-  endDate: ['', Validators.required],
-  isActive: [true],
-});
+  constructor() {
+    // الكود دايمًا بحروف كبيرة، أوتوماتيك، عشان منسيبش تعارض بين "summer20" و"SUMMER20" في قاعدة البيانات
+    this.form.get('code')!.valueChanges.subscribe((val) => {
+      const upper = (val || '').toUpperCase();
+      if (upper !== val) {
+        this.form.get('code')!.setValue(upper, { emitEvent: false });
+      }
+    });
+
+    // الخصم بالنسبة المئوية مايتعديش 100%؛ الخصم بقيمة ثابتة مفيهوش سقف
+    this.form.get('discountType')!.valueChanges.subscribe((type) => this.applyDiscountValueValidators(type));
+    this.applyDiscountValueValidators(this.form.get('discountType')!.value);
+  }
+
+  private applyDiscountValueValidators(discountType: number): void {
+    const control = this.form.get('discountValue')!;
+    const validators = discountType === 0
+      ? [Validators.required, Validators.min(0.01), Validators.max(100)]
+      : [Validators.required, Validators.min(0.01)];
+    control.setValidators(validators);
+    control.updateValueAndValidity({ emitEvent: false });
+  }
+
+  private dateRangeValidator(control: AbstractControl): ValidationErrors | null {
+    const start = control.get('startDate')?.value;
+    const end = control.get('endDate')?.value;
+
+    if (!start || !end) return null;
+
+    return new Date(start) <= new Date(end) ? null : { invalidDateRange: true };
+  }
 
   ngOnInit(): void {
     this.load(1);
@@ -82,12 +144,12 @@ export class CouponsPage implements OnInit {
       discountType: 0,
       discountValue: 0,
       minimumOrder: 0,
+      maximumDiscount: 0,
       usageLimit: 1,
       userUsageLimit: 1,
       isActive: true,
       endDate: '',
-      startDate:'',
-
+      startDate: '',
     });
     this.isFormOpen.set(true);
   }
@@ -102,10 +164,10 @@ export class CouponsPage implements OnInit {
       userUsageLimit: coupon.userUsageLimit,
       isActive: coupon.isActive,
       discountValue: coupon.discountValue,
-minimumOrder: coupon.minimumOrder,
-maximumDiscount: coupon.maximumDiscount,
-startDate: coupon.startDate.substring(0, 10),
-endDate: coupon.endDate.substring(0, 10),
+      minimumOrder: coupon.minimumOrder,
+      maximumDiscount: coupon.maximumDiscount,
+      startDate: coupon.startDate.substring(0, 10),
+      endDate: coupon.endDate.substring(0, 10),
     });
     this.isFormOpen.set(true);
   }
@@ -120,6 +182,15 @@ endDate: coupon.endDate.substring(0, 10),
     return Boolean(control && control.touched && control.hasError(error));
   }
 
+  get hasDateRangeError(): boolean {
+    const start = this.form.get('startDate');
+    const end = this.form.get('endDate');
+    return Boolean(
+      this.form.hasError('invalidDateRange') &&
+      (start?.touched || end?.touched)
+    );
+  }
+
   submit(): void {
     if (this.form.invalid || this.isSubmitting()) {
       this.form.markAllAsTouched();
@@ -129,12 +200,13 @@ endDate: coupon.endDate.substring(0, 10),
     this.isSubmitting.set(true);
     this.formError.set(null);
     const value = this.form.getRawValue();
-const payload: CreateCouponRequest = {
-  ...value,
-  startDate: new Date(value.startDate).toISOString(),
-  endDate: new Date(value.endDate).toISOString(),
-};
-console.log(payload)
+
+    const payload: CreateCouponRequest = {
+      ...value,
+      startDate: new Date(value.startDate).toISOString(),
+      endDate: new Date(value.endDate).toISOString(),
+    };
+
     const existing = this.editingCoupon();
     const request$ = existing
       ? this.couponService.update(existing.id, payload)
@@ -147,18 +219,19 @@ console.log(payload)
           this.closeForm();
           this.load(this.pageNumber());
         } else {
-          this.formError.set(res.message);
+          this.formError.set(res.message || this.translate.instant('admin.coupons.errors.saveFailed'));
         }
       },
       error: (err) => {
         this.isSubmitting.set(false);
-        this.formError.set(extractErrorMessage(err, 'Could not save this coupon.'));
+        this.formError.set(extractErrorMessage(err, this.translate.instant('admin.coupons.errors.saveFailed')));
       },
     });
   }
 
   deleteCoupon(coupon: CouponResponse): void {
-    if (!confirm(`Delete coupon "${coupon.code}"? This cannot be undone.`)) return;
+    const message = this.translate.instant('admin.coupons.confirmDelete', { code: coupon.code });
+    if (!confirm(message)) return;
 
     this.isDeleting.set(coupon.id);
     this.listError.set(null);
@@ -169,12 +242,12 @@ console.log(payload)
         if (res.success) {
           this.load(this.pageNumber());
         } else {
-          this.listError.set(res.message);
+          this.listError.set(res.message || this.translate.instant('admin.coupons.errors.deleteFailed'));
         }
       },
       error: (err) => {
         this.isDeleting.set(null);
-        this.listError.set(extractErrorMessage(err, 'Could not delete this coupon.'));
+        this.listError.set(extractErrorMessage(err, this.translate.instant('admin.coupons.errors.deleteFailed')));
       },
     });
   }

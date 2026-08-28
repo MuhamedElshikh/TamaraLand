@@ -14,3 +14,9 @@ export interface SendWhatsAppMessageRequest {
   phoneNumber: string;
   message: string;
 }
+export interface WhatsAppRecipientResponse {
+  userId: number;
+  phoneNumber: string;
+  name: string;
+  address?: string | null;
+}

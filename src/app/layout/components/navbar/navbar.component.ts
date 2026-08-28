@@ -1,5 +1,8 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, computed, effect, HostListener, inject, signal } from '@angular/core';
+import { Component, computed, effect, HostListener, inject, signal, NgZone, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { fromEvent } from 'rxjs';
+import { auditTime } from 'rxjs/operators';
 import { RouterLink , RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { CartService } from '../../../core/services/cart.service';
@@ -20,11 +23,13 @@ type ThemeMode = 'dark' | 'light';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
-   private auth = inject(AuthService);
-  private cartService = inject(CartService);
-  private wishlistService = inject(WishlistService);
-  private themeService = inject(ThemeService);
-   private languageService = inject(LanguageService);
+  private readonly auth = inject(AuthService);
+  private readonly cartService = inject(CartService);
+  private readonly wishlistService = inject(WishlistService);
+  private readonly themeService = inject(ThemeService);
+  private readonly languageService = inject(LanguageService);
+  private readonly ngZone = inject(NgZone);
+  private readonly destroyRef = inject(DestroyRef);
 
 
   theme = this.themeService.theme;
@@ -57,6 +62,25 @@ export class NavbarComponent {
   private wishlistFetched = signal(false);
 
   constructor() {
+    // Scroll listener outside Angular to prevent triggering ChangeDetection on every frame
+    if (typeof window !== 'undefined') {
+      this.ngZone.runOutsideAngular(() => {
+        fromEvent(window, 'scroll', { passive: true })
+          .pipe(
+            auditTime(40),
+            takeUntilDestroyed(this.destroyRef)
+          )
+          .subscribe(() => {
+            const isScrolled = window.scrollY > 12;
+            if (this.scrolled() !== isScrolled) {
+              this.ngZone.run(() => {
+                this.scrolled.set(isScrolled);
+              });
+            }
+          });
+      });
+    }
+
     // لو فيه توكن (مسجل دخول) بس البروفايل لسه معملوش fetch (زي بعد ريفريش للصفحة)، هاته
     effect(() => {
       if (this.isLoggedIn() && !this.profile()) {
@@ -111,11 +135,6 @@ toggleLanguage(): void {
 isArabic(): boolean {
   return this.languageService.isArabic();
 }
-
-  @HostListener('window:scroll')
-  onScroll() {
-    this.scrolled.set(window.scrollY > 12);
-  }
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {

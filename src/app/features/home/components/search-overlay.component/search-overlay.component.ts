@@ -37,6 +37,7 @@ import {
 import {
   takeUntilDestroyed
 } from '@angular/core/rxjs-interop';
+import { TranslatePipe } from '@ngx-translate/core';
 
 const SEARCH_DEBOUNCE_MS = 300;
 const MIN_SEARCH_LENGTH = 2;
@@ -45,7 +46,8 @@ const MIN_SEARCH_LENGTH = 2;
   selector: 'app-search-overlay',
   standalone: true,
   imports: [
-    RouterLink
+    RouterLink,
+    TranslatePipe
   ],
   templateUrl: './search-overlay.component.html',
   styleUrl: './search-overlay.component.css',
@@ -538,16 +540,16 @@ this.selectedIndex.set(
     switch (type) {
 
       case 'product':
-        return 'Product';
+        return 'search.types.product';
 
       case 'category':
-        return 'Category';
+        return 'search.types.category';
 
       case 'brand':
-        return 'Brand';
+        return 'search.types.brand';
 
       case 'color':
-        return 'Color';
+        return 'search.types.color';
 
       default:
         return '';

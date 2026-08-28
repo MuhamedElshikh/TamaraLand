@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, inject, signal, ElementRef, ViewChild, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CatalogService } from '../../../../core/services/catalog.service'; // عدّل المسار
 import { ProductCardResponse } from '../../../../core/models/catalog.models'; // عدّل المسار
@@ -9,6 +9,7 @@ import { AutoSlideDirective } from '../../../../shared/directives/auto-slide.dir
 @Component({
   selector: 'app-featured-products',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, ProductCardComponent, TranslatePipe, AutoSlideDirective],
   templateUrl: './featured-products.component.html',
   styleUrl: './featured-products.component.css',

@@ -41,7 +41,7 @@ export interface VariantSelection {
 }
 
 interface DimensionItem {
-  label: string;
+  labelKey: string;
   value: number;
 }
 
@@ -348,28 +348,28 @@ export class ProductVariantSelectorComponent implements OnChanges {
 
         if (variant.bust > 0) {
           dimensions.push({
-            label: 'Bust',
+            labelKey: 'variant.bust',
             value: variant.bust,
           });
         }
 
         if (variant.waist > 0) {
           dimensions.push({
-            label: 'Waist',
+            labelKey: 'variant.waist',
             value: variant.waist,
           });
         }
 
         if (variant.hip > 0) {
           dimensions.push({
-            label: 'Hip',
+            labelKey: 'variant.hip',
             value: variant.hip,
           });
         }
 
         if (variant.length > 0) {
           dimensions.push({
-            label: 'Length',
+            labelKey: 'variant.length',
             value: variant.length,
           });
         }

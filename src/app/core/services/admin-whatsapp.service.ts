@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_BASE_URL } from '../constants/api.constants';
 import { ApiResponse } from '../models/api-response.model';
-import { WhatsAppConfigurationResponse, SendWhatsAppMessageRequest } from '../../core/models/whatsapp.models'; // عدّل المسار
+import { WhatsAppConfigurationResponse, SendWhatsAppMessageRequest, WhatsAppRecipientResponse } from '../../core/models/whatsapp.models'; // عدّل المسار
 
 @Injectable({ providedIn: 'root' })
 export class AdminWhatsAppService {
@@ -35,4 +35,14 @@ export class AdminWhatsAppService {
   getQrImage(): Observable<Blob> {
     return this.http.get(`${this.baseUrl}/qr`, { responseType: 'blob' });
   }
+  searchRecipients(
+  search: string
+): Observable<ApiResponse<WhatsAppRecipientResponse[]>> {
+  return this.http.get<ApiResponse<WhatsAppRecipientResponse[]>>(
+    `${this.baseUrl}/recipients`,
+    {
+      params: { search }
+    }
+  );
+}
 }

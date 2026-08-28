@@ -98,6 +98,7 @@
     "tryAgain": "حاول مرة أخرى",
     "addToWishlist": "إضافة إلى المفضلة",
     "removeFromWishlist": "إزالة من المفضلة",
+    "outOfStock": "غير متوفر",
     "currency": "ج.م"
   },
   "filters": {
@@ -170,7 +171,9 @@
     "filters": "التصفية",
     "clearAll": "مسح الكل",
     "showResults": "عرض النتائج",
-    "noProducts": "لا توجد منتجات تطابق عوامل التصفية الحالية."
+    "noProducts": "لا توجد منتجات تطابق عوامل التصفية الحالية.",
+    "nextEdit": "التشكيلة القادمة",
+    "comingSoon": "قريبًا"
   },
   "productDetails": {
     "catalog": "المنتجات",
@@ -192,7 +195,17 @@
     "removeWishlist": "إزالة من المفضلة",
     "addWishlist": "إضافة إلى المفضلة",
     "productNotFound": "هذا المنتج غير متوفر أو لم يعد موجودًا.",
-    "relatedProducts": "قد يعجبك أيضًا"
+    "relatedProducts": "قد يعجبك أيضًا",
+    "selectVariant": "يرجى اختيار المقاس واللون قبل الإضافة للسلة",
+    "addedToCart": "تمت إضافة المنتج إلى السلة بنجاح!",
+    "addToCartError": "حدث خطأ أثناء إضافة المنتج إلى السلة",
+    "updateQuantityError": "تعذر تحديث الكمية.",
+    "removedFromCart": "تم حذف المنتج من السلة",
+    "removeFromCartError": "تعذر حذف المنتج من السلة.",
+    "removedFromWishlist": "تمت إزالة المنتج من المفضلة",
+    "addedToWishlist": "تمت إضافة المنتج إلى المفضلة",
+    "updateWishlistError": "تعذر تحديث المفضلة",
+    "priceAvailableSoon": "السعر سيتوفر قريبًا"
   },
   "categoryPage": {
     "notFound": "هذا القسم غير موجود أو لم يعد متاحًا.",
@@ -860,7 +873,8 @@
     "refresh": "تحديث",
     "saving": "جارٍ الحفظ...",
     "saveChanges": "حفظ التغييرات",
-    "deleting": "جارٍ الحذف..."
+    "deleting": "جارٍ الحذف...",
+    "error": "خطأ"
   },
   "admin": {
     "labels": {
@@ -970,6 +984,11 @@
       "backToList": "العودة إلى المنتجات",
       "setMainImage": "تعيين كصورة رئيسية",
       "savingProduct": "جارٍ حفظ المنتج...",
+      "generalInformation": "المعلومات الأساسية",
+      "noVariants": "لم تتم إضافة أي متغيرات بعد. اضغطي «إضافة متغير» بالأعلى لإضافة متغير واحد على الأقل قبل الحفظ.",
+      "price": "السعر",
+      "measurements": "المقاسات (سم)",
+      "actions": "الإجراءات",
       "columns": {
         "image": "الصورة",
         "englishName": "الاسم بالإنجليزي",
@@ -1009,9 +1028,69 @@
       "add": "إضافة علامة تجارية",
       "search": "البحث عن علامة تجارية",
       "searchPlaceholder": "ابحث باسم العلامة...",
-      "empty": "لا توجد علامات تجارية."
+      "empty": "لا توجد علامات تجارية.",
+      "columns": {
+  "image": "الصورة",
+  "englishName": "الاسم بالإنجليزي",
+  "arabicName": "الاسم بالعربي",
+  "published": "منشور",
+  "description": "الوصف"
+},
+"confirmDelete": "هل أنت متأكد أنك تريد حذف العلامة التجارية \"{{name}}\"؟",
+"deleteFailed": "فشل حذف العلامة التجارية.",
+"updateFailed": "فشل تحديث العلامة التجارية.",
+"createFailed": "فشل إنشاء العلامة التجارية."
     },
+    "colors": {
+  "eyebrow": "الكتالوج",
+  "title": "الألوان",
+  "subtitle": "إدارة الألوان المتاحة لمتغيرات المنتج.",
+  "add": "إضافة لون",
+  "formAddTitle": "إضافة لون",
+  "formEditTitle": "تعديل لون",
+  "formDescription": "حدد اسم اللون وتمثيله المرئي.",
+  "name": "الاسم",
+  "namePlaceholder": "مثال: White",
+  "arabicName": "الاسم بالعربي",
+  "arabicNamePlaceholder": "مثال: أبيض",
+  "primaryColor": "اللون الأساسي",
+  "secondaryColor": "اللون الثانوي",
+  "previewPlaceholder": "معاينة اللون",
+  "noPrimaryColor": "لا يوجد لون أساسي",
+  "create": "إنشاء اللون",
+  "listTitle": "الألوان المتاحة",
+  "colorsCount": "{{count}} لون",
+  "loading": "جارٍ تحميل الألوان...",
+  "empty": "لا توجد ألوان.",
+  "confirmDelete": "هل أنت متأكد أنك تريد حذف \"{{name}}\"؟",
+  "errors": {
+    "loadFailed": "تعذر تحميل الألوان.",
+    "nameRequired": "اسم اللون مطلوب.",
+    "arabicNameRequired": "الاسم العربي للون مطلوب.",
+    "invalidPrimaryHex": "كود اللون الأساسي غير صحيح.",
+    "invalidSecondaryHex": "كود اللون الثانوي غير صحيح.",
+    "createFailed": "تعذر إنشاء اللون.",
+    "updateFailed": "تعذر تحديث اللون.",
+    "deleteFailed": "تعذر حذف اللون."
+  },
+  "success": {
+    "created": "تم إنشاء اللون بنجاح.",
+    "updated": "تم تحديث اللون بنجاح.",
+    "deleted": "تم حذف اللون بنجاح."
+  }
+},
     "categories": {
+      "columns": {
+         "image": "الصورة",
+        "englishName": "الاسم بالإنجليزي",
+        "arabicName": "الاسم بالعربي",
+        "description": "الوصف",
+  "published": "منشور"
+},
+"confirmDelete": "هل أنت متأكد أنك تريد حذف التصنيف \"{{name}}\"؟",
+"deleteFailed": "فشل حذف التصنيف.",
+"updateFailed": "فشل تحديث التصنيف.",
+"createFailed": "فشل إنشاء التصنيف.",
       "title": "إدارة التصنيفات",
       "subtitle": "تنظيم وإدارة تصنيفات المنتجات",
       "search": "البحث عن تصنيف",
@@ -1136,8 +1215,96 @@
       "packageSize": "حجم الباقة",
       "lastSent": "آخر رسالة أرسلت",
       "message": "الرسالة",
-      "messagePlaceholder": "اكتب رسالتك..."
+      "messagePlaceholder": "اكتب رسالتك...",
+      "qrLoadError": "تعذر تحميل رمز QR. حاول الاتصال مرة أخرى.",
+      "phoneRequired": "رقم الهاتف مطلوب.",
+      "messageRequired": "الرسالة مطلوبة."
     },
+    "coupons": {
+      "columns": {
+  "code": "الكود",
+  "type": "النوع",
+  "value": "القيمة",
+  "minOrder": "الحد الأدنى للطلب",
+  "used": "المستخدم",
+  "perUser": "لكل مستخدم",
+  "expires": "تاريخ الانتهاء",
+  "status": "الحالة"
+},
+"confirmDelete": "هل تريد حذف الكوبون \"{{code}}\"؟ لا يمكن التراجع عن هذا الإجراء.",
+"errors": {
+  "saveFailed": "تعذر حفظ الكوبون.",
+  "deleteFailed": "تعذر حذف الكوبون."
+},
+      "title": "كوبونات الخصم",
+      "new": "كوبون جديد",
+      "edit": "تعديل الكوبون",
+      "create": "إنشاء كوبون",
+      "code": "الكود",
+      "discountType": "نوع الخصم",
+      "discountValue": "قيمة الخصم",
+      "minimumOrder": "الحد الأدنى للطلب",
+      "usageLimit": "حد الاستخدام",
+      "userUsageLimit": "حد استخدام العميل",
+      "expiresAt": "تاريخ الانتهاء",
+      "active": "الكوبون نشط",
+      "searchPlaceholder": "ابحثي بكود الكوبون...",
+      "empty": "لا توجد كوبونات.",
+      "validation": {
+        "codeRequired": "كود الكوبون مطلوب.",
+        "valueRequired": "قيمة الخصم مطلوبة.",
+        "usageLimitRequired": "حد الاستخدام مطلوب.",
+        "startDateRequired": "تاريخ البداية مطلوب.",
+        "endDateRequired": "تاريخ الانتهاء مطلوب.",
+         "codeMinLength": "كود الكوبون يجب أن يكون 3 أحرف على الأقل.",
+  "valueMax": "لا يمكن أن يتعدى الخصم 100%.",
+  "dateRange": "تاريخ الانتهاء يجب أن يكون بعد تاريخ البداية."
+      }
+    },
+    "orderDetails": {
+      "back": "العودة إلى الطلبات",
+      "loading": "جارٍ تحميل تفاصيل الطلب...",
+      "items": "منتجات الطلب",
+      "variant": "المتغير",
+      "quantity": "الكمية",
+      "unitPrice": "سعر الوحدة",
+      "customerShipping": "بيانات العميل والشحن",
+      "customerName": "اسم العميل",
+      "governorateArea": "المحافظة / المنطقة",
+      "shippingArea": "منطقة الشحن",
+      "addressDetails": "تفاصيل الشارع والمبنى",
+      "deliveryNotes": "ملاحظات التوصيل",
+      "customerLocation": "موقع العميل",
+      "financialSummary": "الملخص المالي للطلب",
+      "subtotal": "المجموع الفرعي",
+      "shippingFee": "رسوم الشحن",
+      "totalAmount": "إجمالي المبلغ",
+      "paymentDetails": "تفاصيل الدفع",
+      "paymentMethod": "طريقة الدفع"
+    },
+    "brandForm": {
+  "editTitle": "تعديل العلامة التجارية",
+  "createTitle": "إضافة علامة تجارية جديدة",
+  "name": "اسم العلامة التجارية",
+  "namePlaceholder": "مثال: Tamara",
+  "nameRequired": "اسم العلامة التجارية مطلوب (حرفان على الأقل).",
+  "arabicName": "الاسم بالعربي",
+  "arabicNamePlaceholder": "مثال: تمارا",
+  "arabicNameRequired": "الاسم بالعربي مطلوب (حرفين على الأقل).",
+  "description": "الوصف",
+  "descriptionPlaceholder": "وصف العلامة التجارية...",
+  "published": "منشور",
+  "image": "صورة / شعار العلامة التجارية",
+  "currentImage": "الصورة الحالية",
+  "currentImageAlt": "الصورة الحالية للعلامة التجارية",
+  "newImageAlt": "معاينة الصورة الجديدة",
+  "removeImage": "إزالة الصورة المحددة",
+  "changeImage": "تغيير الصورة",
+  "uploadImage": "رفع صورة",
+  "update": "تحديث العلامة التجارية",
+  "save": "حفظ العلامة التجارية"
+},
+    "colorForm": { "optional": "اختياري" },
     "dashboard": {
       "kicker": "لوحة التحكم",
       "welcome": "مرحبًا بعودتك 👋",
@@ -1293,7 +1460,9 @@
         "clickToUpload": "اضغط لرفع الصورة",
         "uploadMobile": "رفع بانر الموبايل",
         "formats": "PNG أو JPG أو WEBP",
-        "optional": "اختياري"
+        "optional": "اختياري",
+        "linkPlaceholder": "الرابط (اختياري)",
+"deleteImageConfirm": "هل تريد حذف هذه الصورة؟"
       },
       "content": {
         "title": "محتوى البانر",
@@ -1328,8 +1497,19 @@
       "update": "فشل تحديث البانر.",
       "create": "فشل إنشاء البانر.",
       "invalidImageType": "يسمح فقط بصور JPG وPNG وWEBP.",
-      "imageTooLarge": "الحد الأقصى لحجم الصورة هو 5 ميجابايت."
+      "imageTooLarge": "الحد الأقصى لحجم الصورة هو 5 ميجابايت.",
+      "imageRequired": "يجب رفع صورة واحدة على الأقل.",
+"invalidDateRange": "تاريخ الانتهاء يجب أن يكون بعد تاريخ البدء."
     },
+    "columns": {
+    "image": "الصورة",
+    "title": "العنوان",
+    "type": "النوع",
+    "order": "الترتيب",
+    "status": "الحالة"
+  },
+  "confirmDelete": "هل أنت متأكد أنك تريد حذف البانر \"{{title}}\"؟",
+  "deleteFailed": "فشل حذف البانر.",
     "management": {
       "title": "إدارة البانرات",
       "subtitle": "إدارة بانرات الصفحة الرئيسية والسلايدرات والحملات الترويجية.",
@@ -1341,6 +1521,21 @@
       "allTypes": "كل الأنواع",
       "status": "الحالة",
       "allStatus": "كل الحالات"
+    }
+  },
+  "search": {
+    "placeholder": "ابحثي عن المنتجات...",
+    "clear": "مسح",
+    "recent": "عمليات البحث الأخيرة",
+    "didYouMean": "هل تقصدين؟",
+    "viewAllResultsFor": "عرض جميع نتائج البحث عن",
+    "noSuggestionsFor": "لا توجد اقتراحات للبحث عن",
+    "searchAnyway": "ابحثي على أي حال",
+    "types": {
+      "product": "منتج",
+      "category": "فئة",
+      "brand": "علامة تجارية",
+      "color": "لون"
     }
   },
   "productDetailsExt": {

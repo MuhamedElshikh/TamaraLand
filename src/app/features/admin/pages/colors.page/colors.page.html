@@ -4,15 +4,15 @@
 
     <div>
       <p class="colors-page__eyebrow">
-        Catalog
+        {{ 'admin.colors.eyebrow' | translate }}
       </p>
 
       <h1>
-        Colors
+        {{ 'admin.colors.title' | translate }}
       </h1>
 
       <p class="colors-page__description">
-        Manage the colors available for product variants.
+        {{ 'admin.colors.subtitle' | translate }}
       </p>
     </div>
 
@@ -22,7 +22,11 @@
         class="colors-page__add-button"
         (click)="startCreate()"
       >
-        + Add Color
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        {{ 'admin.colors.add' | translate }}
       </button>
     }
 
@@ -52,14 +56,14 @@
 
       <div>
         <h2>
-          {{ editingId() === null
-            ? 'Add Color'
-            : 'Edit Color'
-          }}
+          {{ (editingId() === null
+            ? 'admin.colors.formAddTitle'
+            : 'admin.colors.formEditTitle'
+          ) | translate }}
         </h2>
 
         <p>
-          Define the color name and its visual representation.
+          {{ 'admin.colors.formDescription' | translate }}
         </p>
       </div>
 
@@ -69,7 +73,7 @@
           class="color-form__cancel"
           (click)="cancelEdit()"
         >
-          Cancel
+          {{ 'admin.labels.cancel' | translate }}
         </button>
       }
 
@@ -83,13 +87,13 @@
       <label class="form-field">
 
         <span>
-          Name
+          {{ 'admin.colors.name' | translate }}
         </span>
 
         <input
           type="text"
           [(ngModel)]="name"
-          placeholder="e.g. White"
+          placeholder="{{ 'admin.colors.namePlaceholder' | translate }}"
           maxlength="50"
         />
 
@@ -101,13 +105,13 @@
       <label class="form-field">
 
         <span>
-          Arabic Name
+          {{ 'admin.colors.arabicName' | translate }}
         </span>
 
         <input
           type="text"
           [(ngModel)]="arabicName"
-          placeholder="مثال: أبيض"
+          placeholder="{{ 'admin.colors.arabicNamePlaceholder' | translate }}"
           maxlength="50"
           dir="rtl"
         />
@@ -117,16 +121,17 @@
 
       <!-- Primary Hex -->
 
-      <label class="form-field">
+      <label class="form-field form-field--color">
 
         <span>
-          Primary Color
+          {{ 'admin.colors.primaryColor' | translate }}
         </span>
 
         <div class="hex-input">
 
           <input
             type="color"
+            class="hex-input__swatch"
             [value]="hexCode || '#FFFFFF'"
             (input)="hexCode = $any($event.target).value"
           />
@@ -136,8 +141,25 @@
             [(ngModel)]="hexCode"
             placeholder="#FFFFFF"
             maxlength="7"
+            inputmode="text"
+            autocapitalize="characters"
           />
 
+        </div>
+
+        <!-- Quick palette – easier than the tiny native color wheel on mobile -->
+        <div class="preset-swatches">
+          @for (preset of presetColors; track preset.hex) {
+            <button
+              type="button"
+              class="preset-swatch"
+              [class.is-active]="normalizeHex(hexCode) === preset.hex"
+              [style.background]="preset.hex"
+              [title]="preset.label"
+              [attr.aria-label]="preset.label"
+              (click)="selectPreset(preset, 'primary')"
+            ></button>
+          }
         </div>
 
       </label>
@@ -145,17 +167,18 @@
 
       <!-- Secondary Hex -->
 
-      <label class="form-field">
+      <label class="form-field form-field--color">
 
         <span>
-          Secondary Color
-          <small>(optional)</small>
+          {{ 'admin.colors.secondaryColor' | translate }}
+          <small>({{ 'admin.colorForm.optional' | translate }})</small>
         </span>
 
         <div class="hex-input">
 
           <input
             type="color"
+            class="hex-input__swatch"
             [value]="secondaryHexCode || '#FFFFFF'"
             (input)="secondaryHexCode = $any($event.target).value"
           />
@@ -165,8 +188,24 @@
             [(ngModel)]="secondaryHexCode"
             placeholder="#000000"
             maxlength="7"
+            inputmode="text"
+            autocapitalize="characters"
           />
 
+        </div>
+
+        <div class="preset-swatches">
+          @for (preset of presetColors; track preset.hex) {
+            <button
+              type="button"
+              class="preset-swatch"
+              [class.is-active]="normalizeHex(secondaryHexCode) === preset.hex"
+              [style.background]="preset.hex"
+              [title]="preset.label"
+              [attr.aria-label]="preset.label"
+              (click)="selectPreset(preset, 'secondary')"
+            ></button>
+          }
         </div>
 
       </label>
@@ -195,11 +234,11 @@
 
       <div>
         <strong>
-          {{ name || 'Color preview' }}
+          {{ name || ('admin.colors.previewPlaceholder' | translate) }}
         </strong>
 
         <span>
-          {{ normalizeHex(hexCode) || 'No primary color' }}
+          {{ normalizeHex(hexCode) || ('admin.colors.noPrimaryColor' | translate) }}
         </span>
       </div>
 
@@ -214,12 +253,12 @@
         (click)="save()"
         [disabled]="isSaving()"
       >
-        {{ isSaving()
-          ? 'Saving...'
+        {{ (isSaving()
+          ? 'admin.labels.saving'
           : editingId() === null
-            ? 'Create Color'
-            : 'Save Changes'
-        }}
+            ? 'admin.colors.create'
+            : 'admin.labels.saveChanges'
+        ) | translate }}
       </button>
 
       @if (editingId() !== null) {
@@ -230,7 +269,7 @@
           (click)="cancelEdit()"
           [disabled]="isSaving()"
         >
-          Cancel
+          {{ 'admin.labels.cancel' | translate }}
         </button>
 
       }
@@ -248,11 +287,11 @@
 
       <div>
         <h2>
-          Available Colors
+          {{ 'admin.colors.listTitle' | translate }}
         </h2>
 
         <p>
-          {{ colors().length }} colors
+          {{ 'admin.colors.colorsCount' | translate: { count: colors().length } }}
         </p>
       </div>
 
@@ -262,13 +301,13 @@
     @if (isLoading()) {
 
       <div class="colors-empty">
-        Loading colors...
+        {{ 'admin.colors.loading' | translate }}
       </div>
 
     } @else if (colors().length === 0) {
 
       <div class="colors-empty">
-        No colors found.
+        {{ 'admin.colors.empty' | translate }}
       </div>
 
     } @else {
@@ -280,7 +319,10 @@
           track color.id
         ) {
 
-          <article class="color-card">
+          <article
+            class="color-card"
+            [class.is-editing]="editingId() === color.id"
+          >
 
             <div class="color-card__swatch-wrapper">
 
@@ -331,7 +373,7 @@
                 class="color-card__edit"
                 (click)="edit(color)"
               >
-                Edit
+                {{ 'admin.labels.edit' | translate }}
               </button>
 
               <button
@@ -339,7 +381,7 @@
                 class="color-card__delete"
                 (click)="delete(color)"
               >
-                Delete
+                {{ 'admin.labels.delete' | translate }}
               </button>
 
             </div>

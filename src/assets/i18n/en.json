@@ -90,6 +90,7 @@
     "tryAgain": "Try Again",
     "addToWishlist": "Add to Wishlist",
     "removeFromWishlist": "Remove from Wishlist",
+    "outOfStock": "Out of Stock",
     "currency": "EGP"
   },
   "filters": {
@@ -162,7 +163,9 @@
     "filters": "Filters",
     "clearAll": "Clear All",
     "showResults": "Show Results",
-    "noProducts": "No products match your current filters."
+    "noProducts": "No products match your current filters.",
+    "nextEdit": "The Next Edit",
+    "comingSoon": "Coming Soon"
   },
   "productDetails": {
     "catalog": "Catalog",
@@ -184,7 +187,17 @@
     "removeWishlist": "Remove from Wishlist",
     "addWishlist": "Add to Wishlist",
     "productNotFound": "This product doesn't exist or is no longer available.",
-    "relatedProducts": "You Might Also Like"
+    "relatedProducts": "You Might Also Like",
+    "selectVariant": "Please select a variant before adding to cart",
+    "addedToCart": "Product added to cart successfully!",
+    "addToCartError": "An error occurred while adding to cart",
+    "updateQuantityError": "Could not update quantity.",
+    "removedFromCart": "Item removed from cart",
+    "removeFromCartError": "Could not remove item from cart.",
+    "removedFromWishlist": "Removed from wishlist",
+    "addedToWishlist": "Added to wishlist",
+    "updateWishlistError": "Could not update wishlist",
+    "priceAvailableSoon": "Price available soon"
   },
   "categoryPage": {
     "notFound": "This category doesn't exist or is no longer available.",
@@ -853,7 +866,8 @@
     "refresh": "Refresh",
     "saving": "Saving…",
     "saveChanges": "Save changes",
-    "deleting": "Deleting…"
+    "deleting": "Deleting…",
+    "error": "Error"
   },
   "admin": {
     "labels": {
@@ -962,7 +976,12 @@
       "delete": "Delete Product",
       "backToList": "Back to Products",
       "setMainImage": "Set as Main Image",
-      "savingProduct": "Saving product..."
+                     "savingProduct": "Saving product...",
+                     "generalInformation": "General Information",
+                     "noVariants": "No variants added yet. Please click \"Add Variant\" above to add at least one variant before saving.",
+                     "price": "Price",
+                     "measurements": "Measurements (cm)",
+                     "actions": "Actions"
     },
     "orders": {
       "title": "Orders Management",
@@ -995,8 +1014,57 @@
       "add": "Add Brand",
       "search": "Search Brand",
       "searchPlaceholder": "Search by brand name...",
-      "empty": "No brands found."
+      "empty": "No brands found.",
+      "columns": {
+  "image": "Image",
+  "englishName": "English Name",
+  "arabicName": "Arabic Name",
+  "published": "Published",
+  "description": "Description"
+},
+"confirmDelete": "Are you sure you want to delete brand \"{{name}}\"?",
+"deleteFailed": "Failed to delete brand.",
+"updateFailed": "Failed to update brand.",
+"createFailed": "Failed to create brand."
     },
+    "colors": {
+  "eyebrow": "Catalog",
+  "title": "Colors",
+  "subtitle": "Manage the colors available for product variants.",
+  "add": "Add Color",
+  "formAddTitle": "Add Color",
+  "formEditTitle": "Edit Color",
+  "formDescription": "Define the color name and its visual representation.",
+  "name": "Name",
+  "namePlaceholder": "e.g. White",
+  "arabicName": "Arabic Name",
+  "arabicNamePlaceholder": "e.g. أبيض",
+  "primaryColor": "Primary Color",
+  "secondaryColor": "Secondary Color",
+  "previewPlaceholder": "Color preview",
+  "noPrimaryColor": "No primary color",
+  "create": "Create Color",
+  "listTitle": "Available Colors",
+  "colorsCount": "{{count}} colors",
+  "loading": "Loading colors...",
+  "empty": "No colors found.",
+  "confirmDelete": "Are you sure you want to delete \"{{name}}\"?",
+  "errors": {
+    "loadFailed": "Could not load colors.",
+    "nameRequired": "Color name is required.",
+    "arabicNameRequired": "Arabic color name is required.",
+    "invalidPrimaryHex": "Invalid primary hex color.",
+    "invalidSecondaryHex": "Invalid secondary hex color.",
+    "createFailed": "Could not create color.",
+    "updateFailed": "Could not update color.",
+    "deleteFailed": "Could not delete color."
+  },
+  "success": {
+    "created": "Color created successfully.",
+    "updated": "Color updated successfully.",
+    "deleted": "Color deleted successfully."
+  }
+},
     "categories": {
       "title": "Categories Management",
       "subtitle": "Organize and manage product categories",
@@ -1032,7 +1100,11 @@
         "arabicName": "Arabic Name",
         "published": "Published",
         "description": "Description"
-      }
+      },
+"confirmDelete": "Are you sure you want to delete category \"{{name}}\"?",
+"deleteFailed": "Failed to delete category.",
+"updateFailed": "Failed to update category.",
+"createFailed": "Failed to create category."
     },
     "users": {
       "title": "Users",
@@ -1129,8 +1201,96 @@
       "packageSize": "Package Size",
       "lastSent": "Last Sent",
       "message": "Message",
-      "messagePlaceholder": "Write your message..."
+                     "messagePlaceholder": "Write your message...",
+                     "qrLoadError": "Could not load QR code. Try connecting again.",
+                     "phoneRequired": "Phone number is required.",
+                     "messageRequired": "Message is required."
     },
+    "coupons": {"columns": {
+  "code": "Code",
+  "type": "Type",
+  "value": "Value",
+  "minOrder": "Min. order",
+  "used": "Used",
+  "perUser": "Per User",
+  "expires": "Expires",
+  "status": "Status"
+},
+"confirmDelete": "Delete coupon \"{{code}}\"? This cannot be undone.",
+"errors": {
+  "saveFailed": "Could not save this coupon.",
+  "deleteFailed": "Could not delete this coupon."
+},
+      "title": "Coupons",
+      "new": "New coupon",
+      "edit": "Edit coupon",
+      "create": "Create coupon",
+      "code": "Code",
+      "discountType": "Discount type",
+      "discountValue": "Discount value",
+      "minimumOrder": "Minimum order amount",
+      "usageLimit": "Usage limit",
+      "userUsageLimit": "User usage limit",
+      "expiresAt": "Expires at",
+      "active": "Coupon is active",
+      "searchPlaceholder": "Search coupon code...",
+      "empty": "No coupons found.",
+      "validation": {
+        "codeRequired": "Coupon code is required.",
+        "valueRequired": "Value is required.",
+        "usageLimitRequired": "Usage limit is required.",
+        "startDateRequired": "Start date is required.",
+        "endDateRequired": "Expiry date is required.",
+        "codeMinLength": "Coupon code must be at least 3 characters.",
+  "valueMax": "Discount cannot exceed 100%.",
+  "dateRange": "End date must be after start date."
+
+      }
+    },
+    "orderDetails": {
+      "back": "Back to Orders",
+      "loading": "Loading order details...",
+      "items": "Order Items",
+      "variant": "Variant",
+      "quantity": "Qty",
+      "unitPrice": "Unit Price",
+      "customerShipping": "Customer & Shipping Information",
+      "customerName": "Customer Name",
+      "governorateArea": "Governorate / Area",
+      "shippingArea": "Shipping Area",
+      "addressDetails": "Street & Building Details",
+      "deliveryNotes": "Delivery Notes",
+      "customerLocation": "Customer Location",
+      "financialSummary": "Order Financial Summary",
+      "subtotal": "Subtotal",
+      "shippingFee": "Shipping Fee",
+      "totalAmount": "Total Amount",
+      "paymentDetails": "Payment Details",
+      "paymentMethod": "Payment Method"
+    },
+   "brandForm": {
+  "editTitle": "Edit Brand",
+  "createTitle": "Add New Brand",
+  "name": "Brand Name",
+  "namePlaceholder": "e.g. Tamara",
+  "nameRequired": "Brand name is required (minimum 2 characters).",
+  "arabicName": "Arabic Name",
+  "arabicNamePlaceholder": "e.g. تمارا",
+  "arabicNameRequired": "Arabic name is required (minimum 2 characters).",
+  "description": "Description",
+  "descriptionPlaceholder": "Brand description...",
+  "published": "Published",
+  "image": "Brand Image / Logo",
+  "currentImage": "Current image",
+  "currentImageAlt": "Current brand image",
+  "newImageAlt": "New image preview",
+  "removeImage": "Remove selected image",
+  "changeImage": "Change Image",
+  "uploadImage": "Upload Image",
+  "update": "Update Brand",
+  "save": "Save Brand"
+},
+    "colorForm": { "optional": "optional" },
     "dashboard": {
       "kicker": "Admin dashboard",
       "welcome": "Welcome back 👋",
@@ -1275,6 +1435,15 @@
     }
   },
   "banners": {
+    "columns": {
+    "image": "Image",
+    "title": "Title",
+    "type": "Type",
+    "order": "Order",
+    "status": "Status"
+  },
+  "confirmDelete": "Are you sure you want to delete banner \"{{title}}\"?",
+  "deleteFailed": "Failed to delete banner.",
     "form": {
       "images": {
         "title": "Banner Images",
@@ -1286,7 +1455,9 @@
         "clickToUpload": "Click to upload",
         "uploadMobile": "Upload Mobile Banner",
         "formats": "PNG, JPG or WEBP",
-        "optional": "Optional"
+        "optional": "Optional",
+        "linkPlaceholder": "Link (optional)",
+"deleteImageConfirm": "Delete this image?"
       },
       "content": {
         "title": "Banner Content",
@@ -1321,7 +1492,9 @@
       "update": "Failed to update banner.",
       "create": "Failed to create banner.",
       "invalidImageType": "Only JPG, PNG and WEBP images are allowed.",
-      "imageTooLarge": "Maximum image size is 5 MB."
+      "imageTooLarge": "Maximum image size is 5 MB.",
+      "imageRequired": "Please upload at least one image.",
+"invalidDateRange": "End date must be after start date."
     },
     "management": {
       "title": "Banner Management",
@@ -1345,6 +1518,21 @@
     "bentoCard2Subtitle": "Stuffed with premium roasted nuts and gold leaf details",
     "bentoCard3Title": "Hospitality & Event Packs",
     "bentoCard3Subtitle": "Fresh & elegant selections for your guests"
+  },
+  "search": {
+    "placeholder": "Search for products...",
+    "clear": "Clear",
+    "recent": "Recent Searches",
+    "didYouMean": "Did you mean?",
+    "viewAllResultsFor": "View all results for",
+    "noSuggestionsFor": "No suggestions found for",
+    "searchAnyway": "Search anyway",
+    "types": {
+      "product": "Product",
+      "category": "Category",
+      "brand": "Brand",
+      "color": "Color"
+    }
   },
   "productDetailsExt": {
     "tabDescription": "Product Details & Ingredients",

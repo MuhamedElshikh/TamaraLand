@@ -45,7 +45,7 @@
             } @else if (qrImageUrl()) {
               <img [src]="qrImageUrl()" [alt]="'admin.whatsapp.qrAlt' | translate" />
             } @else {
-              <p class="whatsapp-card__hint">Could not load QR code. Try connecting again.</p>
+              <p class="whatsapp-card__hint">{{ 'admin.whatsapp.qrLoadError' | translate }}</p>
             }
           </div>
 
@@ -96,18 +96,70 @@
 
       <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
         <label class="field">
-          <span>{{ 'admin.whatsapp.phoneNumber' | translate }}</span>
-          <input type="text" formControlName="phoneNumber" placeholder="201001234567" />
-          @if (controlHasError('phoneNumber', 'required')) {
-            <small>Phone number is required.</small>
-          }
-        </label>
+  <span>{{ 'admin.whatsapp.phoneNumber' | translate }}</span>
+
+  <div class="whatsapp-recipient-search">
+
+    <input
+      type="text"
+      formControlName="phoneNumber"
+      placeholder="201001234567"
+      autocomplete="off"
+    />
+
+    @if (isSearchingRecipients()) {
+      <span class="whatsapp-recipient-search__loading">
+        Searching...
+      </span>
+    }
+
+    @if (recipientResults().length > 0) {
+      <div class="whatsapp-recipient-search__results">
+
+        @for (
+          recipient of recipientResults();
+          track recipient.phoneNumber
+        ) {
+          <button
+            type="button"
+            class="whatsapp-recipient"
+            (click)="selectRecipient(recipient)"
+          >
+            <div class="whatsapp-recipient__main">
+              <strong>
+                {{ recipient.name }}
+              </strong>
+
+              <span>
+                {{ recipient.phoneNumber }}
+              </span>
+            </div>
+
+            @if (recipient.address) {
+              <small>
+                {{ recipient.address }}
+              </small>
+            }
+          </button>
+        }
+
+      </div>
+    }
+
+  </div>
+
+  @if (controlHasError('phoneNumber', 'required')) {
+    <small>
+      {{ 'admin.whatsapp.phoneRequired' | translate }}
+    </small>
+  }
+</label>
 
         <label class="field">
           <span>{{ 'admin.whatsapp.message' | translate }}</span>
           <textarea formControlName="message" rows="4" placeholder="{{ 'admin.whatsapp.messagePlaceholder' | translate }}"></textarea>
           @if (controlHasError('message', 'required')) {
-            <small>Message is required.</small>
+            <small>{{ 'admin.whatsapp.messageRequired' | translate }}</small>
           }
         </label>
 

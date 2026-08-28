@@ -45,12 +45,12 @@
 
   <!-- Data Table -->
   <app-data-table
-  [columns]="columns"
-  [rows]="categories()"
-  [isLoading]="isLoading()"
-  (toggleChange)="onStatusToggle($event)"
-  (rowClick)="onRowClick($event)"
->
+    [columns]="columns()"
+    [rows]="categories()"
+    [isLoading]="isLoading()"
+    (toggleChange)="onStatusToggle($event)"
+    (rowClick)="onRowClick($event)"
+  >
     <ng-template #actions let-row>
       <div class="action-buttons">
         <button

@@ -44,8 +44,8 @@
   </div>
 
   <!-- Data Table -->
-  <app-data-table
-  [columns]="columns"
+ <app-data-table
+  [columns]="columns()"
   [rows]="brands()"
   [isLoading]="isLoading()"
   (toggleChange)="onStatusToggle($event)"
@@ -56,7 +56,7 @@
         <button
           type="button"
           class="btn-icon btn-icon--edit"
-          title="Edit Brand"
+          [title]="'admin.categories.editTooltip' | translate"
           (click)="openEditModal(row)"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -68,7 +68,7 @@
         <button
           type="button"
           class="btn-icon btn-icon--delete"
-          title="Delete Brand"
+          [title]="'admin.categories.deleteTooltip' | translate"
           [disabled]="isDeletingId() === row.id"
           (click)="deleteBrand(row)"
         >
@@ -102,7 +102,7 @@
       <div class="modal-card" (click)="$event.stopPropagation()">
         <div class="modal-header">
           <h2 class="modal-title">
-            {{ isEditing() ? 'Edit Brand' : 'Create Brand' }}
+            {{ isEditing() ? ('admin.brandForm.editTitle' | translate) : ('admin.brandForm.createTitle' | translate) }}
           </h2>
           <button type="button" class="btn-close" (click)="closeModal()">×</button>
         </div>
@@ -112,81 +112,75 @@
         }
 
         <form [formGroup]="brandForm" (ngSubmit)="onSubmit()">
+          <!-- English Name -->
           <div class="form-group">
-            <label class="form-label" for="brand-name">Brand Name *</label>
-            <div class="form-group">
-  <label class="form-label" for="brand-arabic-name">
-    Arabic Name *
-  </label>
-
-  <input
-    id="brand-arabic-name"
-    type="text"
-    class="form-control"
-    formControlName="arabicName"
-    placeholder="مثال: تمارا"
-  />
-
-  @if (brandForm.get('arabicName')?.touched &&
-      brandForm.get('arabicName')?.invalid) {
-
-    <span class="field-error">
-      Arabic name is required.
-    </span>
-
-  }
-</div>
+            <label class="form-label" for="brand-name">{{ 'admin.brandForm.name' | translate }} *</label>
             <input
               id="brand-name"
               type="text"
               class="form-control"
               formControlName="name"
-              placeholder="e.g. Gucci / Oud Elite"
+              [placeholder]="'admin.brandForm.namePlaceholder' | translate"
             />
             @if (brandForm.get('name')?.touched && brandForm.get('name')?.invalid) {
-              <span class="field-error">Brand name is required (minimum 2 characters).</span>
+              <span class="field-error">{{ 'admin.brandForm.nameRequired' | translate }}</span>
             }
           </div>
 
+          <!-- Arabic Name -->
           <div class="form-group">
-            <label class="form-label" for="brand-desc">Description</label>
+            <label class="form-label" for="brand-arabic-name">
+              {{ 'admin.brandForm.arabicName' | translate }} *
+            </label>
+            <input
+              id="brand-arabic-name"
+              type="text"
+              class="form-control"
+              formControlName="arabicName"
+              [placeholder]="'admin.brandForm.arabicNamePlaceholder' | translate"
+            />
+            @if (brandForm.get('arabicName')?.touched && brandForm.get('arabicName')?.invalid) {
+              <span class="field-error">{{ 'admin.brandForm.arabicNameRequired' | translate }}</span>
+            }
+          </div>
+
+          <!-- Description -->
+          <div class="form-group">
+            <label class="form-label" for="brand-desc">{{ 'admin.brandForm.description' | translate }}</label>
             <textarea
               id="brand-desc"
               rows="3"
               class="form-control"
               formControlName="description"
-              placeholder="Brand description..."
+              [placeholder]="'admin.brandForm.descriptionPlaceholder' | translate"
             ></textarea>
           </div>
+
+          <!-- Published -->
           <div class="form-group">
-  <label class="checkbox">
-
-    <input
-      type="checkbox"
-      formControlName="isPublished">
-
-    Published
-
-  </label>
-</div>
+            <label class="checkbox">
+              <input type="checkbox" formControlName="isPublished" />
+              {{ 'admin.brandForm.published' | translate }}
+            </label>
+          </div>
 
           <!-- Image Upload -->
           <div class="form-group">
-            <label class="form-label">Brand Image / Logo</label>
+            <label class="form-label">{{ 'admin.brandForm.image' | translate }}</label>
 
             <!-- Current image when editing (no new file chosen) -->
             @if (currentImageUrl && !imagePreviewUrl) {
               <div class="image-preview-box">
-                <img [src]="currentImageUrl" alt="Current brand image" class="image-preview" />
-                <span class="image-preview__label">Current image</span>
+                <img [src]="currentImageUrl" [alt]="'admin.brandForm.currentImageAlt' | translate" class="image-preview" />
+                <span class="image-preview__label">{{ 'admin.brandForm.currentImage' | translate }}</span>
               </div>
             }
 
             <!-- New image preview -->
             @if (imagePreviewUrl) {
               <div class="image-preview-box">
-                <img [src]="imagePreviewUrl" alt="New brand image preview" class="image-preview" />
-                <button type="button" class="image-preview__remove" (click)="clearImage()" title="Remove selected image">
+                <img [src]="imagePreviewUrl" [alt]="'admin.brandForm.newImageAlt' | translate" class="image-preview" />
+                <button type="button" class="image-preview__remove" (click)="clearImage()" [title]="'admin.brandForm.removeImage' | translate">
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -202,7 +196,7 @@
                 <line x1="12" y1="12" x2="12" y2="21"></line>
                 <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
               </svg>
-              {{ selectedImageFile ? selectedImageFile.name : (currentImageUrl ? 'Change Image' : 'Upload Image') }}
+              {{ selectedImageFile ? selectedImageFile.name : (currentImageUrl ? ('admin.brandForm.changeImage' | translate) : ('admin.brandForm.uploadImage' | translate)) }}
               <input
                 id="brand-image"
                 type="file"
@@ -216,13 +210,13 @@
           <div class="modal-actions">
             <button type="submit" class="btn btn-primary" [disabled]="isSubmitting()">
               @if (isSubmitting()) {
-                <span class="spinner-sm"></span> Saving...
+                <span class="spinner-sm"></span> {{ 'common.saving' | translate }}
               } @else {
-                {{ isEditing() ? 'Update Brand' : 'Save Brand' }}
+                {{ isEditing() ? ('admin.brandForm.update' | translate) : ('admin.brandForm.save' | translate) }}
               }
             </button>
 
-            <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+            <button type="button" class="btn btn-secondary" (click)="closeModal()">{{ 'common.cancel' | translate }}</button>
           </div>
         </form>
       </div>

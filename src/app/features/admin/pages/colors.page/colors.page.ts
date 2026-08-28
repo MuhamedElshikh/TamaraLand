@@ -11,6 +11,7 @@ import {
 
 import {
   TranslatePipe,
+  TranslateService,
 } from '@ngx-translate/core';
 
 import {
@@ -22,6 +23,12 @@ import {
 import {
   ColorService,
 } from '../../../../core/services/color.service';
+
+interface ColorPreset {
+  label: string;
+  arabicName: string;
+  hex: string;
+}
 
 @Component({
   selector: 'app-admin-colors',
@@ -37,6 +44,9 @@ export class AdminColorsPage implements OnInit {
 
   private readonly colorService =
     inject(ColorService);
+
+  private readonly translate =
+    inject(TranslateService);
 
   readonly colors =
     signal<ColorResponse[]>([]);
@@ -64,6 +74,27 @@ export class AdminColorsPage implements OnInit {
 
   secondaryHexCode = '';
 
+  // باليتة ألوان شائعة لتسهيل الاختيار على الموبايل بدل الاعتماد على الـ color wheel الصغيرة
+  // ملحوظة: الـ label/arabicName هنا بيانات المنتج نفسه (بيتملوا في حقل الاسم) مش نصوص واجهة، فمش بيتترجموا
+  readonly presetColors: ColorPreset[] = [
+    { label: 'White',  arabicName: 'أبيض',    hex: '#FFFFFF' },
+    { label: 'Black',  arabicName: 'أسود',    hex: '#000000' },
+    { label: 'Beige',  arabicName: 'بيج',     hex: '#F5F0E6' },
+    { label: 'Cream',  arabicName: 'كريمي',   hex: '#FFFDD0' },
+    { label: 'Grey',   arabicName: 'رمادي',   hex: '#9CA3AF' },
+    { label: 'Navy',   arabicName: 'كحلي',    hex: '#1E2A47' },
+    { label: 'Blue',   arabicName: 'أزرق',    hex: '#3B82F6' },
+    { label: 'Green',  arabicName: 'أخضر',    hex: '#4CAF50' },
+    { label: 'Olive',  arabicName: 'زيتي',    hex: '#708238' },
+    { label: 'Red',    arabicName: 'أحمر',    hex: '#DC2626' },
+    { label: 'Maroon', arabicName: 'كستنائي', hex: '#7B1E2B' },
+    { label: 'Pink',   arabicName: 'وردي',    hex: '#F472B6' },
+    { label: 'Purple', arabicName: 'بنفسجي',  hex: '#8B5CF6' },
+    { label: 'Brown',  arabicName: 'بني',     hex: '#8B5E3C' },
+    { label: 'Gold',   arabicName: 'ذهبي',    hex: '#C9A24B' },
+    { label: 'Silver', arabicName: 'فضي',     hex: '#C0C0C0' },
+  ];
+
   ngOnInit(): void {
     this.loadColors();
   }
@@ -79,7 +110,7 @@ export class AdminColorsPage implements OnInit {
           this.colors.set(response.data);
         } else {
           this.errorMessage.set(
-            response.message || 'Could not load colors.'
+            response.message || this.translate.instant('admin.colors.errors.loadFailed')
           );
         }
 
@@ -91,7 +122,7 @@ export class AdminColorsPage implements OnInit {
 
         this.errorMessage.set(
           error?.error?.message ||
-          'Could not load colors.'
+          this.translate.instant('admin.colors.errors.loadFailed')
         );
       },
     });
@@ -122,6 +153,27 @@ export class AdminColorsPage implements OnInit {
     this.resetForm();
   }
 
+  // يختار المستخدم لون جاهز من الباليتة بدل ما يفتح الـ color wheel
+  selectPreset(preset: ColorPreset, target: 'primary' | 'secondary' = 'primary'): void {
+
+    if (target === 'primary') {
+      this.hexCode = preset.hex;
+
+      // نملأ الاسم تلقائيًا بس لو المستخدم لسه ماكتبش حاجة، عشان منلخبطش بيانات مكتوبة بالفعل
+      if (!this.name.trim()) {
+        this.name = preset.label;
+      }
+
+      if (!this.arabicName.trim()) {
+        this.arabicName = preset.arabicName;
+      }
+
+      return;
+    }
+
+    this.secondaryHexCode = preset.hex;
+  }
+
   save(): void {
 
     this.clearMessages();
@@ -140,14 +192,14 @@ export class AdminColorsPage implements OnInit {
 
     if (!name) {
       this.errorMessage.set(
-        'Color name is required.'
+        this.translate.instant('admin.colors.errors.nameRequired')
       );
       return;
     }
 
     if (!arabicName) {
       this.errorMessage.set(
-        'Arabic color name is required.'
+        this.translate.instant('admin.colors.errors.arabicNameRequired')
       );
       return;
     }
@@ -157,7 +209,7 @@ export class AdminColorsPage implements OnInit {
       !this.isValidHex(hexCode)
     ) {
       this.errorMessage.set(
-        'Invalid primary hex color.'
+        this.translate.instant('admin.colors.errors.invalidPrimaryHex')
       );
       return;
     }
@@ -167,7 +219,7 @@ export class AdminColorsPage implements OnInit {
       !this.isValidHex(secondaryHexCode)
     ) {
       this.errorMessage.set(
-        'Invalid secondary hex color.'
+        this.translate.instant('admin.colors.errors.invalidSecondaryHex')
       );
       return;
     }
@@ -200,7 +252,7 @@ export class AdminColorsPage implements OnInit {
             ) {
               this.errorMessage.set(
                 response.message ||
-                'Could not create color.'
+                this.translate.instant('admin.colors.errors.createFailed')
               );
               return;
             }
@@ -213,7 +265,7 @@ export class AdminColorsPage implements OnInit {
             );
 
             this.successMessage.set(
-              'Color created successfully.'
+              this.translate.instant('admin.colors.success.created')
             );
 
             this.resetForm(false);
@@ -224,7 +276,7 @@ export class AdminColorsPage implements OnInit {
 
             this.errorMessage.set(
               error?.error?.message ||
-              'Could not create color.'
+              this.translate.instant('admin.colors.errors.createFailed')
             );
           },
         });
@@ -253,7 +305,7 @@ export class AdminColorsPage implements OnInit {
           ) {
             this.errorMessage.set(
               response.message ||
-              'Could not update color.'
+              this.translate.instant('admin.colors.errors.updateFailed')
             );
             return;
           }
@@ -268,7 +320,7 @@ export class AdminColorsPage implements OnInit {
           );
 
           this.successMessage.set(
-            'Color updated successfully.'
+            this.translate.instant('admin.colors.success.updated')
           );
 
           this.resetForm(false);
@@ -279,7 +331,7 @@ export class AdminColorsPage implements OnInit {
 
           this.errorMessage.set(
             error?.error?.message ||
-            'Could not update color.'
+            this.translate.instant('admin.colors.errors.updateFailed')
           );
         },
       });
@@ -289,7 +341,7 @@ export class AdminColorsPage implements OnInit {
 
     const confirmed =
       window.confirm(
-        `Are you sure you want to delete "${color.name}"?`
+        this.translate.instant('admin.colors.confirmDelete', { name: color.name })
       );
 
     if (!confirmed) {
@@ -306,7 +358,7 @@ export class AdminColorsPage implements OnInit {
           if (!response.success) {
             this.errorMessage.set(
               response.message ||
-              'Could not delete color.'
+              this.translate.instant('admin.colors.errors.deleteFailed')
             );
             return;
           }
@@ -325,14 +377,14 @@ export class AdminColorsPage implements OnInit {
           }
 
           this.successMessage.set(
-            'Color deleted successfully.'
+            this.translate.instant('admin.colors.success.deleted')
           );
         },
 
         error: (error) => {
           this.errorMessage.set(
             error?.error?.message ||
-            'Could not delete color.'
+            this.translate.instant('admin.colors.errors.deleteFailed')
           );
         },
       });

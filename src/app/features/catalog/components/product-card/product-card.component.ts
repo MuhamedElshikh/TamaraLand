@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject, signal } from '@angular/core';
+import { Component, Input, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { ProductCardResponse } from '../../../../core/models/catalog.models';
@@ -12,6 +12,7 @@ import { ToastService } from '../../../../shared/toast/toast.service';
 @Component({
   selector: 'app-product-card',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, RouterLink, TranslatePipe, LocalizedNamePipe],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.css',
@@ -103,9 +104,15 @@ export class ProductCardComponent implements OnInit {
     return this.product.variantsCount === 1 && this.product.singleVariantId != null;
   }
 
-  // ✅ جديد: لو Variant واحد وخلص من المخزون، نقفل زرار الإضافة تمامًا
+  // ✅ جديد: لو المنتج أو الـ Variant خلص من المخزون
+  get isOutOfStock(): boolean {
+    if (this.product?.inStock === false) return true;
+    if (this.hasSingleVariant) return this.product.singleVariantStock <= 0;
+    return false;
+  }
+
   get isSingleVariantOutOfStock(): boolean {
-    return this.hasSingleVariant && this.product.singleVariantStock <= 0;
+    return this.isOutOfStock;
   }
 
   // ✅ جديد: وصلنا لأقصى مخزون متاح للـ Variant ده في الكارت (بيقفل زرار +)

@@ -124,11 +124,11 @@
   @if (dimensionsLabel(); as dims) {
     <div class="variant-dimensions">
 
-      @for (dim of dims; track dim.label) {
+      @for (dim of dims; track dim.labelKey) {
         <div class="variant-dimension">
 
           <span class="variant-dimension__label">
-            {{ dim.label }}:
+            {{ dim.labelKey | translate }}:
           </span>
 
           <div class="dot"></div>

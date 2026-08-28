@@ -13,27 +13,15 @@ import { RouteAnalyticsService } from './core/services/route-analytics.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,  ToastComponent],
+  imports: [RouterOutlet, ToastComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
   private readonly gtm = inject(GoogleTagManagerService);
-private readonly router = inject(Router);
-private readonly analytics = inject(AnalyticsService);
-private readonly routeAnalytics = inject(RouteAnalyticsService);
+  private readonly routeAnalytics = inject(RouteAnalyticsService);
 
-    constructor(private language: LanguageService) {
-       
-  this.gtm.initialize();
-
-  this.router.events
-    .pipe(filter(event => event instanceof NavigationEnd))
-    .subscribe(() => {
-
-      this.analytics.pageView(document.title);
-    });
-
-    }
-
+  constructor(private language: LanguageService) {
+    this.gtm.initialize();
+  }
 }

@@ -1,6 +1,17 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+
+import {
+  Component,
+  OnInit,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+} from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
@@ -86,6 +97,45 @@ export class AdminProductFormPage implements OnInit {
   readonly editingVariantIndex = signal<number | null>(null);
   readonly variantError = signal<string | null>(null);
 
+  // =========================================================
+  // Variant Color / Size Search
+  // =========================================================
+
+  readonly colorSearch = signal('');
+  readonly sizeSearch = signal('');
+
+  readonly showColorDropdown = signal(false);
+  readonly showSizeDropdown = signal(false);
+
+  readonly filteredColors = computed(() => {
+    const search = this.normalizeSearch(this.colorSearch());
+
+    if (!search) {
+      return this.colors();
+    }
+
+    return this.colors().filter((color) =>
+      [
+        color.name,
+        color.arabicName,
+      ].some((value) =>
+        this.normalizeSearch(value).includes(search)
+      )
+    );
+  });
+
+  readonly filteredSizes = computed(() => {
+    const search = this.normalizeSearch(this.sizeSearch());
+
+    if (!search) {
+      return this.sizes();
+    }
+
+    return this.sizes().filter((size) =>
+      this.normalizeSearch(size.name).includes(search)
+    );
+  });
+
   variantForm: FormGroup = this.fb.group({
     id: [0],
 
@@ -119,12 +169,21 @@ export class AdminProductFormPage implements OnInit {
     this.isLoadingProduct.set(true);
 
     forkJoin({
-      catRes: this.adminCatalogService.getCategories({ pageSize: 100 }),
-      brandRes: this.adminCatalogService.getBrands({ pageSize: 100 }),
+      catRes: this.adminCatalogService.getCategories({
+        pageSize: 100,
+      }),
+      brandRes: this.adminCatalogService.getBrands({
+        pageSize: 100,
+      }),
       colorRes: this.adminCatalogService.getColors(),
       sizeRes: this.adminCatalogService.getSizes(),
     }).subscribe({
-      next: ({ catRes, brandRes, colorRes, sizeRes }) => {
+      next: ({
+        catRes,
+        brandRes,
+        colorRes,
+        sizeRes,
+      }) => {
         if (catRes?.success && catRes.data) {
           this.categories.set(catRes.data.items);
         }
@@ -155,8 +214,10 @@ export class AdminProductFormPage implements OnInit {
           this.isLoadingProduct.set(false);
         }
       },
+
       error: (err) => {
         this.isLoadingProduct.set(false);
+
         this.errorMessage.set(
           extractErrorMessage(
             err,
@@ -166,6 +227,10 @@ export class AdminProductFormPage implements OnInit {
       },
     });
   }
+
+  // =========================================================
+  // Product Submit
+  // =========================================================
 
   onSubmitProduct(): void {
     if (this.productForm.invalid) {
@@ -177,6 +242,7 @@ export class AdminProductFormPage implements OnInit {
       this.errorMessage.set(
         'Please add at least one product variant (SKU, Price, Stock).'
       );
+
       return;
     }
 
@@ -203,15 +269,17 @@ export class AdminProductFormPage implements OnInit {
         variants: this.variants().map(
           (v): UpdateProductVariantRequest => ({
             id: v.id || 0,
+
             colorId: Number(v.colorId),
             sizeId: Number(v.sizeId),
 
             costPrice: Number(v.costPrice || 0),
-           compareAtPrice:
-  v.compareAtPrice === null ||
-  v.compareAtPrice === undefined
-    ? null
-    : Number(v.compareAtPrice),
+
+            compareAtPrice:
+              v.compareAtPrice === null ||
+              v.compareAtPrice === undefined
+                ? null
+                : Number(v.compareAtPrice),
 
             price: Number(v.price),
             stock: Number(v.stock),
@@ -236,12 +304,15 @@ export class AdminProductFormPage implements OnInit {
               this.router.navigate(['/admin/products']);
             } else {
               this.errorMessage.set(
-                res.message || 'Failed to update product.'
+                res.message ||
+                'Failed to update product.'
               );
             }
           },
+
           error: (err) => {
             this.isSubmitting.set(false);
+
             this.errorMessage.set(
               extractErrorMessage(
                 err,
@@ -280,47 +351,59 @@ export class AdminProductFormPage implements OnInit {
       variants: createVariants,
     };
 
-    this.adminCatalogService.createProduct(createData).subscribe({
-      next: (res) => {
-        this.isSubmitting.set(false);
+    this.adminCatalogService
+      .createProduct(createData)
+      .subscribe({
+        next: (res) => {
+          this.isSubmitting.set(false);
 
-        if (res.success && res.data) {
-          this.successMessage.set(
-            'Product created successfully! You can now manage gallery images.'
-          );
+          if (res.success && res.data) {
+            this.successMessage.set(
+              'Product created successfully! You can now manage gallery images.'
+            );
 
-          this.productId.set(res.data.id);
-          this.isEditMode.set(true);
+            this.productId.set(res.data.id);
+            this.isEditMode.set(true);
 
-          this.router.navigate(
-            ['/admin/product-form', res.data.id],
-            { replaceUrl: true }
-          );
-        } else {
+            this.router.navigate(
+              ['/admin/product-form', res.data.id],
+              { replaceUrl: true }
+            );
+          } else {
+            this.errorMessage.set(
+              res.message ||
+              'Failed to create product.'
+            );
+          }
+        },
+
+        error: (err) => {
+          this.isSubmitting.set(false);
+
           this.errorMessage.set(
-            res.message || 'Failed to create product.'
+            extractErrorMessage(
+              err,
+              'Error creating product.'
+            )
           );
-        }
-      },
-      error: (err) => {
-        this.isSubmitting.set(false);
-
-        this.errorMessage.set(
-          extractErrorMessage(
-            err,
-            'Error creating product.'
-          )
-        );
-      },
-    });
+        },
+      });
   }
 
+  // =========================================================
+  // Variant Form
+  // =========================================================
+
   toggleVariantForm(): void {
-    this.showVariantForm.update((value) => !value);
+    this.showVariantForm.update(
+      (value) => !value
+    );
 
     this.editingVariantIndex.set(null);
 
     this.resetVariantForm();
+
+    this.closeVariantDropdowns();
 
     this.variantError.set(null);
   }
@@ -342,6 +425,7 @@ export class AdminProductFormPage implements OnInit {
       price: variant.price || 0,
 
       costPrice: variant.costPrice || 0,
+
       compareAtPrice:
         variant.compareAtPrice ?? null,
 
@@ -350,6 +434,10 @@ export class AdminProductFormPage implements OnInit {
       hip: variant.hip || 0,
       length: variant.length || 0,
     });
+
+    this.clearVariantSearch();
+
+    this.closeVariantDropdowns();
 
     this.showVariantForm.set(true);
     this.variantError.set(null);
@@ -376,6 +464,7 @@ export class AdminProductFormPage implements OnInit {
       this.variantError.set(
         'Please select a color and size.'
       );
+
       return;
     }
 
@@ -390,6 +479,7 @@ export class AdminProductFormPage implements OnInit {
       this.variantError.set(
         'A variant with the same color and size already exists.'
       );
+
       return;
     }
 
@@ -405,6 +495,7 @@ export class AdminProductFormPage implements OnInit {
       this.variantError.set(
         'Selected color or size could not be found.'
       );
+
       return;
     }
 
@@ -416,7 +507,10 @@ export class AdminProductFormPage implements OnInit {
 
       colorName: selectedColor.name,
       colorArabicName: selectedColor.arabicName,
-      colorHexCode: selectedColor.hexCode ?? null,
+
+      colorHexCode:
+        selectedColor.hexCode ?? null,
+
       colorSecondaryHexCode:
         selectedColor.secondaryHexCode ?? null,
 
@@ -427,6 +521,7 @@ export class AdminProductFormPage implements OnInit {
       price: Number(val.price),
 
       costPrice: Number(val.costPrice || 0),
+
       compareAtPrice:
         val.compareAtPrice === null ||
         val.compareAtPrice === undefined ||
@@ -440,8 +535,12 @@ export class AdminProductFormPage implements OnInit {
       length: Number(val.length || 0),
     };
 
-    const currentVars = [...this.variants()];
-    const editIdx = this.editingVariantIndex();
+    const currentVars = [
+      ...this.variants(),
+    ];
+
+    const editIdx =
+      this.editingVariantIndex();
 
     if (
       editIdx !== null &&
@@ -470,17 +569,23 @@ export class AdminProductFormPage implements OnInit {
 
     this.resetVariantForm();
 
+    this.closeVariantDropdowns();
+
     this.variantError.set(null);
   }
 
   onRemoveVariant(index: number): void {
-    const currentVars = [...this.variants()];
+    const currentVars = [
+      ...this.variants(),
+    ];
 
     currentVars.splice(index, 1);
 
     this.variants.set(currentVars);
 
-    if (this.editingVariantIndex() === index) {
+    if (
+      this.editingVariantIndex() === index
+    ) {
       this.showVariantForm.set(false);
       this.editingVariantIndex.set(null);
 
@@ -488,11 +593,154 @@ export class AdminProductFormPage implements OnInit {
     }
   }
 
-  onFilesSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
+  // =========================================================
+  // Color Search
+  // =========================================================
 
-    if (input.files && input.files.length > 0) {
-      this.selectedFiles = Array.from(input.files);
+  openColorDropdown(): void {
+    this.showSizeDropdown.set(false);
+    this.showColorDropdown.set(true);
+  }
+
+  onColorSearchChange(value: string): void {
+    this.colorSearch.set(value);
+    this.showSizeDropdown.set(false);
+    this.showColorDropdown.set(true);
+  }
+
+  selectColor(color: ColorResponse): void {
+    this.variantForm
+      .get('colorId')
+      ?.setValue(color.id);
+
+    this.variantForm
+      .get('colorId')
+      ?.markAsTouched();
+
+    this.colorSearch.set('');
+    this.showColorDropdown.set(false);
+
+    this.variantError.set(null);
+  }
+
+  // =========================================================
+  // Size Search
+  // =========================================================
+
+  openSizeDropdown(): void {
+    this.showColorDropdown.set(false);
+    this.showSizeDropdown.set(true);
+  }
+
+  onSizeSearchChange(value: string): void {
+    this.sizeSearch.set(value);
+    this.showColorDropdown.set(false);
+    this.showSizeDropdown.set(true);
+  }
+
+  selectSize(size: SizeResponse): void {
+    this.variantForm
+      .get('sizeId')
+      ?.setValue(size.id);
+
+    this.variantForm
+      .get('sizeId')
+      ?.markAsTouched();
+
+    this.sizeSearch.set('');
+    this.showSizeDropdown.set(false);
+
+    this.variantError.set(null);
+  }
+
+  // =========================================================
+  // Selected Values
+  // =========================================================
+
+  getSelectedColor(): ColorResponse | undefined {
+    const value =
+      this.variantForm.get('colorId')?.value;
+
+    if (
+      value === null ||
+      value === undefined ||
+      value === ''
+    ) {
+      return undefined;
+    }
+
+    return this.colors().find(
+      (color) => color.id === Number(value)
+    );
+  }
+
+  getSelectedSize(): SizeResponse | undefined {
+    const value =
+      this.variantForm.get('sizeId')?.value;
+
+    if (
+      value === null ||
+      value === undefined ||
+      value === ''
+    ) {
+      return undefined;
+    }
+
+    return this.sizes().find(
+      (size) => size.id === Number(value)
+    );
+  }
+
+  getColorById(
+    colorId: number | string | null
+  ): ColorResponse | undefined {
+    if (
+      colorId === null ||
+      colorId === undefined ||
+      colorId === ''
+    ) {
+      return undefined;
+    }
+
+    const id = Number(colorId);
+
+    return this.colors().find(
+      (color) => color.id === id
+    );
+  }
+
+  private clearVariantSearch(): void {
+    this.colorSearch.set('');
+    this.sizeSearch.set('');
+  }
+
+  private closeVariantDropdowns(): void {
+    this.showColorDropdown.set(false);
+    this.showSizeDropdown.set(false);
+  }
+
+  private normalizeSearch(
+    value: string | null | undefined
+  ): string {
+    return (value ?? '')
+      .trim()
+      .toLocaleLowerCase();
+  }
+
+  // =========================================================
+  // Images
+  // =========================================================
+
+  onFilesSelected(event: Event): void {
+    const input =
+      event.target as HTMLInputElement;
+
+    if (
+      input.files &&
+      input.files.length > 0
+    ) {
+      this.selectedFiles =
+        Array.from(input.files);
     }
   }
 
@@ -518,7 +766,10 @@ export class AdminProductFormPage implements OnInit {
 
           if (res.success) {
             this.selectedFiles = [];
-            this.loadImages(this.productId()!);
+
+            this.loadImages(
+              this.productId()!
+            );
           } else {
             this.imageError.set(
               res.message ||
@@ -526,6 +777,7 @@ export class AdminProductFormPage implements OnInit {
             );
           }
         },
+
         error: (err) => {
           this.isUploadingImage.set(false);
 
@@ -545,7 +797,9 @@ export class AdminProductFormPage implements OnInit {
       .subscribe({
         next: (res) => {
           if (res.success) {
-            this.loadImages(this.productId()!);
+            this.loadImages(
+              this.productId()!
+            );
           } else {
             alert(
               res.message ||
@@ -553,6 +807,7 @@ export class AdminProductFormPage implements OnInit {
             );
           }
         },
+
         error: (err) =>
           alert(
             extractErrorMessage(
@@ -577,7 +832,9 @@ export class AdminProductFormPage implements OnInit {
       .subscribe({
         next: (res) => {
           if (res.success) {
-            this.loadImages(this.productId()!);
+            this.loadImages(
+              this.productId()!
+            );
           } else {
             alert(
               res.message ||
@@ -585,6 +842,7 @@ export class AdminProductFormPage implements OnInit {
             );
           }
         },
+
         error: (err) =>
           alert(
             extractErrorMessage(
@@ -595,14 +853,23 @@ export class AdminProductFormPage implements OnInit {
       });
   }
 
-  private loadProductDetails(id: number): void {
+  // =========================================================
+  // Loading
+  // =========================================================
+
+  private loadProductDetails(
+    id: number
+  ): void {
     this.adminCatalogService
       .getProductById(id)
       .subscribe({
         next: (res) => {
           this.isLoadingProduct.set(false);
 
-          if (!res.success || !res.data) {
+          if (
+            !res.success ||
+            !res.data
+          ) {
             return;
           }
 
@@ -642,10 +909,12 @@ export class AdminProductFormPage implements OnInit {
 
           this.productForm.patchValue({
             name: p.name || '',
-            arabicName: p.arabicName || '',
+            arabicName:
+              p.arabicName || '',
             categoryId: resolvedCatId,
             brandId: resolvedBrandId,
-            description: p.description || '',
+            description:
+              p.description || '',
             slug: p.slug || '',
             isPublished:
               p.isPublished ?? true,
@@ -655,97 +924,104 @@ export class AdminProductFormPage implements OnInit {
             Array.isArray(p.variants) &&
             p.variants.length > 0
           ) {
-            const mappedVariants: AdminVariantItem[] =
-              p.variants.map((v: any) => {
-                const colorId = Number(
-                  v.colorId ?? 0
-                );
+            const mappedVariants:
+              AdminVariantItem[] =
+              p.variants.map(
+                (v: any) => {
+                  const colorId =
+                    Number(
+                      v.colorId ?? 0
+                    );
 
-                const sizeId = Number(
-                  v.sizeId ?? 0
-                );
+                  const sizeId =
+                    Number(
+                      v.sizeId ?? 0
+                    );
 
-                const color =
-                  this.colors().find(
-                    (item) =>
-                      item.id === colorId
-                  );
+                  const color =
+                    this.colors().find(
+                      (item) =>
+                        item.id === colorId
+                    );
 
-                const size =
-                  this.sizes().find(
-                    (item) =>
-                      item.id === sizeId
-                  );
+                  const size =
+                    this.sizes().find(
+                      (item) =>
+                        item.id === sizeId
+                    );
 
-                return {
-                  id: Number(v.id ?? 0),
+                  return {
+                    id: Number(
+                      v.id ?? 0
+                    ),
 
-                  colorId,
-                  sizeId,
+                    colorId,
+                    sizeId,
 
-                  colorName:
-                    v.colorName ??
-                    color?.name ??
-                    '',
+                    colorName:
+                      v.colorName ??
+                      color?.name ??
+                      '',
 
-                  colorArabicName:
-                    v.colorArabicName ??
-                    color?.arabicName ??
-                    '',
+                    colorArabicName:
+                      v.colorArabicName ??
+                      color?.arabicName ??
+                      '',
 
-                  colorHexCode:
-                    v.colorHexCode ??
-                    color?.hexCode ??
-                    null,
+                    colorHexCode:
+                      v.colorHexCode ??
+                      color?.hexCode ??
+                      null,
 
-                  colorSecondaryHexCode:
-                    v.colorSecondaryHexCode ??
-                    color?.secondaryHexCode ??
-                    null,
+                    colorSecondaryHexCode:
+                      v.colorSecondaryHexCode ??
+                      color?.secondaryHexCode ??
+                      null,
 
-                  sizeName:
-                    v.sizeName ??
-                    size?.name ??
-                    '',
+                    sizeName:
+                      v.sizeName ??
+                      size?.name ??
+                      '',
 
-                  sku: v.sku || '',
+                    sku: v.sku || '',
 
-                  stock: Number(
-                    v.stock ?? 0
-                  ),
+                    stock: Number(
+                      v.stock ?? 0
+                    ),
 
-                  price: Number(
-                    v.price ??
-                    v.finalPrice ??
-                    v.originalPrice ??
-                    0
-                  ),
+                    price: Number(
+                      v.price ??
+                      v.finalPrice ??
+                      v.originalPrice ??
+                      0
+                    ),
 
-                  costPrice: Number(
-                    v.costPrice ?? 0
-                  ),
+                    costPrice: Number(
+                      v.costPrice ?? 0
+                    ),
 
-                  compareAtPrice:
-                    v.compareAtPrice ??
-                    null,
+                    compareAtPrice:
+                      v.compareAtPrice ??
+                      null,
 
-                  bust: Number(
-                    v.bust ?? 0
-                  ),
+                    bust: Number(
+                      v.bust ?? 0
+                    ),
 
-                  waist: Number(
-                    v.waist ?? 0
-                  ),
+                    waist: Number(
+                      v.waist ?? 0
+                    ),
 
-                  hip: Number(
-                    v.hip ?? 0
-                  ),
+                    hip: Number(
+                      v.hip ?? 0
+                    ),
 
-                  length: Number(
-                    v.length ?? 0
-                  ),
-                };
-              });
+                    length: Number(
+                      v.length ?? 0
+                    ),
+                  };
+                }
+              );
 
             this.variants.set(
               mappedVariants
@@ -761,7 +1037,9 @@ export class AdminProductFormPage implements OnInit {
       });
   }
 
-  private loadImages(id: number): void {
+  private loadImages(
+    id: number
+  ): void {
     this.isLoadingImages.set(true);
 
     this.adminCatalogService
@@ -774,7 +1052,9 @@ export class AdminProductFormPage implements OnInit {
             res.success &&
             res.data
           ) {
-            this.images.set(res.data);
+            this.images.set(
+              res.data
+            );
           }
         },
 
@@ -803,25 +1083,35 @@ export class AdminProductFormPage implements OnInit {
       hip: 0,
       length: 0,
     });
+
+    this.clearVariantSearch();
+    this.closeVariantDropdowns();
   }
 
-  private slugify(text: string): string {
+  private slugify(
+    text: string
+  ): string {
     return text
       .toLowerCase()
       .trim()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/[\s_-]+/g, '-')
-      .replace(/^-+|-+$/g, '');
+      .replace(
+        /[^\w\s-]/g,
+        ''
+      )
+      .replace(
+        /[\s_-]+/g,
+        '-'
+      )
+      .replace(
+        /^-+|-+$/g,
+        ''
+      );
   }
-  getColorById(colorId: number | string | null): ColorResponse | undefined {
-  if (colorId === null || colorId === undefined || colorId === '') {
-    return undefined;
-  }
+  isColorSelected(id: number): boolean {
+  return Number(this.variantForm.get('colorId')?.value) === id;
+}
 
-  const id = Number(colorId);
-
-  return this.colors().find(
-    color => color.id === id
-  );
+isSizeSelected(id: number): boolean {
+  return Number(this.variantForm.get('sizeId')?.value) === id;
 }
 }

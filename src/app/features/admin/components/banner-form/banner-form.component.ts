@@ -32,7 +32,7 @@ import {
   Router,
 } from '@angular/router';
 
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 interface ImageItem {
   id?: number;          // موجودة فعلاً لو صورة قديمة، undefined لو جديدة
@@ -58,6 +58,7 @@ export class BannerFormComponent {
 
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly bannerService = inject(AdminBannerService);
+  private readonly translate = inject(TranslateService);
   readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
@@ -256,7 +257,8 @@ export class BannerFormComponent {
     const bannerId = this.banner()?.id;
     if (!bannerId) return;
 
-    if (!confirm('Delete this image?')) return;
+    const message = this.translate.instant('banners.form.images.deleteImageConfirm');
+    if (!confirm(message)) return;
 
     this.deletingImageId.set(image.id);
 
@@ -334,7 +336,7 @@ export class BannerFormComponent {
         },
         error: (err) => {
           this.isSaving.set(false);
-          this.errorMessage.set(extractErrorMessage(err, 'banners.errors.update'));
+          this.errorMessage.set(extractErrorMessage(err, this.translate.instant('banners.errors.update')));
         },
       });
 
@@ -352,7 +354,7 @@ export class BannerFormComponent {
       },
       error: (err) => {
         this.isSaving.set(false);
-        this.errorMessage.set(extractErrorMessage(err, 'banners.errors.create'));
+        this.errorMessage.set(extractErrorMessage(err, this.translate.instant('banners.errors.create')));
       },
     });
   }
@@ -365,12 +367,12 @@ export class BannerFormComponent {
     const allowed = ['image/jpeg', 'image/png', 'image/webp'];
 
     if (!allowed.includes(file.type)) {
-      alert('banners.errors.invalidImageType');
+      alert(this.translate.instant('banners.errors.invalidImageType'));
       return false;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      alert('banners.errors.imageTooLarge');
+      alert(this.translate.instant('banners.errors.imageTooLarge'));
       return false;
     }
 
@@ -391,5 +393,5 @@ export class BannerFormComponent {
       ? null
       : { invalidDateRange: true };
   }
-  
+
 }

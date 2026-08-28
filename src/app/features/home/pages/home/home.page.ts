@@ -1,4 +1,4 @@
-  import { Component, OnInit, inject, signal, viewChild, ElementRef } from '@angular/core';
+  import { Component, OnInit, inject, signal, viewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
   import { RouterLink } from '@angular/router';
   import { CatalogService } from '../../../../core/services/catalog.service'; // عدّل المسار
   import { CategoryResponse } from '../../../../core/models/catalog.models'; // عدّل المسار
@@ -15,6 +15,7 @@
   @Component({
     selector: 'app-home-page',
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
       RouterLink,
       HeroBannerComponent,

@@ -1,338 +1,350 @@
 <!-- ========================================================= -->
+<!-- Error Banner -->
+<!-- ========================================================= -->
+
+@if (errorMessage()) {
+  <div class="alert alert-danger">
+    {{ errorMessage() | translate }}
+  </div>
+}
+
+<form class="banner-form" [formGroup]="form" (ngSubmit)="submit()">
+
+<!-- ========================================================= -->
 <!-- Banner Images -->
 <!-- ========================================================= -->
-<form [formGroup]="form" (ngSubmit)="submit()">
-<div class="card-header">
-  <div>
-    <h2>{{ 'banners.form.images.title' | translate }}</h2>
-    <p>{{ 'banners.form.images.description' | translate }}</p>
+
+<div class="form-card">
+  <div class="card-header">
+    <div>
+      <h2>{{ 'banners.form.images.title' | translate }}</h2>
+      <p>{{ 'banners.form.images.description' | translate }}</p>
+    </div>
+  </div>
+
+  <div class="image-grid">
+
+    <!-- ========================= -->
+    <!-- Desktop Images -->
+    <!-- ========================= -->
+    <div class="upload-container">
+      <label class="upload-title">{{ 'banners.form.images.desktop' | translate }}</label>
+
+      <div class="images-grid">
+
+        <!-- Existing images (edit mode) -->
+        @for (img of existingDesktopImages(); track img.id) {
+          <div class="image-tile">
+            <div class="image-tile__photo">
+              <img [src]="img.imageUrl" [alt]="'banners.form.images.desktopAlt' | translate">
+              <button
+                type="button"
+                class="image-tile__remove"
+                [disabled]="deletingImageId() === img.id"
+                [title]="'common.remove' | translate"
+                [attr.aria-label]="'common.remove' | translate"
+                (click)="deleteExistingImage(img)">
+                @if (deletingImageId() === img.id) {
+                  <span class="spinner-sm"></span>
+                } @else {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                }
+              </button>
+            </div>
+            <input
+              type="text"
+              class="image-tile__link"
+              [placeholder]="'banners.form.images.linkPlaceholder' | translate"
+              [value]="img.link ?? ''"
+              disabled>
+          </div>
+        }
+
+        <!-- New images (not yet uploaded) -->
+        @for (img of newDesktopImages(); track $index) {
+          <div class="image-tile">
+            <div class="image-tile__photo">
+              <img [src]="img.preview" [alt]="'banners.form.images.desktopAlt' | translate">
+              <button
+                type="button"
+                class="image-tile__remove"
+                [title]="'common.remove' | translate"
+                [attr.aria-label]="'common.remove' | translate"
+                (click)="removeNewImage(newDesktopImages, $index)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+            <input
+              type="text"
+              class="image-tile__link"
+              [placeholder]="'banners.form.images.linkPlaceholder' | translate"
+              [value]="img.link"
+              (change)="updateNewImageLink(newDesktopImages, $index, $any($event.target).value)">
+          </div>
+        }
+
+        <!-- Upload box (as a grid tile) -->
+        <label
+          class="upload-box"
+          (drop)="desktopDrop($event)"
+          (dragover)="$event.preventDefault()">
+          <input hidden type="file" accept="image/*" multiple (change)="desktopSelected($event)">
+          <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+          <span>{{ 'banners.form.images.clickToUpload' | translate }}</span>
+          <small>{{ 'banners.form.images.formats' | translate }}</small>
+        </label>
+
+      </div>
+    </div>
+
+    <!-- ========================= -->
+    <!-- Mobile Images -->
+    <!-- ========================= -->
+    <div class="upload-container">
+      <label class="upload-title">{{ 'banners.form.images.mobile' | translate }}</label>
+
+      <div class="images-grid">
+
+        @for (img of existingMobileImages(); track img.id) {
+          <div class="image-tile">
+            <div class="image-tile__photo">
+              <img [src]="img.imageUrl" [alt]="'banners.form.images.mobileAlt' | translate">
+              <button
+                type="button"
+                class="image-tile__remove"
+                [disabled]="deletingImageId() === img.id"
+                [title]="'common.remove' | translate"
+                [attr.aria-label]="'common.remove' | translate"
+                (click)="deleteExistingImage(img)">
+                @if (deletingImageId() === img.id) {
+                  <span class="spinner-sm"></span>
+                } @else {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                }
+              </button>
+            </div>
+            <input
+              type="text"
+              class="image-tile__link"
+              [placeholder]="'banners.form.images.linkPlaceholder' | translate"
+              [value]="img.link ?? ''"
+              disabled>
+          </div>
+        }
+
+        @for (img of newMobileImages(); track $index) {
+          <div class="image-tile">
+            <div class="image-tile__photo">
+              <img [src]="img.preview" [alt]="'banners.form.images.mobileAlt' | translate">
+              <button
+                type="button"
+                class="image-tile__remove"
+                [title]="'common.remove' | translate"
+                [attr.aria-label]="'common.remove' | translate"
+                (click)="removeNewImage(newMobileImages, $index)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+            <input
+              type="text"
+              class="image-tile__link"
+              [placeholder]="'banners.form.images.linkPlaceholder' | translate"
+              [value]="img.link"
+              (change)="updateNewImageLink(newMobileImages, $index, $any($event.target).value)">
+          </div>
+        }
+
+        <label
+          class="upload-box"
+          (drop)="mobileDrop($event)"
+          (dragover)="$event.preventDefault()">
+          <input hidden type="file" accept="image/*" multiple (change)="mobileSelected($event)">
+          <i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>
+          <span>{{ 'banners.form.images.uploadMobile' | translate }}</span>
+          <small>{{ 'banners.form.images.optional' | translate }}</small>
+        </label>
+
+      </div>
+    </div>
+
   </div>
 </div>
 
-<div class="image-grid">
-
-  <!-- ========================= -->
-  <!-- Desktop Images -->
-  <!-- ========================= -->
-  <div class="upload-container">
-    <label class="upload-title">{{ 'banners.form.images.desktop' | translate }}</label>
-
-    <!-- Existing images (edit mode) -->
-    @for (img of existingDesktopImages(); track img.id) {
-      <div class="image-preview">
-        <img [src]="img.imageUrl" [alt]="'banners.form.images.desktopAlt' | translate">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Link (optional)"
-          [value]="img.link ?? ''"
-          disabled>
-        <div class="image-actions">
-          <button
-            type="button"
-            class="btn btn-danger"
-            [disabled]="deletingImageId() === img.id"
-            (click)="deleteExistingImage(img)">
-            @if (deletingImageId() === img.id) {
-              <span class="spinner-sm"></span>
-            } @else {
-              {{ 'common.remove' | translate }}
-            }
-          </button>
-        </div>
-      </div>
-    }
-
-    <!-- New images (not yet uploaded) -->
-    @for (img of newDesktopImages(); track $index) {
-      <div class="image-preview">
-        <img [src]="img.preview" [alt]="'banners.form.images.desktopAlt' | translate">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Link (optional)"
-          [value]="img.link"
-          (change)="updateNewImageLink(newDesktopImages, $index, $any($event.target).value)">
-        <div class="image-actions">
-          <button type="button" class="btn btn-danger" (click)="removeNewImage(newDesktopImages, $index)">
-            {{ 'common.remove' | translate }}
-          </button>
-        </div>
-      </div>
-    }
-
-    <!-- Upload box -->
-    <label
-      class="upload-box"
-      (drop)="desktopDrop($event)"
-      (dragover)="$event.preventDefault()">
-      <input hidden type="file" accept="image/*" multiple (change)="desktopSelected($event)">
-      <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
-      <span>{{ 'banners.form.images.clickToUpload' | translate }}</span>
-      <small>{{ 'banners.form.images.formats' | translate }}</small>
-    </label>
-  </div>
-
-  <!-- ========================= -->
-  <!-- Mobile Images -->
-  <!-- ========================= -->
-  <div class="upload-container">
-    <label class="upload-title">{{ 'banners.form.images.mobile' | translate }}</label>
-
-    @for (img of existingMobileImages(); track img.id) {
-      <div class="image-preview">
-        <img [src]="img.imageUrl" [alt]="'banners.form.images.mobileAlt' | translate">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Link (optional)"
-          [value]="img.link ?? ''"
-          disabled>
-        <div class="image-actions">
-          <button
-            type="button"
-            class="btn btn-danger"
-            [disabled]="deletingImageId() === img.id"
-            (click)="deleteExistingImage(img)">
-            @if (deletingImageId() === img.id) {
-              <span class="spinner-sm"></span>
-            } @else {
-              {{ 'common.remove' | translate }}
-            }
-          </button>
-        </div>
-      </div>
-    }
-
-    @for (img of newMobileImages(); track $index) {
-      <div class="image-preview">
-        <img [src]="img.preview" [alt]="'banners.form.images.mobileAlt' | translate">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Link (optional)"
-          [value]="img.link"
-          (change)="updateNewImageLink(newMobileImages, $index, $any($event.target).value)">
-        <div class="image-actions">
-          <button type="button" class="btn btn-danger" (click)="removeNewImage(newMobileImages, $index)">
-            {{ 'common.remove' | translate }}
-          </button>
-        </div>
-      </div>
-    }
-
-    <label
-      class="upload-box"
-      (drop)="mobileDrop($event)"
-      (dragover)="$event.preventDefault()">
-      <input hidden type="file" accept="image/*" multiple (change)="mobileSelected($event)">
-      <i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>
-      <span>{{ 'banners.form.images.uploadMobile' | translate }}</span>
-      <small>{{ 'banners.form.images.optional' | translate }}</small>
-    </label>
-  </div>
-
-</div>
 <!-- ========================================================= -->
 <!-- Banner Content -->
 <!-- ========================================================= -->
 
-<div>
+<div class="form-card">
 
-  <h2>
-    {{ 'banners.form.content.title' | translate }}
-  </h2>
+  <div class="card-header">
+    <h2>
+      {{ 'banners.form.content.title' | translate }}
+    </h2>
 
-  <p>
-    {{ 'banners.form.content.description' | translate }}
-  </p>
+    <p>
+      {{ 'banners.form.content.description' | translate }}
+    </p>
+  </div>
 
+  <div class="form-grid">
+
+    <div class="form-group full">
+      <label>
+        {{ 'banners.form.fields.title' | translate }}
+      </label>
+
+      <input
+        type="text"
+        formControlName="title"
+      >
+    </div>
+
+    <div class="form-group full">
+      <label>
+        {{ 'banners.form.fields.description' | translate }}
+      </label>
+
+      <textarea
+        rows="5"
+        formControlName="description"
+      ></textarea>
+    </div>
+
+    <div class="form-group full">
+      <label>
+        {{ 'banners.form.fields.link' | translate }}
+      </label>
+
+      <input
+        type="text"
+        formControlName="link"
+      >
+    </div>
+
+  </div>
 </div>
-
-
-
-<!-- ========================================================= -->
-<!-- Banner Content Fields -->
-<!-- ========================================================= -->
-
-<div class="form-group full">
-
-  <label>
-    {{ 'banners.form.fields.title' | translate }}
-  </label>
-
-
-  <input
-    type="text"
-    formControlName="title"
-  >
-
-</div>
-
-
-
-<div class="form-group full">
-
-  <label>
-    {{ 'banners.form.fields.description' | translate }}
-  </label>
-
-
-  <textarea
-    rows="5"
-    formControlName="description"
-  ></textarea>
-
-</div>
-
-
-
-<div class="form-group full">
-
-  <label>
-    {{ 'banners.form.fields.link' | translate }}
-  </label>
-
-
-  <input
-    type="text"
-    formControlName="link"
-  >
-
-</div>
-
-
 
 <!-- ========================================================= -->
 <!-- Display Settings -->
 <!-- ========================================================= -->
 
-<div>
+<div class="form-card">
 
-  <h2>
-    {{ 'banners.form.display.title' | translate }}
-  </h2>
+  <div class="card-header">
+    <h2>
+      {{ 'banners.form.display.title' | translate }}
+    </h2>
 
-  <p>
-    {{ 'banners.form.display.description' | translate }}
-  </p>
+    <p>
+      {{ 'banners.form.display.description' | translate }}
+    </p>
+  </div>
 
-</div>
+  <div class="settings-grid">
 
+    <!-- ========================= -->
+    <!-- Banner Type -->
+    <!-- ========================= -->
 
+    <div class="form-group">
+      <label>
+        {{ 'banners.form.fields.bannerType' | translate }}
+      </label>
 
-<!-- ========================================================= -->
-<!-- Banner Type -->
-<!-- ========================================================= -->
+      <select formControlName="type">
+        @for (item of bannerTypes; track item.value) {
+          <option [ngValue]="item.value">
+            {{ item.textKey | translate }}
+          </option>
+        }
+      </select>
+    </div>
 
-<div class="form-group">
+    <!-- ========================= -->
+    <!-- Display Order -->
+    <!-- ========================= -->
 
-  <label>
-    {{ 'banners.form.fields.bannerType' | translate }}
+    <div class="form-group">
+      <label>
+        {{ 'banners.form.fields.displayOrder' | translate }}
+      </label>
+
+      <input
+        type="number"
+        formControlName="displayOrder"
+      >
+    </div>
+
+    <!-- ========================= -->
+    <!-- Start Date -->
+    <!-- ========================= -->
+
+    <div class="form-group">
+      <label>
+        {{ 'banners.form.fields.startDate' | translate }}
+      </label>
+
+      <input
+        type="date"
+        formControlName="startDate"
+      >
+    </div>
+
+    <!-- ========================= -->
+    <!-- End Date -->
+    <!-- ========================= -->
+
+    <div class="form-group">
+      <label>
+        {{ 'banners.form.fields.endDate' | translate }}
+      </label>
+
+      <input
+        type="date"
+        formControlName="endDate"
+      >
+    </div>
+
+  </div>
+
+  @if (form.errors?.['invalidDateRange'] && (form.get('endDate')?.touched || form.get('startDate')?.touched)) {
+    <p class="validation-error">{{ 'banners.errors.invalidDateRange' | translate }}</p>
+  }
+
+  <!-- ========================= -->
+  <!-- Active -->
+  <!-- ========================= -->
+
+  <label class="switch">
+    <input
+      type="checkbox"
+      formControlName="isActive"
+    >
+
+    <span>
+      {{ 'banners.form.fields.active' | translate }}
+    </span>
   </label>
 
-
-  <select formControlName="type">
-
-    @for (item of bannerTypes; track item.value) {
-
-      <option [ngValue]="item.value">
-        {{ item.textKey | translate }}
-      </option>
-
-    }
-
-  </select>
-
 </div>
-
-
-
-<!-- ========================================================= -->
-<!-- Display Order -->
-<!-- ========================================================= -->
-
-<div class="form-group">
-
-  <label>
-    {{ 'banners.form.fields.displayOrder' | translate }}
-  </label>
-
-
-  <input
-    type="number"
-    formControlName="displayOrder"
-  >
-
-</div>
-
-
-
-<!-- ========================================================= -->
-<!-- Start Date -->
-<!-- ========================================================= -->
-
-<div class="form-group">
-
-  <label>
-    {{ 'banners.form.fields.startDate' | translate }}
-  </label>
-
-
-  <input
-    type="date"
-    formControlName="startDate"
-  >
-
-</div>
-
-
-
-<!-- ========================================================= -->
-<!-- End Date -->
-<!-- ========================================================= -->
-
-<div class="form-group">
-
-  <label>
-    {{ 'banners.form.fields.endDate' | translate }}
-  </label>
-
-
-  <input
-    type="date"
-    formControlName="endDate"
-  >
-
-</div>
-
-
-
-<!-- ========================================================= -->
-<!-- Active -->
-<!-- ========================================================= -->
-
-<label class="checkbox-group">
-
-  <input
-    type="checkbox"
-    formControlName="isActive"
-  >
-
-
-  <span>
-    {{ 'banners.form.fields.active' | translate }}
-  </span>
-
-</label>
-
-
 
 <!-- ========================================================= -->
 <!-- Actions -->
 <!-- ========================================================= -->
 
-<div class="form-actions">
+<div class="form-footer">
 
   <!-- Cancel -->
   <button
@@ -340,28 +352,22 @@
     class="btn btn-outline"
     (click)="router.navigate(['/admin/banners'])"
   >
-
     {{ 'common.cancel' | translate }}
-
   </button>
-
-
 
   <!-- Submit -->
   <button
     type="submit"
     class="btn btn-primary"
+    [disabled]="isSaving()"
   >
-
-    {{
-      (
-        isEdit()
-          ? 'banners.form.actions.update'
-          : 'banners.form.actions.create'
-      ) | translate
-    }}
-
+    @if (isSaving()) {
+      <span class="spinner-sm"></span> {{ 'common.saving' | translate }}
+    } @else {
+      {{ (isEdit() ? 'banners.form.actions.update' : 'banners.form.actions.create') | translate }}
+    }
   </button>
 
 </div>
+
 </form>

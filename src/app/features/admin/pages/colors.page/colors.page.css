@@ -40,6 +40,9 @@
 }
 
 .colors-page__add-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   border: 1px solid var(--primary);
   border-radius: var(--radius-full);
   padding: 0.7rem 1.25rem;
@@ -48,6 +51,12 @@
   font: inherit;
   font-weight: 700;
   cursor: pointer;
+  transition: .2s;
+}
+
+.colors-page__add-button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 
@@ -119,7 +128,7 @@
 .color-form__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 1.25rem 1rem;
 }
 
 .form-field {
@@ -141,7 +150,7 @@
 
 .form-field input[type="text"] {
   width: 100%;
-  min-height: 42px;
+  min-height: 44px;
   padding: 0.65rem 0.75rem;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
@@ -149,27 +158,99 @@
   background: var(--bg-secondary);
   color: var(--text-primary);
   font: inherit;
+  transition: .2s;
 }
 
 .form-field input[type="text"]:focus {
   border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(201, 162, 75, .15);
 }
 
+
+/* =========================================================
+   Hex row: big round tappable swatch + hex text field
+   ========================================================= */
 
 .hex-input {
   display: grid;
-  grid-template-columns: 44px 1fr;
-  gap: 0.5rem;
+  grid-template-columns: 48px 1fr;
+  align-items: center;
+  gap: 0.65rem;
 }
 
-.hex-input input[type="color"] {
-  width: 44px;
-  height: 42px;
-  padding: 3px;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
+/* Native color input styled as a large, easy-to-tap circle.
+   Vendor-specific selectors strip the default square swatch chrome
+   so we control the shape ourselves. */
+.hex-input__swatch {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
   background: var(--bg-secondary);
   cursor: pointer;
+  overflow: hidden;
+  transition: .2s;
+}
+
+.hex-input__swatch:hover {
+  border-color: var(--primary);
+  transform: scale(1.04);
+}
+
+.hex-input__swatch::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border-radius: 50%;
+}
+
+.hex-input__swatch::-webkit-color-swatch {
+  border: none;
+  border-radius: 50%;
+}
+
+.hex-input__swatch::-moz-color-swatch {
+  border: none;
+  border-radius: 50%;
+}
+
+.hex-input input[type="text"] {
+  min-height: 48px;
+}
+
+
+/* =========================================================
+   Quick color palette (mobile-friendly alternative
+   to hunting for a hex value with the native color wheel)
+   ========================================================= */
+
+.preset-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.15rem;
+}
+
+.preset-swatch {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  cursor: pointer;
+  padding: 0;
+  transition: .15s;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.preset-swatch:hover {
+  transform: scale(1.12);
+}
+
+.preset-swatch.is-active {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--bg-card), 0 0 0 4px var(--primary);
 }
 
 
@@ -219,13 +300,14 @@
 }
 
 .button {
-  min-height: 40px;
-  padding: 0.6rem 1rem;
+  min-height: 44px;
+  padding: 0.6rem 1.1rem;
   border-radius: var(--radius-full);
   font: inherit;
   font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
+  transition: .2s;
 }
 
 .button:disabled {
@@ -237,6 +319,11 @@
   border: 1px solid var(--primary);
   background: var(--gold-gradient);
   color: var(--secondary-dark);
+}
+
+.button--primary:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .button--secondary {
@@ -270,7 +357,7 @@
 
 .colors-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 0.75rem;
 }
 
@@ -284,6 +371,17 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   background: var(--bg-card);
+  transition: .2s;
+}
+
+.color-card:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.color-card.is-editing {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(201, 162, 75, .15);
 }
 
 
@@ -355,6 +453,7 @@
   font: inherit;
   font-size: 0.75rem;
   cursor: pointer;
+  padding: 0.3rem;
 }
 
 .color-card__edit {
@@ -395,8 +494,9 @@
     flex-direction: column;
   }
 
-  .colors-grid {
-    grid-template-columns: 1fr;
+  .colors-page__add-button {
+    width: 100%;
+    justify-content: center;
   }
 }
 
@@ -416,6 +516,34 @@
   }
 
   .color-form__grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* الصف اللي فيه الدايرة والحقل، والباليتة، بيبقوا أوضح وأكبر على الموبايل */
+  .hex-input {
+    grid-template-columns: 52px 1fr;
+  }
+
+  .hex-input__swatch {
+    width: 52px;
+    height: 52px;
+  }
+
+  .preset-swatch {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+  }
+
+  .color-form__actions {
+    flex-direction: column-reverse;
+  }
+
+  .color-form__actions .button {
+    width: 100%;
+  }
+
+  .colors-grid {
     grid-template-columns: 1fr;
   }
 

@@ -32,7 +32,7 @@
       #searchInput
       type="text"
       class="search-overlay__input"
-      placeholder="Search for products..."
+      [placeholder]="'search.placeholder' | translate"
       [value]="query()"
       (input)="onInput($any($event.target).value)"
       autocomplete="off"
@@ -45,7 +45,7 @@
         type="button"
         class="search-overlay__clear"
         (click)="onInput('')"
-        aria-label="Clear">
+        [attr.aria-label]="'search.clear' | translate">
 
         ×
 
@@ -67,7 +67,7 @@
 
         <section class="search-section">
 
-          <h4>Recent Searches</h4>
+          <h4>{{ 'search.recent' | translate }}</h4>
 
           <div class="search-tags">
 
@@ -103,7 +103,7 @@
   <div class="search-overlay__did-you-mean">
 
     <span class="search-overlay__did-you-mean-label">
-      Did you mean?
+      {{ 'search.didYouMean' | translate }}
     </span>
 
     <div class="search-overlay__did-you-mean-list">
@@ -335,7 +335,7 @@
                 <span
                   class="search-overlay__suggestion-type">
 
-                  {{ getSuggestionLabel(suggestion.type) }}
+                  {{ getSuggestionLabel(suggestion.type) | translate }}
 
                 </span>
 
@@ -364,7 +364,7 @@
           class="search-overlay__view-all"
           (click)="viewAllResults()">
 
-          View all results for
+          {{ 'search.viewAllResultsFor' | translate }}
           <strong>"{{ query() }}"</strong>
 
         </button>
@@ -382,7 +382,7 @@
 
         <p class="search-overlay__empty">
 
-          No suggestions found for
+          {{ 'search.noSuggestionsFor' | translate }}
           <strong>"{{ query() }}"</strong>
 
           <br />
@@ -392,7 +392,7 @@
             class="search-overlay__empty-action"
             (click)="viewAllResults()">
 
-            Search anyway
+            {{ 'search.searchAnyway' | translate }}
 
           </button>
 

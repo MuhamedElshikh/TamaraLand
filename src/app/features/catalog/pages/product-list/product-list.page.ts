@@ -3,11 +3,14 @@ import {
   computed,
   inject,
   signal,
-  OnInit
+  OnInit,
+  DestroyRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UpperCasePipe } from '@angular/common';
 
-import { ActivatedRoute , Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
@@ -39,7 +42,7 @@ interface SeasonConfig {
 @Component({
   selector: 'app-product-list',
   standalone: true,
-
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ProductCardComponent,
     ProductFiltersComponent,
@@ -47,7 +50,6 @@ interface SeasonConfig {
     TranslatePipe,
     UpperCasePipe
   ],
-
   templateUrl: './product-list.page.html',
   styleUrl: './product-list.page.css',
 })
@@ -61,6 +63,7 @@ export class ProductListPage implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly translate = inject(TranslateService);
   private readonly analyticsService = inject(AnalyticsService);
+  private readonly destroyRef = inject(DestroyRef);
 
 
   // =========================================================
@@ -302,93 +305,77 @@ export class ProductListPage implements OnInit {
 
     this.translate
       .stream(data['title'])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(title => {
         this.pageTitle.set(title);
       });
 
-
     this.translate
       .stream(data['kicker'])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(kicker => {
         this.pageKicker.set(kicker);
       });
 
-
     this.translate
       .stream(data['subtitle'])
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(subtitle => {
         this.pageSubtitle.set(subtitle);
       });
 
-
     // -------------------------------------------------------
     // Query Params
     // -------------------------------------------------------
-this.route.queryParams.subscribe(params => {
+    this.route.queryParams
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(params => {
+        const cap = this.priceCap();
 
-  const cap = this.priceCap();
+        const requestedMax = params['maxPrice']
+          ? +params['maxPrice']
+          : undefined;
 
-  const requestedMax = params['maxPrice']
-    ? +params['maxPrice']
-    : undefined;
+        const clampedMax = cap
+          ? Math.min(requestedMax ?? cap, cap)
+          : requestedMax;
 
-  // لو الصفحة "capped" (زي Under 800):
-  // - لو المستخدم مبعتش maxPrice -> استخدم الـ cap نفسه
-  // - لو بعت maxPrice أكبر من الـ cap -> نزّله للـ cap
-  // - لو بعت maxPrice أصغر من الـ cap -> سيبه زي ما هو
-  const clampedMax = cap
-    ? Math.min(requestedMax ?? cap, cap)
-    : requestedMax;
+        const filter: ProductFilterRequest = {
+          search: params['search'] ?? undefined,
+          categoryId: params['categoryId']
+            ? +params['categoryId']
+            : undefined,
+          brandId: params['brandId']
+            ? +params['brandId']
+            : undefined,
+          minPrice: params['minPrice']
+            ? +params['minPrice']
+            : undefined,
+          maxPrice: clampedMax,
+          sortBy: params['sortBy'] ?? undefined,
+          desc: params['desc'] === 'true',
+          inStockOnly: params['inStockOnly'] === 'true',
+          pageNumber: +(params['page'] ?? 1),
+          collection: this.collection(),
+        };
 
-  const filter: ProductFilterRequest = {
-    search: params['search'] ?? undefined,
+        this.currentFilter = filter;
 
-    categoryId: params['categoryId']
-      ? +params['categoryId']
-      : undefined,
+        this.currentSearch.set(
+          filter.search?.trim() ?? ''
+        );
 
-    brandId: params['brandId']
-      ? +params['brandId']
-      : undefined,
+        if (filter.search?.trim()) {
+          this.analyticsService.search(
+            filter.search
+          );
+        }
 
-    minPrice: params['minPrice']
-      ? +params['minPrice']
-      : undefined,
-
-    maxPrice: clampedMax,
-
-    sortBy: params['sortBy'] ?? undefined,
-
-    desc:
-      params['desc'] === 'true',
-
-    inStockOnly:
-      params['inStockOnly'] === 'true',
-
-    pageNumber:
-      +(params['page'] ?? 1),
-
-    collection:
-      this.collection(),
-  };
-
-  this.currentFilter = filter;
-
-  this.currentSearch.set(
-    filter.search?.trim() ?? ''
-  );
-
-  if (filter.search?.trim()) {
-    this.analyticsService.search(
-      filter.search
-    );
-  }
-
-  this.loadProducts(
-    filter,
-    filter.pageNumber ?? 1
-  );
-});
+        this.loadProducts(
+          filter,
+          filter.pageNumber ?? 1
+        );
+      });
   }
 
 

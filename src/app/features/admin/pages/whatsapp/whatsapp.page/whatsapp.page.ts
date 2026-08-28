@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminWhatsAppService } from '../../../../../core/services/admin-whatsapp.service'; // عدّل المسار
-import { WhatsAppConfigurationResponse } from '../../../../../core/models/whatsapp.models'; // عدّل المسار
+import {  WhatsAppConfigurationResponse,WhatsAppRecipientResponse } from '../../../../../core/models/whatsapp.models'; // عدّل المسار
 import { ToastService } from '../../../../../shared/toast/toast.service'; // عدّل المسار
 import { extractErrorMessage } from '../../../../../core/utils/error-message.util'; // عدّل المسار
 import { DatePipe } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
-
+import {Subscription,debounceTime,distinctUntilChanged,switchMap,of,catchError} from 'rxjs';
 @Component({
   selector: 'app-admin-whatsapp-page',
   standalone: true,
@@ -18,7 +18,10 @@ export class WhatsAppPage implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly whatsAppService = inject(AdminWhatsAppService);
   private readonly toast = inject(ToastService);
+readonly recipientResults = signal<WhatsAppRecipientResponse[]>([]);
+readonly isSearchingRecipients = signal(false);
 
+private recipientSearchSubscription?: Subscription;
   readonly config = signal<WhatsAppConfigurationResponse | null>(null);
   readonly isLoadingConfig = signal(true);
 
@@ -39,13 +42,17 @@ export class WhatsAppPage implements OnInit, OnDestroy {
   });
 
   ngOnInit(): void {
-    this.loadConfiguration();
-  }
+  this.loadConfiguration();
+  this.setupRecipientSearch();
+}
 
   ngOnDestroy(): void {
-    // نحرر الـ object URL بتاع الصورة عشان مانسيبش memory leak
-    if (this.currentQrObjectUrl) URL.revokeObjectURL(this.currentQrObjectUrl);
+  this.recipientSearchSubscription?.unsubscribe();
+
+  if (this.currentQrObjectUrl) {
+    URL.revokeObjectURL(this.currentQrObjectUrl);
   }
+}
 
   loadConfiguration(): void {
     this.isLoadingConfig.set(true);
@@ -60,6 +67,15 @@ export class WhatsAppPage implements OnInit, OnDestroy {
       error: () => this.isLoadingConfig.set(false),
     });
   }
+  selectRecipient(
+  recipient: WhatsAppRecipientResponse
+): void {
+  this.messageForm.controls.phoneNumber.setValue(
+    recipient.phoneNumber
+  );
+
+  this.recipientResults.set([]);
+}
 
   private loadQrCode(): void {
     this.isLoadingQr.set(true);
@@ -166,4 +182,39 @@ export class WhatsAppPage implements OnInit, OnDestroy {
       },
     });
   }
+  private setupRecipientSearch(): void {
+  const phoneControl = this.messageForm.controls.phoneNumber;
+
+  this.recipientSearchSubscription = phoneControl.valueChanges
+    .pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(value => {
+        const search = value.trim();
+
+        if (search.length < 2) {
+          this.recipientResults.set([]);
+          return of(null);
+        }
+
+        this.isSearchingRecipients.set(true);
+
+        return this.whatsAppService
+          .searchRecipients(search)
+          .pipe(
+            catchError(() => of(null))
+          );
+      })
+    )
+    .subscribe(response => {
+      this.isSearchingRecipients.set(false);
+
+      if (!response?.success) {
+        this.recipientResults.set([]);
+        return;
+      }
+
+      this.recipientResults.set(response.data ?? []);
+    });
+}
 }

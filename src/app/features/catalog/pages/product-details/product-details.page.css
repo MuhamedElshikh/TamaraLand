@@ -179,6 +179,24 @@
   flex-shrink: 0;
 }
 
+.product-sticky-bar__btn:disabled,
+.product-sticky-bar__btn--out-of-stock {
+  background: #241e17 !important;
+  color: #8c8273 !important;
+  border: 1px solid rgba(201, 162, 75, 0.15) !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+  opacity: 0.9 !important;
+  transform: none !important;
+}
+
+.product-sticky-bar__btn:disabled:hover,
+.product-sticky-bar__btn--out-of-stock:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  background: #241e17 !important;
+}
+
 /* =========================================================
    Hero
    ========================================================= */
@@ -719,9 +737,27 @@
   font-weight: 600;
 }
 
-.product-details-page__cart-btn:hover {
+.product-details-page__cart-btn:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(201, 162, 75, 0.18);
+}
+
+.product-details-page__cart-btn:disabled,
+.product-details-page__cart-btn--out-of-stock {
+  background: #241e17 !important;
+  color: #8c8273 !important;
+  border: 1px solid rgba(201, 162, 75, 0.15) !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+  opacity: 0.9 !important;
+  transform: none !important;
+}
+
+.product-details-page__cart-btn:disabled:hover,
+.product-details-page__cart-btn--out-of-stock:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  background: #241e17 !important;
 }
 
 .product-details-page__cart-msg {

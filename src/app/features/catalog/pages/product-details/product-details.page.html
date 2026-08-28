@@ -245,18 +245,22 @@
 
             <button
               class="btn btn-primary product-details-page__cart-btn"
+              [class.product-details-page__cart-btn--out-of-stock]="isOutOfStock()"
               type="button"
               (click)="addToCart()"
               [disabled]="
                 isAddingToCart() ||
-                !selectedVariant()?.variantId
+                !selectedVariant()?.variantId ||
+                isOutOfStock()
               "
             >
 
               {{
                 isAddingToCart()
                   ? ('productDetails.adding' | translate)
-                  : ('productDetails.addToCart' | translate)
+                  : isOutOfStock()
+                    ? ('productDetails.outOfStock' | translate)
+                    : ('productDetails.addToCart' | translate)
               }}
 
             </button>
@@ -645,17 +649,21 @@
         <button
           type="button"
           class="btn btn-primary product-sticky-bar__btn"
+          [class.product-sticky-bar__btn--out-of-stock]="isOutOfStock()"
           (click)="addToCart()"
           [disabled]="
             isAddingToCart() ||
-            !selectedVariant()?.variantId
+            !selectedVariant()?.variantId ||
+            isOutOfStock()
           "
         >
 
           {{
             isAddingToCart()
               ? ('productDetails.adding' | translate)
-              : ('productDetails.addToCart' | translate)
+              : isOutOfStock()
+                ? ('productDetails.outOfStock' | translate)
+                : ('productDetails.addToCart' | translate)
           }}
 
         </button>

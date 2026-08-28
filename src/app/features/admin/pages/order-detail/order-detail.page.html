@@ -6,14 +6,14 @@
         <line x1="19" y1="12" x2="5" y2="12"></line>
         <polyline points="12 19 5 12 12 5"></polyline>
       </svg>
-      Back to Orders
+      {{ 'admin.orderDetails.back' | translate }}
     </button>
   </div>
 
   @if (isLoading()) {
     <div class="loading-state">
       <div class="spinner"></div>
-      <p>Loading order details...</p>
+      <p>{{ 'admin.orderDetails.loading' | translate }}</p>
     </div>
   } @else if (errorMessage() && !orderDetails()) {
     <div class="alert alert-danger mb-4">
@@ -32,7 +32,7 @@
 
       <!-- Order Status Quick Action -->
       <div class="status-action-box">
-        <label class="form-label mb-1" for="update-status-select">Order Status</label>
+        <label class="form-label mb-1" for="update-status-select">{{ 'admin.orders.status' | translate }}</label>
         <div class="status-input-group">
           <select
             id="update-status-select"
@@ -40,12 +40,12 @@
             [ngModel]="selectedStatus()"
             (ngModelChange)="selectedStatus.set(+$event)"
           >
-            <option [value]="0">Pending</option>
-            <option [value]="1">Confirmed</option>
-            <option [value]="2">Processing</option>
-            <option [value]="3">Shipped</option>
-            <option [value]="4">Delivered</option>
-            <option [value]="5">Cancelled</option>
+            <option [value]="0">{{ 'admin.orders.pending' | translate }}</option>
+            <option [value]="1">{{ 'admin.orders.confirmed' | translate }}</option>
+            <option [value]="2">{{ 'admin.orders.processing' | translate }}</option>
+            <option [value]="3">{{ 'admin.orders.shipped' | translate }}</option>
+            <option [value]="4">{{ 'admin.orders.delivered' | translate }}</option>
+            <option [value]="5">{{ 'admin.orders.cancelled' | translate }}</option>
           </select>
           <button
             type="button"
@@ -56,7 +56,7 @@
             @if (isUpdatingStatus()) {
               <span class="spinner-sm"></span>
             } @else {
-              Update
+              {{ 'admin.orders.updateStatus' | translate }}
             }
           </button>
         </div>
@@ -81,17 +81,17 @@
       <div class="grid-main">
         <!-- Order Items -->
         <div class="detail-card">
-          <h2 class="card-title">Order Items</h2>
+          <h2 class="card-title">{{ 'admin.orderDetails.items' | translate }}</h2>
           <div class="table-responsive">
             <table class="items-table">
              <thead>
   <tr>
-    <th>Product</th>
-    <th>Variant</th>
+    <th>{{ 'admin.labels.product' | translate }}</th>
+    <th>{{ 'admin.orderDetails.variant' | translate }}</th>
     <th>SKU</th>
-    <th class="text-center">Qty</th>
-    <th class="text-right">Unit Price</th>
-    <th class="text-right">Total</th>
+    <th class="text-center">{{ 'admin.orderDetails.quantity' | translate }}</th>
+    <th class="text-right">{{ 'admin.orderDetails.unitPrice' | translate }}</th>
+    <th class="text-right">{{ 'admin.dashboard.columns.total' | translate }}</th>
   </tr>
 </thead>
 
@@ -174,26 +174,26 @@
 
         <!-- Customer & Shipping Info -->
         <div class="detail-card">
-          <h2 class="card-title">Customer & Shipping Information</h2>
+          <h2 class="card-title">{{ 'admin.orderDetails.customerShipping' | translate }}</h2>
           <div class="info-grid">
             <div class="info-item">
-              <span class="info-label">Customer Name</span>
+              <span class="info-label">{{ 'admin.orderDetails.customerName' | translate }}</span>
               <span class="info-value">{{ order.fullName || '—' }}</span>
             </div>
             <div class="info-item">
-              <span class="info-label">Phone Number</span>
+              <span class="info-label">{{ 'admin.whatsapp.phoneNumber' | translate }}</span>
               <span class="info-value">{{ order.phoneNumber || '—' }}</span>
             </div>
             <div class="info-item">
-              <span class="info-label">Governorate / Area</span>
+              <span class="info-label">{{ 'admin.orderDetails.governorateArea' | translate }}</span>
               <span class="info-value">{{ order.governorate }} - {{ order.area }}</span>
             </div>
             <div class="info-item">
-              <span class="info-label">Shipping Area</span>
+              <span class="info-label">{{ 'admin.orderDetails.shippingArea' | translate }}</span>
               <span class="info-value">{{ order.shippingAreaName || 'Standard' }}</span>
             </div>
             <div class="info-item info-item--full">
-              <span class="info-label">Street & Building Details</span>
+              <span class="info-label">{{ 'admin.orderDetails.addressDetails' | translate }}</span>
               <span class="info-value">
                 {{ order.street }}
                 {{ order.building ? ', Bldg ' + order.building : '' }}
@@ -203,7 +203,7 @@
             </div>
             @if (order.notes) {
               <div class="info-item info-item--full">
-                <span class="info-label">Delivery Notes</span>
+                <span class="info-label">{{ 'admin.orderDetails.deliveryNotes' | translate }}</span>
                 <span class="info-value text-muted-italic">{{ order.notes }}</span>
               </div>
             }
@@ -215,7 +215,7 @@
   <div class="detail-card">
 
     <h2 class="card-title">
-      Customer Location
+      {{ 'admin.orderDetails.customerLocation' | translate }}
     </h2>
 
     
@@ -238,10 +238,10 @@
       <div class="grid-sidebar">
         <!-- Summary Card -->
         <div class="detail-card">
-          <h2 class="card-title">Order Financial Summary</h2>
+          <h2 class="card-title">{{ 'admin.orderDetails.financialSummary' | translate }}</h2>
           <div class="summary-rows">
             <div class="summary-row">
-              <span>Subtotal</span>
+              <span>{{ 'admin.orderDetails.subtotal' | translate }}</span>
               <span>{{ order.subTotal | number }} EGP</span>
             </div>
             @if (order.discount > 0) {
@@ -251,12 +251,12 @@
               </div>
             }
             <div class="summary-row">
-              <span>Shipping Fee</span>
+              <span>{{ 'admin.orderDetails.shippingFee' | translate }}</span>
               <span>{{ order.shippingCost | number }} EGP</span>
             </div>
             <div class="summary-divider"></div>
             <div class="summary-row summary-row--total">
-              <span>Total Amount</span>
+              <span>{{ 'admin.orderDetails.totalAmount' | translate }}</span>
               <span class="text-gold">{{ order.total | number }} EGP</span>
             </div>
           </div>
@@ -264,14 +264,14 @@
 
         <!-- Payment Info Card -->
         <div class="detail-card">
-          <h2 class="card-title">Payment Details</h2>
+          <h2 class="card-title">{{ 'admin.orderDetails.paymentDetails' | translate }}</h2>
           <div class="summary-rows">
             <div class="summary-row">
-              <span>Payment Method</span>
+              <span>{{ 'admin.orderDetails.paymentMethod' | translate }}</span>
               <span class="font-medium">{{ paymentMethodMap[order.paymentMethod] || 'Cash' }}</span>
             </div>
             <div class="summary-row">
-              <span>Payment Status</span>
+              <span>{{ 'admin.orders.paymentStatus' | translate }}</span>
               <app-status-badge [label]="paymentStatusMap[order.paymentStatus] || 'Pending'" />
             </div>
           </div>

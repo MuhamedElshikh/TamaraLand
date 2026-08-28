@@ -22,25 +22,28 @@
         <button
           type="button"
           class="product-card__add-btn"
-          [disabled]="isAdding() || isSingleVariantOutOfStock"
+          [class.product-card__add-btn--out-of-stock]="isOutOfStock"
+          [disabled]="isAdding() || isOutOfStock"
           (click)="addToCart($event)"
         >
           {{
             isAdding()
               ? ('productCard.adding' | translate)
-              : isSingleVariantOutOfStock
+              : isOutOfStock
                 ? ('productCard.outOfStock' | translate)
                 : ('productCard.addToCart' | translate)
           }}
         </button>
       } @else {
-        <!-- ✅ أكتر من Variant: يودّي لصفحة التفاصيل يختار لون/مقاس -->
+        <!-- ✅ أكتر من Variant: يودّي لصفحة التفاصيل يختار لون/مقاس إلا لو المنتج ككل خلصان -->
         <button
           type="button"
           class="product-card__add-btn"
+          [class.product-card__add-btn--out-of-stock]="isOutOfStock"
+          [disabled]="isOutOfStock"
           (click)="addToCart($event)"
         >
-          {{ 'productCard.addToCart' | translate }}
+          {{ isOutOfStock ? ('productCard.outOfStock' | translate) : ('productCard.addToCart' | translate) }}
         </button>
       }
 

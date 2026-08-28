@@ -7,10 +7,13 @@ import {
   ViewChild,
   AfterViewInit,
   OnDestroy,
+  NgZone,
 } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { fromEvent } from 'rxjs';
+import { auditTime } from 'rxjs/operators';
 
 import { ProductGalleryComponent } from '../../components/product-gallery/product-gallery.component';
 import { ProductVariantSelectorComponent } from '../../components/product-variant-selector/product-variant-selector.component';
@@ -29,7 +32,7 @@ import { AnalyticsService } from '../../../../core/services/analytics.service';
 import { ToastService } from '../../../../shared/toast/toast.service';
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe';
 import { LocalizedFieldPipe } from '../../../../shared/pipes/localized-field.pipe';
 
@@ -73,16 +76,18 @@ export class ProductDetailsPage
   private readonly wishlistService = inject(WishlistService);
   private readonly analyticsService = inject(AnalyticsService);
   private readonly toast = inject(ToastService);
+  private readonly translate = inject(TranslateService);
 
   @ViewChild('relatedSliderTrack')
   relatedSliderTrack?: ElementRef<HTMLDivElement>;
+
+  private readonly ngZone = inject(NgZone);
 
   readonly canScrollPrev = signal(false);
   readonly canScrollNext = signal(true);
   readonly showStickyBar = signal(false);
 
-  private readonly onWindowScrollBound =
-    this.onWindowScroll.bind(this);
+  private scrollSub?: { unsubscribe: () => void };
 
   // =========================================================
   // Lifecycle
@@ -95,33 +100,25 @@ export class ProductDetailsPage
     );
 
     if (typeof window !== 'undefined') {
-      window.addEventListener(
-        'scroll',
-        this.onWindowScrollBound,
-        { passive: true }
-      );
+      this.ngZone.runOutsideAngular(() => {
+        const sub = fromEvent(window, 'scroll', { passive: true })
+          .pipe(auditTime(40))
+          .subscribe(() => {
+            const scrollY = window.scrollY || document.documentElement.scrollTop;
+            const isSticky = scrollY > 450;
+            if (this.showStickyBar() !== isSticky) {
+              this.ngZone.run(() => {
+                this.showStickyBar.set(isSticky);
+              });
+            }
+          });
+        this.scrollSub = sub;
+      });
     }
   }
 
   ngOnDestroy(): void {
-    if (typeof window !== 'undefined') {
-      window.removeEventListener(
-        'scroll',
-        this.onWindowScrollBound
-      );
-    }
-  }
-
-  private onWindowScroll(): void {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    const scrollY =
-      window.scrollY ||
-      document.documentElement.scrollTop;
-
-    this.showStickyBar.set(scrollY > 450);
+    this.scrollSub?.unsubscribe();
   }
 
   // =========================================================
@@ -314,7 +311,7 @@ export class ProductDetailsPage
         !this.product() &&
         price === 0
       ) {
-        return 'Price available soon';
+        return this.translate.instant('productDetails.priceAvailableSoon');
       }
 
       return `EGP ${price.toLocaleString()}`;
@@ -339,6 +336,9 @@ export class ProductDetailsPage
           : 0)
       );
     });
+
+  readonly isOutOfStock =
+    computed(() => this.stock() <= 0);
 
   readonly rating =
     computed(() =>
@@ -533,7 +533,7 @@ export class ProductDetailsPage
       );
 
       this.toast.error(
-        'Please select a variant before adding to cart'
+        this.translate.instant('productDetails.selectVariant')
       );
 
       return;
@@ -562,7 +562,7 @@ export class ProductDetailsPage
           );
 
           this.toast.success(
-            'Product added to cart successfully!'
+            this.translate.instant('productDetails.addedToCart')
           );
 
           const prod =
@@ -625,7 +625,7 @@ export class ProductDetailsPage
           );
 
           this.toast.error(
-            'An error occurred while adding to cart'
+            this.translate.instant('productDetails.addToCartError')
           );
         },
       });
@@ -715,7 +715,7 @@ export class ProductDetailsPage
           this.toast.error(
             extractErrorMessage(
               err,
-              'Could not update quantity.'
+              this.translate.instant('productDetails.updateQuantityError')
             )
           );
         },
@@ -744,7 +744,7 @@ export class ProductDetailsPage
           );
 
           this.toast.success(
-            'Item removed from cart'
+            this.translate.instant('productDetails.removedFromCart')
           );
         },
 
@@ -756,7 +756,7 @@ export class ProductDetailsPage
           this.toast.error(
             extractErrorMessage(
               err,
-              'Could not remove item from cart.'
+              this.translate.instant('productDetails.removeFromCartError')
             )
           );
         },
@@ -814,7 +814,7 @@ export class ProductDetailsPage
 
           if (wasInWishlist) {
             this.toast.success(
-              'Removed from wishlist'
+              this.translate.instant('productDetails.removedFromWishlist')
             );
 
             this.analyticsService.removeWishlist({
@@ -834,7 +834,7 @@ export class ProductDetailsPage
             });
           } else {
             this.toast.success(
-              'Added to wishlist'
+              this.translate.instant('productDetails.addedToWishlist')
             );
 
             this.analyticsService.wishlist({
@@ -860,7 +860,7 @@ export class ProductDetailsPage
 
           this.toast.error(
             response.message ||
-            'Failed to update wishlist'
+            this.translate.instant('productDetails.updateWishlistError')
           );
         }
       },
@@ -875,7 +875,7 @@ export class ProductDetailsPage
         );
 
         this.toast.error(
-          'An error occurred while updating wishlist'
+          this.translate.instant('productDetails.updateWishlistError')
         );
       },
     });
