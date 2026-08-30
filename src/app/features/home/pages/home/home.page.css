@@ -17,7 +17,12 @@
   width: 100%;
 
   overflow-x: auto;
-  overflow-y: hidden;
+
+  /*
+   * مهم:
+   * السماح للموديل بالخروج رأسيًا من الـgold card
+   */
+  overflow-y: visible;
 
   scroll-snap-type: x proximity;
   scroll-behavior: smooth;
@@ -446,9 +451,9 @@
   mask-composite: exclude;
 }
 
-
 /* =========================================================
    3D MODEL / CUTOUT
+   Model rises out of the gold card
    ========================================================= */
 
 .category-card__cutout {
@@ -456,11 +461,11 @@
 
   z-index: 10;
 
-  top: -9%;
+  top: -11%;
   left: 50%;
 
   width: 108%;
-  height: 112%;
+  height: 120%;
 
   transform: translateX(-50%);
 
@@ -470,32 +475,34 @@
 
   pointer-events: none;
 
+  /*
+   * مهم جدًا:
+   * ممنوع نقص الصورة من تحت.
+   * الموديل لازم يخرج من حدود الـ gold card.
+   */
   overflow: visible;
 
-  clip-path:
-    inset(
-      0
-      0
-      2.7%
-      0
-    );
+  clip-path: none;
 
   transition:
-    transform
-    0.45s
+    transform 0.45s
     cubic-bezier(0.22, 1, 0.36, 1);
-    
 }
 
 
 .category-card__cutout img {
   display: block;
 
+  position: relative;
+  z-index: 20;
+
   width: 100%;
-  height: 100%;
+  height: 105%;
 
   object-fit: contain;
   object-position: center top;
+
+  pointer-events: none;
 
   filter:
     drop-shadow(
@@ -504,8 +511,6 @@
       16px
       rgba(0, 0, 0, 0.20)
     );
-
-  pointer-events: none;
 }
 
 

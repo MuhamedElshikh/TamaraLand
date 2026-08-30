@@ -758,104 +758,60 @@
    ========================================================= */
 
 .listing-page .category-card__cutout {
-  position:
-    absolute;
+  position: absolute;
 
-  z-index:
-    10;
+  z-index: 10;
 
-  /*
-   * هنا كان الفرق الكبير
-   *
-   * Home:
-   * top: -9%
-   * width: 108%
-   * height: 112%
-   */
-  top:
-    -9%;
+  top: -11%;
+  left: 50%;
 
-  left:
-    50%;
+  width: 108%;
+  height: 120%;
 
-  width:
-    108%;
+  transform: translateX(-50%);
 
-  height:
-    112%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 
-  transform:
-    translateX(-50%);
-
-  display:
-    flex;
-
-  align-items:
-    flex-start;
-
-  justify-content:
-    center;
-
-  pointer-events:
-    none;
-
-  overflow:
-    visible;
+  pointer-events: none;
 
   /*
-   * يمنع حواف الصورة من الظهور أسفل الـ stage
+   * مهم جدًا:
+   * ممنوع نقص الصورة من تحت.
+   * الموديل لازم يخرج من حدود الـ gold card.
    */
-  clip-path:
-    inset(
-      0
-      0
-      2.7%
-      0
-    );
+  overflow: visible;
+
+  clip-path: none;
 
   transition:
-    transform
-    0.45s
-    cubic-bezier(
-      0.22,
-      1,
-      0.36,
-      1
-    );
+    transform 0.45s
+    cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 
 .listing-page .category-card__cutout img {
-  display:
-    block;
+  display: block;
 
-  width:
-    100%;
+  position: relative;
+  z-index: 20;
 
-  height:
-    100%;
+  width: 100%;
+  height: 105%;
 
-  object-fit:
-    contain;
+  object-fit: contain;
+  object-position: center top;
 
-  object-position:
-    center top;
+  pointer-events: none;
 
   filter:
     drop-shadow(
       0
       14px
       16px
-      rgba(
-        0,
-        0,
-        0,
-        0.20
-      )
+      rgba(0, 0, 0, 0.20)
     );
-
-  pointer-events:
-    none;
 }
 
 
