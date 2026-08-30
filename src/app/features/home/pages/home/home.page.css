@@ -984,7 +984,7 @@
 
   .category-card__cutout {
     top:
-      -8%;
+      -10%;
 
     width:
       110%;
@@ -995,13 +995,7 @@
     /*
      * نفس فكرة قص الجزء السفلي
      */
-    clip-path:
-      inset(
-        0
-        0
-        9%
-        0
-      );
+    clip-path:none;
   }
 
   .category-card__label {
@@ -1078,21 +1072,15 @@
 
   .category-card__cutout {
     top:
-      -7%;
+      -9%;
 
     width:
       112%;
 
     height:
-      110%;
+      117%;
 
-    clip-path:
-      inset(
-        0
-        0
-        9%
-        0
-      );
+    clip-path:none;
   }
 
   .category-card__label {

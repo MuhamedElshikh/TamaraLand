@@ -1213,21 +1213,15 @@
      * لا تصغر الموديل
      */
     top:
-      -8%;
+      -10%;
 
     width:
       110%;
 
     height:
-      112%;
+      118%;
 
-    clip-path:
-      inset(
-        0
-        0
-        2.7%
-        0
-      );
+    clip-path: none;
   }
 
   .listing-page .category-card__label {
@@ -1310,21 +1304,15 @@
 
   .listing-page .category-card__cutout {
     top:
-      -8%;
+      -10%;
 
     width:
       112%;
 
     height:
-      110%;
+      117%;
 
-    clip-path:
-      inset(
-        0
-        0
-        2.7%
-        0
-      );
+    clip-path:none;
   }
 
   .listing-page .category-card__label {
