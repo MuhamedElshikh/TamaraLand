@@ -1,11 +1,7 @@
 <section class="listing-page">
 
-  <!-- =====================================================
-       HERO
-       ===================================================== -->
-
+  <!-- HERO -->
   <header class="listing-page__hero">
-
     <span class="listing-page__hero-line"></span>
 
     <p class="section-kicker">
@@ -19,31 +15,22 @@
     <p class="section-copy">
       {{ 'categories.subtitle' | translate }}
     </p>
-
   </header>
 
 
-  <!-- =====================================================
-       LOADING
-       ===================================================== -->
-
+  <!-- LOADING -->
   @if (isLoading()) {
 
     <div class="listing-page__grid listing-page__grid--loading">
 
       @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
-
         <div class="listing-page__skeleton"></div>
-
       }
 
     </div>
 
 
-  <!-- =====================================================
-       EMPTY
-       ===================================================== -->
-
+  <!-- EMPTY -->
   } @else if (categories().length === 0) {
 
     <div class="listing-page__empty">
@@ -55,10 +42,7 @@
     </div>
 
 
-  <!-- =====================================================
-       CATEGORIES
-       ===================================================== -->
-
+  <!-- CATEGORIES -->
   } @else {
 
     <div class="listing-page__grid">
@@ -71,56 +55,41 @@
 
         <a
           [routerLink]="['/categories', category.id]"
-          class="listing-card"
+          class="category-card"
           [style.--card-index]="i"
         >
 
-          <!-- Image -->
-          <div class="listing-card__image">
+          <!-- CARD -->
+          <div class="category-card__frame">
+
+            <!-- GOLD BACKGROUND -->
+            <div
+              class="category-card__stage"
+              aria-hidden="true"
+            >
+          
+          <!-- 3D CUTOUT MODEL -->
+          <div class="category-card__cutout">
 
             <img
-              [src]="category.imageUrl || fallbackImage"
+              [src]="category.imageUrl"
               [alt]="category | localizedName"
               loading="lazy"
             />
 
+          </div>  
+          </div>
+
           </div>
 
 
-          <!-- Gradient -->
-          <div class="listing-card__gradient"></div>
 
 
-          <!-- Content -->
-          <div class="listing-card__content">
+          <!-- CATEGORY NAME -->
+          <div class="category-card__label">
 
-            <div class="listing-card__text">
-
-              <span class="listing-card__name">
-                {{ category | localizedName }}
-              </span>
-
-              @if (category.description) {
-
-                <span class="listing-card__desc">
-                  {{ category.description }}
-                </span>
-
-              }
-
-            </div>
-
-
-            <!-- Arrow -->
-            <span class="listing-card__explore">
-
-              <span
-                class="listing-card__arrow"
-                aria-hidden="true"
-              >
-                →
-              </span>
-
+            <span class="category-card__label-text">
+              {{ category | localizedName }}
             </span>
 
           </div>

@@ -1,453 +1,1557 @@
-/* ================= Category Strip & Cards ================= */
+/* =========================================================
+   HOME — CATEGORY STRIP
+   ========================================================= */
 
 .category-strip-wrapper {
   position: relative;
+  padding-top: 3.25rem;
+  overflow: visible;
 }
 
 .category-strip {
+  position: relative;
+
   display: flex;
-  gap: 1.25rem;
+  align-items: flex-start;
+
+  gap: 1.5rem;
+  width: 100%;
+
   overflow-x: auto;
-  scroll-snap-type: x proximity;   /* كانت mandatory */
+  overflow-y: hidden;
+
+  scroll-snap-type: x proximity;
   scroll-behavior: smooth;
-  scroll-padding-inline: 16px;
-  padding-bottom: 4px;
+  scroll-padding-inline: 1rem;
+
+  padding:
+    0.75rem
+    1rem
+    1rem;
+
+  margin: 0;
+
   scrollbar-width: none;
+  background: transparent;
 }
 
 .category-strip::-webkit-scrollbar {
   display: none;
 }
 
+
+/* =========================================================
+   NAV BUTTONS
+   ========================================================= */
+
 .category-strip__nav {
   position: absolute;
-  top: 40%;
+
+  top: calc(50% + 1.6rem);
   transform: translateY(-50%);
-  z-index: 2;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+
+  z-index: 30;
+
+  width: 42px;
+  height: 42px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  border-radius: var(--radius-full);
+
   background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
+
+  border:
+    1px solid
+    var(--border-color);
+
   color: var(--primary);
+
   cursor: pointer;
-  transition: var(--transition-smooth);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  box-shadow:
+    var(--shadow-sm);
+
+  transition:
+    var(--transition-smooth);
 }
 
 .category-strip__nav:hover {
   background: var(--primary);
-  color: var(--bg-primary);
-  transform: translateY(-50%) scale(1.08);
+  color: var(--secondary-dark);
+  border-color: var(--primary);
+
+  transform:
+    translateY(-50%)
+    scale(1.06);
+
+  box-shadow:
+    var(--shadow-md);
 }
 
-.category-strip__nav--prev { inset-inline-start: -18px; }
-.category-strip__nav--next { inset-inline-end: -18px; }
-
-@keyframes skeletonPulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 0.9; }
+.category-strip__nav--prev {
+  inset-inline-start: -18px;
 }
+
+.category-strip__nav--next {
+  inset-inline-end: -18px;
+}
+
+
+/* =========================================================
+   SKELETON
+   ========================================================= */
 
 .category-card--skeleton {
-  flex: 0 0 auto;
+  position: relative;
+
+  flex:
+    0 0 auto;
+
   width: 23%;
-  aspect-ratio: 3 / 4;
-  border-radius: var(--radius-md);
-  background: var(--secondary-light);
-  border: 1px solid var(--border-color);
-  animation: skeletonPulse 1.4s ease-in-out infinite;
+  min-width: 190px;
+
+  height:
+    clamp(280px, 24vw, 340px);
+
+  border-radius:
+    var(--radius-md);
+
+  background:
+    var(--secondary-light);
+
+  border:
+    1px solid
+    var(--border-color);
+
+  animation:
+    skeletonPulse
+    1.4s ease-in-out infinite;
 }
+
+
+/* =========================================================
+   CATEGORY CARD
+   ========================================================= */
 
 .category-card {
+  --card-index: 0;
+
   position: relative;
+
   display: block;
-  flex: 0 0 auto;
+
+  flex:
+    0 0 auto;
+
   width: 23%;
-  aspect-ratio: 3 / 4;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  border: 1px solid var(--border-color);
+  min-width: 190px;
+
+  height:
+    clamp(300px, 25vw, 350px);
+
+  box-sizing: border-box;
+
+  text-decoration: none;
+
+  /*
+   * لازم يكون visible عشان الموديل يخرج
+   * من أعلى الكارت.
+   */
+  overflow: visible;
+
+  isolation: isolate;
+
   scroll-snap-align: start;
+
   opacity: 0;
-  animation: fadeInUp 0.6s ease forwards;
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-              border-color 0.3s ease,
-              box-shadow 0.4s ease;
+
+  animation:
+    categoryCardReveal
+    0.6s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    forwards;
+
+  animation-delay:
+    calc(
+      0.05s +
+      (var(--card-index) * 0.08s)
+    );
+
+  transition:
+    transform
+    0.35s
+    cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* استاجرد أنيميشن لكل كارت */
-.category-card:nth-child(1) { animation-delay: 0.05s; }
-.category-card:nth-child(2) { animation-delay: 0.15s; }
-.category-card:nth-child(3) { animation-delay: 0.25s; }
-.category-card:nth-child(4) { animation-delay: 0.35s; }
-.category-card:nth-child(5) { animation-delay: 0.45s; }
-.category-card:nth-child(6) { animation-delay: 0.55s; }
 
-.category-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  border-color: rgba(201, 162, 75, 0.6);
-  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.4), 0 0 15px rgba(201, 162, 75, 0.15);
-}
+/* =========================================================
+   MAIN CARD / OUTER FRAME
+   ========================================================= */
 
-.category-card img {
+.category-card__frame {
+  position: absolute;
+
+  /*
+   * main card تحت الموديل.
+   */
+  z-index: 1;
+
+  inset:
+    9% 0 0 0;
+
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  height: 91%;
+
+  box-sizing: border-box;
+
+  border-radius:
+    var(--radius-lg);
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--bg-card),
+      var(--secondary)
+    );
+
+  border:
+    1px solid
+    var(--border-color);
+
+  box-shadow:
+    var(--shadow-sm);
+
+  /*
+   * لا نقص الموديل من هنا.
+   */
+  overflow: visible;
+
+  transition:
+    transform 0.35s ease,
+    border-color 0.3s ease,
+    box-shadow 0.35s ease;
 }
 
-.category-card:hover img {
-  transform: scale(1.09);
+
+/* =========================================================
+   GOLD INNER CARD
+   ========================================================= */
+.category-card__stage {
+  position: absolute;
+
+  z-index: 2;
+
+  top: 5.5%;
+  left: 7%;
+
+  width: 86%;
+  height: 87%;
+
+  box-sizing: border-box;
+
+  border-radius:
+    calc(var(--radius-lg) - 2px);
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--primary-light),
+      var(--primary) 52%,
+      var(--primary-dark)
+    );
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--primary) 45%,
+      var(--border-color)
+    );
+
+  overflow: visible;
+
+  box-shadow:
+    inset
+      0 1px 0
+      rgba(255, 255, 255, 0.16),
+
+    inset
+      0 -18px 32px
+      rgba(0, 0, 0, 0.08);
 }
 
-.category-card::after {
+
+/* =========================================================
+   GOLD CARD LIGHT
+   ========================================================= */
+
+/* .category-card__stage::before {
   content: '';
+
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(16, 13, 8, 0.88) 0%, rgba(16, 13, 8, 0.2) 55%, transparent 100%);
-  transition: opacity 0.3s ease;
+
+  background:
+    radial-gradient(
+      circle at 50% 8%,
+      rgba(255, 255, 255, 0.22),
+      transparent 55%
+    );
+
+  pointer-events: none;
+} */
+
+
+/* =========================================================
+   GOLD CARD BOTTOM DETAIL
+   ========================================================= */
+
+/* .category-card__stage::after {
+  content: '';
+
+  position: absolute;
+
+  left: 12%;
+  right: 12%;
+
+  bottom: 8%;
+
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.28),
+      transparent
+    );
+
+  opacity: 0.8;
+
+  pointer-events: none;
+} */
+
+
+/* =========================================================
+   3D MODEL / CUTOUT
+   ========================================================= */
+.category-card__cutout {
+  position: absolute;
+
+  z-index: 10;
+
+  /*
+   * الموديل يطلع من فوق الـ gold card
+   */
+  top: -9%;
+  left: 50%;
+
+  width: 108%;
+  height: 112%;
+
+  transform: translateX(-50%);
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+
+  pointer-events: none;
+
+  overflow: visible;
+
+  /*
+   * القص يكون بالضبط عند نهاية الـ gold card.
+   *
+   * الـ cutout بدأ عند -9%
+   * وارتفاعه 112%
+   *
+   * لذلك الجزء المطلوب قصه من أسفل
+   * حوالي 2.7% فقط.
+   */
+  clip-path: inset(
+    0
+    0
+    2.7%
+    0
+  );
+
+  transition:
+    transform
+    0.45s
+    cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.category-card__content {
-  position: absolute;
-  inset-inline: 1rem;
-  bottom: 1rem;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
+
+.category-card__cutout img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  object-position: center top;
+
+  filter:
+    drop-shadow(
+      0
+      14px
+      16px
+      rgba(0, 0, 0, 0.20)
+    );
+
+  pointer-events: none;
 }
+
+/* =========================================================
+   MODEL IMAGE
+   ========================================================= */
+
+.category-card__cutout img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  object-position:
+    center top;
+
+  /*
+   * Shadow على الـ PNG نفسه
+   * عشان يحسسك إن الموديل خارج الكارت.
+   */
+  filter:
+    drop-shadow(
+      0
+      14px
+      16px
+      rgba(0, 0, 0, 0.20)
+    );
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   CATEGORY LABEL
+   ========================================================= */
 
 .category-card__label {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #C9A24B;
-  transition: transform 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;
+  position: absolute;
+
+  /*
+   * فوق الـ gold card،
+   * لكن أقل من الموديل.
+   */
+  z-index: 15;
+
+  top: 57%;
+
+  inset-inline:
+    0;
+
+  width: 100%;
+
+  min-height: 54px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding:
+    0.55rem
+    0.75rem;
+
+  background:
+    var(--label-bg);
+
+  border:
+    1px solid
+    var(--label-border);
+
+  border-radius:
+    var(--radius-md);
+
+  box-shadow:
+    0
+    6px
+    14px
+    var(--label-shadow);
+
+  backdrop-filter:
+    blur(4px);
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.3s ease;
+}
+
+
+/* =========================================================
+   LABEL TEXT
+   ========================================================= */
+
+.category-card__label-text {
+  position: relative;
+
+  display: block;
+
+  max-width: 94%;
+
+  text-align: center;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  color:
+    var(--label-text);
+
+  font-family:
+    'Tajawal',
+    system-ui,
+    sans-serif;
+
+  font-size:
+    1.1rem;
+
+  font-weight:
+    700;
+
+  line-height:
+    1.2;
+}
+
+
+/* =========================================================
+   GOLD UNDERLINE
+   ========================================================= */
+
+.category-card__label-text::after {
+  content: '';
+
+  position: absolute;
+
+  left: 50%;
+
+  bottom: -7px;
+
+  width: 28px;
+
+  height: 1px;
+
+  transform:
+    translateX(-50%);
+
+  background:
+    var(--gold-gradient);
+
+  opacity:
+    0.8;
+}
+
+
+/* =========================================================
+   HOVER
+   ========================================================= */
+
+.category-card:hover {
+  transform:
+    translateY(-6px);
+}
+
+.category-card:hover .category-card__frame {
+  border-color:
+    var(--primary);
+
+  box-shadow:
+    var(--shadow-sm);
+}
+
+.category-card:hover .category-card__cutout {
+  transform:
+    translateX(-50%)
+    translateY(-7px)
+    scale(1.02);
 }
 
 .category-card:hover .category-card__label {
-  color: #FFF5D0;
-  text-shadow: 0 2px 10px rgba(201, 162, 75, 0.4);
-  transform: translateX(-2px);
+  transform:
+    translateY(-2px);
+
+  border-color:
+    var(--primary);
+
+  box-shadow:
+    0
+    8px
+    16px
+    var(--label-shadow);
 }
 
-.category-card__arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: rgba(201, 162, 75, 0.15);
-  color: #C9A24B;
-  border: 1px solid rgba(201, 162, 75, 0.3);
-  opacity: 0.7;
-  transform: scale(0.85);
-  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+
+/* =========================================================
+   DARK THEME
+   ========================================================= */
+
+:root:not([data-theme='light'])
+.category-card__stage {
+  background:
+    linear-gradient(
+      145deg,
+      var(--primary-light),
+      var(--primary) 52%,
+      var(--primary-dark)
+    );
 }
 
-.category-card:hover .category-card__arrow {
-  opacity: 1;
-  transform: scale(1);
-  background: #C9A24B;
-  color: #100D08;
+:root:not([data-theme='light'])
+.category-card__frame {
+  background:
+    linear-gradient(
+      145deg,
+      var(--bg-card),
+      var(--secondary)
+    );
+
+  border-color:
+    var(--border-color);
+
+  box-shadow:
+    var(--shadow-sm);
 }
 
-/* ================= Animations ================= */
+:root:not([data-theme='light'])
+.category-card__label {
+  background:
+    var(--label-bg);
+
+  border-color:
+    var(--label-border);
+
+  box-shadow:
+    0
+    6px
+    14px
+    var(--label-shadow);
+}
+
+:root:not([data-theme='light'])
+.category-card__label-text {
+  color:
+    var(--label-text);
+}
+
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+:root[data-theme='light']
+.category-card__stage {
+  background:
+    linear-gradient(
+      145deg,
+      var(--primary-light),
+      var(--primary) 52%,
+      var(--primary-dark)
+    );
+}
+
+:root[data-theme='light']
+.category-card__frame {
+  background:
+    linear-gradient(
+      145deg,
+      var(--bg-card),
+      var(--secondary)
+    );
+
+  border-color:
+    var(--border-color);
+
+  box-shadow:
+    var(--shadow-sm);
+}
+
+:root[data-theme='light']
+.category-card__label {
+  background:
+    var(--label-bg);
+
+  border-color:
+    var(--label-border);
+
+  box-shadow:
+    0
+    6px
+    14px
+    var(--label-shadow);
+}
+
+:root[data-theme='light']
+.category-card__label-text {
+  color:
+    var(--label-text);
+}
+
+
+/* =========================================================
+   CATEGORY CARD ANIMATION
+   ========================================================= */
+
+@keyframes categoryCardReveal {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+}
+
+@keyframes skeletonPulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 0.9;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1024px) {
+
+  .category-strip-wrapper {
+    padding-top:
+      3rem;
+  }
+
+  .category-strip {
+    gap:
+      1.25rem;
+
+    padding-inline:
+      0.75rem;
+  }
+
+  .category-card,
+  .category-card--skeleton {
+    width:
+      30%;
+
+    min-width:
+      190px;
+  }
+
+  .category-card {
+    height:
+      clamp(280px, 32vw, 330px);
+  }
+
+  .category-card__label-text {
+    font-size:
+      1.05rem;
+  }
+}
+
+
+/* =========================================================
+   MOBILE / TABLET
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .category-strip-wrapper {
+    padding-top:
+      2.75rem;
+  }
+
+  .category-strip {
+    gap:
+      1rem;
+
+    padding:
+      0.65rem
+      0.5rem
+      0.75rem;
+  }
+
+  .category-strip__nav {
+    display:
+      none;
+  }
+
+  .category-card,
+  .category-card--skeleton {
+    width:
+      42%;
+
+    min-width:
+      160px;
+  }
+
+  .category-card {
+    height:
+      clamp(250px, 42vw, 300px);
+  }
+
+  .category-card__frame {
+    border-radius:
+      var(--radius-md);
+  }
+
+  .category-card__stage {
+    top:
+      6%;
+
+    left:
+      6%;
+
+    width:
+      88%;
+
+    height:
+      86%;
+
+    border-radius:
+      20px;
+  }
+
+  .category-card__cutout {
+    top:
+      -8%;
+
+    width:
+      110%;
+
+    height:
+      112%;
+
+    /*
+     * نفس فكرة قص الجزء السفلي
+     */
+    clip-path:
+      inset(
+        0
+        0
+        9%
+        0
+      );
+  }
+
+  .category-card__label {
+    top:
+      57%;
+
+    min-height:
+      46px;
+
+    padding:
+      0.45rem
+      0.35rem;
+
+    border-radius:
+      10px;
+  }
+
+  .category-card__label-text {
+    font-size:
+      1rem;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+  .category-strip-wrapper {
+    padding-top:
+      2.5rem;
+  }
+
+  .category-strip {
+    gap:
+      0.8rem;
+
+    padding-inline:
+      0.4rem;
+  }
+
+  .category-card,
+  .category-card--skeleton {
+    width:
+      62%;
+
+    min-width:
+      180px;
+  }
+
+  .category-card {
+    height:
+      clamp(270px, 68vw, 320px);
+  }
+
+  .category-card__stage {
+    top:
+      6%;
+
+    left:
+      6%;
+
+    width:
+      88%;
+
+    height:
+      86%;
+
+    border-radius:
+      18px;
+  }
+
+  .category-card__cutout {
+    top:
+      -7%;
+
+    width:
+      112%;
+
+    height:
+      110%;
+
+    clip-path:
+      inset(
+        0
+        0
+        9%
+        0
+      );
+  }
+
+  .category-card__label {
+    top:
+      57%;
+
+    min-height:
+      44px;
+
+    padding:
+      0.4rem
+      0.25rem;
+
+    border-radius:
+      9px;
+  }
+
+  .category-card__label-text {
+    font-size:
+      0.92rem;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .category-card,
+  .category-card__frame,
+  .category-card__cutout,
+  .category-card__label {
+    animation:
+      none !important;
+
+    transition:
+      none !important;
+  }
+
+  .category-card {
+    opacity:
+      1;
+
+    transform:
+      none;
+  }
+}
+
+
+/* =========================================================
+   PAGE ANIMATIONS
+   ========================================================= */
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    transform:
+      translateY(18px);
   }
+
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform:
+      translateY(0);
   }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .scaffold-page {
   opacity: 0;
-  animation: fadeInUp 0.7s ease forwards;
+
+  animation:
+    fadeInUp
+    0.7s
+    ease
+    forwards;
 }
+
+
+/* =========================================================
+   TRUST ITEM ICON
+   ========================================================= */
 
 .trust-item__icon {
   display: flex;
+
   align-items: center;
   justify-content: center;
+
   width: 44px;
   height: 44px;
+
   flex-shrink: 0;
+
   border-radius: 50%;
-  background: rgba(201, 162, 75, 0.1);
-  color: var(--primary);
-  transition: transform 0.3s ease;
+
+  background:
+    rgba(201, 162, 75, 0.1);
+
+  color:
+    var(--primary);
+
+  transition:
+    transform 0.3s ease;
 }
 
 .trust-item:hover .trust-item__icon {
-  animation: iconPulse 0.5s ease;
+  animation:
+    iconPulse
+    0.5s
+    ease;
 }
 
 @keyframes iconPulse {
-  50% { transform: scale(1.12); }
+  50% {
+    transform:
+      scale(1.12);
+  }
 }
+
+
+/* =========================================================
+   BRAND BANNER GLOW
+   ========================================================= */
 
 .brand-banner__glow {
   pointer-events: none;
+
   position: absolute;
+
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 40rem;
-  height: 20rem;
-  border-radius: 50%;
-  filter: blur(110px);
-  opacity: 0.15;
-  background: radial-gradient(circle, #C9A24B 0%, transparent 70%);
-  animation: pulseGlow 4s ease-in-out infinite;
+
+  transform:
+    translate(-50%, -50%);
+
+  width:
+    40rem;
+
+  height:
+    20rem;
+
+  border-radius:
+    50%;
+
+  filter:
+    blur(110px);
+
+  opacity:
+    0.15;
+
+  background:
+    radial-gradient(
+      circle,
+      #C9A24B 0%,
+      transparent 70%
+    );
+
+  animation:
+    pulseGlow
+    4s
+    ease-in-out
+    infinite;
 }
 
 @keyframes pulseGlow {
-  0%, 100% { opacity: 0.12; }
-  50% { opacity: 0.22; }
+  0%,
+  100% {
+    opacity:
+      0.12;
+  }
+
+  50% {
+    opacity:
+      0.22;
+  }
 }
 
-/* ---- Scroll Reveal (بديل الـ page-load animation للسكاشن اللي تحت) ---- */
+
+/* =========================================================
+   SCROLL REVEAL
+   ========================================================= */
 
 .reveal-init {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+
+  transform:
+    translateY(24px);
+
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
 }
 
 .reveal-active {
   opacity: 1;
-  transform: translateY(0);
+
+  transform:
+    translateY(0);
 }
 
-/* ---- Brand banner ---- */
+
+/* =========================================================
+   BRAND BANNER
+   ========================================================= */
 
 .brand-banner {
   position: relative;
+
   overflow: hidden;
+
   text-align: center;
-  padding: 5rem 1.5rem;
-  margin: 2rem 0;
-  background: var(--secondary-light);
-  border-top: 1px solid var(--border-color);
-  border-bottom: 1px solid var(--border-color);
+
+  padding:
+    5rem
+    1.5rem;
+
+  margin:
+    2rem 0;
+
+  background:
+    var(--secondary-light);
+
+  border-top:
+    1px solid
+    var(--border-color);
+
+  border-bottom:
+    1px solid
+    var(--border-color);
 }
 
 .brand-banner__eyebrow {
   position: relative;
+
   z-index: 1;
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.25em;
-  color: var(--text-secondary);
-  margin-bottom: 1rem;
+
+  font-size:
+    0.78rem;
+
+  font-weight:
+    700;
+
+  text-transform:
+    uppercase;
+
+  letter-spacing:
+    0.25em;
+
+  color:
+    var(--text-secondary);
+
+  margin-bottom:
+    1rem;
 }
 
 .brand-banner__quote {
   position: relative;
+
   z-index: 1;
-  max-width: 44rem;
-  margin: 0 auto 2rem;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1.4rem, 3vw, 2rem);
-  font-style: italic;
-  font-weight: 600;
-  line-height: 1.5;
-  color: var(--text-secondary);
+
+  max-width:
+    44rem;
+
+  margin:
+    0 auto 2rem;
+
+  font-family:
+    'Cormorant Garamond',
+    serif;
+
+  font-size:
+    clamp(
+      1.4rem,
+      3vw,
+      2rem
+    );
+
+  font-style:
+    italic;
+
+  font-weight:
+    600;
+
+  line-height:
+    1.5;
+
+  color:
+    var(--text-secondary);
 }
 
-/* ---- Trust strip ---- */
+
+/* =========================================================
+   TRUST STRIP
+   ========================================================= */
 
 .trust-strip {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.25rem;
-  max-width: 1280px;
-  margin: 3.5rem auto;
-  padding: 0 1.5rem;
+  display:
+    flex;
+
+  flex-wrap:
+    wrap;
+
+  justify-content:
+    center;
+
+  gap:
+    1.25rem;
+
+  max-width:
+    1280px;
+
+  margin:
+    3.5rem auto;
+
+  padding:
+    0 1.5rem;
 }
 
 .trust-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.35rem 1.25rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-color);
-  background: rgba(22, 18, 12, 0.7);
-  backdrop-filter: blur(8px);
-  flex: 1 1 240px;
-  max-width: 100%;
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-              border-color 0.35s ease,
-              box-shadow 0.35s ease;
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    1rem;
+
+  padding:
+    1.35rem
+    1.25rem;
+
+  border-radius:
+    var(--radius-md);
+
+  border:
+    1px solid
+    var(--border-color);
+
+  background:
+    rgba(22, 18, 12, 0.7);
+
+  backdrop-filter:
+    blur(8px);
+
+  flex:
+    1 1 240px;
+
+  max-width:
+    100%;
+
+  transition:
+    transform
+      0.35s
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      ),
+    border-color
+      0.35s ease,
+    box-shadow
+      0.35s ease;
 }
 
 .trust-item:hover {
-  border-color: rgba(201, 162, 75, 0.6);
-  transform: translateY(-6px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35), 0 0 12px rgba(201, 162, 75, 0.15);
+  border-color:
+    rgba(
+      201,
+      162,
+      75,
+      0.6
+    );
+
+  transform:
+    translateY(-6px);
+
+  box-shadow:
+    0
+    12px
+    28px
+    rgba(0, 0, 0, 0.35),
+    0
+    0
+    12px
+    rgba(
+      201,
+      162,
+      75,
+      0.15
+    );
 }
 
 .trust-item__title {
-  font-size: 0.92rem;
-  font-weight: 700;
-  color: rgba(255, 245, 224, 0.95);
-  transition: color 0.3s ease;
+  font-size:
+    0.92rem;
+
+  font-weight:
+    700;
+
+  color:
+    rgba(
+      255,
+      245,
+      224,
+      0.95
+    );
+
+  transition:
+    color 0.3s ease;
 }
 
-.trust-item:hover .trust-item__title {
-  color: #C9A24B;
+.trust-item:hover
+.trust-item__title {
+  color:
+    #C9A24B;
 }
 
 .trust-item__copy {
-  font-size: 0.8rem;
-  color: rgba(255, 245, 224, 0.62);
-  line-height: 1.4;
+  font-size:
+    0.8rem;
+
+  color:
+    rgba(
+      255,
+      245,
+      224,
+      0.62
+    );
+
+  line-height:
+    1.4;
 }
 
-/* ---- Button shine ---- */
+
+/* =========================================================
+   BUTTON SHINE
+   ========================================================= */
 
 .btn-primary {
   position: relative;
+
   overflow: hidden;
 }
 
 .btn-primary::before {
   content: '';
+
   position: absolute;
+
   top: 0;
   left: -100%;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.25), transparent);
-  transition: left 0.6s ease;
+
+  width:
+    60%;
+
+  height:
+    100%;
+
+  background:
+    linear-gradient(
+      120deg,
+      transparent,
+      rgba(
+        255,
+        255,
+        255,
+        0.25
+      ),
+      transparent
+    );
+
+  transition:
+    left 0.6s ease;
 }
 
 .btn-primary:hover::before {
-  left: 120%;
+  left:
+    120%;
 }
 
-/* ---- Responsive ---- */
 
-@media (max-width: 1024px) {
-  .category-card,
-  .category-card--skeleton {
-    width: 30%;
-  }
-}
+/* =========================================================
+   RESPONSIVE — ADDITIONAL
+   ========================================================= */
 
 @media (max-width: 768px) {
-  .category-card,
-  .category-card--skeleton {
-    width: 42%;
-  }
-
-  .category-strip__nav {
-    display: none; /* الأزرار مش لازمة على الموبايل، السحب باليد أسهل */
-  }
-
-  .category-card__label {
-    font-size: 1rem;
-    inset-inline-start: 0.75rem;
-    bottom: 0.75rem;
-    color: gold;
-  }
 
   .brand-banner {
-    padding: 3rem 1rem;
-    margin: 1.5rem 0;
+    padding:
+      3rem 1rem;
+
+    margin:
+      1.5rem 0;
   }
 
   .brand-banner__glow {
-    width: 24rem;
-    height: 12rem;
+    width:
+      24rem;
+
+    height:
+      12rem;
   }
 
   .trust-strip {
-    gap: 1rem;
-    margin: 2rem auto;
-    padding: 0 1rem;
+    gap:
+      1rem;
+
+    margin:
+      2rem auto;
+
+    padding:
+      0 1rem;
   }
 
   .trust-item {
-    flex: 1 1 100%;
-    padding: 1rem;
+    flex:
+      1 1 100%;
+
+    padding:
+      1rem;
   }
 }
 
 @media (max-width: 480px) {
-  .category-card,
-  .category-card--skeleton {
-    width: 62%;
-    aspect-ratio: 1 / 1;
-    border-radius: var(--radius-sm);
-  }
-
-  .category-card__label {
-    font-size: 0.9rem;
-    inset-inline-start: 0.6rem;
-    bottom: 0.6rem;
-    color: #C9A24B;
-  }
 
   .brand-banner {
-    padding: 2.5rem 0.75rem;
+    padding:
+      2.5rem 0.75rem;
   }
 
   .brand-banner__eyebrow {
-    font-size: 0.7rem;
-    letter-spacing: 0.18em;
+    font-size:
+      0.7rem;
+
+    letter-spacing:
+      0.18em;
   }
 
   .trust-item {
-    gap: 0.75rem;
-    padding: 0.9rem;
+    gap:
+      0.75rem;
+
+    padding:
+      0.9rem;
   }
 
   .trust-item__icon {
-    width: 38px;
-    height: 38px;
+    width:
+      38px;
+
+    height:
+      38px;
   }
 
   .trust-item__title {
-    font-size: 0.85rem;
+    font-size:
+      0.85rem;
   }
 
   .trust-item__copy {
-    font-size: 0.75rem;
+    font-size:
+      0.75rem;
   }
 }
 
 
+/* =========================================================
+   FINAL REDUCED MOTION
+   ========================================================= */
 
-/* احترام يوزرز الـ reduced motion */
 @media (prefers-reduced-motion: reduce) {
+
   .category-card,
   .scaffold-page,
   .reveal-init,
   .reveal-active {
-    animation: none;
-    transition: none;
-    opacity: 1;
-    transform: none;
+    animation:
+      none;
+
+    transition:
+      none;
+
+    opacity:
+      1;
+
+    transform:
+      none;
   }
 }

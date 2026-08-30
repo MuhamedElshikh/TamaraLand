@@ -6,7 +6,10 @@
   --primary: hsl(var(--primary-hsl));
   --primary-light: hsl(45, 60%, 68%);
   --primary-dark: hsl(40, 45%, 35%);
-
+ --label-bg: rgba(18, 15, 10, 0.95);
+  --label-border: rgba(201, 162, 75, 0.30);
+  --label-text: #E8CD82;
+  --label-shadow: rgba(0, 0, 0, 0.40);
   --secondary-hsl: 30, 20%, 8%;       /* Ink black */
   --secondary: hsl(var(--secondary-hsl));
   --secondary-light: hsl(30, 15%, 15%);
@@ -1454,7 +1457,10 @@ app-error-message .error-message {
   --primary: hsl(var(--primary-hsl));
   --primary-light: hsl(44, 55%, 58%);
   --primary-dark: hsl(40, 48%, 30%);
-
+ --label-bg: rgba(255, 255, 255, 0.97);
+  --label-border: rgba(201, 162, 75, 0.25);
+  --label-text: var(--text-primary);
+  --label-shadow: rgba(60, 45, 15, 0.12);
   --secondary-hsl: 39, 36%, 93%;
   --secondary: hsl(var(--secondary-hsl));
   --secondary-light: hsl(34, 38%, 96%);
