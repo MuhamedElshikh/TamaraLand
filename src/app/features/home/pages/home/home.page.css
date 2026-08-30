@@ -4,7 +4,6 @@
 
 .category-strip-wrapper {
   position: relative;
-  padding-top: 3.25rem;
   overflow: visible;
 }
 
@@ -194,21 +193,42 @@
 .category-card__frame {
   position: absolute;
 
-  /*
-   * main card تحت الموديل.
-   */
   z-index: 1;
 
-  inset:
-    9% 0 0 0;
+  inset: 9% 0 0 0;
 
   width: 100%;
   height: 91%;
 
   box-sizing: border-box;
 
-  border-radius:
-    var(--radius-lg);
+  background: transparent;
+
+  border: 0;
+
+  box-shadow: none;
+
+  overflow: visible;
+}
+
+
+/* =========================================================
+   OUTER CARD — TOP PIECE
+   ========================================================= */
+
+.category-card__frame::before {
+  content: '';
+
+  position: absolute;
+  z-index: 1;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 60%;
+
+  box-sizing: border-box;
 
   background:
     linear-gradient(
@@ -217,28 +237,84 @@
       var(--secondary)
     );
 
-  border:
-    1px solid
-    var(--border-color);
+  border: 1px solid var(--border-color);
 
-  box-shadow:
-    var(--shadow-sm);
+  border-radius:
+    var(--radius-lg)
+    var(--radius-lg)
+    22px
+    22px;
+
+  box-shadow: var(--shadow-sm);
 
   /*
-   * لا نقص الموديل من هنا.
+   * Smooth central notch.
+   * نفس عرض الـ label: من 5% إلى 95%.
    */
-  overflow: visible;
+  -webkit-mask:
+    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat,
+    linear-gradient(#000 0 0) 5% 88% / 90% 12% no-repeat;
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat,
+    linear-gradient(#000 0 0) 5% 88% / 90% 12% no-repeat;
+  mask-composite: exclude;
+}
 
-  transition:
-    transform 0.35s ease,
-    border-color 0.3s ease,
-    box-shadow 0.35s ease;
+
+/* =========================================================
+   OUTER CARD — BOTTOM PIECE
+   ========================================================= */
+
+.category-card__frame::after {
+  content: '';
+
+  position: absolute;
+  z-index: 1;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 40%;
+
+  box-sizing: border-box;
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--bg-card),
+      var(--secondary)
+    );
+
+  border: 1px solid var(--border-color);
+
+  border-radius:
+    22px
+    22px
+    var(--radius-lg)
+    var(--radius-lg);
+
+  box-shadow: var(--shadow-sm);
+
+  /*
+   * نفس الـ notch بالضبط، لكن من الناحية السفلية.
+   */
+  -webkit-mask:
+    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat,
+    linear-gradient(#000 0 0) 5% 0 / 90% 12% no-repeat;
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat,
+    linear-gradient(#000 0 0) 5% 0 / 90% 12% no-repeat;
+  mask-composite: exclude;
 }
 
 
 /* =========================================================
    GOLD INNER CARD
    ========================================================= */
+
 .category-card__stage {
   position: absolute;
 
@@ -252,8 +328,33 @@
 
   box-sizing: border-box;
 
-  border-radius:
-    calc(var(--radius-lg) - 2px);
+  background: transparent;
+
+  border: 0;
+
+  overflow: visible;
+
+  box-shadow: none;
+}
+
+
+/* =========================================================
+   GOLD CARD — TOP PIECE
+   ========================================================= */
+
+.category-card__stage::before {
+  content: '';
+
+  position: absolute;
+  z-index: 1;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 60%;
+
+  box-sizing: border-box;
 
   background:
     linear-gradient(
@@ -263,89 +364,98 @@
       var(--primary-dark)
     );
 
-  border:
-    1px solid
+  border: 1px solid
     color-mix(
       in srgb,
       var(--primary) 45%,
       var(--border-color)
     );
 
-  overflow: visible;
+  border-radius:
+    calc(var(--radius-lg) - 2px)
+    calc(var(--radius-lg) - 2px)
+    20px
+    20px;
 
   box-shadow:
-    inset
-      0 1px 0
-      rgba(255, 255, 255, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
 
-    inset
-      0 -18px 32px
-      rgba(0, 0, 0, 0.08);
+  /*
+   * نفس عرض الـ label بالضبط.
+   */
+  /* -webkit-mask:
+    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat,
+    linear-gradient(#000 0 0) 5% 88% / 90% 12% no-repeat;
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat,
+    linear-gradient(#000 0 0) 5% 88% / 90% 12% no-repeat;
+  mask-composite: exclude; */
 }
 
 
 /* =========================================================
-   GOLD CARD LIGHT
+   GOLD CARD — BOTTOM PIECE
    ========================================================= */
 
-/* .category-card__stage::before {
+.category-card__stage::after {
   content: '';
 
   position: absolute;
-  inset: 0;
+  z-index: 1;
 
-  background:
-    radial-gradient(
-      circle at 50% 8%,
-      rgba(255, 255, 255, 0.22),
-      transparent 55%
-    );
+  left: 0;
+  right: 0;
+  bottom: 0;
 
-  pointer-events: none;
-} */
+  height: 40%;
 
-
-/* =========================================================
-   GOLD CARD BOTTOM DETAIL
-   ========================================================= */
-
-/* .category-card__stage::after {
-  content: '';
-
-  position: absolute;
-
-  left: 12%;
-  right: 12%;
-
-  bottom: 8%;
-
-  height: 1px;
+  box-sizing: border-box;
 
   background:
     linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.28),
-      transparent
+      145deg,
+      var(--primary-light),
+      var(--primary) 52%,
+      var(--primary-dark)
     );
 
-  opacity: 0.8;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--primary) 45%,
+      var(--border-color)
+    );
 
-  pointer-events: none;
-} */
+  border-radius:
+    20px
+    20px
+    calc(var(--radius-lg) - 2px)
+    calc(var(--radius-lg) - 2px);
+
+  box-shadow:
+    inset 0 -18px 32px rgba(0, 0, 0, 0.08);
+
+  -webkit-mask:
+    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat,
+    linear-gradient(#000 0 0) 5% 0 / 90% 12% no-repeat;
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat,
+    linear-gradient(#000 0 0) 5% 0 / 90% 12% no-repeat;
+  mask-composite: exclude;
+}
 
 
 /* =========================================================
    3D MODEL / CUTOUT
    ========================================================= */
+
 .category-card__cutout {
   position: absolute;
 
   z-index: 10;
 
-  /*
-   * الموديل يطلع من فوق الـ gold card
-   */
   top: -9%;
   left: 50%;
 
@@ -362,26 +472,19 @@
 
   overflow: visible;
 
-  /*
-   * القص يكون بالضبط عند نهاية الـ gold card.
-   *
-   * الـ cutout بدأ عند -9%
-   * وارتفاعه 112%
-   *
-   * لذلك الجزء المطلوب قصه من أسفل
-   * حوالي 2.7% فقط.
-   */
-  clip-path: inset(
-    0
-    0
-    2.7%
-    0
-  );
+  clip-path:
+    inset(
+      0
+      0
+      2.7%
+      0
+    );
 
   transition:
     transform
     0.45s
     cubic-bezier(0.22, 1, 0.36, 1);
+    
 }
 
 
@@ -392,39 +495,8 @@
   height: 100%;
 
   object-fit: contain;
-
   object-position: center top;
 
-  filter:
-    drop-shadow(
-      0
-      14px
-      16px
-      rgba(0, 0, 0, 0.20)
-    );
-
-  pointer-events: none;
-}
-
-/* =========================================================
-   MODEL IMAGE
-   ========================================================= */
-
-.category-card__cutout img {
-  display: block;
-
-  width: 100%;
-  height: 100%;
-
-  object-fit: contain;
-
-  object-position:
-    center top;
-
-  /*
-   * Shadow على الـ PNG نفسه
-   * عشان يحسسك إن الموديل خارج الكارت.
-   */
   filter:
     drop-shadow(
       0
@@ -444,30 +516,27 @@
 .category-card__label {
   position: absolute;
 
-  /*
-   * فوق الـ gold card،
-   * لكن أقل من الموديل.
-   */
   z-index: 15;
 
   top: 57%;
 
-  inset-inline:
-    0;
+  /*
+   * أصغر من الكارت، والـ notch يبدأ وينتهي
+   * عند نفس النقطتين بالضبط.
+   */
+  left: 5%;
+  width: 90%;
 
-  width: 100%;
-
-  min-height: 54px;
+  min-height: 48px;
 
   box-sizing: border-box;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
   padding:
-    0.55rem
+    0.45rem
     0.75rem;
 
   background:
@@ -475,7 +544,7 @@
 
   border:
     1px solid
-    var(--label-border);
+    var(--primary);
 
   border-radius:
     var(--radius-md);
@@ -489,10 +558,59 @@
   backdrop-filter:
     blur(4px);
 
+  opacity: 1;
+  visibility: visible;
+
+  transform:
+    translateY(0)
+    scale(1);
+
+  overflow: hidden;
+
   transition:
-    transform 0.35s ease,
-    box-shadow 0.35s ease,
-    border-color 0.3s ease;
+    transform
+      0.4s
+      cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow
+      0.4s ease,
+    border-color
+      0.3s ease;
+}
+
+
+/* =========================================================
+   LABEL SHINE
+   ========================================================= */
+
+.category-card__label::before {
+  content: '';
+
+  position: absolute;
+
+  z-index: 1;
+
+  top: 0;
+  left: -80%;
+
+  width: 55%;
+  height: 100%;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      105deg,
+      transparent,
+      rgba(255, 255, 255, 0.24),
+      transparent
+    );
+
+  transform: skewX(-18deg);
+
+  transition:
+    left
+    0.7s
+    cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 
@@ -503,6 +621,8 @@
 .category-card__label-text {
   position: relative;
 
+  z-index: 2;
+
   display: block;
 
   max-width: 94%;
@@ -510,9 +630,7 @@
   text-align: center;
 
   white-space: nowrap;
-
   overflow: hidden;
-
   text-overflow: ellipsis;
 
   color:
@@ -524,7 +642,7 @@
     sans-serif;
 
   font-size:
-    1.1rem;
+    1.05rem;
 
   font-weight:
     700;
@@ -544,21 +662,26 @@
   position: absolute;
 
   left: 50%;
+  bottom: -6px;
 
-  bottom: -7px;
-
-  width: 28px;
-
+  width: 26px;
   height: 1px;
 
   transform:
-    translateX(-50%);
+    translateX(-50%)
+    scaleX(1);
+
+  transform-origin: center;
 
   background:
     var(--gold-gradient);
 
-  opacity:
-    0.8;
+  opacity: 0.8;
+
+  transition:
+    transform
+    0.35s
+    ease;
 }
 
 
@@ -571,13 +694,6 @@
     translateY(-6px);
 }
 
-.category-card:hover .category-card__frame {
-  border-color:
-    var(--primary);
-
-  box-shadow:
-    var(--shadow-sm);
-}
 
 .category-card:hover .category-card__cutout {
   transform:
@@ -586,18 +702,38 @@
     scale(1.02);
 }
 
+
+/* =========================================================
+   LABEL HOVER ANIMATION
+   ========================================================= */
+
 .category-card:hover .category-card__label {
   transform:
-    translateY(-2px);
+    translateY(-3px)
+    scale(1.025);
 
   border-color:
     var(--primary);
 
   box-shadow:
     0
-    8px
-    16px
+    10px
+    22px
     var(--label-shadow);
+}
+
+
+.category-card:hover .category-card__label::before {
+  left:
+    125%;
+}
+
+
+.category-card:hover
+.category-card__label-text::after {
+  transform:
+    translateX(-50%)
+    scaleX(1.35);
 }
 
 

@@ -1,22 +1,27 @@
 /* =========================================================
-   CATEGORIES LISTING PAGE
+   CATEGORIES PAGE
+   CATEGORY CARDS — EXACT HOME CARD STYLE
+   ========================================================= */
+
+
+/* =========================================================
+   PAGE
    ========================================================= */
 
 .listing-page {
+  position: relative;
+
   width: 100%;
-  max-width: 1400px;
-  min-width: 0;
-
-  margin-inline: auto;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 2rem;
-
-  padding: 1.5rem 1.25rem 3rem;
+  min-height: 100%;
 
   box-sizing: border-box;
+
+  padding:
+    clamp(2rem, 4vw, 4rem)
+    clamp(1rem, 4vw, 4rem)
+    4rem;
+
+  overflow: visible;
 }
 
 
@@ -25,17 +30,24 @@
    ========================================================= */
 
 .listing-page__hero {
-  width: 100%;
-  max-width: 48rem;
+  position: relative;
 
-  padding-top: 0.75rem;
+  max-width: 850px;
+
+  margin:
+    0 auto;
+
+  text-align: center;
+
+  opacity: 0;
 
   animation:
-    categoryHeroReveal
-    0.65s
-    cubic-bezier(0.22, 1, 0.36, 1)
-    both;
+    fadeInUp
+    0.7s
+    ease
+    forwards;
 }
+
 
 .listing-page__hero-line {
   display: block;
@@ -43,64 +55,78 @@
   width: 42px;
   height: 2px;
 
-  margin-bottom: 0.9rem;
+  margin:
+    0 auto
+    1.25rem;
 
   background:
-    var(--gold-gradient);
+    var(--primary);
 
-  transform-origin: left;
-
-  animation:
-    categoryLineReveal
-    0.6s
-    0.1s
-    ease
-    both;
-}
-
-.listing-page__hero .section-kicker {
-  margin-bottom: 0.45rem;
-}
-
-.listing-page__hero .section-title {
-  margin-bottom: 0.55rem;
-}
-
-.listing-page__hero .section-copy {
-  max-width: 40rem;
+  border-radius:
+    999px;
 }
 
 
-/* =========================================================
-   CATEGORY LABEL VARIABLES
-   ========================================================= */
+.listing-page .section-kicker {
+  margin:
+    0 0 0.65rem;
 
-:root {
-  --label-bg:
-    rgba(18, 15, 10, 0.95);
+  color:
+    var(--primary);
 
-  --label-border:
-    rgba(201, 162, 75, 0.30);
+  font-size:
+    0.78rem;
 
-  --label-text:
-    #E8CD82;
+  font-weight:
+    700;
 
-  --label-shadow:
-    rgba(0, 0, 0, 0.40);
+  letter-spacing:
+    0.25em;
+
+  text-transform:
+    uppercase;
 }
 
-:root[data-theme='light'] {
-  --label-bg:
-    rgba(255, 255, 255, 0.97);
 
-  --label-border:
-    rgba(201, 162, 75, 0.25);
+.listing-page .section-title {
+  margin:
+    0 0 0.85rem;
 
-  --label-text:
+  color:
     var(--text-primary);
 
-  --label-shadow:
-    rgba(60, 45, 15, 0.12);
+  font-family:
+    Georgia,
+    'Times New Roman',
+    serif;
+
+  font-size:
+    clamp(
+      2rem,
+      4vw,
+      3.25rem
+    );
+
+  font-weight:
+    500;
+
+  line-height:
+    1.1;
+}
+
+
+.listing-page .section-copy {
+  max-width:
+    650px;
+
+  margin:
+    0 auto;
+
+  color:
+    var(--text-secondary);
+
+  line-height:
+    1.7;
 }
 
 
@@ -109,25 +135,103 @@
    ========================================================= */
 
 .listing-page__grid {
+  position: relative;
+
   width: 100%;
-  min-width: 0;
+
+  margin-top:
+    clamp(
+      4rem,
+      6vw,
+      6rem
+    );
 
   display: grid;
 
   grid-template-columns:
-    repeat(4, minmax(0, 1fr));
+    repeat(
+      4,
+      minmax(0, 1fr)
+    );
 
   column-gap:
-    1rem;
+    1.5rem;
 
   row-gap:
-    4.5rem;
+    5rem;
 
-  margin-top:
-    3rem;
+  align-items:
+    start;
 
   overflow:
     visible;
+}
+
+
+/* =========================================================
+   SKELETON
+   ========================================================= */
+
+.listing-page__grid--loading {
+  align-items:
+    start;
+}
+
+
+.listing-page__skeleton {
+  width:
+    100%;
+
+  height:
+    clamp(
+      300px,
+      25vw,
+      350px
+    );
+
+  box-sizing:
+    border-box;
+
+  border-radius:
+    var(--radius-lg);
+
+  background:
+    var(--secondary-light);
+
+  border:
+    1px solid
+    var(--border-color);
+
+  animation:
+    skeletonPulse
+    1.4s
+    ease-in-out
+    infinite;
+}
+
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.listing-page__empty {
+  min-height:
+    250px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  text-align:
+    center;
+
+  margin-top:
+    4rem;
 }
 
 
@@ -137,248 +241,61 @@
 
 .listing-page .category-card {
   --card-index: 0;
-  --card-height: clamp(360px, 30vw, 430px);
 
-  position: relative;
+  position:
+    relative;
 
-  display: block;
+  display:
+    block;
 
-  width: 100%;
-  height: var(--card-height);
-
-  box-sizing: border-box;
-
-  text-decoration: none;
-
-  overflow: visible;
-
-  isolation: isolate;
-
-  opacity: 1;
-
-  transform: none;
-
-  animation:
-    categoryCardReveal
-    0.55s
-    cubic-bezier(0.22, 1, 0.36, 1)
-    both;
-
-  animation-delay:
-    calc(
-      0.04s +
-      (var(--card-index) * 0.055s)
-    );
-}
-
-
-/* =========================================================
-   MAIN CARD
-   ========================================================= */
-
-.listing-page .category-card__frame {
-  position: absolute;
-
-  inset: 0;
-
-  z-index: 1;
-
-  width: 100%;
-  height: 100%;
-
-  box-sizing: border-box;
-
-  border-radius:
-    var(--radius-lg);
-
-  background:
-    var(--bg-card);
-
-  border:
-    1px solid
-    var(--border-color);
+  width:
+    100%;
 
   /*
-   * لازم visible
-   * عشان الموديل يطلع فوق الكارت.
+   * نفس ارتفاع Home
    */
+  height:
+    clamp(
+      300px,
+      25vw,
+      350px
+    );
+
+  box-sizing:
+    border-box;
+
+  text-decoration:
+    none;
+
   overflow:
     visible;
 
-  box-shadow:
-    0
-    12px
-    28px
-    rgba(0, 0, 0, 0.09);
-
-  transition:
-    transform
-      0.4s
-      cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow
-      0.4s ease,
-    border-color
-      0.3s ease;
-}
-
-
-/* =========================================================
-   GOLD / CHAMPAGNE STAGE
-   ========================================================= */
-.listing-page .category-card__stage {
-  position: absolute;
-
-  z-index: 2;
-
-  top: 6%;
-  left: 7%;
-
-  width: 86%;
-  height: 84%;
-
-  box-sizing: border-box;
-
-  border-radius: 28px;
-
-  /*
-   * مهم:
-   * visible عشان الموديل يطلع من فوق الـ gold.
-   */
-  overflow: visible;
-
-  background:
-    linear-gradient(
-      145deg,
-      #F1DFB7 0%,
-      #E4CC91 50%,
-      #D0AC55 100%
-    );
-
-  border:
-    1px solid
-    rgba(201, 162, 75, 0.22);
-
-  box-shadow:
-    inset
-      0 1px 0
-      rgba(255, 255, 255, 0.45),
-
-    inset
-      0 -20px 35px
-      rgba(90, 60, 15, 0.06);
-}
-
-/* =========================================================
-   GOLD LIGHT
-   ========================================================= */
-
-/* .listing-page .category-card__stage::before {
-  content: '';
-
-  position: absolute;
-
-  inset: 0;
-
-  background:
-    radial-gradient(
-      circle at 50% 8%,
-      rgba(255, 255, 255, 0.42),
-      transparent 55%
-    );
-
-  pointer-events:
-    none;
-} */
-
-
-/* =========================================================
-   GOLD BOTTOM DETAIL
-   ========================================================= */
-
-.listing-page .category-card__stage::after {
-  content: '';
-
-  position: absolute;
-
-  left: 12%;
-  right: 12%;
-
-  bottom: 7%;
-
-  height: 1px;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(201, 162, 75, 0.45),
-      transparent
-    );
+  isolation:
+    isolate;
 
   opacity:
-    0.7;
+    0;
 
-  pointer-events:
-    none;
-}
+  animation:
+    categoryCardReveal
+    0.6s
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    )
+    forwards;
 
-
-/* =========================================================
-   3D CUTOUT
-   ========================================================= */
-.listing-page .category-card__cutout {
-  position: absolute;
-
-  z-index: 5;
-
-  /*
-   * يطلع فوق الـ gold card
-   */
-  top: -8%;
-
-  left: 50%;
-
-  width: 100%;
-  height: 116%;
-
-  transform:
-    translateX(-50%);
-
-  display: flex;
-
-  justify-content: center;
-  align-items: flex-start;
-
-  pointer-events: none;
-
-  overflow: visible;
-
-  /*
-   * هنا السحر:
-   *
-   * الـ cutout يبدأ من -8%
-   * وارتفاعه 116%
-   *
-   * نهاية الـ gold = 100%
-   *
-   * لذلك نقص آخر ~7%
-   * من الـ cutout.
-   *
-   * النتيجة:
-   * الصورة تظهر كاملة فوق،
-   * وتتقص بالضبط عند أسفل الـ gold.
-   */
-  clip-path:
-    inset(
-      0
-      0
-      7%
-      0
+  animation-delay:
+    calc(
+      0.05s +
+      (var(--card-index) * 0.08s)
     );
 
   transition:
     transform
-    0.5s
+    0.35s
     cubic-bezier(
       0.22,
       1,
@@ -389,51 +306,584 @@
 
 
 /* =========================================================
-   MODEL IMAGE
+   OUTER FRAME
    ========================================================= */
 
-.listing-page .category-card__cutout img {
-  display: block;
+.listing-page .category-card__frame {
+  position:
+    absolute;
 
-  width: 100%;
-  height: 100%;
+  z-index:
+    1;
 
-  object-fit: contain;
-
-  object-position: center top;
-
-  filter:
-    drop-shadow(
-      0
-      18px
-      20px
-      rgba(0, 0, 0, 0.18)
-    );
-
-  pointer-events: none;
-}
-
-
-/* =========================================================
-   CATEGORY LABEL
-   ========================================================= */
-
-.listing-page .category-card__label {
-  position: absolute;
-
-  z-index: 20;
-
-  top:
-    62%;
-
-  left:
-    0;
+  /*
+   * IMPORTANT
+   *
+   * نفس Home بالضبط
+   */
+  inset:
+    9% 0 0 0;
 
   width:
     100%;
 
+  height:
+    91%;
+
+  box-sizing:
+    border-box;
+
+  background:
+    transparent;
+
+  border:
+    0;
+
+  box-shadow:
+    none;
+
+  overflow:
+    visible;
+}
+
+
+/* =========================================================
+   OUTER FRAME — TOP PIECE
+   ========================================================= */
+
+.listing-page .category-card__frame::before {
+  content:
+    '';
+
+  position:
+    absolute;
+
+  z-index:
+    1;
+
+  top:
+    0;
+
+  left:
+    0;
+
+  right:
+    0;
+
+  height:
+    60%;
+
+  box-sizing:
+    border-box;
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--bg-card),
+      var(--secondary)
+    );
+
+  border:
+    1px solid
+    var(--border-color);
+
+  border-radius:
+    var(--radius-lg)
+    var(--radius-lg)
+    22px
+    22px;
+
+  box-shadow:
+    var(--shadow-sm);
+
+  /*
+   * NOTCH
+   *
+   * نفس Home
+   */
+  -webkit-mask:
+    linear-gradient(#000 0 0)
+      0 0 /
+      100% 100%
+      no-repeat,
+
+    linear-gradient(#000 0 0)
+      5% 88% /
+      90% 12%
+      no-repeat;
+
+  -webkit-mask-composite:
+    xor;
+
+  mask:
+    linear-gradient(#000 0 0)
+      0 0 /
+      100% 100%
+      no-repeat,
+
+    linear-gradient(#000 0 0)
+      5% 88% /
+      90% 12%
+      no-repeat;
+
+  mask-composite:
+    exclude;
+}
+
+
+/* =========================================================
+   OUTER FRAME — BOTTOM PIECE
+   ========================================================= */
+
+.listing-page .category-card__frame::after {
+  content:
+    '';
+
+  position:
+    absolute;
+
+  z-index:
+    1;
+
+  left:
+    0;
+
+  right:
+    0;
+
+  bottom:
+    0;
+
+  height:
+    40%;
+
+  box-sizing:
+    border-box;
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--bg-card),
+      var(--secondary)
+    );
+
+  border:
+    1px solid
+    var(--border-color);
+
+  border-radius:
+    22px
+    22px
+    var(--radius-lg)
+    var(--radius-lg);
+
+  box-shadow:
+    var(--shadow-sm);
+
+  /*
+   * نفس notch من الناحية السفلية
+   */
+  -webkit-mask:
+    linear-gradient(#000 0 0)
+      0 0 /
+      100% 100%
+      no-repeat,
+
+    linear-gradient(#000 0 0)
+      5% 0 /
+      90% 12%
+      no-repeat;
+
+  -webkit-mask-composite:
+    xor;
+
+  mask:
+    linear-gradient(#000 0 0)
+      0 0 /
+      100% 100%
+      no-repeat,
+
+    linear-gradient(#000 0 0)
+      5% 0 /
+      90% 12%
+      no-repeat;
+
+  mask-composite:
+    exclude;
+}
+
+
+/* =========================================================
+   GOLD STAGE
+   ========================================================= */
+
+.listing-page .category-card__stage {
+  position:
+    absolute;
+
+  z-index:
+    2;
+
+  /*
+   * نفس Home
+   */
+  top:
+    5.5%;
+
+  left:
+    7%;
+
+  width:
+    86%;
+
+  height:
+    87%;
+
+  box-sizing:
+    border-box;
+
+  background:
+    transparent;
+
+  border:
+    0;
+
+  overflow:
+    visible;
+
+  box-shadow:
+    none;
+}
+
+
+/* =========================================================
+   GOLD STAGE — TOP
+   ========================================================= */
+
+.listing-page .category-card__stage::before {
+  content:
+    '';
+
+  position:
+    absolute;
+
+  z-index:
+    1;
+
+  top:
+    0;
+
+  left:
+    0;
+
+  right:
+    0;
+
+  height:
+    60%;
+
+  box-sizing:
+    border-box;
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--primary-light),
+      var(--primary) 52%,
+      var(--primary-dark)
+    );
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--primary) 45%,
+      var(--border-color)
+    );
+
+  border-radius:
+    calc(
+      var(--radius-lg) - 2px
+    )
+    calc(
+      var(--radius-lg) - 2px
+    )
+    20px
+    20px;
+
+  box-shadow:
+    inset
+    0 1px 0
+    rgba(
+      255,
+      255,
+      255,
+      0.16
+    );
+
+  /*
+   * نفس notch بتاع Home
+   */
+  /* -webkit-mask:
+    linear-gradient(#000 0 0)
+      0 0 /
+      100% 100%
+      no-repeat,
+
+    linear-gradient(#000 0 0)
+      5% 88% /
+      90% 12%
+      no-repeat;
+
+  -webkit-mask-composite:
+    xor;
+
+  mask:
+    linear-gradient(#000 0 0)
+      0 0 /
+      100% 100%
+      no-repeat,
+
+    linear-gradient(#000 0 0)
+      5% 88% /
+      90% 12%
+      no-repeat;
+
+  mask-composite:
+    exclude; */
+}
+
+
+/* =========================================================
+   GOLD STAGE — BOTTOM
+   ========================================================= */
+
+.listing-page .category-card__stage::after {
+  content:
+    '';
+
+  position:
+    absolute;
+
+  z-index:
+    1;
+
+  left:
+    0;
+
+  right:
+    0;
+
+  bottom:
+    0;
+
+  height:
+    40%;
+
+  box-sizing:
+    border-box;
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--primary-light),
+      var(--primary) 52%,
+      var(--primary-dark)
+    );
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--primary) 45%,
+      var(--border-color)
+    );
+
+  border-radius:
+    20px
+    20px
+    calc(
+      var(--radius-lg) - 2px
+    )
+    calc(
+      var(--radius-lg) - 2px
+    );
+
+  box-shadow:
+    inset
+    0 -18px
+    32px
+    rgba(
+      0,
+      0,
+      0,
+      0.08
+    );
+
+  /*
+   * Bottom notch
+   */
+  -webkit-mask:
+    linear-gradient(#000 0 0)
+      0 0 /
+      100% 100%
+      no-repeat,
+
+    linear-gradient(#000 0 0)
+      5% 0 /
+      90% 12%
+      no-repeat;
+
+  -webkit-mask-composite:
+    xor;
+
+  mask:
+    linear-gradient(#000 0 0)
+      0 0 /
+      100% 100%
+      no-repeat,
+
+    linear-gradient(#000 0 0)
+      5% 0 /
+      90% 12%
+      no-repeat;
+
+  mask-composite:
+    exclude;
+}
+
+
+/* =========================================================
+   3D MODEL
+   ========================================================= */
+
+.listing-page .category-card__cutout {
+  position:
+    absolute;
+
+  z-index:
+    10;
+
+  /*
+   * هنا كان الفرق الكبير
+   *
+   * Home:
+   * top: -9%
+   * width: 108%
+   * height: 112%
+   */
+  top:
+    -9%;
+
+  left:
+    50%;
+
+  width:
+    108%;
+
+  height:
+    112%;
+
+  transform:
+    translateX(-50%);
+
+  display:
+    flex;
+
+  align-items:
+    flex-start;
+
+  justify-content:
+    center;
+
+  pointer-events:
+    none;
+
+  overflow:
+    visible;
+
+  /*
+   * يمنع حواف الصورة من الظهور أسفل الـ stage
+   */
+  clip-path:
+    inset(
+      0
+      0
+      2.7%
+      0
+    );
+
+  transition:
+    transform
+    0.45s
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+}
+
+
+.listing-page .category-card__cutout img {
+  display:
+    block;
+
+  width:
+    100%;
+
+  height:
+    100%;
+
+  object-fit:
+    contain;
+
+  object-position:
+    center top;
+
+  filter:
+    drop-shadow(
+      0
+      14px
+      16px
+      rgba(
+        0,
+        0,
+        0,
+        0.20
+      )
+    );
+
+  pointer-events:
+    none;
+}
+
+
+/* =========================================================
+   LABEL
+   ========================================================= */
+
+.listing-page .category-card__label {
+  position:
+    absolute;
+
+  z-index:
+    15;
+
+  /*
+   * نفس Home
+   */
+  top:
+    57%;
+
+  left:
+    5%;
+
+  width:
+    90%;
+
   min-height:
-    68px;
+    48px;
 
   box-sizing:
     border-box;
@@ -448,39 +898,113 @@
     center;
 
   padding:
-    0.75rem 1rem;
+    0.45rem
+    0.75rem;
 
   background:
     var(--label-bg);
 
   border:
     1px solid
-    var(--label-border);
+    var(--primary);
 
   border-radius:
-    14px;
+    var(--radius-md);
 
   box-shadow:
     0
-    12px
-    24px
-    var(--label-shadow),
-
-    0
-    3px
-    7px
-    rgba(60, 45, 15, 0.06);
+    6px
+    14px
+    var(--label-shadow);
 
   backdrop-filter:
-    blur(3px);
+    blur(4px);
+
+  opacity:
+    1;
+
+  visibility:
+    visible;
+
+  transform:
+    translateY(0)
+    scale(1);
+
+  overflow:
+    hidden;
 
   transition:
     transform
-      0.35s ease,
+    0.4s
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    ),
+
     box-shadow
-      0.35s ease,
+    0.4s ease,
+
     border-color
-      0.3s ease;
+    0.3s ease;
+}
+
+
+/* =========================================================
+   LABEL SHINE
+   ========================================================= */
+
+.listing-page .category-card__label::before {
+  content:
+    '';
+
+  position:
+    absolute;
+
+  z-index:
+    1;
+
+  top:
+    0;
+
+  left:
+    -80%;
+
+  width:
+    55%;
+
+  height:
+    100%;
+
+  pointer-events:
+    none;
+
+  background:
+    linear-gradient(
+      105deg,
+      transparent,
+      rgba(
+        255,
+        255,
+        255,
+        0.24
+      ),
+      transparent
+    );
+
+  transform:
+    skewX(-18deg);
+
+  transition:
+    left
+    0.7s
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
 }
 
 
@@ -491,6 +1015,9 @@
 .listing-page .category-card__label-text {
   position:
     relative;
+
+  z-index:
+    2;
 
   display:
     block;
@@ -519,11 +1046,7 @@
     sans-serif;
 
   font-size:
-    clamp(
-      1.25rem,
-      2vw,
-      1.8rem
-    );
+    1.05rem;
 
   font-weight:
     700;
@@ -537,7 +1060,7 @@
    GOLD UNDERLINE
    ========================================================= */
 
-/* .listing-page .category-card__label-text::after {
+.listing-page .category-card__label-text::after {
   content:
     '';
 
@@ -548,212 +1071,381 @@
     50%;
 
   bottom:
-    -9px;
+    -6px;
 
   width:
-    32px;
+    26px;
 
   height:
     1px;
 
   transform:
-    translateX(-50%);
+    translateX(-50%)
+    scaleX(1);
+
+  transform-origin:
+    center;
 
   background:
     var(--gold-gradient);
 
   opacity:
-    0.75;
-} */
+    0.8;
 
-
-/* =========================================================
-   LIGHT THEME
-   ========================================================= */
-
-:root[data-theme='light']
-.listing-page .category-card__frame {
-  background:
-    #FFFFFF;
-
-  border-color:
-    var(--border-color);
-
-  box-shadow:
-    0
-    12px
-    28px
-    rgba(60, 45, 15, 0.10);
-}
-
-:root[data-theme='light']
-.listing-page .category-card__stage {
-  background:
-    linear-gradient(
-      145deg,
-      #F1DFB7 0%,
-      #E4CC91 50%,
-      #D0AC55 100%
-    );
-
-  border-color:
-    rgba(
-      201,
-      162,
-      75,
-      0.22
-    );
+  transition:
+    transform
+    0.35s
+    ease;
 }
 
 
 /* =========================================================
-   DARK THEME
+   HOVER — SAME HOME
    ========================================================= */
 
-:root:not([data-theme='light'])
-.listing-page .category-card__frame {
-  background:
-    linear-gradient(
-      145deg,
-      var(--bg-card),
-      var(--secondary)
-    );
-
-  border-color:
-    var(--border-color);
-
-  box-shadow:
-    0
-    14px
-    32px
-    rgba(0, 0, 0, 0.38);
+.listing-page .category-card:hover {
+  transform:
+    translateY(-6px);
 }
 
-:root:not([data-theme='light'])
-.listing-page .category-card__stage {
-  background:
-    linear-gradient(
-      145deg,
-      #3A2C17 0%,
-      #2D2315 48%,
-      #1A150D 100%
-    );
-
-  border-color:
-    rgba(
-      201,
-      162,
-      75,
-      0.30
-    );
-
-  box-shadow:
-    inset
-      0 1px 0
-      rgba(255, 255, 255, 0.04),
-
-    inset
-      0 -25px 40px
-      rgba(0, 0, 0, 0.18);
-}
-
-
-/* =========================================================
-   HOVER
-   ========================================================= */
 
 .listing-page .category-card:hover
 .category-card__frame {
+  border-color:
+    var(--primary);
+
+  box-shadow:
+    var(--shadow-sm);
+}
+
+
+.listing-page .category-card:hover
+.category-card__cutout {
   transform:
-    translateY(3px);
+    translateX(-50%)
+    translateY(-7px)
+    scale(1.02);
+}
+
+
+.listing-page .category-card:hover
+.category-card__label {
+  transform:
+    translateY(-3px)
+    scale(1.025);
 
   border-color:
     var(--primary);
 
   box-shadow:
     0
-    18px
-    38px
-    rgba(0, 0, 0, 0.16);
+    10px
+    22px
+    var(--label-shadow);
 }
 
+
 .listing-page .category-card:hover
-.category-card__cutout {
+.category-card__label::before {
+  left:
+    125%;
+}
+
+
+.listing-page .category-card:hover
+.category-card__label-text::after {
   transform:
     translateX(-50%)
-    translateY(-8px)
-    scale(1.025);
-}
-
-.listing-page .category-card:hover
-.category-card__label {
-  transform:
-    translateY(-2px)
-    scale(1.015);
-
-  box-shadow:
-    0
-    16px
-    30px
-    rgba(0, 0, 0, 0.17);
+    scaleX(1.35);
 }
 
 
 /* =========================================================
-   EMPTY
+   TABLET
    ========================================================= */
 
-.listing-page__empty {
-  width:
-    100%;
+@media (max-width: 1100px) {
 
-  min-height:
-    240px;
+  .listing-page__grid {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
 
-  display:
-    flex;
+    column-gap:
+      1.25rem;
 
-  align-items:
-    center;
+    row-gap:
+      4.5rem;
+  }
 
-  justify-content:
-    center;
-
-  text-align:
-    center;
+  .listing-page .category-card {
+    height:
+      clamp(
+        290px,
+        31vw,
+        330px
+      );
+  }
 }
 
 
 /* =========================================================
-   SKELETON
+   MOBILE / TABLET
    ========================================================= */
 
-.listing-page__skeleton {
-  width:
-    100%;
+@media (max-width: 768px) {
 
-  height:
-    clamp(
-      360px,
-      30vw,
-      430px
-    );
+  .listing-page {
+    padding:
+      2rem
+      1rem
+      3rem;
+  }
 
-  border-radius:
-    var(--radius-lg);
+  .listing-page__grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
 
-  background:
-    var(--secondary-light);
+    column-gap:
+      0.8rem;
 
-  border:
-    1px solid
-    var(--border-color);
+    row-gap:
+      3.5rem;
 
-  animation:
-    skeletonPulse
-    1.4s
-    ease-in-out
-    infinite;
+    margin-top:
+      3rem;
+  }
+
+  .listing-page .category-card {
+    height:
+      clamp(
+        260px,
+        42vw,
+        300px
+      );
+  }
+
+  .listing-page .category-card__frame {
+    border-radius:
+      var(--radius-md);
+  }
+
+  .listing-page .category-card__stage {
+    top:
+      5.5%;
+
+    left:
+      6%;
+
+    width:
+      88%;
+
+    height:
+      87%;
+
+    border-radius:
+      20px;
+  }
+
+  .listing-page .category-card__cutout {
+    /*
+     * لا تصغر الموديل
+     */
+    top:
+      -8%;
+
+    width:
+      110%;
+
+    height:
+      112%;
+
+    clip-path:
+      inset(
+        0
+        0
+        2.7%
+        0
+      );
+  }
+
+  .listing-page .category-card__label {
+    top:
+      57%;
+
+    left:
+      5%;
+
+    width:
+      90%;
+
+    min-height:
+      46px;
+
+    padding:
+      0.45rem
+      0.35rem;
+
+    border-radius:
+      10px;
+  }
+
+  .listing-page .category-card__label-text {
+    font-size:
+      1rem;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+  .listing-page {
+    padding:
+      1.5rem
+      0.7rem
+      2.5rem;
+  }
+
+  .listing-page__grid {
+    column-gap:
+      0.55rem;
+
+    row-gap:
+      3rem;
+
+    margin-top:
+      2.5rem;
+  }
+
+  .listing-page .category-card {
+    height:
+      clamp(
+        270px,
+        68vw,
+        320px
+      );
+  }
+
+  .listing-page .category-card__stage {
+    top:
+      5.5%;
+
+    left:
+      6%;
+
+    width:
+      88%;
+
+    height:
+      87%;
+
+    border-radius:
+      18px;
+  }
+
+  .listing-page .category-card__cutout {
+    top:
+      -8%;
+
+    width:
+      112%;
+
+    height:
+      110%;
+
+    clip-path:
+      inset(
+        0
+        0
+        2.7%
+        0
+      );
+  }
+
+  .listing-page .category-card__label {
+    top:
+      57%;
+
+    left:
+      5%;
+
+    width:
+      90%;
+
+    min-height:
+      44px;
+
+    padding:
+      0.4rem
+      0.25rem;
+
+    border-radius:
+      9px;
+  }
+
+  .listing-page .category-card__label-text {
+    font-size:
+      0.92rem;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+  .listing-page__grid {
+    column-gap:
+      0.45rem;
+
+    row-gap:
+      2.75rem;
+  }
+
+  .listing-page .category-card {
+    height:
+      275px;
+  }
+
+  .listing-page .category-card__stage {
+    left:
+      6%;
+
+    width:
+      88%;
+  }
+
+  .listing-page .category-card__cutout {
+    top:
+      -8%;
+
+    width:
+      114%;
+
+    height:
+      110%;
+  }
+
+  .listing-page .category-card__label {
+    min-height:
+      43px;
+  }
+
+  .listing-page .category-card__label-text {
+    font-size:
+      0.9rem;
+  }
 }
 
 
@@ -761,43 +1453,8 @@
    ANIMATIONS
    ========================================================= */
 
-@keyframes categoryHeroReveal {
-  from {
-    opacity:
-      0;
-
-    transform:
-      translateY(14px);
-  }
-
-  to {
-    opacity:
-      1;
-
-    transform:
-      translateY(0);
-  }
-}
-
-@keyframes categoryLineReveal {
-  from {
-    opacity:
-      0;
-
-    transform:
-      scaleX(0);
-  }
-
-  to {
-    opacity:
-      1;
-
-    transform:
-      scaleX(1);
-  }
-}
-
 @keyframes categoryCardReveal {
+
   from {
     opacity:
       0;
@@ -815,7 +1472,9 @@
   }
 }
 
+
 @keyframes skeletonPulse {
+
   0%,
   100% {
     opacity:
@@ -829,276 +1488,22 @@
 }
 
 
-/* =========================================================
-   LARGE TABLET
-   ========================================================= */
+@keyframes fadeInUp {
 
-@media (max-width: 1100px) {
+  from {
+    opacity:
+      0;
 
-  .listing-page {
-    padding-inline:
-      1rem;
+    transform:
+      translateY(18px);
   }
 
-  .listing-page__grid {
-    grid-template-columns:
-      repeat(
-        3,
-        minmax(0, 1fr)
-      );
+  to {
+    opacity:
+      1;
 
-    column-gap:
-      0.9rem;
-
-    row-gap:
-      4rem;
-
-    margin-top:
-      2.75rem;
-  }
-
-  .listing-page .category-card {
-    height:
-      390px;
-  }
-}
-
-
-/* =========================================================
-   TABLET
-   ========================================================= */
-
-@media (max-width: 800px) {
-
-  .listing-page__grid {
-    grid-template-columns:
-      repeat(
-        2,
-        minmax(0, 1fr)
-      );
-
-    column-gap:
-      0.75rem;
-
-    row-gap:
-      3.5rem;
-
-    margin-top:
-      2.5rem;
-  }
-
-  .listing-page .category-card {
-    height:
-      350px;
-  }
-
-  .listing-page .category-card__stage {
-    top:
-      6%;
-
-    left:
-      6%;
-
-    width:
-      88%;
-
-    height:
-      84%;
-
-    border-radius:
-      22px;
-  }
-
-  .listing-page .category-card__cutout {
-    top:
-      -7%;
-
-    width:
-      104%;
-
-    height:
-      112%;
-
-    /*
-     * Gold نهاية عند 90%
-     * Cutout من -7% إلى 105%
-     */
-    clip-path:
-      inset(
-        0
-        0
-        13.4%
-        0
-      );
-  }
-
-  .listing-page .category-card__label {
-    top:
-      56%;
-
-    min-height:
-      60px;
-
-    border-radius:
-      12px;
-  }
-
-  .listing-page .category-card__label-text {
-    font-size:
-      1.2rem;
-  }
-}
-
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 560px) {
-
-  .listing-page {
-    padding:
-      1rem
-      0.7rem
-      2.5rem;
-
-    gap:
-      1.5rem;
-  }
-
-  .listing-page__grid {
-    grid-template-columns:
-      repeat(
-        2,
-        minmax(0, 1fr)
-      );
-
-    column-gap:
-      0.55rem;
-
-    row-gap:
-      2.75rem;
-
-    margin-top:
-      2rem;
-  }
-
-  .listing-page .category-card {
-    height:
-      295px;
-  }
-
-  .listing-page .category-card__frame {
-    border-radius:
-      13px;
-  }
-
-  .listing-page .category-card__stage {
-    top:
-      6%;
-
-    left:
-      5%;
-
-    width:
-      90%;
-
-    height:
-      84%;
-
-    border-radius:
-      18px;
-  }
-
-  .listing-page .category-card__cutout {
-    top:
-      -6%;
-
-    width:
-      108%;
-
-    height:
-      110%;
-
-    /*
-     * Gold نهاية = 90%
-     * Cutout نهاية = 104%
-     */
-    clip-path:
-      inset(
-        0
-        0
-        12.7%
-        0
-      );
-  }
-
-  .listing-page .category-card__label {
-    top:
-      58%;
-
-    min-height:
-      50px;
-
-    padding:
-      0.45rem
-      0.25rem;
-
-    border-radius:
-      9px;
-  }
-
-  .listing-page .category-card__label-text {
-    font-size:
-      0.98rem;
-  }
-
-  .listing-page .category-card__label-text::after {
-    bottom:
-      -6px;
-
-    width:
-      24px;
-  }
-}
-
-
-/* =========================================================
-   SMALL MOBILE
-   ========================================================= */
-
-@media (max-width: 380px) {
-
-  .listing-page .category-card {
-    height:
-      275px;
-  }
-
-  .listing-page .category-card__cutout {
-    width:
-      112%;
-
-    /*
-     * نفس نقطة نهاية الـ gold
-     * مع الحفاظ على خروج الرأس.
-     */
-    clip-path:
-      inset(
-        0
-        0
-        12.7%
-        0
-      );
-  }
-
-  .listing-page .category-card__label {
-    min-height:
-      46px;
-  }
-
-  .listing-page .category-card__label-text {
-    font-size:
-      0.9rem;
+    transform:
+      translateY(0);
   }
 }
 
@@ -1110,16 +1515,21 @@
 @media (prefers-reduced-motion: reduce) {
 
   .listing-page__hero,
-  .listing-page__hero-line,
   .listing-page .category-card,
   .listing-page .category-card__frame,
   .listing-page .category-card__cutout,
   .listing-page .category-card__label {
+
     animation:
       none !important;
 
     transition:
       none !important;
+  }
+
+  .listing-page__hero {
+    opacity:
+      1;
   }
 
   .listing-page .category-card {
