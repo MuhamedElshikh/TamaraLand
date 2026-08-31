@@ -272,8 +272,7 @@ export class CheckoutPage implements OnInit {
 
               cart.subTotal,
 
-              cart.couponCode ?? null,
-
+              cart.coupon?.code ?? null,
               address.shippingCost,
 
               cart.items.map(

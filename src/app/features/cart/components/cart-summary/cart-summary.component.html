@@ -19,25 +19,25 @@
 
   @if (cart() && cart()!.discount > 0) {
 
-    <div class="cart-summary__row cart-summary__row--discount">
+  <div class="cart-summary__row cart-summary__row--discount">
 
-      <span>
+    <span>
 
-        {{ 'cart.summary.discount' | translate }}
+      {{ 'cart.summary.discount' | translate }}
 
-        @if (cart()!.couponCode) {
-          ({{ cart()!.couponCode }})
-        }
+      @if (cart()!.coupon?.code) {
+        ({{ cart()!.coupon!.code }})
+      }
 
-      </span>
+    </span>
 
-      <span>
-        −{{ cart()!.discount | number }} EGP
-      </span>
+    <span>
+      −{{ cart()!.discount | number }} EGP
+    </span>
 
-    </div>
+  </div>
 
-  }
+}
 
   <div class="cart-summary__row cart-summary__row--total">
 
