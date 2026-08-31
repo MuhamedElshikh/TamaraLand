@@ -314,17 +314,21 @@
 
           <div class="product-details-page__stats">
 
-            <div class="stat-card">
+          <div class="stat-card">
+  <div class="stat-card__value">
 
-              <div class="stat-card__value">
-                ⭐ {{ rating().toFixed(1) }}/5
-              </div>
+    @if (rating() > 0) {
+      ⭐ {{ rating().toFixed(1) }}/5
+    } @else {
+      ⭐ {{ 'productDetails.notRatedYet' | translate }}
+    }
 
-              <div class="stat-card__label">
-                {{ 'productDetails.rating' | translate }}
-              </div>
+  </div>
 
-            </div>
+  <div class="stat-card__label">
+    {{ 'productDetails.rating' | translate }}
+  </div>
+</div>
 
 
             <div class="stat-card">

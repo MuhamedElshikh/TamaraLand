@@ -181,6 +181,7 @@
     "featuredItem": "منتج مميز",
     "description": "  الوصف :",
     "productImages": "صور المنتج",
+    "notRatedYet": "غير مقيم",
     "addToCart": "أضف إلى السلة",
     "adding": "جارٍ الإضافة...",
     "successToadd": "تمت الإضافة المنتج إلى السلة بنجاح",

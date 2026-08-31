@@ -101,15 +101,39 @@
         <p class="product-card__price-old">{{ originalPrice | number }} {{ 'productCard.currency' | translate }}</p>
       }
     </div>
+<div class="product-card__footer">
 
-    <div class="product-card__footer">
-      <div class="product-card__rating">
-        ⭐ {{ ratingValue.toFixed(1) }}
-      </div>
-      <div class="product-card__analytics">
-        <span>👁 {{ product.viewsCount }}</span>
-        <span>💬 {{ reviewCount }}</span>
-      </div>
-    </div>
+  <div
+    class="product-card__rating"
+    [class.product-card__rating--empty]="ratingValue <= 0"
+  >
+    @if (ratingValue > 0) {
+      <span class="product-card__rating-star">★</span>
+      <span class="product-card__rating-value">
+        {{ ratingValue.toFixed(1) }}
+      </span>
+    } @else {
+      <span class="product-card__rating-star">☆</span>
+      <span class="product-card__rating-value">
+        {{ 'productDetails.notRatedYet' | translate }}
+      </span>
+    }
+  </div>
+
+  <div class="product-card__analytics">
+
+    <span>
+      <span class="product-card__analytics-icon">👁</span>
+      {{ product.viewsCount }}
+    </span>
+
+    <span>
+      <span class="product-card__analytics-icon">💬</span>
+      {{ reviewCount }}
+    </span>
+
+  </div>
+
+</div>
   </div>
 </a>
