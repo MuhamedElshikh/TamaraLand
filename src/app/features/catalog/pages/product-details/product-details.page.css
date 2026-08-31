@@ -258,8 +258,18 @@
   position: sticky;
   top: 1.5rem;
   align-self: start;
+
+  z-index: 1;
 }
 
+
+/*
+ * لما الـ Lightbox يفتح:
+ * ارفع الـ Gallery كلها فوق باقي الصفحة.
+ */
+.product-details-page__gallery:has(.gallery-lightbox) {
+  z-index: 100000;
+}
 .product-details-page__aside {
   display: flex;
   flex-direction: column;

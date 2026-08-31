@@ -1,44 +1,102 @@
 <section class="gallery-shell">
 
- 
-
   @if (images.length > 0) {
-    <div class="gallery-shell__main" (click)="openLightbox()">
+
+    <div
+      class="gallery-shell__main"
+      (mousemove)="onMainImageMouseMove($event)"
+      (mouseleave)="resetMainZoom()"
+      (click)="openLightbox()"
+    >
       <img
-        [src]="selectedImage()?.imageUrl || images[0].imageUrl"
+        [src]="currentImageUrl"
         [alt]="title"
+        [style.transform-origin]="mainTransformOrigin()"
       >
-      <span class="gallery-zoom-badge">🔍 {{ 'gallery.zoom' | translate }}</span>
+
+      <span class="gallery-zoom-badge">
+        🔍 {{ 'gallery.zoom' | translate }}
+      </span>
     </div>
 
     <div class="gallery-shell__thumbs">
-      @for(image of images;track image.id){
+      @for (image of images; track image.id) {
         <button
           class="gallery-thumb"
-          [class.gallery-thumb--active]="selectedImage()?.id===image.id"
+          [class.gallery-thumb--active]="selectedImage()?.id === image.id"
           (click)="selectImage(image)"
-          type="button">
+          type="button"
+        >
           <img
             [src]="image.imageUrl"
-            [alt]="title">
+            [alt]="title"
+          >
         </button>
       }
     </div>
-  }
-  @else if(fallbackImage){
-    <div class="gallery-shell__main" (click)="openLightbox()">
+
+  } @else if (fallbackImage) {
+
+    <div
+      class="gallery-shell__main"
+      (mousemove)="onMainImageMouseMove($event)"
+      (mouseleave)="resetMainZoom()"
+      (click)="openLightbox()"
+    >
       <img
         [src]="fallbackImage"
-        [alt]="title">
+        [alt]="title"
+        [style.transform-origin]="mainTransformOrigin()"
+      >
+
+      <span class="gallery-zoom-badge">
+        🔍 {{ 'gallery.zoom' | translate }}
+      </span>
     </div>
+
   }
 
+
   @if (isLightboxOpen()) {
-    <div class="gallery-lightbox" (click)="closeLightbox()">
-      <div class="gallery-lightbox__dialog" (click)="$event.stopPropagation()">
-        <button type="button" class="gallery-lightbox__close" (click)="closeLightbox()">✕</button>
-        <img [src]="selectedImage()?.imageUrl || images[0]?.imageUrl || fallbackImage" [alt]="title" class="gallery-lightbox__img" />
+
+    <div
+      class="gallery-lightbox"
+      (click)="closeLightbox()"
+    >
+
+      <button
+        type="button"
+        class="gallery-lightbox__close"
+        (click)="closeLightbox()"
+        aria-label="Close"
+      >
+        ✕
+      </button>
+
+      <div
+        class="gallery-lightbox__dialog"
+        (click)="$event.stopPropagation()"
+      >
+
+        <div
+          class="gallery-lightbox__viewport"
+          (mousemove)="onLightboxMouseMove($event)"
+          (mouseenter)="onLightboxMouseEnter()"
+          (mouseleave)="resetLightboxZoom()"
+        >
+          <img
+            [src]="currentImageUrl"
+            [alt]="title"
+            class="gallery-lightbox__img"
+            [class.gallery-lightbox__img--zoomed]="isLightboxZoomed()"
+            [style.transform-origin]="lightboxTransformOrigin()"
+          >
+        </div>
+
       </div>
+
     </div>
+
   }
+
 </section>

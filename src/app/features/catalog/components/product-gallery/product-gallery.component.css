@@ -1,242 +1,529 @@
-.gallery-shell{
+/* =========================================================
+   GALLERY SHELL
+   ========================================================= */
 
-    display:flex;
+.gallery-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 
-    flex-direction:column;
+  width: 100%;
+  min-width: 0;
 
-    gap:1.25rem;
+  padding: 0.5rem;
 
-    padding:0.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
 
-    background:var(--bg-card);
-
-    border:1px solid var(--border-color);
-
-    border-radius:24px;
-
-    box-shadow:var(--shadow-sm);
-
+  box-shadow: var(--shadow-sm);
 }
 
-.gallery-shell__header h3{
 
-    margin-top:.35rem;
-
-    font-size:1.5rem;
-
-    font-family:'Cormorant Garamond',serif;
-
-}
-
-.gallery-shell__main{
-
-    position:relative;
-
-    overflow:hidden;
-
-    border-radius:20px;
-
-    aspect-ratio:4/5;
-
-    background:var(--bg-secondary);
-
-    border:1px solid var(--border-color);
-
-}
-
-.gallery-shell__main img{
-
-    width:100%;
-
-    height:100%;
-
-    object-fit:contain;
-
-    transition:transform .45s;
-
-}
-
-.gallery-shell__main:hover img{
-
-    transform:scale(1.08);
-
-}
-
-.gallery-shell__thumbs{
-
-    display:flex;
-
-    justify-content:center;
-
-    gap:.75rem;
-
-    flex-wrap:wrap;
-
-}
-
-.gallery-thumb{
-
-    width:74px;
-
-    height:74px;
-
-    border-radius:14px;
-
-    overflow:hidden;
-
-    border:2px solid transparent;
-
-    background:none;
-
-    cursor:pointer;
-
-    transition:.25s;
-
-    padding:0;
-
-}
-
-.gallery-thumb img{
-
-    width:100%;
-
-    height:100%;
-
-    object-fit:cover;
-
-}
-
-.gallery-thumb:hover{
-
-    transform:translateY(-3px);
-
-}
-
-.gallery-thumb--active{
-
-    border-color:var(--primary);
-
-    box-shadow:0 0 0 4px rgba(201,162,75,.12);
-
-}
-
-.gallery-shell__placeholder{
-
-    aspect-ratio:4/5;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    border-radius:20px;
-
-    background:linear-gradient(
-    135deg,
-    rgba(201,162,75,.08),
-    rgba(201,162,75,.18));
-
-    color:var(--text-muted);
-
-    font-size:1rem;
-
-}
-
-@media(max-width:768px){
-
-.gallery-shell{
-
-padding:1rem;
-
-}
-
-.gallery-thumb{
-
-width:60px;
-
-height:60px;
-
-}
-
-}
+/* =========================================================
+   MAIN IMAGE
+   ========================================================= */
 
 .gallery-shell__main {
+  position: relative;
+
+  width: 100%;
+  aspect-ratio: 4 / 5;
+
+  overflow: hidden;
+
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+
+  background: var(--bg-secondary);
+
   cursor: zoom-in;
+
+  /* مهم للـ zoom */
+  isolation: isolate;
 }
+
+
+.gallery-shell__main > img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  transform: scale(1);
+
+  /*
+    transform-origin بيتغير من Angular
+    حسب مكان الماوس
+  */
+  transform-origin: 50% 50%;
+
+  transition:
+    transform 0.35s cubic-bezier(.2, .7, .2, 1),
+    transform-origin 0.05s linear;
+
+  will-change: transform, transform-origin;
+
+  user-select: none;
+  pointer-events: none;
+}
+
+
+/*
+  التكبير بيتحرك ناحية مكان الماوس
+*/
+@media (hover: hover) and (pointer: fine) {
+
+  .gallery-shell__main:hover > img {
+    transform: scale(1.8);
+  }
+
+}
+
+
+/* =========================================================
+   ZOOM BADGE
+   ========================================================= */
 
 .gallery-zoom-badge {
   position: absolute;
+
   bottom: 0.75rem;
   inset-inline-end: 0.75rem;
-  padding: 0.35rem 0.75rem;
+
+  z-index: 5;
+
+  padding: 0.4rem 0.75rem;
+
   border-radius: var(--radius-full);
-  background: rgba(16, 13, 8, 0.75);
-  color: #C9A24B;
+
+  background: rgba(16, 13, 8, 0.78);
+
+  color: #c9a24b;
+
   font-size: 0.75rem;
   font-weight: 600;
+
   backdrop-filter: blur(6px);
+
   border: 1px solid rgba(201, 162, 75, 0.3);
+
   pointer-events: none;
-  opacity: 0.85;
-  transition: opacity 0.25s ease;
+
+  opacity: 0.8;
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
 }
+
 
 .gallery-shell__main:hover .gallery-zoom-badge {
   opacity: 1;
+
+  transform: translateY(-2px);
 }
 
-/* Lightbox Modal */
+
+/* =========================================================
+   THUMBNAILS
+   ========================================================= */
+
+.gallery-shell__thumbs {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  gap: 0.75rem;
+
+  flex-wrap: wrap;
+}
+
+
+.gallery-thumb {
+  width: 74px;
+  height: 74px;
+
+  flex: 0 0 74px;
+
+  padding: 0;
+
+  overflow: hidden;
+
+  border-radius: 14px;
+
+  border: 2px solid transparent;
+
+  background: var(--bg-secondary);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+
+.gallery-thumb img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  pointer-events: none;
+}
+
+
+.gallery-thumb:hover {
+  transform: translateY(-3px);
+}
+
+
+.gallery-thumb--active {
+  border-color: var(--primary);
+
+  box-shadow:
+    0 0 0 4px rgba(201, 162, 75, 0.12);
+}
+
+
+/* =========================================================
+   LIGHTBOX
+   ========================================================= */
+
 .gallery-lightbox {
   position: fixed;
+
   inset: 0;
-  z-index: 9999;
-  background: rgba(0, 0, 0, 0.92);
-  backdrop-filter: blur(10px);
+
+  z-index: 99999;
+
+  /*
+    مهم جدًا:
+    الـ modal مش مرتبط بحجم الـ gallery
+  */
+  width: 100vw;
+  height: 100dvh;
+
   display: flex;
+
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
-  animation: fadeIn 0.25s ease;
+
+  padding: 70px 40px 40px;
+
+  background: rgba(8, 8, 8, 0.96);
+
+  backdrop-filter: blur(10px);
+
+  overflow: hidden;
+
+  animation: galleryFadeIn 0.22s ease;
 }
+
+
+/* =========================================================
+   LIGHTBOX DIALOG
+   ========================================================= */
 
 .gallery-lightbox__dialog {
   position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
+
+  /*
+    ده هيخلي الـ dialog ياخد الشاشة المتاحة
+    بدل ما ياخد حجم الصورة نفسها
+  */
+  width: min(1100px, calc(100vw - 80px));
+  height: calc(100dvh - 110px);
+
+  max-width: 1100px;
+  max-height: 900px;
+
   display: flex;
+
   align-items: center;
   justify-content: center;
+
+  min-width: 0;
+  min-height: 0;
 }
+
+
+/* =========================================================
+   LIGHTBOX VIEWPORT
+   ========================================================= */
+
+.gallery-lightbox__viewport {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 16px;
+
+  cursor: zoom-in;
+
+  background: rgba(255, 255, 255, 0.015);
+
+  isolation: isolate;
+}
+
+
+/* =========================================================
+   LIGHTBOX IMAGE
+   ========================================================= */
 
 .gallery-lightbox__img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
   max-width: 100%;
-  max-height: 88vh;
+  max-height: 100%;
+
   object-fit: contain;
-  border-radius: 12px;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
+
+  transform: scale(1);
+
+  transform-origin: 50% 50%;
+
+  transition:
+    transform 0.25s cubic-bezier(.2, .7, .2, 1),
+    transform-origin 0.04s linear;
+
+  will-change: transform, transform-origin;
+
+  user-select: none;
+
+  pointer-events: none;
 }
+
+
+/*
+  Zoom داخل الـ Lightbox
+*/
+.gallery-lightbox__img--zoomed {
+  transform: scale(2.2);
+}
+
+
+.gallery-lightbox__viewport:hover {
+  cursor: zoom-in;
+}
+
+
+/* =========================================================
+   CLOSE BUTTON
+   ========================================================= */
 
 .gallery-lightbox__close {
-  position: absolute;
-  top: -45px;
-  inset-inline-end: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  font-size: 1.2rem;
-  cursor: pointer;
+  position: fixed;
+
+  top: 20px;
+  inset-inline-end: 25px;
+
+  z-index: 100001;
+
+  width: 46px;
+  height: 46px;
+
   display: flex;
+
   align-items: center;
   justify-content: center;
-  transition: background 0.25s ease, transform 0.25s ease;
+
+  padding: 0;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+
+  background: rgba(255, 255, 255, 0.1);
+
+  color: #ffffff;
+
+  font-size: 1.15rem;
+  line-height: 1;
+
+  cursor: pointer;
+
+  backdrop-filter: blur(8px);
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
 }
 
+
 .gallery-lightbox__close:hover {
-  background: #C9A24B;
-  color: #100D08;
-  transform: scale(1.1);
+  background: #c9a24b;
+
+  color: #100d08;
+
+  transform: scale(1.08);
+}
+
+
+/* =========================================================
+   PLACEHOLDER
+   ========================================================= */
+
+.gallery-shell__placeholder {
+  aspect-ratio: 4 / 5;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(201, 162, 75, 0.08),
+      rgba(201, 162, 75, 0.18)
+    );
+
+  color: var(--text-muted);
+
+  font-size: 1rem;
+}
+
+
+/* =========================================================
+   ANIMATION
+   ========================================================= */
+
+@keyframes galleryFadeIn {
+
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .gallery-shell {
+    padding: 0.75rem;
+  }
+
+
+  .gallery-thumb {
+    width: 60px;
+    height: 60px;
+
+    flex-basis: 60px;
+  }
+
+
+  .gallery-lightbox {
+    padding:
+      65px
+      16px
+      20px;
+  }
+
+
+  .gallery-lightbox__dialog {
+    width: 100%;
+
+    height:
+      calc(100dvh - 90px);
+  }
+
+
+  /*
+    مفيش hover zoom على touch screens
+  */
+  .gallery-lightbox__img--zoomed {
+    transform: scale(1);
+  }
+
+
+  .gallery-lightbox__viewport {
+    cursor: default;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+  .gallery-shell {
+    padding: 0.5rem;
+
+    border-radius: 18px;
+  }
+
+
+  .gallery-shell__main {
+    border-radius: 15px;
+  }
+
+
+  .gallery-lightbox {
+    padding:
+      60px
+      8px
+      12px;
+  }
+
+
+  .gallery-lightbox__dialog {
+    width: 100%;
+
+    height:
+      calc(100dvh - 72px);
+  }
+
+
+  .gallery-lightbox__viewport {
+    border-radius: 10px;
+  }
+
+
+  .gallery-lightbox__close {
+    top: 10px;
+
+    inset-inline-end: 12px;
+
+    width: 42px;
+    height: 42px;
+  }
+
+
+  .gallery-zoom-badge {
+    display: none;
+  }
+
 }
