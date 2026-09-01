@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/sitemap.xml",
+      "destination": "https://tamaraland.runasp.net/sitemap.xml"
+    },
+    {
+      "source": "/robots.txt",
+      "destination": "https://tamaraland.runasp.net/robots.txt"
+    }
+  ]
+}
