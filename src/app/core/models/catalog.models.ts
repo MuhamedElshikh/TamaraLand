@@ -149,6 +149,7 @@ export interface ProductResponse  {
   id:number;
   price:number;
   name:string;
+  arabicName:string;
   rating:number;
   description:string;
   inStock:boolean;
