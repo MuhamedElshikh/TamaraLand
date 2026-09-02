@@ -10,38 +10,67 @@ export type AppLanguage = 'en' | 'ar';
 export class LanguageService {
   private readonly STORAGE_KEY = 'app-language';
 
-  private document = inject(DOCUMENT);
-  private translate = inject(TranslateService);
+  private readonly document = inject(DOCUMENT);
+  private readonly translate = inject(TranslateService);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   constructor() {
-    const saved = this.isBrowser
-      ? ((localStorage.getItem(this.STORAGE_KEY) as AppLanguage) ?? 'en')
-      : 'en';
-
     this.translate.addLangs(['en', 'ar']);
     this.translate.setFallbackLang('en');
-
-    this.setLanguage(saved);
   }
 
   get currentLanguage(): AppLanguage {
     return (this.translate.currentLang as AppLanguage) || 'en';
   }
 
-  setLanguage(lang: AppLanguage): void {
-    this.translate.use(lang);
+  /**
+   * Loads the initial application language.
+   *
+   * During SSR/prerender:
+   * - Always uses English.
+   * - Waits until the translation file is fully loaded.
+   *
+   * In the browser:
+   * - Uses the language saved in localStorage.
+   * - Falls back to English.
+   */
+  async load(): Promise<void> {
+    const savedLanguage = this.isBrowser
+      ? (localStorage.getItem(this.STORAGE_KEY) as AppLanguage | null)
+      : null;
 
-    if (this.isBrowser) {
+    const language: AppLanguage =
+      savedLanguage === 'ar' || savedLanguage === 'en'
+        ? savedLanguage
+        : 'en';
+
+    await this.setLanguage(language, false);
+  }
+
+  /**
+   * Changes the current language and waits for its translation file
+   * to be loaded before continuing.
+   */
+  async setLanguage(
+    lang: AppLanguage,
+    persist = true
+  ): Promise<void> {
+    await this.translate.use(lang).toPromise();
+
+    if (persist && this.isBrowser) {
       localStorage.setItem(this.STORAGE_KEY, lang);
     }
 
     this.document.documentElement.lang = lang;
-    this.document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    this.document.documentElement.dir =
+      lang === 'ar' ? 'rtl' : 'ltr';
   }
 
-  toggle(): void {
-    this.setLanguage(this.currentLanguage === 'en' ? 'ar' : 'en');
+  async toggle(): Promise<void> {
+    const nextLanguage: AppLanguage =
+      this.currentLanguage === 'en' ? 'ar' : 'en';
+
+    await this.setLanguage(nextLanguage);
   }
 
   isArabic(): boolean {

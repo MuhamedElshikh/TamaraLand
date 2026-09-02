@@ -1,6 +1,19 @@
-import { ApplicationConfig, provideZoneChangeDetection,inject, provideAppInitializer } from '@angular/core';
-import { provideRouter ,withInMemoryScrolling } from '@angular/router';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import {
+  ApplicationConfig,
+  provideZoneChangeDetection,
+  inject,
+  provideAppInitializer
+} from '@angular/core';
+
+import {
+  provideRouter,
+  withInMemoryScrolling
+} from '@angular/router';
+
+import {
+  provideHttpClient,
+  withInterceptors
+} from '@angular/common/http';
 
 import { routes } from './app.routes';
 
@@ -17,17 +30,27 @@ import {
   TranslateHttpLoader,
   provideTranslateHttpLoader
 } from '@ngx-translate/http-loader';
+
 import { StoreSettingsService } from './core/services/store-settings.service';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { LanguageService } from './core/services/language.service';
+
+import {
+  provideClientHydration,
+  withEventReplay
+} from '@angular/platform-browser';
+
 export const appConfig: ApplicationConfig = {
   providers: [
+
     provideZoneChangeDetection({
       eventCoalescing: true
     }),
 
-    provideRouter(routes,withInMemoryScrolling({
-        scrollPositionRestoration: 'top', // يرجع لفوق مع كل navigation
-        anchorScrolling: 'enabled' // لو بتستخدم #anchors كمان
+    provideRouter(
+      routes,
+      withInMemoryScrolling({
+        scrollPositionRestoration: 'top',
+        anchorScrolling: 'enabled'
       })
     ),
 
@@ -39,23 +62,35 @@ export const appConfig: ApplicationConfig = {
       ])
     ),
 
-    // Configure ngx-translate HTTP loader
+    // ngx-translate HTTP loader
     ...provideTranslateHttpLoader({
       prefix: './assets/i18n/',
       suffix: '.json'
     }),
 
-    // Configure translate service
+    // ngx-translate
     ...provideTranslateService({
       loader: provideTranslateLoader(TranslateHttpLoader),
       fallbackLang: 'en',
       lang: 'en'
     }),
-     provideAppInitializer(() => {
-      const storeSettingsService = inject(StoreSettingsService);
-      return storeSettingsService.load();
-    }), provideClientHydration(withEventReplay()),
-  ]
 
-  
+    // Load store settings before application starts
+    provideAppInitializer(() => {
+      const storeSettingsService = inject(StoreSettingsService);
+
+      return storeSettingsService.load();
+    }),
+
+    // Load translations before SSR / prerender rendering
+    provideAppInitializer(() => {
+      const languageService = inject(LanguageService);
+
+      return languageService.load();
+    }),
+
+    provideClientHydration(
+      withEventReplay()
+    )
+  ]
 };
