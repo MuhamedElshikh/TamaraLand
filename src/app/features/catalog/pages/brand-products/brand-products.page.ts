@@ -6,7 +6,7 @@ import {
   signal,
   PLATFORM_ID
 } from '@angular/core';
-
+import { SeoService } from '../../../../core/services/seo.service';
 import { isPlatformBrowser } from '@angular/common';
 
 import { ActivatedRoute } from '@angular/router';
@@ -56,7 +56,7 @@ export class BrandProductsPage implements OnInit, OnDestroy {
   private readonly catalogService = inject(CatalogService);
   private readonly route = inject(ActivatedRoute);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
-
+private readonly seo = inject(SeoService);
 
   // =========================================================
   // Page State
@@ -279,34 +279,134 @@ export class BrandProductsPage implements OnInit, OnDestroy {
   // Brand
   // =========================================================
 
-  private loadBrand(): void {
+ private loadBrand(): void {
 
-    this.catalogService
-      .getBrandById(this.brandId)
+  this.catalogService
+    .getBrandById(this.brandId)
 
-      .pipe(
-        catchError(() => of(null))
-      )
+    .pipe(
+      catchError(() => of(null))
+    )
 
-      .subscribe((response) => {
+    .subscribe((response) => {
 
-        if (
-          response?.success &&
-          response.data
-        ) {
+      if (
+        response?.success &&
+        response.data
+      ) {
 
-          this.brand.set(response.data);
+        this.brand.set(response.data);
 
-          return;
-        }
+        this.setBrandSeo(response.data);
+
+        return;
+      }
 
 
-        this.notFound.set(true);
+      this.notFound.set(true);
 
+      this.seo.setSeo({
+        title: 'Brand Not Found | Tamara Land',
+
+        description:
+          'The requested brand could not be found.',
+
+        robots:
+          'noindex, nofollow'
       });
 
-  }
+    });
 
+}
+private setBrandSeo(
+  brand: BrandResponse
+): void {
+
+  const title =
+    `${brand.name} | Tamara Land`;
+
+  const description =
+    brand.description?.trim() ||
+    `Shop ${brand.name} from Tamara Land. Discover women's fashion in Egypt.`;
+
+  const canonicalUrl =
+    `/brands/${brand.id}`;
+
+  const image =
+    brand.imageUrl;
+
+
+  this.seo.setSeo({
+
+    title,
+
+    description,
+
+    canonicalUrl,
+
+    image,
+
+    type: 'website',
+
+    robots:
+      'index, follow',
+
+    siteName:
+      'Tamara Land',
+
+    jsonLd:
+      this.buildBrandSchema(
+        brand,
+        description
+      )
+
+  });
+
+}
+private buildBrandSchema(
+  brand: BrandResponse,
+  description: string
+): Record<string, unknown> {
+
+  return {
+
+    '@context':
+      'https://schema.org',
+
+    '@type':
+      'CollectionPage',
+
+    name:
+      brand.name,
+
+    description,
+
+    url:
+      `https://www.tamaraland.shop/brands/${brand.id}`,
+
+    ...(brand.imageUrl
+      ? {
+          image:
+            brand.imageUrl
+        }
+      : {}),
+
+    isPartOf: {
+
+      '@type':
+        'WebSite',
+
+      name:
+        'Tamara Land',
+
+      url:
+        'https://www.tamaraland.shop'
+
+    }
+
+  };
+
+}
 
   // =========================================================
   // Products
