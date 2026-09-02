@@ -1,3 +1,14 @@
+.admin-header__menu > svg,
+.admin-header__action > svg,
+.admin-header__language > svg {
+  display: none;
+}
+
+.admin-header__menu > i,
+.admin-header__action > i,
+.admin-header__language > i {
+  font-size: 1rem;
+}
 .admin-header {
   display: flex;
   align-items: center;

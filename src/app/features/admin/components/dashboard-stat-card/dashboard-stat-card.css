@@ -152,15 +152,9 @@
 
 }
 
-.dashboard-stat__icon .material-symbols-rounded{
+.dashboard-stat__icon i{
 
     font-size:28px;
-
-    font-variation-settings:
-        'FILL' 1,
-        'wght' 300,
-        'GRAD' 0,
-        'opsz' 24;
 
 }
 @media (max-width: 768px) {
@@ -185,7 +179,7 @@
     height: 40px;
   }
 
-  .dashboard-stat__icon .material-symbols-rounded {
+    .dashboard-stat__icon i {
     font-size: 22px;
   }
 }

@@ -1,3 +1,14 @@
+.admin-sidebar__icon > svg {
+  display: none;
+}
+
+.admin-sidebar__icon > i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  text-align: center;
+}
 .admin-sidebar {
   display: flex;
   flex-direction: column;

@@ -13,7 +13,7 @@
       class="admin-sidebar__close"
       (click)="closeSidebar()"
       [attr.aria-label]="'header.closeMenu' | translate">
-      ✕
+      <i class="fa-solid fa-xmark" aria-hidden="true"></i>
     </button>
 
     <span class="admin-sidebar__logo"><img src="../../../../../assets/logo.png" [alt]="'sidebar.logoAlt' | translate"></span>
@@ -36,6 +36,11 @@
         class="admin-sidebar__link">
 
         <span class="admin-sidebar__icon">
+
+          <i
+            [class]="'fa-solid ' + iconClass(item.icon)"
+            aria-hidden="true">
+          </i>
 
           @switch (item.icon) {
 
@@ -244,7 +249,7 @@
   (click)="closeSidebar()"
 >
   <span class="admin-sidebar__back-icon" aria-hidden="true">
-    →
+    <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
   </span>
 
   <span>

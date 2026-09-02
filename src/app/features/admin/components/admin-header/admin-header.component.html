@@ -7,6 +7,7 @@
     (click)="openMenu()"
     [attr.aria-label]="'header.openMenu' | translate"
   >
+    <i class="fa-solid fa-bars" aria-hidden="true"></i>
     <svg
       width="24"
       height="24"
@@ -56,6 +57,12 @@
           : 'header.switchToDark') | translate
       "
     >
+
+      @if (themeService.theme() === 'dark') {
+        <i class="fa-solid fa-sun" aria-hidden="true"></i>
+      } @else {
+        <i class="fa-solid fa-moon" aria-hidden="true"></i>
+      }
 
       @if (themeService.theme() === 'dark') {
 
@@ -151,6 +158,8 @@
       [attr.aria-label]="'header.changeLanguage' | translate"
       [title]="'header.changeLanguage' | translate"
     >
+
+      <i class="fa-solid fa-globe" aria-hidden="true"></i>
 
       <svg
         width="20"

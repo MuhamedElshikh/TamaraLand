@@ -30,6 +30,27 @@ interface AdminNavItem {
 })
 export class AdminSidebarComponent {
 
+  iconClass(icon: string): string {
+    const icons: Record<string, string> = {
+      grid: 'fa-chart-line',
+      box: 'fa-box-open',
+      palette: 'fa-palette',
+      ruler: 'fa-ruler-combined',
+      layers: 'fa-folder-tree',
+      tag: 'fa-tag',
+      receipt: 'fa-receipt',
+      ticket: 'fa-ticket',
+      percent: 'fa-percent',
+      truck: 'fa-truck',
+      image: 'fa-image',
+      whatsapp: 'fa-whatsapp',
+      users: 'fa-users',
+      settings: 'fa-gear',
+    };
+
+    return icons[icon] ?? 'fa-circle';
+  }
+
   @Input({ required: true })
   mobileMenuOpen = false;
 

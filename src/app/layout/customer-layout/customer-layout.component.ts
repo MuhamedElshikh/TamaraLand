@@ -16,7 +16,7 @@ import { StoreSettingsService } from '../../core/services/store-settings.service
 })
 export class CustomerLayoutComponent {
 
-    private readonly storeSettingsService = inject(StoreSettingsService);
+  private readonly storeSettingsService = inject(StoreSettingsService);
   readonly settings = this.storeSettingsService.settings;
 
 }

@@ -23,7 +23,7 @@
   } @else {
     <div class="category-strip-wrapper">
       <button class="category-strip__nav category-strip__nav--prev" (click)="scrollCategories(-1)" aria-label="Previous">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
       </button>
 
       <div class="category-strip" #categoryStrip>
@@ -59,7 +59,7 @@
       </div>
 
       <button class="category-strip__nav category-strip__nav--next" (click)="scrollCategories(1)" aria-label="Next">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
       </button>
     </div>
   }
@@ -80,7 +80,7 @@
 <section class="trust-strip">
   <div class="trust-item" [appScrollReveal]="0">
     <span class="trust-item__icon">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 7h13v9H3z" stroke="currentColor" stroke-width="1.6"/><path d="M16 10h3l2 3v3h-5z" stroke="currentColor" stroke-width="1.6"/><circle cx="7" cy="18.5" r="1.6" stroke="currentColor" stroke-width="1.6"/><circle cx="17.5" cy="18.5" r="1.6" stroke="currentColor" stroke-width="1.6"/></svg>
+      <i class="fa-solid fa-truck" aria-hidden="true"></i>
     </span>
     <div>
       <p class="trust-item__title">{{ 'home.fastDelivery' | translate }}</p>
@@ -89,7 +89,7 @@
   </div>
   <div class="trust-item" appScrollReveal="100">
     <span class="trust-item__icon">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
     </span>
     <div>
       <p class="trust-item__title">{{ 'home.secureCheckout' | translate }}</p>
@@ -98,7 +98,7 @@
   </div>
   <div class="trust-item" appScrollReveal="200">
     <span class="trust-item__icon">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20 12v10H4V12" stroke="currentColor" stroke-width="1.6"/><path d="M22 7H2v5h20V7z" stroke="currentColor" stroke-width="1.6"/><path d="M12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" stroke="currentColor" stroke-width="1.6"/></svg>
+      <i class="fa-solid fa-gift" aria-hidden="true"></i>
     </span>
     <div>
       <p class="trust-item__title">{{ 'home.luxuryPackaging' | translate }}</p>
@@ -107,7 +107,7 @@
   </div>
   <div class="trust-item" appScrollReveal="300">
     <span class="trust-item__icon">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      <i class="fa-solid fa-star" aria-hidden="true"></i>
     </span>
     <div>
       <p class="trust-item__title">{{ 'home.guaranteedQuality' | translate }}</p>

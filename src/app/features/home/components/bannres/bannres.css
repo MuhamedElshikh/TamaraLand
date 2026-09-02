@@ -54,9 +54,11 @@
 }
 
 .static-banner:hover img{
-
     transform:scale(1.03);
-
+    -webkit-transform:scale(1.03);
+    -moz-transform:scale(1.03);
+    -ms-transform:scale(1.03);
+    -o-transform:scale(1.03);
 }
 
 
@@ -73,7 +75,7 @@
 
 .static-banner-strip--home img{
 
-    aspect-ratio:21/6;
+    aspect-ratio:16/5;
 
 }
 
@@ -157,7 +159,7 @@
 
 .static-banner-strip--home img{
 
-    aspect-ratio:16/9;
+    aspect-ratio:12/5;
 
 }
 
@@ -180,7 +182,7 @@
 
 .static-banner img{
 
-    aspect-ratio:16/10;
+    aspect-ratio:4/2;
 
 }
 

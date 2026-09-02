@@ -11,6 +11,11 @@
   animation: fadeIn 0.2s ease forwards;
 }
 .lang-btn {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: none;
   background: transparent;
   cursor: pointer;
@@ -139,9 +144,13 @@
   display: flex;
 }
 
-.icon-btn svg {
+.icon-btn svg,
+.icon-btn i {
   width: 18px;
   height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .menu-toggle {
@@ -406,7 +415,8 @@
     height: 34px;
   }
 
-  .icon-btn svg {
+  .icon-btn svg,
+  .icon-btn i {
     width: 17px;
     height: 17px;
   }
@@ -431,7 +441,8 @@
     height: 32px;
   }
 
-  .icon-btn svg {
+  .icon-btn svg,
+  .icon-btn i {
     width: 16px;
     height: 16px;
   }
