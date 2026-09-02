@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 
 import { ActivatedRoute } from '@angular/router';
-
+import { SeoService } from '../../../../core/services/seo.service';
 import {
   catchError,
   of
@@ -65,7 +65,7 @@ export class CategoryProductsPage
 
   private currentFilter: ProductFilterRequest = {};
 
-
+private readonly seo =inject(SeoService);
   readonly products =
     signal<ProductCardResponse[]>([]);
 
@@ -266,34 +266,44 @@ export class CategoryProductsPage
 
   private loadCategory(): void {
 
-    this.catalogService
-      .getCategoryById(this.categoryId)
+  this.catalogService
+    .getCategoryById(this.categoryId)
 
-      .pipe(
-        catchError(() => of(null))
-      )
+    .pipe(
+      catchError(() => of(null))
+    )
 
-      .subscribe((response) => {
+    .subscribe((response) => {
 
-        if (
-          response?.success &&
+      if (
+        response?.success &&
+        response.data
+      ) {
+
+        this.category.set(
           response.data
-        ) {
+        );
 
-          this.category.set(
-            response.data
-          );
+        this.setCategorySeo(
+          response.data
+        );
 
-          return;
-        }
+        return;
+      }
 
+      this.notFound.set(true);
 
-        this.notFound.set(true);
-
+      this.seo.setSeo({
+        title: 'Category Not Found | Tamara Land',
+        description:
+          'The requested category could not be found.',
+        robots:
+          'noindex, nofollow'
       });
 
-  }
+    });
 
+}
 
   // =========================================================
   // Products
@@ -364,5 +374,91 @@ export class CategoryProductsPage
       });
 
   }
+private setCategorySeo(
+  category: CategoryResponse
+): void {
+
+  const title =
+    `${category.name} | Tamara Land`;
+
+  const description =
+    category.description?.trim() ||
+    `Shop ${category.name} from Tamara Land. Discover our collection of women's fashion in Egypt.`;
+
+  const canonicalUrl =
+    `/categories/${category.id}`;
+
+  const image =
+    category.imageUrl;
+
+  this.seo.setSeo({
+
+    title,
+
+    description,
+
+    canonicalUrl,
+
+    image,
+
+    type: 'website',
+
+    robots:
+      'index, follow',
+
+    siteName:
+      'Tamara Land',
+
+    jsonLd:
+      this.buildCategorySchema(category)
+
+  });
 
 }
+
+private buildCategorySchema(
+  category: CategoryResponse
+): Record<string, unknown> {
+
+  return {
+
+    '@context':
+      'https://schema.org',
+
+    '@type':
+      'CollectionPage',
+
+    name:
+      category.name,
+
+    description:
+      category.description || '',
+
+    url:
+      `https://www.tamaraland.shop/categories/${category.id}`,
+
+    ...(category.imageUrl
+      ? {
+          image:
+            category.imageUrl
+        }
+      : {}),
+
+    isPartOf: {
+
+      '@type':
+        'WebSite',
+
+      name:
+        'Tamara Land',
+
+      url:
+        'https://www.tamaraland.shop'
+
+    }
+
+  };
+
+} // قفل buildCategorySchema
+
+} // قفل CategoryProductsPage
