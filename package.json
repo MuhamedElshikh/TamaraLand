@@ -1,14 +1,16 @@
 {
   "name": "tmaraland-frontend",
   "version": "0.0.0",
-  "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "serve:ssr:tmaraland-frontend": "node dist/tmaraland-frontend/server/server.mjs"
-  },
+ "scripts": {
+  "ng": "ng",
+  "start": "ng serve",
+  "build": "ng build",
+  "build:seo": "node scripts/generate-seo-files.mjs",
+  "build:production": "ng build && npm run build:seo",
+  "watch": "ng build --watch --configuration development",
+  "test": "ng test",
+  "serve:ssr:tmaraland-frontend": "node dist/tmaraland-frontend/server/server.mjs"
+},
   "prettier": {
     "printWidth": 100,
     "singleQuote": true,

@@ -8,7 +8,9 @@ import {
   AfterViewInit,
   OnDestroy,
   NgZone,
+  PLATFORM_ID,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -86,7 +88,8 @@ private readonly seo = inject(SeoService);
   readonly canScrollPrev = signal(false);
   readonly canScrollNext = signal(true);
   readonly showStickyBar = signal(false);
-
+private readonly platformId = inject(PLATFORM_ID);
+private readonly isBrowser = isPlatformBrowser(this.platformId);
   private scrollSub?: { unsubscribe: () => void };
 
   // =========================================================
@@ -94,28 +97,34 @@ private readonly seo = inject(SeoService);
   // =========================================================
 
   ngAfterViewInit(): void {
-    setTimeout(
-      () => this.onRelatedSliderScroll(),
-      0
-    );
-
-    if (typeof window !== 'undefined') {
-      this.ngZone.runOutsideAngular(() => {
-        const sub = fromEvent(window, 'scroll', { passive: true })
-          .pipe(auditTime(40))
-          .subscribe(() => {
-            const scrollY = window.scrollY || document.documentElement.scrollTop;
-            const isSticky = scrollY > 450;
-            if (this.showStickyBar() !== isSticky) {
-              this.ngZone.run(() => {
-                this.showStickyBar.set(isSticky);
-              });
-            }
-          });
-        this.scrollSub = sub;
-      });
-    }
+  if (!this.isBrowser) {
+    return;
   }
+
+  setTimeout(() => {
+    this.onRelatedSliderScroll();
+  }, 0);
+
+  this.ngZone.runOutsideAngular(() => {
+    const sub = fromEvent(window, 'scroll', { passive: true })
+      .pipe(auditTime(40))
+      .subscribe(() => {
+        const scrollY =
+          window.scrollY ||
+          document.documentElement.scrollTop;
+
+        const isSticky = scrollY > 450;
+
+        if (this.showStickyBar() !== isSticky) {
+          this.ngZone.run(() => {
+            this.showStickyBar.set(isSticky);
+          });
+        }
+      });
+
+    this.scrollSub = sub;
+  });
+}
 
   ngOnDestroy(): void {
     this.scrollSub?.unsubscribe();
@@ -483,11 +492,11 @@ private readonly seo = inject(SeoService);
   });
     // Deep-link / refresh:
     // make sure cart state is available.
-    if (!this.cartService.cart()) {
-      this.cartService
-        .getCart()
-        .subscribe();
-    }
+   if (this.isBrowser && !this.cartService.cart()) {
+  this.cartService
+    .getCart()
+    .subscribe();
+}
   }
 
   // =========================================================

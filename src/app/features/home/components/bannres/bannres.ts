@@ -5,16 +5,38 @@ import {
   OnInit,
   computed,
   inject,
-  signal
+  signal,
+  PLATFORM_ID,
 } from '@angular/core';
-import { NgClass } from '@angular/common';
-import {Router,RouterLink,UrlTree
-} from '@angular/router';import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+import {
+  isPlatformBrowser,
+  NgClass,
+} from '@angular/common';
+
+import {
+  Router,
+  RouterLink,
+  UrlTree,
+} from '@angular/router';
+
+import {
+  takeUntilDestroyed,
+} from '@angular/core/rxjs-interop';
+
 import { TranslatePipe } from '@ngx-translate/core';
+
 import { BannerService } from '../../../../core/services/banner.service';
-import { BannerResponse, BannerType } from '../../../../core/models/banner.models';
+
+import {
+  BannerResponse,
+  BannerType,
+} from '../../../../core/models/banner.models';
+
 import { ScrollRevealDirective } from '../../../../shared/directives/scroll-reveal.directive';
+
 import { AutoSlideDirective } from '../../../../shared/directives/auto-slide.directive';
+
 
 interface BannerSlide {
   desktopUrl: string;
@@ -22,179 +44,379 @@ interface BannerSlide {
   link?: string;
 }
 
+
 @Component({
   selector: 'app-banners',
   standalone: true,
-  imports: [RouterLink, TranslatePipe, NgClass, ScrollRevealDirective, AutoSlideDirective],
+
+  imports: [
+    RouterLink,
+    TranslatePipe,
+    NgClass,
+    ScrollRevealDirective,
+    AutoSlideDirective,
+  ],
+
   templateUrl: './bannres.html',
-  styleUrl: './bannres.css'
+  styleUrl: './bannres.css',
 })
 export class Banners implements OnInit {
 
-  @Input({ required: true }) bannerType!: BannerType;
+  @Input({ required: true })
+  bannerType!: BannerType;
 
-  private readonly bannerService = inject(BannerService);
-  private readonly destroyRef = inject(DestroyRef);
-private readonly router = inject(Router);
-  readonly banners = signal<BannerResponse[]>([]);
 
-  readonly isHomeBanner = computed(() => this.bannerType === BannerType.HomeBanner);
+  private readonly bannerService =
+    inject(BannerService);
 
-  readonly stripClass = computed(() => {
-    switch (this.bannerType) {
-      case BannerType.HomeBanner:
-        return 'static-banner-strip--home';
-      case BannerType.OfferBanner:
-        return 'static-banner-strip--offer';
-      case BannerType.CategoryBanner:
-        return 'static-banner-strip--category';
-      default:
-        return '';
-    }
-  });
+  private readonly destroyRef =
+    inject(DestroyRef);
 
-  // ==========================
-  // Home Banner: سلايدات مبنية من كل صور كل البانرز (مش بانر = كارت واحد بس)
-  // ==========================
+  private readonly router =
+    inject(Router);
 
-  readonly homeSlides = computed(() => this.buildSlides(this.banners()));
+  private readonly platformId =
+    inject(PLATFORM_ID);
+
+
+  readonly banners =
+    signal<BannerResponse[]>([]);
+
+
+  readonly isHomeBanner =
+    computed(
+      () =>
+        this.bannerType ===
+        BannerType.HomeBanner
+    );
+
+
+  readonly stripClass =
+    computed(() => {
+
+      switch (this.bannerType) {
+
+        case BannerType.HomeBanner:
+          return 'static-banner-strip--home';
+
+        case BannerType.OfferBanner:
+          return 'static-banner-strip--offer';
+
+        case BannerType.CategoryBanner:
+          return 'static-banner-strip--category';
+
+        default:
+          return '';
+
+      }
+
+    });
+
+
+  readonly homeSlides =
+    computed(() =>
+      this.buildSlides(
+        this.banners()
+      )
+    );
+
 
   ngOnInit(): void {
 
-    this.bannerService.getHeroBanners(this.bannerType)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+    this.bannerService
+      .getHeroBanners(this.bannerType)
+
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+
       .subscribe({
 
         next: (response) => {
-          this.banners.set(response.data ?? []);
+
+          this.banners.set(
+            response.data ?? []
+          );
+
         },
 
         error: () => {
-          // السكاشن دي مش أساسية زي الهيرو، فمش هنعمل حاجة لو فشلت
-        }
+          // Optional banner section.
+        },
 
       });
 
   }
 
-  private buildSlides(banners: BannerResponse[]): BannerSlide[] {
+
+  private buildSlides(
+    banners: BannerResponse[]
+  ): BannerSlide[] {
 
     const slides: BannerSlide[] = [];
 
+
     for (const banner of banners) {
 
-      const desktopImages = banner.images
-        .filter(x => !x.isMobile)
-        .sort((a, b) => a.displayOrder - b.displayOrder);
+      const desktopImages =
+        banner.images
 
-      const mobileImages = banner.images
-        .filter(x => x.isMobile)
-        .sort((a, b) => a.displayOrder - b.displayOrder);
+          .filter(
+            x => !x.isMobile
+          )
 
-      if (desktopImages.length === 0 && mobileImages.length > 0) {
-        // مفيش صور ديسكتوب، بس فيه موبايل → اعتبرها سلايدات مستقلة
-        mobileImages.forEach(m => {
-          slides.push({
-            desktopUrl: m.imageUrl,
-            mobileUrl: m.imageUrl,
-            link: m.link
-          });
-        });
+          .sort(
+            (a, b) =>
+              a.displayOrder -
+              b.displayOrder
+          );
+
+
+      const mobileImages =
+        banner.images
+
+          .filter(
+            x => x.isMobile
+          )
+
+          .sort(
+            (a, b) =>
+              a.displayOrder -
+              b.displayOrder
+          );
+
+
+      if (
+        desktopImages.length === 0 &&
+        mobileImages.length > 0
+      ) {
+
+        mobileImages.forEach(
+          mobile => {
+
+            slides.push({
+
+              desktopUrl:
+                mobile.imageUrl,
+
+              mobileUrl:
+                mobile.imageUrl,
+
+              link:
+                mobile.link,
+
+            });
+
+          }
+        );
+
         continue;
+
       }
 
-      // كل صورة ديسكتوب = سلايد منفصل، ولو فيه صورة موبايل بنفس الترتيب نستخدمها ليها
-      desktopImages.forEach((d, i) => {
-        const mobileMatch = mobileImages[i];
-        slides.push({
-          desktopUrl: d.imageUrl,
-          mobileUrl: mobileMatch?.imageUrl,
-          link: d.link ?? mobileMatch?.link
-        });
-      });
+
+      desktopImages.forEach(
+        (desktop, index) => {
+
+          const mobileMatch =
+            mobileImages[index];
+
+
+          slides.push({
+
+            desktopUrl:
+              desktop.imageUrl,
+
+            mobileUrl:
+              mobileMatch?.imageUrl,
+
+            link:
+              desktop.link ??
+              mobileMatch?.link,
+
+          });
+
+        }
+      );
+
     }
+
 
     return slides;
+
   }
 
-  resolveSlideImage(slide: BannerSlide): string {
 
-    const isMobileView = window.innerWidth <= 768;
+  resolveSlideImage(
+    slide: BannerSlide
+  ): string {
 
-    if (isMobileView && slide.mobileUrl) {
+    if (
+      isPlatformBrowser(
+        this.platformId
+      ) &&
+      window.innerWidth <= 768 &&
+      slide.mobileUrl
+    ) {
+
       return slide.mobileUrl;
+
     }
+
 
     return slide.desktopUrl;
+
   }
 
-  // ==========================
-  // Offer / Category: بانر = كارت واحد
-  // ==========================
 
-  resolveImage(banner: BannerResponse): string {
+  resolveImage(
+    banner: BannerResponse
+  ): string {
 
-    const isMobileView = window.innerWidth <= 768;
+    const mobileImage =
+      banner.images.find(
+        x => x.isMobile
+      );
 
-    const mobileImage = banner.images.find(x => x.isMobile);
-    const desktopImage = banner.images.find(x => !x.isMobile);
 
-    if (isMobileView && mobileImage) {
+    const desktopImage =
+      banner.images.find(
+        x => !x.isMobile
+      );
+
+
+    if (
+      isPlatformBrowser(
+        this.platformId
+      ) &&
+      window.innerWidth <= 768 &&
+      mobileImage
+    ) {
+
       return mobileImage.imageUrl;
+
     }
 
-    return desktopImage?.imageUrl ?? mobileImage?.imageUrl ?? '';
-  }
 
-  resolveLink(banner: BannerResponse): string | undefined {
-
-    const isMobileView = window.innerWidth <= 768;
-
-    const mobileImage = banner.images.find(x => x.isMobile);
-    const desktopImage = banner.images.find(x => !x.isMobile);
-
-    if (isMobileView && mobileImage) {
-      return mobileImage.link;
-    }
-
-    return desktopImage?.link ?? mobileImage?.link;
-  }
-resolveRouterLink(link?: string): UrlTree | null {
-  if (!link) {
-    return null;
-  }
-
-  const trimmedLink = link.trim();
-
-  if (!trimmedLink) {
-    return null;
-  }
-
-  try {
-    const [path, queryString] = trimmedLink.split('?');
-
-    const queryParams: Record<string, string> = {};
-
-    if (queryString) {
-      const params = new URLSearchParams(queryString);
-
-      params.forEach((value, key) => {
-        queryParams[key] = value;
-      });
-    }
-
-    return this.router.createUrlTree(
-      [path],
-      {
-        queryParams:
-          Object.keys(queryParams).length > 0
-            ? queryParams
-            : undefined
-      }
+    return (
+      desktopImage?.imageUrl ??
+      mobileImage?.imageUrl ??
+      ''
     );
 
-  } catch {
-    return null;
   }
-}
+
+
+  resolveLink(
+    banner: BannerResponse
+  ): string | undefined {
+
+    const mobileImage =
+      banner.images.find(
+        x => x.isMobile
+      );
+
+
+    const desktopImage =
+      banner.images.find(
+        x => !x.isMobile
+      );
+
+
+    if (
+      isPlatformBrowser(
+        this.platformId
+      ) &&
+      window.innerWidth <= 768 &&
+      mobileImage
+    ) {
+
+      return mobileImage.link;
+
+    }
+
+
+    return (
+      desktopImage?.link ??
+      mobileImage?.link
+    );
+
+  }
+
+
+  resolveRouterLink(
+    link?: string
+  ): UrlTree | null {
+
+    if (!link) {
+      return null;
+    }
+
+
+    const trimmedLink =
+      link.trim();
+
+
+    if (!trimmedLink) {
+      return null;
+    }
+
+
+    try {
+
+      const [
+        path,
+        queryString,
+      ] =
+        trimmedLink.split('?');
+
+
+      const queryParams:
+        Record<string, string> = {};
+
+
+      if (queryString) {
+
+        const params =
+          new URLSearchParams(
+            queryString
+          );
+
+
+        params.forEach(
+          (value, key) => {
+
+            queryParams[key] =
+              value;
+
+          }
+        );
+
+      }
+
+
+      return this.router.createUrlTree(
+        [path],
+        {
+
+          queryParams:
+            Object.keys(
+              queryParams
+            ).length > 0
+              ? queryParams
+              : undefined,
+
+        }
+      );
+
+    } catch {
+
+      return null;
+
+    }
+
+  }
+
 }

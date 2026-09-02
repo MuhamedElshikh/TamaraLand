@@ -4,8 +4,15 @@ import {
   Input,
   OnChanges,
   SimpleChanges,
-  signal
+  signal,
+  PLATFORM_ID,
+  inject,
 } from '@angular/core';
+
+import {
+  DOCUMENT,
+  isPlatformBrowser,
+} from '@angular/common';
 
 import { ProductImageResponse } from '../../../../core/models/catalog.models';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -19,65 +26,88 @@ import { TranslatePipe } from '@ngx-translate/core';
 })
 export class ProductGalleryComponent implements OnChanges {
 
+  private readonly document = inject(DOCUMENT);
+  private readonly platformId = inject(PLATFORM_ID);
+
+  private readonly isBrowser =
+    isPlatformBrowser(this.platformId);
+
   @Input() images: ProductImageResponse[] = [];
   @Input() title = 'Product images';
   @Input() fallbackImage = '/assets/placeholder-product.jpg';
 
-  selectedImage = signal<ProductImageResponse | null>(null);
+  selectedImage =
+    signal<ProductImageResponse | null>(null);
 
-  isLightboxOpen = signal(false);
+  isLightboxOpen =
+    signal(false);
 
-  // Main image
-  mainTransformOrigin = signal('50% 50%');
+  mainTransformOrigin =
+    signal('50% 50%');
 
-  // Lightbox
-  lightboxTransformOrigin = signal('50% 50%');
-  isLightboxZoomed = signal(false);
+  lightboxTransformOrigin =
+    signal('50% 50%');
+
+  isLightboxZoomed =
+    signal(false);
 
 
   get currentImageUrl(): string {
+
     return (
       this.selectedImage()?.imageUrl ||
       this.images[0]?.imageUrl ||
       this.fallbackImage
     );
+
   }
 
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(
+    changes: SimpleChanges
+  ): void {
 
     if (changes['images']) {
-      this.selectedImage.set(this.images[0] ?? null);
+
+      this.selectedImage.set(
+        this.images[0] ?? null
+      );
+
     }
 
   }
 
 
-  selectImage(image: ProductImageResponse): void {
+  selectImage(
+    image: ProductImageResponse
+  ): void {
 
     this.selectedImage.set(image);
 
     this.resetMainZoom();
+
     this.resetLightboxZoom();
 
   }
 
 
-  /* =========================================================
-     MAIN IMAGE HOVER ZOOM
-     ========================================================= */
+  onMainImageMouseMove(
+    event: MouseEvent
+  ): void {
 
-  onMainImageMouseMove(event: MouseEvent): void {
+    const element =
+      event.currentTarget as HTMLElement;
 
-    const element = event.currentTarget as HTMLElement;
-
-    const rect = element.getBoundingClientRect();
+    const rect =
+      element.getBoundingClientRect();
 
     const x =
-      ((event.clientX - rect.left) / rect.width) * 100;
+      ((event.clientX - rect.left) /
+        rect.width) * 100;
 
     const y =
-      ((event.clientY - rect.top) / rect.height) * 100;
+      ((event.clientY - rect.top) /
+        rect.height) * 100;
 
     this.mainTransformOrigin.set(
       `${this.clamp(x)}% ${this.clamp(y)}%`
@@ -88,14 +118,12 @@ export class ProductGalleryComponent implements OnChanges {
 
   resetMainZoom(): void {
 
-    this.mainTransformOrigin.set('50% 50%');
+    this.mainTransformOrigin.set(
+      '50% 50%'
+    );
 
   }
 
-
-  /* =========================================================
-     LIGHTBOX
-     ========================================================= */
 
   openLightbox(): void {
 
@@ -103,8 +131,12 @@ export class ProductGalleryComponent implements OnChanges {
 
     this.resetLightboxZoom();
 
-    // منع الصفحة الخلفية من الـ scroll
-    document.body.style.overflow = 'hidden';
+    if (this.isBrowser) {
+
+      this.document.body.style.overflow =
+        'hidden';
+
+    }
 
   }
 
@@ -115,30 +147,40 @@ export class ProductGalleryComponent implements OnChanges {
 
     this.resetLightboxZoom();
 
-    document.body.style.overflow = '';
+    if (this.isBrowser) {
+
+      this.document.body.style.overflow =
+        '';
+
+    }
 
   }
 
 
   onLightboxMouseEnter(): void {
 
-    // Zoom يبدأ بمجرد دخول الماوس
     this.isLightboxZoomed.set(true);
 
   }
 
 
-  onLightboxMouseMove(event: MouseEvent): void {
+  onLightboxMouseMove(
+    event: MouseEvent
+  ): void {
 
-    const element = event.currentTarget as HTMLElement;
+    const element =
+      event.currentTarget as HTMLElement;
 
-    const rect = element.getBoundingClientRect();
+    const rect =
+      element.getBoundingClientRect();
 
     const x =
-      ((event.clientX - rect.left) / rect.width) * 100;
+      ((event.clientX - rect.left) /
+        rect.width) * 100;
 
     const y =
-      ((event.clientY - rect.top) / rect.height) * 100;
+      ((event.clientY - rect.top) /
+        rect.height) * 100;
 
     this.lightboxTransformOrigin.set(
       `${this.clamp(x)}% ${this.clamp(y)}%`
@@ -153,12 +195,16 @@ export class ProductGalleryComponent implements OnChanges {
 
     this.isLightboxZoomed.set(false);
 
-    this.lightboxTransformOrigin.set('50% 50%');
+    this.lightboxTransformOrigin.set(
+      '50% 50%'
+    );
 
   }
 
 
-  private clamp(value: number): number {
+  private clamp(
+    value: number
+  ): number {
 
     return Math.min(
       100,
@@ -168,14 +214,14 @@ export class ProductGalleryComponent implements OnChanges {
   }
 
 
-  /* =========================================================
-     ESC CLOSE
-     ========================================================= */
-
-  @HostListener('document:keydown.escape')
+  @HostListener(
+    'document:keydown.escape'
+  )
   onEscape(): void {
 
-    if (this.isLightboxOpen()) {
+    if (
+      this.isLightboxOpen()
+    ) {
       this.closeLightbox();
     }
 
