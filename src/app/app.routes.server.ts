@@ -1,7 +1,7 @@
 import { RenderMode, ServerRoute } from '@angular/ssr';
 
 const PRODUCT_ALL_IDS_URL = 'https://tamaraland.runasp.net/api/Product/all-ids';
-const CATEGORY_ALL_IDS_URL = 'https://tamaraland.runasp.net/api/Category/all-ids';
+const CATEGORY_ALL_IDS_URL = 'https://tamaraland.runasp.net/api/Categories/all-ids';
 const BRAND_ALL_IDS_URL = 'https://tamaraland.runasp.net/api/Brand/all-ids';
 
 async function fetchIds(url: string): Promise<number[]> {

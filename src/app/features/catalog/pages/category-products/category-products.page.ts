@@ -5,6 +5,7 @@ import {
   OnInit,
   signal
 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 
 import { ActivatedRoute } from '@angular/router';
 import { SeoService } from '../../../../core/services/seo.service';
@@ -56,7 +57,7 @@ export class CategoryProductsPage
   private readonly route =
     inject(ActivatedRoute);
 
-
+private readonly document = inject(DOCUMENT);
   // =========================================================
   // State
   // =========================================================
@@ -152,8 +153,7 @@ private readonly seo =inject(SeoService);
     // Prevent the page from remaining
     // locked after navigating away.
 
-    document.body.style.overflow = '';
-
+this.document.body.style.overflow = '';
   }
 
 
@@ -165,8 +165,7 @@ private readonly seo =inject(SeoService);
 
     this.filtersOpen.set(true);
 
-    document.body.style.overflow = 'hidden';
-
+this.document.body.style.overflow = 'hidden';
   }
 
 
@@ -174,8 +173,7 @@ private readonly seo =inject(SeoService);
 
     this.filtersOpen.set(false);
 
-    document.body.style.overflow = '';
-
+this.document.body.style.overflow = '';
   }
 
 
