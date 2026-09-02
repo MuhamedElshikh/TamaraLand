@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { fromEvent } from 'rxjs';
 import { auditTime } from 'rxjs/operators';
-
+import { SeoService } from '../../../../core/services/seo.service';
 import { ProductGalleryComponent } from '../../components/product-gallery/product-gallery.component';
 import { ProductVariantSelectorComponent } from '../../components/product-variant-selector/product-variant-selector.component';
 import { ProductCardComponent } from '../../components/product-card/product-card.component';
@@ -77,7 +77,7 @@ export class ProductDetailsPage
   private readonly analyticsService = inject(AnalyticsService);
   private readonly toast = inject(ToastService);
   private readonly translate = inject(TranslateService);
-
+private readonly seo = inject(SeoService);
   @ViewChild('relatedSliderTrack')
   relatedSliderTrack?: ElementRef<HTMLDivElement>;
 
@@ -460,43 +460,27 @@ export class ProductDetailsPage
   // =========================================================
 
   constructor() {
-    this.route.data
-      .pipe(takeUntilDestroyed())
-      .subscribe(data => {
-        const productData =
-          data['product'] as
-          | ProductDetailsResponse
-          | null;
+   this.route.data
+  .pipe(takeUntilDestroyed())
+  .subscribe(data => {
 
-        this.product.set(
-          productData
-        );
+    const productData =
+      data['product'] as
+      | ProductDetailsResponse
+      | null;
 
-        this.isInWishlist.set(
-          Boolean(
-            productData?.isInWishlist
-          )
-        );
+    this.product.set(productData);
 
-        if (productData) {
-          this.analyticsService.viewItem({
-            id: productData.id,
-            name: productData.name,
-            category:
-              productData.categoryName,
-            brand:
-              productData.brandName,
-            price:
-              productData.price,
-            originalPrice:
-              productData.originalPrice,
-            discount:
-              productData.originalPrice -
-              productData.price,
-          });
-        }
-      });
+    this.isInWishlist.set(
+      Boolean(productData?.isInWishlist)
+    );
 
+    if (productData) {
+      this.setProductSeo(productData);
+    }
+
+    // analytics...
+  });
     // Deep-link / refresh:
     // make sure cart state is available.
     if (!this.cartService.cart()) {
@@ -880,4 +864,167 @@ export class ProductDetailsPage
       },
     });
   }
+private setProductSeo(
+  product: ProductDetailsResponse
+): void {
+
+  const title =
+    `${product.name} | Tamara Land`;
+
+  const description =
+    product.description?.trim() ||
+    `Shop ${product.name} from Tamara Land. Discover quality women's fashion in Egypt.`;
+
+  const canonicalUrl =
+    `/products/${product.id}`;
+
+  const mainImage =
+    product.images?.find(
+      image => image.isMain
+    )?.imageUrl ??
+    product.imageUrl ??
+    product.images?.[0]?.imageUrl;
+
+  this.seo.setSeo({
+
+    title,
+
+    description,
+
+    canonicalUrl,
+
+    image: mainImage,
+
+    type: 'product',
+
+    robots:
+      'index, follow',
+
+    siteName:
+      'Tamara Land',
+
+    jsonLd:
+      this.buildProductSchema(product)
+
+  });
+
+}
+
+
+private buildProductSchema(
+  product: ProductDetailsResponse
+): Record<string, unknown> {
+
+  const mainImage =
+    product.images?.find(
+      image => image.isMain
+    )?.imageUrl ??
+    product.imageUrl ??
+    product.images?.[0]?.imageUrl;
+
+  const variant =
+    product.variants?.[0];
+
+  const price =
+    Number(
+      variant?.price ??
+      product.price
+    );
+
+  const schema: Record<string, unknown> = {
+
+    '@context':
+      'https://schema.org',
+
+    '@type':
+      'Product',
+
+    name:
+      product.name,
+
+    description:
+      product.description,
+
+    brand: {
+      '@type':
+        'Brand',
+
+      name:
+        product.brandName
+    },
+
+    category:
+      product.categoryName,
+
+    offers: {
+
+      '@type':
+        'Offer',
+
+      url:
+        `https://www.tamaraland.shop/products/${product.id}`,
+
+      priceCurrency:
+        'EGP',
+
+      price:
+        price,
+
+      availability:
+        product.inStock
+          ? 'https://schema.org/InStock'
+          : 'https://schema.org/OutOfStock'
+
+    }
+
+  };
+
+
+  if (mainImage) {
+
+    schema['image'] = [
+      mainImage
+    ];
+
+  }
+
+
+  if (variant?.sku) {
+
+    schema['sku'] =
+      variant.sku;
+
+  }
+
+
+  if (
+    product.reviewsCount > 0 &&
+    product.rating > 0
+  ) {
+
+    schema['aggregateRating'] = {
+
+      '@type':
+        'AggregateRating',
+
+      ratingValue:
+        Number(product.rating),
+
+      reviewCount:
+        Number(product.reviewsCount),
+
+      bestRating:
+        5,
+
+      worstRating:
+        1
+
+    };
+
+  }
+
+
+  return schema;
+
+}
 }
