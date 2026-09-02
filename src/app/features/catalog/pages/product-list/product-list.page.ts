@@ -6,20 +6,27 @@ import {
   OnInit,
   DestroyRef,
   ChangeDetectionStrategy,
-  PLATFORM_ID
+  PLATFORM_ID,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { UpperCasePipe, isPlatformBrowser } from '@angular/common';
+
+import { isPlatformBrowser, UpperCasePipe } from '@angular/common';
 
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
+import { combineLatest } from 'rxjs';
+
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
 import { ProductCardComponent } from '../../components/product-card/product-card.component';
+
 import { ProductFiltersComponent } from '../../components/product-filters/product-filters.component';
+
 import { PaginationComponent } from '../../../../shared/pagination/pagination';
 
 import { CatalogService } from '../../../../core/services/catalog.service';
+
 import {
   ProductCardResponse,
   ProductFilterRequest,
@@ -28,454 +35,891 @@ import {
 
 import { AnalyticsService } from '../../../../core/services/analytics.service';
 
+import { SeoService } from '../../../../core/services/seo.service';
+
+
 const PAGE_SIZE = 12;
 
-type SeasonKey = 'summer' | 'winter' | 'spring' | 'autumn';
+
+type SeasonKey =
+  | 'summer'
+  | 'autumn'
+  | 'winter'
+  | 'spring';
+
 
 interface SeasonConfig {
   key: SeasonKey;
   kicker: string;
   title: string;
   description: string;
-  particles: string[];
 }
+
+
+interface SeasonalParticle {
+  id: number;
+  left: number;
+  delay: number;
+  duration: number;
+  symbol: string;
+}
+
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
   imports: [
     ProductCardComponent,
     ProductFiltersComponent,
     PaginationComponent,
     TranslatePipe,
-    UpperCasePipe
+    UpperCasePipe,
   ],
+
   templateUrl: './product-list.page.html',
+
   styleUrl: './product-list.page.css',
+
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductListPage implements OnInit {
 
-  // =========================================================
-  // SERVICES
-  // =========================================================
-
   private readonly catalogService = inject(CatalogService);
+
   private readonly route = inject(ActivatedRoute);
+
+  private readonly router = inject(Router);
+
   private readonly translate = inject(TranslateService);
+
   private readonly analyticsService = inject(AnalyticsService);
+
+  private readonly seo = inject(SeoService);
+
   private readonly destroyRef = inject(DestroyRef);
-  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
+  private readonly isBrowser =
+    isPlatformBrowser(inject(PLATFORM_ID));
 
-  // =========================================================
-  // FILTER DRAWER
-  // =========================================================
 
   readonly filtersOpen = signal(false);
 
-  openFilters(): void {
-    this.filtersOpen.set(true);
 
-    if (this.isBrowser) {
-      document.body.style.overflow = 'hidden';
-    }
-  }
-
-  closeFilters(): void {
-    this.filtersOpen.set(false);
-
-    if (this.isBrowser) {
-      document.body.style.overflow = '';
-    }
-  }
-
-  clearFilters(): void {
-    // Reset filters logic can be added here later
-    this.closeFilters();
-  }
-
-  applyFilters(): void {
-    this.closeFilters();
-  }
+  readonly products =
+    signal<ProductCardResponse[]>([]);
 
 
-  // =========================================================
-  // PRODUCTS
-  // =========================================================
-
-  readonly products = signal<ProductCardResponse[]>([]);
-
-  readonly isLoading = signal(false);
-
-  readonly totalCount = signal(0);
-
-  readonly pageNumber = signal(1);
-
-  readonly totalPages = signal(1);
-
-  readonly didYouMean = signal<string[]>([]);
-  readonly currentSearch = signal('');
+  readonly isLoading =
+    signal(false);
 
 
-  // =========================================================
-  // PAGE CONTENT
-  // =========================================================
-
-  readonly pageTitle = signal('All Products');
-
-  readonly pageKicker = signal('Catalog');
-
-  readonly pageSubtitle = signal(
-    'Explore curated pieces with refined filters and elegant browsing.'
-  );
+  readonly totalCount =
+    signal(0);
 
 
-  // =========================================================
-  // COLLECTION
-  // =========================================================
-
-  private readonly collection = signal<ProductCollection>(
-    ProductCollection.None
-  );
+  readonly pageNumber =
+    signal(1);
 
 
-  // =========================================================
-  // PRICE CAP (for capped collections like "Under 800")
-  // =========================================================
-
-  readonly priceCap = signal<number | null>(null);
+  readonly totalPages =
+    signal(1);
 
 
-  // =========================================================
-  // CURRENT FILTER
-  // =========================================================
+  readonly didYouMean =
+    signal<string[]>([]);
+
+
+  readonly currentSearch =
+    signal('');
+
+
+  readonly pageTitle =
+    signal('All Products');
+
+
+  readonly pageKicker =
+    signal('Catalog');
+
+
+  readonly pageSubtitle =
+    signal(
+      'Explore curated pieces with refined filters and elegant browsing.'
+    );
+
+
+  private readonly collection =
+    signal<ProductCollection>(ProductCollection.None);
+
+
+  readonly priceCap =
+    signal<number | null>(null);
+
 
   private currentFilter: ProductFilterRequest = {};
-  private readonly router = inject(Router);
 
-
-  // =========================================================
-  // SUMMARY
-  // =========================================================
 
   readonly summary = computed(() => {
+
     const count = this.totalCount();
 
     return count > 0
       ? `Showing ${count} product${count === 1 ? '' : 's'}`
       : 'Showing curated pieces';
+
   });
 
 
-  // =========================================================
-  // SALE PAGE DETECTION
-  // =========================================================
-
-  readonly isSalePage = computed(() => {
-    return this.collection() === ProductCollection.Offers;
-  });
+  readonly isSalePage = computed(
+    () =>
+      this.collection() === ProductCollection.Offers
+  );
 
 
-  // =========================================================
-  // CURRENT SEASON
-  // =========================================================
-  month : number = new Date().getMonth() + 1;
   readonly season = computed<SeasonConfig>(() => {
 
+    const month = new Date().getMonth() + 1;
 
-  const currentMonth = this.month;
+    if (month >= 3 && month <= 5) {
 
-  // الموسم القادم
-  if (currentMonth >= 3 && currentMonth <= 5) {
-    // Current: Spring
-    // Next: Summer
+      return {
+        key: 'spring',
 
-    return {
-      key: 'summer',
+        kicker: 'Spring Edit',
 
-      kicker: 'Something Beautiful Is Coming',
+        title: 'A New Season Is Blooming',
 
-      title: 'Wait for Our Summer Offers',
+        description:
+          'Fresh silhouettes, softer details, and pieces made for brighter days.',
+      };
 
-      description:
-        'Our summer collection of special offers is on its way. Stay tuned.',
+    }
 
-      particles: ['✦', '·', '✧', '·'],
-    };
-  }
 
-  if (currentMonth >= 6 && currentMonth <= 8) {
-    // Current: Summer
-    // Next: Autumn
+    if (month >= 6 && month <= 8) {
 
-    return {
-      key: 'autumn',
+      return {
+        key: 'summer',
 
-      kicker: 'A New Chapter Is Coming',
+        kicker: 'Summer Edit',
 
-      title: 'Wait for Our Autumn Offers',
+        title: 'Summer Is On Its Way',
 
-      description:
-        'A warmer edit is coming soon, with special offers made for the season.',
+        description:
+          'Light textures, effortless silhouettes, and pieces made for sun-filled days.',
+      };
 
-      particles: ['🍂', '·', '🍁', '·'],
-    };
-  }
+    }
 
-  if (currentMonth >= 9 && currentMonth <= 11) {
-    // Current: Autumn
-    // Next: Winter
+
+    if (month >= 9 && month <= 11) {
+
+      return {
+        key: 'autumn',
+
+        kicker: 'Autumn Edit',
+
+        title: 'A Softer Season Begins',
+
+        description:
+          'Layered textures, elegant tones, and effortless pieces for the new season.',
+      };
+
+    }
+
 
     return {
       key: 'winter',
 
-      kicker: 'The Season Of Giving',
+      kicker: 'Winter Edit',
 
-      title: 'Wait for Our Winter Offers',
+      title: 'Winter Is Coming',
 
       description:
-        'Something special is coming. Discover our winter offers very soon.',
-
-      particles: ['❄', '·', '❆', '·'],
+        'Refined layers, cozy textures, and timeless silhouettes for colder days.',
     };
-  }
 
-  // Current: Winter
-  // Next: Spring
-
-  return {
-    key: 'spring',
-
-    kicker: 'A New Season Awaits',
-
-    title: 'Wait for Our Spring Offers',
-
-    description:
-      'Fresh styles are coming soon. Stay close for something beautifully new.',
-
-    particles: ['✿', '❀', '·', '✦'],
-  };
-});
-
-  // =========================================================
-  // SEASONAL PARTICLES
-  // =========================================================
-
-  readonly seasonalParticles = computed(() => {
-
-    const particles = this.season().particles;
-
-    return Array.from({ length: 14 }, (_, index) => ({
-      id: index,
-
-      symbol: particles[index % particles.length],
-
-      left: Math.random() * 100,
-
-      delay: Math.random() * 5,
-
-      duration: 5 + Math.random() * 5,
-    }));
   });
 
 
-  // =========================================================
-  // INIT
-  // =========================================================
+  readonly seasonalParticles =
+    computed<SeasonalParticle[]>(() => {
+
+      const symbols =
+        this.season().key === 'summer'
+          ? ['✦', '·', '✧', '○']
+          : this.season().key === 'winter'
+            ? ['✦', '❄', '·', '✧']
+            : this.season().key === 'spring'
+              ? ['✿', '·', '✦', '❀']
+              : ['✦', '·', '❧', '○'];
+
+
+      return Array.from(
+        { length: 10 },
+        (_, index) => ({
+          id: index,
+
+          left: Math.random() * 90 + 5,
+
+          delay: Math.random() * 4,
+
+          duration: 4 + Math.random() * 4,
+
+          symbol:
+            symbols[index % symbols.length],
+        })
+      );
+
+    });
+
 
   ngOnInit(): void {
 
     const data = this.route.snapshot.data;
 
 
-    // -------------------------------------------------------
-    // Collection
-    // -------------------------------------------------------
-
     this.collection.set(
-      data['collection'] ?? ProductCollection.None
+      data['collection'] ??
+      ProductCollection.None
     );
 
 
-    // -------------------------------------------------------
-    // Price Cap (e.g. "Under 800" collection page)
-    // -------------------------------------------------------
+    this.priceCap.set(
+      data['priceCap'] ??
+      null
+    );
 
-    this.priceCap.set(data['priceCap'] ?? null);
+
+    /*
+     * Translation + query params
+     *
+     * We use the same route translation keys that
+     * already control the visible H1 / subtitle.
+     *
+     * This means:
+     *
+     * /products
+     * /new-in
+     * /sale
+     * /under-800
+     *
+     * automatically get their correct SEO content.
+     */
+
+    combineLatest([
+
+      this.translate.stream(
+        data['title']
+      ),
+
+      this.translate.stream(
+        data['kicker']
+      ),
+
+      this.translate.stream(
+        data['subtitle']
+      ),
+
+      this.route.queryParams,
+
+    ])
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
+      .subscribe(
+        ([
+          title,
+          kicker,
+          subtitle,
+          params,
+        ]) => {
+
+          this.pageTitle.set(title);
+
+          this.pageKicker.set(kicker);
+
+          this.pageSubtitle.set(subtitle);
 
 
-    // -------------------------------------------------------
-    // Translations
-    // -------------------------------------------------------
+          this.setCatalogSeo(
+            title,
+            subtitle,
+            params
+          );
 
-    this.translate
-      .stream(data['title'])
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(title => {
-        this.pageTitle.set(title);
-      });
+        }
+      );
 
-    this.translate
-      .stream(data['kicker'])
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(kicker => {
-        this.pageKicker.set(kicker);
-      });
 
-    this.translate
-      .stream(data['subtitle'])
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(subtitle => {
-        this.pageSubtitle.set(subtitle);
-      });
-
-    // -------------------------------------------------------
-    // Query Params
-    // -------------------------------------------------------
     this.route.queryParams
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
       .subscribe(params => {
-        const cap = this.priceCap();
 
-        const requestedMax = params['maxPrice']
-          ? +params['maxPrice']
-          : undefined;
+        const cap =
+          this.priceCap();
 
-        const clampedMax = cap
-          ? Math.min(requestedMax ?? cap, cap)
-          : requestedMax;
 
-        const filter: ProductFilterRequest = {
-          search: params['search'] ?? undefined,
-          categoryId: params['categoryId']
-            ? +params['categoryId']
-            : undefined,
-          brandId: params['brandId']
-            ? +params['brandId']
-            : undefined,
-          minPrice: params['minPrice']
-            ? +params['minPrice']
-            : undefined,
-          maxPrice: clampedMax,
-          sortBy: params['sortBy'] ?? undefined,
-          desc: params['desc'] === 'true',
-          inStockOnly: params['inStockOnly'] === 'true',
-          pageNumber: +(params['page'] ?? 1),
-          collection: this.collection(),
+        const requestedMax =
+          params['maxPrice']
+            ? +params['maxPrice']
+            : undefined;
+
+
+        const clampedMax =
+          cap
+            ? Math.min(
+                requestedMax ?? cap,
+                cap
+              )
+            : requestedMax;
+
+
+        const filter:
+          ProductFilterRequest = {
+
+          search:
+            params['search'] ??
+            undefined,
+
+          categoryId:
+            params['categoryId']
+              ? +params['categoryId']
+              : undefined,
+
+          brandId:
+            params['brandId']
+              ? +params['brandId']
+              : undefined,
+
+          minPrice:
+            params['minPrice']
+              ? +params['minPrice']
+              : undefined,
+
+          maxPrice:
+            clampedMax,
+
+          sortBy:
+            params['sortBy'] ??
+            undefined,
+
+          desc:
+            params['desc'] === 'true',
+
+          inStockOnly:
+            params['inStockOnly'] === 'true',
+
+          pageNumber:
+            +(params['page'] ?? 1),
+
+          collection:
+            this.collection(),
+
         };
 
-        this.currentFilter = filter;
+
+        this.currentFilter =
+          filter;
+
 
         this.currentSearch.set(
-          filter.search?.trim() ?? ''
+          filter.search?.trim() ??
+          ''
         );
 
-        if (filter.search?.trim()) {
+
+        if (
+          filter.search?.trim()
+        ) {
+
           this.analyticsService.search(
             filter.search
           );
+
         }
+
 
         this.loadProducts(
           filter,
           filter.pageNumber ?? 1
         );
+
       });
+
   }
 
 
-  // =========================================================
-  // FILTERS CHANGED
-  // =========================================================
-onFiltersChanged(
-  filter: ProductFilterRequest
-): void {
+  /*
+   * ============================================================
+   * SEO
+   * ============================================================
+   */
 
-  const cap = this.priceCap();
 
-  const queryParams: Record<string, string | number | boolean> = {};
+  private setCatalogSeo(
+    title: string,
+    description: string,
+    queryParams: Record<string, unknown>
+  ): void {
 
-  if (filter.search?.trim()) {
-    queryParams['search'] =
-      filter.search.trim();
+    const canonicalUrl =
+      this.getCatalogCanonicalUrl();
+
+
+    /*
+     * Only the clean/base catalog URLs should
+     * be indexable.
+     *
+     * Examples:
+     *
+     * /products              -> index
+     * /new-in                -> index
+     * /sale                  -> index
+     * /under-800             -> index
+     *
+     * /products?page=2       -> noindex
+     * /products?brandId=15   -> noindex
+     * /products?search=dress -> noindex
+     */
+
+    const hasQueryParams =
+      Object.keys(queryParams).length > 0;
+
+
+    const robots =
+      hasQueryParams
+        ? 'noindex, follow'
+        : 'index, follow';
+
+
+    const seoTitle =
+      `${title} | Tamara Land`;
+
+
+    /*
+     * We intentionally don't add filter values
+     * to the SEO title/description.
+     *
+     * Filtered URLs are noindex anyway.
+     */
+
+
+    this.seo.setSeo({
+
+      title: seoTitle,
+
+      description,
+
+      canonicalUrl,
+
+      type: 'website',
+
+      robots,
+
+      siteName: 'Tamara Land',
+
+      locale:
+        this.translate.currentLang === 'ar'
+          ? 'ar_EG'
+          : 'en_US',
+
+      /*
+       * JSON-LD is added after the products
+       * have been loaded.
+       */
+
+    });
+
   }
 
-  if (filter.categoryId !== undefined) {
-    queryParams['categoryId'] =
-      filter.categoryId;
-  }
 
-  if (filter.brandId !== undefined) {
-    queryParams['brandId'] =
-      filter.brandId;
-  }
+  private getCatalogCanonicalUrl(): string {
 
-  if (filter.minPrice !== undefined) {
-    queryParams['minPrice'] =
-      filter.minPrice;
-  }
+    const path =
+      this.route.routeConfig?.path;
 
-  if (filter.maxPrice !== undefined) {
-    // امنع أي قيمة تتخطى الـ cap لو الصفحة محدودة بسعر معين
-    queryParams['maxPrice'] = cap
-      ? Math.min(filter.maxPrice, cap)
-      : filter.maxPrice;
-  } else if (cap) {
-    // المستخدم مبعتش سعر، بس الصفحة نفسها محدودة بـ cap
-    queryParams['maxPrice'] = cap;
-  }
 
-  if (filter.inStockOnly) {
-    queryParams['inStockOnly'] = true;
-  }
+    switch (path) {
 
-  if (filter.sortBy) {
-    queryParams['sortBy'] =
-      filter.sortBy;
+      case 'new-in':
+        return '/new-in';
 
-    queryParams['desc'] =
-      filter.desc ?? false;
-  }
 
-  queryParams['page'] = 1;
+      case 'sale':
+        return '/sale';
 
-  this.router.navigate(
-    [],
-    {
-      relativeTo: this.route,
-      queryParams,
-      replaceUrl: true
+
+      case 'under-800':
+        return '/under-800';
+
+
+      case 'products':
+      default:
+        return '/products';
+
     }
-  );
-}
+
+  }
 
 
-  // =========================================================
-  // PAGINATION
-  // =========================================================
+  private setCatalogJsonLd(
+    title: string,
+    description: string,
+    products: ProductCardResponse[]
+  ): void {
 
-  onPageChange(page: number): void {
+    /*
+     * Do not generate structured data for
+     * filtered/search/paginated URLs.
+     *
+     * They are already noindex.
+     */
 
-    this.loadProducts(
-      this.currentFilter,
-      page
+    const hasQueryParams =
+      Object.keys(
+        this.route.snapshot.queryParams
+      ).length > 0;
+
+
+    if (hasQueryParams) {
+
+      this.seo.setSeo({
+
+        title: `${title} | Tamara Land`,
+
+        description,
+
+        canonicalUrl:
+          this.getCatalogCanonicalUrl(),
+
+        type: 'website',
+
+        robots: 'noindex, follow',
+
+        siteName: 'Tamara Land',
+
+        locale:
+          this.translate.currentLang === 'ar'
+            ? 'ar_EG'
+            : 'en_US',
+
+      });
+
+      return;
+
+    }
+
+
+    this.seo.setSeo({
+
+      title: `${title} | Tamara Land`,
+
+      description,
+
+      canonicalUrl:
+        this.getCatalogCanonicalUrl(),
+
+      type: 'website',
+
+      robots: 'index, follow',
+
+      siteName: 'Tamara Land',
+
+      locale:
+        this.translate.currentLang === 'ar'
+          ? 'ar_EG'
+          : 'en_US',
+
+      jsonLd:
+        this.buildCatalogSchema(
+          title,
+          description,
+          products
+        ),
+
+    });
+
+  }
+
+
+  private buildCatalogSchema(
+    title: string,
+    description: string,
+    products: ProductCardResponse[]
+  ): Record<string, unknown> {
+
+    const canonicalUrl =
+      this.getCatalogCanonicalUrl();
+
+
+    const itemListElement =
+      products.map(
+        (product, index) => {
+
+          const item: Record<string, unknown> = {
+
+            '@type': 'ListItem',
+
+            position: index + 1,
+
+            name: product.name,
+
+            url:
+              `https://www.tamaraland.shop/products/${product.id}`,
+
+          };
+
+
+          if (product.imageUrl) {
+
+            item['image'] =
+              this.absoluteUrl(
+                product.imageUrl
+              );
+
+          }
+
+
+          return item;
+
+        }
+      );
+
+
+    const itemList: Record<string, unknown> = {
+
+      '@type': 'ItemList',
+
+      itemListOrder:
+        'https://schema.org/ItemListOrderAscending',
+
+      numberOfItems:
+        products.length,
+
+      itemListElement,
+
+    };
+
+
+    return {
+
+      '@context': 'https://schema.org',
+
+      '@type': 'CollectionPage',
+
+      name:
+        `${title} | Tamara Land`,
+
+      description,
+
+      url:
+        `https://www.tamaraland.shop${canonicalUrl}`,
+
+      isPartOf: {
+
+        '@type': 'WebSite',
+
+        name: 'Tamara Land',
+
+        url:
+          'https://www.tamaraland.shop',
+
+      },
+
+      mainEntity: itemList,
+
+    };
+
+  }
+
+
+  private absoluteUrl(
+    url: string
+  ): string {
+
+    if (
+      url.startsWith('http://') ||
+      url.startsWith('https://')
+    ) {
+
+      return url;
+
+    }
+
+
+    return `https://www.tamaraland.shop${
+      url.startsWith('/')
+        ? ''
+        : '/'
+    }${url}`;
+
+  }
+
+
+  /*
+   * ============================================================
+   * FILTERS
+   * ============================================================
+   */
+
+
+  onFiltersChanged(
+    filter: ProductFilterRequest
+  ): void {
+
+    const queryParams: Record<string, unknown> = {};
+
+
+    if (filter.search) {
+
+      queryParams['search'] =
+        filter.search;
+
+    }
+
+
+    if (filter.categoryId) {
+
+      queryParams['categoryId'] =
+        filter.categoryId;
+
+    }
+
+
+    if (filter.brandId) {
+
+      queryParams['brandId'] =
+        filter.brandId;
+
+    }
+
+
+    if (
+      filter.minPrice !== undefined
+    ) {
+
+      queryParams['minPrice'] =
+        filter.minPrice;
+
+    }
+
+
+    if (
+      filter.maxPrice !== undefined
+    ) {
+
+      queryParams['maxPrice'] =
+        filter.maxPrice;
+
+    }
+
+
+    if (filter.sortBy) {
+
+      queryParams['sortBy'] =
+        filter.sortBy;
+
+    }
+
+
+    if (filter.desc !== undefined) {
+
+      queryParams['desc'] =
+        filter.desc;
+
+    }
+
+
+    if (filter.inStockOnly) {
+
+      queryParams['inStockOnly'] =
+        true;
+
+    }
+
+
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+
+        queryParams,
+
+        queryParamsHandling: '',
+
+      }
+    );
+
+  }
+
+
+  onPageChange(
+    page: number
+  ): void {
+
+    this.router.navigate(
+      [],
+
+      {
+        relativeTo: this.route,
+
+        queryParams: {
+          ...this.route.snapshot.queryParams,
+
+          page:
+            page > 1
+              ? page
+              : null,
+        },
+
+        queryParamsHandling: '',
+
+      }
     );
 
 
-    // ارجع لأول الليستة
     if (this.isBrowser) {
+
       window.scrollTo({
         top: 0,
         behavior: 'smooth',
       });
+
     }
+
   }
 
 
-  // =========================================================
-  // LOAD PRODUCTS
-  // =========================================================
+  selectDidYouMean(
+    term: string
+  ): void {
+
+    this.router.navigate(
+      ['/products'],
+
+      {
+        queryParams: {
+          search: term,
+        },
+      }
+    );
+
+  }
+
+
+  /*
+   * ============================================================
+   * PRODUCTS
+   * ============================================================
+   */
+
 
   private loadProducts(
     filter: ProductFilterRequest = {},
@@ -484,110 +928,192 @@ onFiltersChanged(
 
     this.isLoading.set(true);
 
-    this.pageNumber.set(pageNumber);
+    this.pageNumber.set(
+      pageNumber
+    );
 
 
-    // -------------------------------------------------------
-    // Final Filter
-    // -------------------------------------------------------
-
-    const request: ProductFilterRequest = {
+    const request:
+      ProductFilterRequest = {
 
       ...filter,
 
-      collection: this.collection(),
+      collection:
+        this.collection(),
 
       pageNumber,
 
-      pageSize: PAGE_SIZE,
+      pageSize:
+        PAGE_SIZE,
+
     };
 
 
-    // -------------------------------------------------------
-    // API
-    // -------------------------------------------------------
-
     this.catalogService
       .getProducts(request)
+      .pipe(
+        takeUntilDestroyed(
+          this.destroyRef
+        )
+      )
       .subscribe({
-
-        // ===================================================
-        // SUCCESS
-        // ===================================================
 
         next: response => {
 
-         if (response.success && response.data) {
+          if (
+            response.success &&
+            response.data
+          ) {
 
-  this.products.set(
-    response.data.items
-  );
+            const items =
+              response.data.items;
 
-  this.didYouMean.set(
-    response.data.didYouMean ?? []
-  );
 
-  // -----------------------------------------------
-  // Analytics
-  // -----------------------------------------------
+            this.products.set(
+              items
+            );
 
-  this.analyticsService.viewItemList(
-    response.data.items.map(item => ({
-      id: item.id,
-      name: item.name,
-      price: item.price,
-    })),
-    this.pageTitle()
-  );
 
-  // -----------------------------------------------
-  // Pagination
-  // -----------------------------------------------
+            this.didYouMean.set(
+              response.data.didYouMean ??
+              []
+            );
 
-  this.totalCount.set(
-    response.data.totalCount
-  );
 
-  this.totalPages.set(
-    response.data.totalPages || 1
-  );
-}
+            this.totalCount.set(
+              response.data.totalCount
+            );
+
+
+            this.totalPages.set(
+              response.data.totalPages ||
+              1
+            );
+
+
+            this.analyticsService.viewItemList(
+
+              items.map(item => ({
+
+                id:
+                  item.id,
+
+                name:
+                  item.name,
+
+                price:
+                  item.price,
+
+              })),
+
+              this.pageTitle()
+
+            );
+
+
+            /*
+             * Update JSON-LD after the
+             * prerendered product list
+             * has been loaded.
+             */
+
+            this.setCatalogJsonLd(
+
+              this.pageTitle(),
+
+              this.pageSubtitle(),
+
+              items
+
+            );
+
+          }
 
 
           this.isLoading.set(false);
+
         },
 
 
-        // ===================================================
-        // ERROR
-        // ===================================================
+        error: () => {
 
-       error: () => {
+          this.products.set([]);
 
-  this.isLoading.set(false);
+          this.didYouMean.set([]);
 
-  this.products.set([]);
+          this.totalCount.set(0);
 
-  this.totalCount.set(0);
+          this.totalPages.set(1);
 
-  this.totalPages.set(1);
+          this.isLoading.set(false);
 
-  this.didYouMean.set([]);
-},
+
+          /*
+           * Keep the normal page SEO even
+           * when the product API fails.
+           *
+           * The page itself remains indexable
+           * because the canonical route is still
+           * the real catalog page.
+           */
+
+          this.setCatalogSeo(
+
+            this.pageTitle(),
+
+            this.pageSubtitle(),
+
+            this.route.snapshot.queryParams
+
+          );
+
+        },
+
       });
+
   }
-  selectDidYouMean(term: string): void {
-  const search = term.trim();
 
-  if (!search) return;
 
-  this.router.navigate(
-    ['/products'],
-    {
-      queryParams: {
-        search
+  /*
+   * ============================================================
+   * MOBILE FILTER DRAWER
+   * ============================================================
+   */
+
+
+  openFilters(): void {
+
+    this.filtersOpen.set(true);
+
+  }
+
+
+  closeFilters(): void {
+
+    this.filtersOpen.set(false);
+
+  }
+
+
+  clearFilters(): void {
+
+    this.router.navigate(
+      [],
+
+      {
+
+        relativeTo: this.route,
+
+        queryParams: {},
+
+        queryParamsHandling: '',
+
       }
-    }
-  );
-}
+    );
+
+
+    this.closeFilters();
+
+  }
+
 }
