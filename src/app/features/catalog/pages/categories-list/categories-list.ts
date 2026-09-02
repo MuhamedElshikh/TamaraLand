@@ -24,6 +24,8 @@ import {
   LocalizedNamePipe
 } from '../../../../shared/pipes/localized-name.pipe';
 
+import { SeoService } from '../../../../core/services/seo.service';
+
 
 @Component({
   selector: 'app-categories-list',
@@ -44,6 +46,9 @@ export class CategoriesListPage implements OnInit {
 
   private readonly catalogService =
     inject(CatalogService);
+
+  private readonly seo =
+    inject(SeoService);
 
 
   // =========================================================
@@ -66,7 +71,89 @@ export class CategoriesListPage implements OnInit {
 
   ngOnInit(): void {
 
+    this.setSeo();
+
     this.loadCategories();
+
+  }
+
+
+  // =========================================================
+  // SEO
+  // =========================================================
+
+  private setSeo(): void {
+
+    const title =
+      'Women’s Fashion Categories | Tamara Land';
+
+    const description =
+      'Explore women’s fashion categories at Tamara Land. Discover dresses, jumpsuits, tops, skirts and more in Egypt.';
+
+    this.seo.setSeo({
+
+      title,
+
+      description,
+
+      canonicalUrl:
+        '/categories',
+
+      type:
+        'website',
+
+      robots:
+        'index, follow',
+
+      siteName:
+        'Tamara Land',
+
+      jsonLd:
+        this.buildCategoriesSchema(
+          title,
+          description
+        )
+
+    });
+
+  }
+
+
+  private buildCategoriesSchema(
+    title: string,
+    description: string
+  ): Record<string, unknown> {
+
+    return {
+
+      '@context':
+        'https://schema.org',
+
+      '@type':
+        'CollectionPage',
+
+      name:
+        title,
+
+      description,
+
+      url:
+        'https://www.tamaraland.shop/categories',
+
+      isPartOf: {
+
+        '@type':
+          'WebSite',
+
+        name:
+          'Tamara Land',
+
+        url:
+          'https://www.tamaraland.shop'
+
+      }
+
+    };
 
   }
 
