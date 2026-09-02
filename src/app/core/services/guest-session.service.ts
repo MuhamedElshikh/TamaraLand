@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 const GUEST_ID_KEY = 'guestId';
 
@@ -6,9 +7,12 @@ const GUEST_ID_KEY = 'guestId';
   providedIn: 'root'
 })
 export class GuestSessionService {
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   constructor() {
-    this.initialize();
+    if (this.isBrowser) {
+      this.initialize();
+    }
   }
 
   /**
@@ -16,6 +20,12 @@ export class GuestSessionService {
    * Uses crypto.randomUUID() with safe fallback to ensure a valid guest ID.
    */
   initialize(): string {
+    if (!this.isBrowser) {
+      // وقت الـ SSR/build مفيش guest session حقيقية - القيمة دي مؤقتة
+      // ومش بتتخزن، هيتحدد guestId حقيقي أول ما المستخدم يفتح الموقع في المتصفح
+      return '';
+    }
+
     let guestId: string | null = null;
     try {
       guestId = localStorage.getItem(GUEST_ID_KEY);
@@ -38,6 +48,10 @@ export class GuestSessionService {
    * Returns current guestId, ensuring initialization.
    */
   getGuestId(): string {
+    if (!this.isBrowser) {
+      return '';
+    }
+
     let guestId: string | null = null;
     try {
       guestId = localStorage.getItem(GUEST_ID_KEY);

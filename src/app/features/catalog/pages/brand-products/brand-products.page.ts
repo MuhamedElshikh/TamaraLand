@@ -3,8 +3,11 @@ import {
   inject,
   OnDestroy,
   OnInit,
-  signal
+  signal,
+  PLATFORM_ID
 } from '@angular/core';
+
+import { isPlatformBrowser } from '@angular/common';
 
 import { ActivatedRoute } from '@angular/router';
 
@@ -52,6 +55,7 @@ export class BrandProductsPage implements OnInit, OnDestroy {
 
   private readonly catalogService = inject(CatalogService);
   private readonly route = inject(ActivatedRoute);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
 
   // =========================================================
@@ -144,7 +148,9 @@ export class BrandProductsPage implements OnInit, OnDestroy {
     // locked if the component is destroyed
     // while the drawer is open.
 
-    document.body.style.overflow = '';
+    if (this.isBrowser) {
+      document.body.style.overflow = '';
+    }
 
   }
 
@@ -157,7 +163,9 @@ export class BrandProductsPage implements OnInit, OnDestroy {
 
     this.filtersOpen.set(true);
 
-    document.body.style.overflow = 'hidden';
+    if (this.isBrowser) {
+      document.body.style.overflow = 'hidden';
+    }
 
   }
 
@@ -166,7 +174,9 @@ export class BrandProductsPage implements OnInit, OnDestroy {
 
     this.filtersOpen.set(false);
 
-    document.body.style.overflow = '';
+    if (this.isBrowser) {
+      document.body.style.overflow = '';
+    }
 
   }
 
@@ -255,10 +265,12 @@ export class BrandProductsPage implements OnInit, OnDestroy {
     );
 
 
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
+    if (this.isBrowser) {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
 
   }
 

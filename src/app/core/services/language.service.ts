@@ -1,5 +1,5 @@
-import { DOCUMENT } from '@angular/common';
-import { Injectable, inject } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 export type AppLanguage = 'en' | 'ar';
@@ -12,9 +12,12 @@ export class LanguageService {
 
   private document = inject(DOCUMENT);
   private translate = inject(TranslateService);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   constructor() {
-    const saved = (localStorage.getItem(this.STORAGE_KEY) as AppLanguage) ?? 'en';
+    const saved = this.isBrowser
+      ? ((localStorage.getItem(this.STORAGE_KEY) as AppLanguage) ?? 'en')
+      : 'en';
 
     this.translate.addLangs(['en', 'ar']);
     this.translate.setFallbackLang('en');
@@ -29,7 +32,9 @@ export class LanguageService {
   setLanguage(lang: AppLanguage): void {
     this.translate.use(lang);
 
-    localStorage.setItem(this.STORAGE_KEY, lang);
+    if (this.isBrowser) {
+      localStorage.setItem(this.STORAGE_KEY, lang);
+    }
 
     this.document.documentElement.lang = lang;
     this.document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';

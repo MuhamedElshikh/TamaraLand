@@ -1,5 +1,5 @@
-import { Injectable, Inject } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { Injectable, Inject, PLATFORM_ID, inject } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -7,11 +7,15 @@ import { environment } from '../../../environments/environment';
 })
 export class GoogleTagManagerService {
 
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
   constructor(
     @Inject(DOCUMENT) private document: Document
   ) {}
 
   initialize(): void {
+
+    if (!this.isBrowser) return;
 
     if (!environment.analytics.enabled)
       return;
@@ -38,6 +42,8 @@ export class GoogleTagManagerService {
 
   push(event: object): void {
 
+    if (!this.isBrowser) return;
+
     if (!environment.analytics.enabled)
       return;
 
@@ -46,5 +52,5 @@ export class GoogleTagManagerService {
     (window as any).dataLayer.push(event);
 
   }
-  
+
 }

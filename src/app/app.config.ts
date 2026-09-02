@@ -18,6 +18,7 @@ import {
   provideTranslateHttpLoader
 } from '@ngx-translate/http-loader';
 import { StoreSettingsService } from './core/services/store-settings.service';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({
@@ -53,7 +54,7 @@ export const appConfig: ApplicationConfig = {
      provideAppInitializer(() => {
       const storeSettingsService = inject(StoreSettingsService);
       return storeSettingsService.load();
-    }),
+    }), provideClientHydration(withEventReplay()),
   ]
 
   

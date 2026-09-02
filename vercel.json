@@ -1,4 +1,8 @@
 {
+  "version": 2,
+  "framework": null,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/tmaraland-frontend/browser",
   "rewrites": [
     {
       "source": "/sitemap.xml",
@@ -7,6 +11,10 @@
     {
       "source": "/robots.txt",
       "destination": "https://tamaraland.runasp.net/robots.txt"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.csr.html"
     }
   ]
 }

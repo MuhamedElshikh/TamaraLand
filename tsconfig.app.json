@@ -4,7 +4,10 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": ["node", "google.maps"]
+    "types": [
+      "node",
+      "google.maps"
+    ]
   },
   "include": [
     "src/**/*.ts"

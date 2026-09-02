@@ -5,10 +5,11 @@ import {
   signal,
   OnInit,
   DestroyRef,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  PLATFORM_ID
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { UpperCasePipe } from '@angular/common';
+import { UpperCasePipe, isPlatformBrowser } from '@angular/common';
 
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -64,6 +65,7 @@ export class ProductListPage implements OnInit {
   private readonly translate = inject(TranslateService);
   private readonly analyticsService = inject(AnalyticsService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
 
   // =========================================================
@@ -75,13 +77,17 @@ export class ProductListPage implements OnInit {
   openFilters(): void {
     this.filtersOpen.set(true);
 
-    document.body.style.overflow = 'hidden';
+    if (this.isBrowser) {
+      document.body.style.overflow = 'hidden';
+    }
   }
 
   closeFilters(): void {
     this.filtersOpen.set(false);
 
-    document.body.style.overflow = '';
+    if (this.isBrowser) {
+      document.body.style.overflow = '';
+    }
   }
 
   clearFilters(): void {
@@ -458,10 +464,12 @@ onFiltersChanged(
 
 
     // ارجع لأول الليستة
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
+    if (this.isBrowser) {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }
   }
 
 

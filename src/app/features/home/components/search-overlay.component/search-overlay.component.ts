@@ -6,8 +6,11 @@ import {
   EventEmitter,
   inject,
   signal,
-  DestroyRef
+  DestroyRef,
+  PLATFORM_ID
 } from '@angular/core';
+
+import { isPlatformBrowser } from '@angular/common';
 
 import {
   Router,
@@ -69,6 +72,9 @@ export class SearchOverlayComponent {
   private readonly search$ =
     new Subject<string>();
 
+  private readonly isBrowser =
+    isPlatformBrowser(inject(PLATFORM_ID));
+
 
   // =========================================================
   // STATE
@@ -110,7 +116,9 @@ export class SearchOverlayComponent {
 
   constructor() {
 
-    this.loadRecentSearches();
+    if (this.isBrowser) {
+      this.loadRecentSearches();
+    }
 
     this.search$
       .pipe(
@@ -220,6 +228,8 @@ this.selectedIndex.set(
 
   private loadRecentSearches(): void {
 
+    if (!this.isBrowser) return;
+
     try {
 
       const stored =
@@ -258,6 +268,8 @@ this.selectedIndex.set(
   private saveRecentSearch(
     term: string
   ): void {
+
+    if (!this.isBrowser) return;
 
     const normalized =
       term.trim();

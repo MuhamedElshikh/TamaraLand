@@ -1,4 +1,5 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
@@ -12,8 +13,11 @@ import {
 } from '../models/auth.models';
 import { AnalyticsService } from './analytics.service';
 import { ClarityService } from './clarity.service';
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
   currentUser(): ProfileResponse | null {
     return this._profile();
   }
@@ -23,8 +27,10 @@ export class AuthService {
   }
 
   private readonly _profile = signal<ProfileResponse | null>(null);
-  private readonly _token = signal<string | null>(localStorage.getItem('usertoken'));
-private readonly clarity: ClarityService = new ClarityService();
+  private readonly _token = signal<string | null>(
+    this.isBrowser ? localStorage.getItem('usertoken') : null
+  );
+  private readonly clarity: ClarityService = new ClarityService();
   readonly profile = this._profile.asReadonly();
   readonly token = this._token.asReadonly();
   readonly isLoggedIn = computed(() => !!this._token());
@@ -39,119 +45,127 @@ private readonly clarity: ClarityService = new ClarityService();
     } catch { return false; }
   });
 
-  constructor(private http: HttpClient, private router: Router ,  private analytics: AnalyticsService) {}
+  constructor(private http: HttpClient, private router: Router, private analytics: AnalyticsService) {}
 
- login(
-  data: LoginRequest
-): Observable<ApiResponse<AuthResponse>> {
-  return this.http
-    .post<ApiResponse<AuthResponse>>(
-      `${API_BASE_URL}/api/Auth/login`,
-      data
-    )
-    .pipe(
-      tap(res => {
-        if (
-          res.success &&
-          res.data?.accessToken
-        ) {
-          this.saveToken(
-            res.data.accessToken
-          );
-        }
-      })
-    );
-}
-
-register(
-  data: RegisterRequest
-): Observable<ApiResponse<AuthResponse>> {
-  return this.http
-    .post<ApiResponse<AuthResponse>>(
-      `${API_BASE_URL}/api/Auth/register`,
-      data
-    )
-    .pipe(
-      tap(res => {
-        if (
-          res.success &&
-          res.data?.accessToken
-        ) {
-          this.saveToken(
-            res.data.accessToken
-          );
-
-          this.analytics.signUp();
-        }
-      })
-    );
-}
-completeGoogleLogin(
-  response: AuthResponse
-): void {
-
-  if (!response?.accessToken) {
-    return;
+  login(
+    data: LoginRequest
+  ): Observable<ApiResponse<AuthResponse>> {
+    return this.http
+      .post<ApiResponse<AuthResponse>>(
+        `${API_BASE_URL}/api/Auth/login`,
+        data
+      )
+      .pipe(
+        tap(res => {
+          if (
+            res.success &&
+            res.data?.accessToken
+          ) {
+            this.saveToken(
+              res.data.accessToken
+            );
+          }
+        })
+      );
   }
 
-  this._token.set(
-    response.accessToken
-  );
+  register(
+    data: RegisterRequest
+  ): Observable<ApiResponse<AuthResponse>> {
+    return this.http
+      .post<ApiResponse<AuthResponse>>(
+        `${API_BASE_URL}/api/Auth/register`,
+        data
+      )
+      .pipe(
+        tap(res => {
+          if (
+            res.success &&
+            res.data?.accessToken
+          ) {
+            this.saveToken(
+              res.data.accessToken
+            );
 
-  localStorage.setItem(
-    'usertoken',
-    response.accessToken
-  );
+            this.analytics.signUp();
+          }
+        })
+      );
+  }
 
-  this.setupAnalytics(
-    response.accessToken
-  );
+  completeGoogleLogin(
+    response: AuthResponse
+  ): void {
 
-  this.analytics.login(
-    'google'
-  );
-}
-loginWithGoogle(
-  idToken: string
-): Observable<ApiResponse<AuthResponse>> {
+    if (!response?.accessToken) {
+      return;
+    }
 
-  return this.http
-    .post<ApiResponse<AuthResponse>>(
-      `${API_BASE_URL}/api/Auth/google`,
-      {
-        idToken
-      }
-    )
-    .pipe(
-
-      tap(res => {
-
-        if (
-          res.success &&
-          res.data
-        ) {
-
-          this.setToken(
-            res.data.accessToken
-          );
-
-          this.analytics.login(
-            'google'
-          );
-        }
-
-      })
+    this._token.set(
+      response.accessToken
     );
-}
+
+    if (this.isBrowser) {
+      localStorage.setItem(
+        'usertoken',
+        response.accessToken
+      );
+    }
+
+    this.setupAnalytics(
+      response.accessToken
+    );
+
+    this.analytics.login(
+      'google'
+    );
+  }
+
+  loginWithGoogle(
+    idToken: string
+  ): Observable<ApiResponse<AuthResponse>> {
+
+    return this.http
+      .post<ApiResponse<AuthResponse>>(
+        `${API_BASE_URL}/api/Auth/google`,
+        {
+          idToken
+        }
+      )
+      .pipe(
+
+        tap(res => {
+
+          if (
+            res.success &&
+            res.data
+          ) {
+
+            this.setToken(
+              res.data.accessToken
+            );
+
+            this.analytics.login(
+              'google'
+            );
+          }
+
+        })
+      );
+  }
+
   logout(): void {
-   this.analytics.trackEvent('logout');
-this.analytics.clearUser();
-this.clarity.clearUser();
+    this.analytics.trackEvent('logout');
+    this.analytics.clearUser();
+    this.clarity.clearUser();
     this._token.set(null);
     this._profile.set(null);
-    localStorage.removeItem('usertoken');
+
+    if (this.isBrowser) {
+      localStorage.removeItem('usertoken');
+    }
+
     this.router.navigate(['/login']);
-    
   }
 
   getProfile(): Observable<ApiResponse<ProfileResponse>> {
@@ -177,56 +191,63 @@ this.clarity.clearUser();
   resetPassword(data: ResetPasswordRequest): Observable<ApiResponse<void>> {
     return this.http.post<ApiResponse<void>>(`${API_BASE_URL}/api/Account/reset-password`, data);
   }
+
   private getUserIdFromToken(token: string): string | null {
-  try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
 
-    return (
-      payload.sub ??
-      payload.nameid ??
-      payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"] ??
-      payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/nameidentifier"] ??
-      null
-    );
-  } catch {
-    return null;
+      return (
+        payload.sub ??
+        payload.nameid ??
+        payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"] ??
+        payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/nameidentifier"] ??
+        null
+      );
+    } catch {
+      return null;
+    }
   }
-}
 
-private setupAnalytics(token: string): void {
-  const userId = this.getUserIdFromToken(token);
+  private setupAnalytics(token: string): void {
+    const userId = this.getUserIdFromToken(token);
 
-  if (userId) {
-    this.analytics.setUser(userId);
-this.clarity.setUser(userId);
+    if (userId) {
+      this.analytics.setUser(userId);
+      this.clarity.setUser(userId);
+    }
   }
-}
-private saveToken(
-  token: string,
-  provider?: string
-): void {
-  this._token.set(token);
 
-  localStorage.setItem(
-    'usertoken',
-    token
-  );
+  private saveToken(
+    token: string,
+    provider?: string
+  ): void {
+    this._token.set(token);
 
-  this.setupAnalytics(token);
+    if (this.isBrowser) {
+      localStorage.setItem(
+        'usertoken',
+        token
+      );
+    }
 
-  if (provider) {
-    this.analytics.login(provider);
+    this.setupAnalytics(token);
+
+    if (provider) {
+      this.analytics.login(provider);
+    }
   }
-}
-setToken(token: string): void {
 
-  this._token.set(token);
+  setToken(token: string): void {
 
-  localStorage.setItem(
-    'usertoken',
-    token
-  );
+    this._token.set(token);
 
-  this.setupAnalytics(token);
-}
+    if (this.isBrowser) {
+      localStorage.setItem(
+        'usertoken',
+        token
+      );
+    }
+
+    this.setupAnalytics(token);
+  }
 }
