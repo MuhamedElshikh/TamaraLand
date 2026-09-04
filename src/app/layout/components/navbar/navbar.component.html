@@ -1,95 +1,489 @@
-<header class="site-header" [class.site-header--scrolled]="scrolled()">
-  @if(searchOpen()){
+<header
+  class="site-header"
+  [class.site-header--scrolled]="scrolled()"
+  [class.site-header--menu-open]="menuOpen()"
+>
+  <!-- =====================================================
+       SEARCH OVERLAY
+       ===================================================== -->
+
+  @if (searchOpen()) {
+    <div class="search-backdrop">
+      <app-search-overlay
+        (closed)="closeSearch()"
+      ></app-search-overlay>
+    </div>
+  }
 
 
-<div class="search-backdrop" (closed)="closeSearch()">
-    <app-search-overlay (closed)="closeSearch()"></app-search-overlay>
+  <!-- =====================================================
+       NAVBAR INNER
+       ===================================================== -->
 
-</div>
-    
-
-}
   <div class="site-header__inner">
-    <a routerLink="/" class="site-header__brand" (click)="closeMenu()">
-      <img src="assets/logo.png" [alt]="'sidebar.logoAlt' | translate" class="site-header__logo" />
+
+    <!-- BRAND -->
+    <a
+      routerLink="/"
+      class="site-header__brand"
+      aria-label="Tamara Land"
+      (click)="closeMenu()"
+    >
+      <img
+        src="assets/logo.png"
+        [alt]="'sidebar.logoAlt' | translate"
+        class="site-header__logo"
+      />
     </a>
 
-    <nav class="site-nav" [class.site-nav--open]="menuOpen()">
-      <a routerLink="/" routerLinkActive="nav-link--active" [routerLinkActiveOptions]="{exact: true}" class="nav-link" (click)="closeMenu()">{{'navbar.home'|translate}}</a>
-      <a routerLink="/new-in" routerLinkActive="nav-link--active" class="nav-link" (click)="closeMenu()">{{ 'navbar.newIn' | translate }}</a>
-      <a routerLink="/categories" routerLinkActive="nav-link--active" class="nav-link" (click)="closeMenu()">{{ 'navbar.collections' | translate }}</a>
-      <a routerLink="/brands" routerLinkActive="nav-link--active" class="nav-link" (click)="closeMenu()">{{ 'navbar.brands' | translate }}</a>
-      <a routerLink="/sale" routerLinkActive="nav-link--active" class="nav-link" (click)="closeMenu()">{{ 'navbar.sale' | translate }}</a>
-      <a routerLink="/contact" routerLinkActive="nav-link--active" class="nav-link" (click)="closeMenu()">{{ 'navbar.contact' | translate }}</a>
 
-      <div class="site-nav__mobile-actions">
-        @if (isLoggedIn()) {
-          <a routerLink="/profile" class="nav-link" (click)="closeMenu()">{{ 'navbar.hello' | translate }}, {{ firstName() }}</a>
-          <a routerLink="/orders" class="nav-link" (click)="closeMenu()">{{ 'navbar.orders' | translate }}</a>
-          <button type="button" class="nav-link nav-link--button" (click)="logout()">{{ 'navbar.logout' | translate }}</button>
-        } @else {
-          <a routerLink="/login" class="nav-link" (click)="closeMenu()">{{ 'navbar.signin' | translate }}</a>
-          <a routerLink="/register" class="nav-link" (click)="closeMenu()">{{ 'navbar.signup' | translate }}</a>
-        }
+    <!-- ===================================================
+         DESKTOP / MOBILE NAV
+         =================================================== -->
+
+  <nav
+  id="primary-navigation"
+  class="site-nav"
+  [class.site-nav--open]="menuOpen()"
+  [attr.aria-hidden]="menuOpen() ? 'false' : 'true'"
+  aria-label="Primary navigation"
+>
+
+      <!-- MOBILE DRAWER HEADER -->
+      <div class="site-nav__mobile-header">
+
+        <span class="site-nav__mobile-kicker">
+          {{ 'navbar.collections' | translate }}
+        </span>
+
+        <button
+          type="button"
+          class="site-nav__close"
+          [attr.aria-label]="'header.closeMenu' | translate"
+          (click)="closeMenu()"
+        >
+          <span></span>
+          <span></span>
+        </button>
+
       </div>
-    </nav>
 
-    <div class="site-header__actions">
-      <button
-        class="lang-btn"
-        type="button"
-        (click)="toggleLanguage()"
-        [attr.aria-label]="'header.changeLanguage' | translate"
-        [title]="'header.changeLanguage' | translate">
-        <i class="fa-solid fa-globe" aria-hidden="true"></i>
-      </button>
-      <button class="icon-btn" (click)="toggleTheme()" [attr.aria-label]="(theme() === 'dark' ? 'header.switchToLight' : 'header.switchToDark') | translate">
-        @if (theme() === 'dark') {
-          <i class="fa-solid fa-sun" aria-hidden="true"></i>
-        } @else {
-          <i class="fa-solid fa-moon" aria-hidden="true"></i>
-        }
-      </button>
 
-      <button class="icon-btn" [attr.aria-label]="'navbar.search' | translate" type="button" (click)="toggleSearch()">
-        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-      </button>
-      <a routerLink="/wishlist" class="icon-btn icon-btn--cart" [attr.aria-label]="'navbar.wishlist' | translate">
-        <i class="fa-regular fa-heart" aria-hidden="true"></i>
-        @if (wishlistCount() > 0) {
-          <span class="icon-btn__badge">{{ wishlistCount() > 99 ? '99+' : wishlistCount() }}</span>
-        }
-      </a>
-      <a routerLink="/cart" class="icon-btn icon-btn--cart" [attr.aria-label]="'navbar.cart' | translate">
-        <i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>
-        @if (cartItemsCount() > 0) {
-          <span class="icon-btn__badge">{{ cartItemsCount() > 99 ? '99+' : cartItemsCount() }}</span>
-        }
-      </a>
+      <!-- NAVIGATION LINKS -->
 
-      @if (isLoggedIn()) {
-        <div class="account-menu">
-          <button class="icon-btn icon-btn--desktop" (click)="toggleAccountMenu()" [attr.aria-label]="'navbar.profile' | translate">
-            <i class="fa-regular fa-user" aria-hidden="true"></i>
+      <div class="site-nav__links">
+
+        <a
+          routerLink="/"
+          routerLinkActive="nav-link--active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="nav-link"
+          (click)="closeMenu()"
+        >
+          <span class="nav-link__index">01</span>
+          <span>{{ 'navbar.home' | translate }}</span>
+        </a>
+
+
+        <a
+          routerLink="/new-in"
+          routerLinkActive="nav-link--active"
+          class="nav-link"
+          (click)="closeMenu()"
+        >
+          <span class="nav-link__index">02</span>
+          <span>{{ 'navbar.newIn' | translate }}</span>
+        </a>
+
+
+        <a
+          routerLink="/categories"
+          routerLinkActive="nav-link--active"
+          class="nav-link"
+          (click)="closeMenu()"
+        >
+          <span class="nav-link__index">03</span>
+          <span>{{ 'navbar.collections' | translate }}</span>
+        </a>
+
+
+        <a
+          routerLink="/brands"
+          routerLinkActive="nav-link--active"
+          class="nav-link"
+          (click)="closeMenu()"
+        >
+          <span class="nav-link__index">04</span>
+          <span>{{ 'navbar.brands' | translate }}</span>
+        </a>
+
+
+        <a
+          routerLink="/sale"
+          routerLinkActive="nav-link--active"
+          class="nav-link nav-link--sale"
+          (click)="closeMenu()"
+        >
+          <span class="nav-link__index">05</span>
+          <span>{{ 'navbar.sale' | translate }}</span>
+        </a>
+
+
+        <a
+          routerLink="/contact"
+          routerLinkActive="nav-link--active"
+          class="nav-link"
+          (click)="closeMenu()"
+        >
+          <span class="nav-link__index">06</span>
+          <span>{{ 'navbar.contact' | translate }}</span>
+        </a>
+
+      </div>
+
+
+      <!-- =================================================
+           MOBILE ACCOUNT AREA
+           ================================================= -->
+
+      <div class="site-nav__mobile-account">
+
+        <div class="site-nav__mobile-account-heading">
+          <span>
+            {{ 'navbar.profile' | translate }}
+          </span>
+        </div>
+
+
+        @if (isLoggedIn()) {
+
+          <a
+            routerLink="/profile"
+            class="mobile-account-link"
+            (click)="closeMenu()"
+          >
+            <span>
+              {{ 'navbar.hello' | translate }},
+              {{ firstName() }}
+            </span>
+
+            <span aria-hidden="true">→</span>
+          </a>
+
+
+          <a
+            routerLink="/orders"
+            class="mobile-account-link"
+            (click)="closeMenu()"
+          >
+            <span>{{ 'navbar.orders' | translate }}</span>
+            <span aria-hidden="true">→</span>
+          </a>
+
+
+          <button
+            type="button"
+            class="mobile-account-link mobile-account-link--button"
+            (click)="logout()"
+          >
+            <span>{{ 'navbar.logout' | translate }}</span>
+            <span aria-hidden="true">↗</span>
           </button>
 
+        } @else {
+
+          <a
+            routerLink="/login"
+            class="mobile-account-link"
+            (click)="closeMenu()"
+          >
+            <span>{{ 'navbar.signin' | translate }}</span>
+            <span aria-hidden="true">→</span>
+          </a>
+
+
+          <a
+            routerLink="/register"
+            class="mobile-account-link"
+            (click)="closeMenu()"
+          >
+            <span>{{ 'navbar.signup' | translate }}</span>
+            <span aria-hidden="true">→</span>
+          </a>
+
+        }
+
+      </div>
+
+
+      <!-- MOBILE DRAWER FOOTER -->
+
+      <div class="site-nav__mobile-footer">
+
+        <span>
+          TAMARA LAND
+        </span>
+
+        <span>
+          EST. 2024
+        </span>
+
+      </div>
+
+    </nav>
+
+
+    <!-- ===================================================
+         ACTIONS
+         =================================================== -->
+
+    <div class="site-header__actions">
+
+
+      <!-- LANGUAGE -->
+
+      <button
+        type="button"
+        class="header-action header-action--language"
+        (click)="toggleLanguage()"
+        [attr.aria-label]="'header.changeLanguage' | translate"
+        [title]="'header.changeLanguage' | translate"
+      >
+        <span class="header-action__language">
+          {{ isArabic() ? 'EN' : 'AR' }}
+        </span>
+      </button>
+
+
+      <!-- THEME -->
+
+      <button
+        type="button"
+        class="header-action header-action--theme"
+        (click)="toggleTheme()"
+        [attr.aria-label]="
+          (
+            theme() === 'dark'
+              ? 'header.switchToLight'
+              : 'header.switchToDark'
+          ) | translate
+        "
+      >
+        @if (theme() === 'dark') {
+
+          <i
+            class="fa-solid fa-sun"
+            aria-hidden="true"
+          ></i>
+
+        } @else {
+
+          <i
+            class="fa-solid fa-moon"
+            aria-hidden="true"
+          ></i>
+
+        }
+      </button>
+
+
+      <!-- SEARCH -->
+
+      <button
+        type="button"
+        class="header-action header-action--search"
+        (click)="toggleSearch()"
+        [attr.aria-label]="'navbar.search' | translate"
+        [attr.aria-expanded]="searchOpen()"
+      >
+        <i
+          class="fa-solid fa-magnifying-glass"
+          aria-hidden="true"
+        ></i>
+      </button>
+
+
+      <!-- WISHLIST -->
+
+      <a
+        routerLink="/wishlist"
+        class="header-action header-action--desktop-only header-action--counter"
+        [attr.aria-label]="'navbar.wishlist' | translate"
+      >
+        <i
+          class="fa-regular fa-heart"
+          aria-hidden="true"
+        ></i>
+
+        @if (wishlistCount() > 0) {
+          <span class="header-action__badge">
+            {{ wishlistCount() > 99 ? '99+' : wishlistCount() }}
+          </span>
+        }
+      </a>
+
+
+      <!-- CART -->
+
+      <a
+        routerLink="/cart"
+        class="header-action header-action--counter"
+        [attr.aria-label]="'navbar.cart' | translate"
+      >
+        <i
+          class="fa-solid fa-bag-shopping"
+          aria-hidden="true"
+        ></i>
+
+        @if (cartItemsCount() > 0) {
+          <span class="header-action__badge">
+            {{ cartItemsCount() > 99 ? '99+' : cartItemsCount() }}
+          </span>
+        }
+      </a>
+
+
+      <!-- =================================================
+           ACCOUNT DESKTOP
+           ================================================= -->
+
+      @if (isLoggedIn()) {
+
+        <div class="account-menu">
+
+          <button
+            type="button"
+            class="header-action header-action--account header-action--desktop-only"
+            (click)="toggleAccountMenu()"
+            [attr.aria-label]="'navbar.profile' | translate"
+            [attr.aria-expanded]="accountMenuOpen()"
+            aria-haspopup="menu"
+          >
+            <i
+              class="fa-regular fa-user"
+              aria-hidden="true"
+            ></i>
+          </button>
+
+
           @if (accountMenuOpen()) {
-            <div class="account-menu__dropdown">
-              <p class="account-menu__greeting">{{ 'navbar.hello' | translate }}, {{ firstName() }}</p>
-              <a routerLink="/profile" (click)="closeAccountMenu()">{{ 'navbar.profile' | translate }}</a>
-              <a routerLink="/orders" (click)="closeAccountMenu()">{{ 'navbar.orders' | translate }}</a>
-              <a routerLink="/wishlist" (click)="closeAccountMenu()">{{ 'navbar.wishlist' | translate }}</a>
-              <button type="button" (click)="logout()">{{ 'navbar.logout' | translate }}</button>
+
+            <div
+              class="account-menu__dropdown"
+              role="menu"
+            >
+
+              <div class="account-menu__top">
+
+                <span class="account-menu__eyebrow">
+                  TAMARA LAND
+                </span>
+
+                <p class="account-menu__greeting">
+                  {{ 'navbar.hello' | translate }},
+                  {{ firstName() }}
+                </p>
+
+              </div>
+
+
+              <a
+                routerLink="/profile"
+                role="menuitem"
+                (click)="closeAccountMenu()"
+              >
+                <span>{{ 'navbar.profile' | translate }}</span>
+                <span aria-hidden="true">→</span>
+              </a>
+
+
+              <a
+                routerLink="/orders"
+                role="menuitem"
+                (click)="closeAccountMenu()"
+              >
+                <span>{{ 'navbar.orders' | translate }}</span>
+                <span aria-hidden="true">→</span>
+              </a>
+
+
+              <a
+                routerLink="/wishlist"
+                role="menuitem"
+                (click)="closeAccountMenu()"
+              >
+                <span>{{ 'navbar.wishlist' | translate }}</span>
+                <span aria-hidden="true">→</span>
+              </a>
+
+
+              <button
+                type="button"
+                role="menuitem"
+                (click)="logout()"
+              >
+                <span>{{ 'navbar.logout' | translate }}</span>
+                <span aria-hidden="true">↗</span>
+              </button>
+
             </div>
+
           }
+
         </div>
+
       } @else {
-        <a routerLink="/login" class="nav-signin-btn icon-btn--desktop">{{ 'navbar.signin' | translate }}</a>
+
+        <a
+          routerLink="/login"
+          class="nav-signin-btn header-action--desktop-only"
+        >
+          {{ 'navbar.signin' | translate }}
+        </a>
+
       }
 
-      <button class="menu-toggle" (click)="toggleMenu()" [class.menu-toggle--open]="menuOpen()" [attr.aria-label]="menuOpen() ? ('header.closeMenu' | translate) : ('header.openMenu' | translate)">
-        <span></span><span></span><span></span>
+
+      <!-- =================================================
+           MOBILE MENU TOGGLE
+           ================================================= -->
+
+      <button
+        type="button"
+        class="menu-toggle"
+        [class.menu-toggle--open]="menuOpen()"
+        (click)="toggleMenu()"
+        [attr.aria-label]="
+          menuOpen()
+            ? ('header.closeMenu' | translate)
+            : ('header.openMenu' | translate)
+        "
+        [attr.aria-expanded]="menuOpen()"
+        aria-controls="primary-navigation"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
+
     </div>
+
   </div>
+
+
+  <!-- =====================================================
+       MOBILE MENU BACKDROP
+       ===================================================== -->
+
+  @if (menuOpen()) {
+
+    <button
+      type="button"
+      class="site-nav-backdrop"
+      aria-label="Close navigation"
+      (click)="closeMenu()"
+    ></button>
+
+  }
+
 </header>

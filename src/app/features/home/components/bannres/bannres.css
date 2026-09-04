@@ -1,189 +1,478 @@
-/* ===========================
-   STATIC BANNER STRIPS
-   (Home / Offer / Category)
-=========================== */
+/* =========================================================
+   TAMARA LAND — BANNER V2
+   Luxury Editorial Campaign System
+   Home Banner + Offer Banner + Category Banner
+   ========================================================= */
 
-.static-banner-strip{
+.banner-section {
+  --banner-max: 1440px;
+  --banner-radius: 4px;
+  --banner-gold: #c9a24b;
+  --banner-gold-light: #e8cd82;
 
-    width:90%;
-
-    margin:20px auto;
-
-    display:flex;
-
-    gap:16px;
-
-    flex:3 ;
-    flex-direction: row;
-
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: clamp(2.5rem, 5vw, 5rem) 0;
+  isolation: isolate;
 }
 
-.static-banner{
-
-    flex:1 1 300px;
-
-    display:block;
-
-    position:relative;
-
-    border-radius:12px;
-
-    overflow:hidden;
-
-    background:#000;
-
-    -webkit-border-radius:12px;
-    -moz-border-radius:12px;
-
+.banner-section::before {
+  content: '';
+  position: absolute;
+  inset: 12% 5%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse at 50% 50%,
+      rgba(201, 162, 75, .065),
+      transparent 65%
+    );
 }
 
-.static-banner img{
+/* =========================================================
+   SHELL
+   ========================================================= */
 
-    width:100%;
-
-    height:100%;
-
-    display:block;
-
-    object-fit:fill;
-
-    aspect-ratio:16/6;
-
-    transition:transform .5s ease;
-
+.banner-shell {
+  width: min(calc(100% - 2rem), var(--banner-max));
+  margin-inline: auto;
+  min-width: 0;
 }
 
-.static-banner:hover img{
-    transform:scale(1.03);
-    -webkit-transform:scale(1.03);
-    -moz-transform:scale(1.03);
-    -ms-transform:scale(1.03);
-    -o-transform:scale(1.03);
+.banner-shell--home {
+  width: min(calc(100% - 2rem), 1480px);
 }
 
+/* =========================================================
+   HOME BANNER
+   ========================================================= */
 
-/* ===========================
-   PER-TYPE VARIATIONS
-=========================== */
-
-/* Home Banner: شريط واحد عريض */
-.static-banner-strip--home .static-banner{
-
-    flex:1 1 100%;
-
+.banner-slider {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
-.static-banner-strip--home img{
-
-    aspect-ratio:16/5;
-
+.banner-slider::-webkit-scrollbar {
+  display: none;
 }
 
-/* Offer Banner: 2 جنب بعض على الديسكتوب */
-.static-banner-strip--offer .static-banner{
-
-    flex:1 1 calc(50% - 8px);
-
+.banner-slider .banner-frame {
+  flex: 0 0 100%;
+  width: 100%;
+  scroll-snap-align: start;
 }
 
-.static-banner-strip--offer img{
+/* =========================================================
+   BANNER FRAME
+   ========================================================= */
 
-    aspect-ratio:16/9;
-
+.banner-frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(201, 162, 75, .38);
+  border-radius: var(--banner-radius);
+  background: var(--bg-card, #181612);
+  color: inherit;
+  text-decoration: none;
+  isolation: isolate;
+  box-shadow:
+    0 10px 35px rgba(48, 36, 18, .07),
+    0 2px 8px rgba(48, 36, 18, .04);
+  transform: translateZ(0);
+  transition:
+    border-color 300ms ease,
+    box-shadow 400ms ease,
+    transform 400ms cubic-bezier(.22, 1, .36, 1);
 }
 
-/* Category Banner: كروت أصغر، ممكن أكتر من 2 */
-.static-banner-strip--category .static-banner{
-
-    flex:1 1 calc(33.333% - 11px);
-
+.banner-frame::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  z-index: 3;
+  pointer-events: none;
+  border: 1px solid rgba(255, 248, 227, .42);
+  opacity: .72;
 }
 
-.static-banner-strip--category img{
-
-    aspect-ratio:4/5;
-
+.banner-frame__edge {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  border: 1px solid rgba(232, 205, 130, .18);
 }
 
-
-/* ===========================
-   HOME BANNER SLIDER
-   (appAutoSlide بيعمل scrollBy على الديف ده)
-=========================== */
-
-.banner-slider{
-
-    overflow-x:auto;
-    scroll-behavior:smooth;
-    scroll-snap-type:x mandatory;
-    scrollbar-width:none;
-    -webkit-overflow-scrolling:touch;
-
+.banner-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-width: 100%;
+  aspect-ratio: 3 / 1;
+  object-fit: cover;
+  object-position: center;
+  background: var(--bg-secondary, #14120f);
+  transform: scale(1.001);
+  backface-visibility: hidden;
+  transition:
+    transform 900ms cubic-bezier(.22, 1, .36, 1),
+    filter 500ms ease;
 }
 
-.banner-slider::-webkit-scrollbar{
+/* =========================================================
+   EDITORIAL SHEEN
+   ========================================================= */
 
-    display:none;
-
+.banner-frame__sheen {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      105deg,
+      transparent 0%,
+      transparent 42%,
+      rgba(255,255,255,.10) 50%,
+      transparent 58%,
+      transparent 100%
+    );
+  background-size: 220% 100%;
+  background-position: 180% 0;
+  opacity: 0;
+  transition:
+    opacity 350ms ease,
+    background-position 900ms cubic-bezier(.22,1,.36,1);
 }
 
-/* كل بانر هوم = سلايد كامل العرض، مايتقصش تحت تأثير flex shrink */
-.banner-slider .static-banner{
+/* =========================================================
+   HOME BANNER
+   ========================================================= */
 
-    flex:0 0 100%;
-    scroll-snap-align:start;
-
+.banner-section--home {
+  padding-top: clamp(1.75rem, 3vw, 3rem);
+  padding-bottom: clamp(3rem, 5vw, 5rem);
 }
 
-
-/* ===========================
-   RESPONSIVE — TABLET (≤768px)
-=========================== */
-
-@media (max-width:768px){
-
-.static-banner-strip{
-
-    gap:12px;
-
-    margin:14px auto;
-
+.banner-frame--home {
+  border-radius: 8px;
+  box-shadow:
+    0 18px 50px rgba(58, 42, 17, .09),
+    0 3px 12px rgba(58, 42, 17, .045);
 }
 
-.static-banner-strip--offer .static-banner,
-.static-banner-strip--category .static-banner{
-
-    flex:1 1 100%;
-
+.banner-frame--home::before {
+  inset: 10px;
 }
 
-.static-banner-strip--home img{
+/* =========================================================
+   OFFER BANNER
+   ========================================================= */
 
-    aspect-ratio:12/5;
-
+.static-banner-strip--offer {
+  padding-top: clamp(1rem, 2vw, 2rem);
+  padding-bottom: clamp(3.5rem, 6vw, 5.5rem);
 }
 
+.static-banner-strip--offer .banner-list {
+  display: flex;
+  align-items: stretch;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  min-width: 0;
 }
 
-
-/* ===========================
-   RESPONSIVE — SMALL PHONES (≤420px)
-=========================== */
-
-@media (max-width:420px){
-
-.static-banner-strip{
-
-    width:94%;
-
-    gap:10px;
-
+.static-banner-strip--offer .banner-frame {
+  flex: 1 1 100%;
 }
 
-.static-banner img{
-
-    aspect-ratio:4/2;
-
+.banner-frame--offer {
+  border-radius: 8px;
 }
 
+/* If more than one Offer banner arrives, keep them elegant. */
+.static-banner-strip--offer .banner-list:has(.banner-frame + .banner-frame) .banner-frame {
+  flex-basis: calc(50% - .75rem);
+}
+
+.static-banner-strip--offer .banner-list:has(.banner-frame + .banner-frame) .banner-image {
+  aspect-ratio: 3 / 1.15;
+}
+
+/* =========================================================
+   CATEGORY BANNER
+   ========================================================= */
+
+.static-banner-strip--category .banner-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.banner-frame--category .banner-image {
+  aspect-ratio: 4 / 5;
+}
+
+.banner-frame--category {
+  border-radius: 8px;
+}
+
+/* =========================================================
+   HOVER — QUIET LUXURY
+   ========================================================= */
+
+@media (hover: hover) and (pointer: fine) {
+
+  .banner-frame:hover {
+    border-color: rgba(201, 162, 75, .72);
+    box-shadow:
+      0 20px 55px rgba(58, 42, 17, .12),
+      0 5px 16px rgba(58, 42, 17, .06);
+    transform: translateY(-2px);
+  }
+
+  .banner-frame:hover .banner-image {
+    transform: scale(1.018);
+  }
+
+  .banner-frame:hover .banner-frame__sheen {
+    opacity: 1;
+    background-position: -20% 0;
+  }
+}
+
+/* =========================================================
+   FOCUS
+   ========================================================= */
+
+.banner-frame:focus-visible {
+  outline: 2px solid var(--primary-light, #e8cd82);
+  outline-offset: 5px;
+}
+
+/* =========================================================
+   DARK THEME
+   ========================================================= */
+
+:root:not([data-theme='light']) .banner-frame {
+  border-color: rgba(201, 162, 75, .30);
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, .20),
+    0 2px 8px rgba(0, 0, 0, .14);
+}
+
+:root:not([data-theme='light']) .banner-frame::before {
+  border-color: rgba(232, 205, 130, .24);
+}
+
+:root:not([data-theme='light']) .banner-section::before {
+  background:
+    radial-gradient(
+      ellipse at 50% 50%,
+      rgba(201, 162, 75, .055),
+      transparent 65%
+    );
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1024px) {
+
+  .banner-section {
+    padding-block: 2.5rem 3.75rem;
+  }
+
+  .banner-shell,
+  .banner-shell--home {
+    width: min(calc(100% - 1.5rem), 920px);
+  }
+
+  .static-banner-strip--offer .banner-list {
+    gap: 1rem;
+  }
+
+  .static-banner-strip--category .banner-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .banner-section {
+    padding-block: 1.75rem 3rem;
+  }
+
+  .banner-shell,
+  .banner-shell--home {
+    width: calc(100% - 1.25rem);
+  }
+
+  .banner-frame {
+    border-radius: 6px;
+  }
+
+  .banner-frame::before {
+    inset: 6px;
+  }
+
+  /*
+   * MOBILE IMAGE FIX
+   * Keep the complete campaign artwork visible.
+   * The old fixed aspect-ratio + object-fit: cover was cropping
+   * the left/right content of the banner on narrow screens.
+   */
+  .banner-image {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    aspect-ratio: auto;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .banner-section--home {
+    padding-top: 1.25rem;
+    padding-bottom: 3rem;
+  }
+
+  .banner-frame--home .banner-image {
+    height: auto;
+    aspect-ratio: auto;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  /* One Offer banner = full width.
+     Multiple Offer banners = horizontal editorial cards. */
+  .static-banner-strip--offer .banner-list {
+    gap: .75rem;
+  }
+
+  .static-banner-strip--offer .banner-frame {
+    flex: 0 0 100%;
+  }
+
+  .static-banner-strip--offer .banner-list:has(.banner-frame + .banner-frame) {
+    overflow-x: auto;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+    padding-bottom: .4rem;
+  }
+
+  .static-banner-strip--offer .banner-list:has(.banner-frame + .banner-frame)::-webkit-scrollbar {
+    display: none;
+  }
+
+  .static-banner-strip--offer .banner-list:has(.banner-frame + .banner-frame) .banner-frame {
+    flex: 0 0 88%;
+    scroll-snap-align: start;
+  }
+
+  .static-banner-strip--offer .banner-list:has(.banner-frame + .banner-frame) .banner-image {
+    aspect-ratio: 3 / 1.55;
+  }
+
+  .static-banner-strip--category .banner-list {
+    display: flex;
+    gap: .75rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+    padding-bottom: .35rem;
+  }
+
+  .static-banner-strip--category .banner-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .static-banner-strip--category .banner-frame {
+    flex: 0 0 76%;
+    scroll-snap-align: center;
+  }
+
+  .banner-frame--category .banner-image {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+/* =========================================================
+   SMALL PHONES — 360px
+   ========================================================= */
+
+@media (max-width: 390px) {
+
+  .banner-shell,
+  .banner-shell--home {
+    width: calc(100% - 1rem);
+  }
+
+  .banner-section {
+    padding-block: 1.25rem 2.5rem;
+  }
+
+  .banner-frame::before {
+    inset: 5px;
+  }
+
+  .banner-frame--home .banner-image {
+    height: auto;
+    aspect-ratio: auto;
+    object-fit: contain;
+  }
+
+  .static-banner-strip--offer .banner-list:has(.banner-frame + .banner-frame) .banner-frame {
+    flex-basis: 92%;
+  }
+
+  .static-banner-strip--offer .banner-list:has(.banner-frame + .banner-frame) .banner-image {
+    aspect-ratio: 3 / 1.7;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .banner-slider {
+    scroll-behavior: auto;
+  }
+
+  .banner-frame,
+  .banner-image,
+  .banner-frame__sheen {
+    transition: none !important;
+  }
+
+  .banner-frame:hover {
+    transform: none;
+  }
+
+  .banner-frame:hover .banner-image {
+    transform: none;
+  }
+
+  .banner-frame__sheen {
+    display: none;
+  }
 }

@@ -1,203 +1,155 @@
 <article
-  class="product-card"
-
-  [class.product-card--compact]="variant === 'compact'"
-
-  [class.product-card--large]="variant === 'large'"
-
-  [class.product-card--wide]="variant === 'wide'"
-
-  [class.product-card--editorial]="variant === 'editorial'"
-
-  [class.product-card--out-of-stock]="isOutOfStock"
-
-  [class.product-card--in-cart]="isInCart"
+  class="tl-product"
+  [class.tl-product--compact]="variant === 'compact'"
+  [class.tl-product--large]="variant === 'large'"
+  [class.tl-product--wide]="variant === 'wide'"
+  [class.tl-product--editorial]="variant === 'editorial'"
+  [class.tl-product--out-of-stock]="isOutOfStock"
+  [class.tl-product--in-cart]="isInCart"
 >
 
   <!-- =====================================================
-       MEDIA
-       ===================================================== -->
+       OBJECT / IMAGE
+  ====================================================== -->
 
-  <div class="product-card__media">
+  <a
+    class="tl-product__media"
+    [routerLink]="['/products', product.id]"
+    [attr.aria-label]="product | localizedName"
+  >
 
-    <a
-      class="product-card__media-link"
+    <img
+      class="tl-product__image"
+      [src]="imageUrl"
+      [alt]="product | localizedName"
+      loading="lazy"
+      decoding="async"
+    />
 
-      [routerLink]="['/products', product.id]"
+    <span
+      class="tl-product__gradient"
+      aria-hidden="true"
+    ></span>
 
-      [attr.aria-label]="product | localizedName"
-    >
+    
 
-      <img
-        class="product-card__image"
-
-        [src]="imageUrl"
-
-        [alt]="product | localizedName"
-
-        loading="lazy"
-
-        decoding="async"
-      />
-
-      <span
-        class="product-card__veil"
-        aria-hidden="true"
-      ></span>
-
-    </a>
+  </a>
 
 
-    <!-- ===================================================
-         BADGES
-         =================================================== -->
+  <!-- =====================================================
+       TOP CONTROLS
+  ====================================================== -->
+
+  <div class="tl-product__controls">
 
     @if (hasDiscount) {
 
-      <span class="product-card__badge">
+      <span class="tl-product__discount">
         −{{ discountPercent }}%
       </span>
 
     }
 
-
-    <!-- ===================================================
-         WISHLIST
-         =================================================== -->
-
     <button
       type="button"
-
-      class="product-card__wishlist"
-
-      [class.product-card__wishlist--active]="isInWishlist()"
-
+      class="tl-product__wishlist"
+      [class.tl-product__wishlist--active]="isInWishlist()"
       [disabled]="isTogglingWishlist()"
-
       [attr.aria-label]="
         isInWishlist()
-          ? 'Remove from wishlist'
-          : 'Add to wishlist'
+          ? ('common.removeFromWishlist' | translate)
+          : ('common.addToWishlist' | translate)
       "
-
       [attr.aria-pressed]="isInWishlist()"
-
       (click)="toggleWishlist($event)"
     >
 
-      <svg
-        viewBox="0 0 24 24"
+      <i
+        class="fa-regular fa-heart"
         aria-hidden="true"
-      >
-
-        <path
-          d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z"
-        />
-
-      </svg>
+      ></i>
 
     </button>
 
+  </div>
 
-    <!-- ===================================================
-         OUT OF STOCK
-         =================================================== -->
 
-    @if (isOutOfStock) {
+  <!-- =====================================================
+       PRODUCT INDEX
+  ====================================================== -->
 
-      <div
-        class="product-card__sold-out"
-        aria-hidden="true"
-      >
+  <span
+    class="tl-product__index"
+    aria-hidden="true"
+  >
+    {{ product.id | number:'2.0-0' }}
+  </span>
 
-        <span>
-          Sold out
+
+  <!-- =====================================================
+       PRODUCT INFORMATION
+  ====================================================== -->
+
+  <div class="tl-product__info">
+
+    <div class="tl-product__identity">
+
+      @if (product.brandName) {
+
+        <span class="tl-product__brand">
+          {{ product.brandName }}
         </span>
 
-      </div>
+      }
 
-    }
+      <a
+        class="tl-product__name"
+        [routerLink]="['/products', product.id]"
+      >
+        {{ product | localizedName }}
+      </a>
+
+    </div>
 
 
-    <!-- ===================================================
-         INFORMATION
-         =================================================== -->
+    <div class="tl-product__bottom">
 
-    <div class="product-card__content">
+      <div class="tl-product__pricing">
 
-      <div class="product-card__identity">
+        @if (ratingValue > 0) {
 
-        @if (product.brandName) {
+          <div class="tl-product__rating">
 
-          <span class="product-card__brand">
-            {{ product.brandName }}
-          </span>
+            <i
+              class="fa-solid fa-star"
+              aria-hidden="true"
+            ></i>
+
+            <span>
+              {{ ratingValue | number:'1.1-1' }}
+            </span>
+
+            @if (reviewCount > 0) {
+
+              <small>
+                ({{ reviewCount }})
+              </small>
+
+            }
+
+          </div>
 
         }
 
-        <a
-          class="product-card__name"
+        <div class="tl-product__price">
 
-          [routerLink]="[
-            '/products',
-            product.id
-          ]"
-        >
-          {{ product | localizedName }}
-        </a>
-
-      </div>
-
-
-      <!-- =================================================
-           PRICE / META
-           ================================================= -->
-
-      <div class="product-card__bottom">
-
-        <div class="product-card__meta">
-
-          @if (ratingValue > 0) {
-
-            <span class="product-card__rating">
-
-              <svg
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-
-                <path
-                  d="m12 3 2.78 5.63 6.22.9-4.5 4.38 1.06 6.2L12 17.18l-5.56 2.93 1.06-6.2L3 9.53l6.22-.9L12 3Z"
-                />
-
-              </svg>
-
-              {{ ratingValue | number:'1.1-1' }}
-
-              @if (reviewCount > 0) {
-
-                <span>
-                  ({{ reviewCount }})
-                </span>
-
-              }
-
-            </span>
-
-          }
-
-        </div>
-
-
-        <div class="product-card__price-wrap">
-
-          <span class="product-card__price">
+          <span class="tl-product__price-current">
             {{ finalPrice | number:'1.0-2' }}
           </span>
 
           @if (hasDiscount) {
 
-            <span class="product-card__price-old">
+            <span class="tl-product__price-original">
               {{ originalPrice | number:'1.0-2' }}
             </span>
 
@@ -209,31 +161,22 @@
 
 
       <!-- =================================================
-           ACTION
-           ================================================= -->
+           BAG ACTION
+      ================================================== -->
 
-      <div class="product-card__action">
+      <div class="tl-product__action">
 
         @if (isAdding()) {
 
           <button
             type="button"
-
-            class="product-card__action-button"
-
+            class="tl-product__bag tl-product__bag--loading"
             disabled
-
             aria-busy="true"
+            [attr.aria-label]="'common.adding' | translate"
           >
 
-            <span
-              class="product-card__spinner"
-              aria-hidden="true"
-            ></span>
-
-            <span>
-              Adding
-            </span>
+            <span class="tl-product__spinner"></span>
 
           </button>
 
@@ -243,15 +186,16 @@
 
           <button
             type="button"
-
-            class="
-              product-card__action-button
-              product-card__action-button--disabled
-            "
-
+            class="tl-product__bag tl-product__bag--disabled"
             disabled
+            [attr.aria-label]="'common.soldOut' | translate"
           >
-            Sold out
+
+            <i
+              class="fa-solid fa-ban"
+              aria-hidden="true"
+            ></i>
+
           </button>
 
         }
@@ -262,46 +206,32 @@
         ) {
 
           <div
-            class="product-card__quantity"
-
+            class="tl-product__stepper"
             role="group"
-
-            aria-label="Quantity"
+            [attr.aria-label]="'common.quantity' | translate"
           >
 
             <button
               type="button"
-
-              aria-label="Decrease quantity"
-
+              [attr.aria-label]="'common.decrease' | translate"
               [disabled]="isUpdatingCart()"
-
-              (click)="
-                decreaseCartQuantity($event)
-              "
+              (click)="decreaseCartQuantity($event)"
             >
               −
             </button>
-
 
             <span>
               {{ cartQuantity }}
             </span>
 
-
             <button
               type="button"
-
-              aria-label="Increase quantity"
-
+              [attr.aria-label]="'common.increase' | translate"
               [disabled]="
                 isUpdatingCart() ||
                 isAtMaxStock
               "
-
-              (click)="
-                increaseCartQuantity($event)
-              "
+              (click)="increaseCartQuantity($event)"
             >
               +
             </button>
@@ -314,31 +244,19 @@
 
           <button
             type="button"
-
-            class="product-card__action-button"
-
+            class="tl-product__bag"
+            [attr.aria-label]="
+              hasMultipleCartVariants
+                ? ('common.viewOptions' | translate)
+                : ('common.addToBag' | translate)
+            "
             (click)="addToCart($event)"
           >
 
-            <span>
-              {{
-                hasMultipleCartVariants
-                  ? 'View options'
-                  : 'Add to bag'
-              }}
-            </span>
-
-
-            <svg
-              viewBox="0 0 24 24"
+            <i
+              class="fa-solid fa-bag-shopping"
               aria-hidden="true"
-            >
-
-              <path
-                d="M5 12h13M13 6l6 6-6 6"
-              />
-
-            </svg>
+            ></i>
 
           </button>
 
@@ -349,5 +267,23 @@
     </div>
 
   </div>
+
+
+  <!-- =====================================================
+       SOLD OUT
+  ====================================================== -->
+
+  @if (isOutOfStock) {
+
+    <div
+      class="tl-product__sold-out"
+      aria-hidden="true"
+    >
+      <span>
+        {{ 'common.soldOut' | translate }}
+      </span>
+    </div>
+
+  }
 
 </article>

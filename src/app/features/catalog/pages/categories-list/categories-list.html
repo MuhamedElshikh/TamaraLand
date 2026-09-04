@@ -52,50 +52,54 @@
         track category.id;
         let i = $index
       ) {
+ <a
+            [routerLink]="['/categories', category.id]"
+            class="category-card"
+            [style.--card-index]="i"
+          >
 
-        <a
-          [routerLink]="['/categories', category.id]"
-          class="category-card"
-          [style.--card-index]="i"
-        >
+            <div class="category-card__scene">
 
-          <!-- CARD -->
-          <div class="category-card__frame">
+              <div class="category-card__arch" aria-hidden="true">
+                <span class="category-card__arch-inner"></span>
+                <span class="category-card__arch-glow"></span>
+                <span class="category-card__arch-line"></span>
+              </div>
 
-            <!-- GOLD BACKGROUND -->
-            <div
-              class="category-card__stage"
-              aria-hidden="true"
-            >
-          
-          <!-- 3D CUTOUT MODEL -->
-          <div class="category-card__cutout">
+              <div class="category-card__ornament category-card__ornament--left" aria-hidden="true">
+                <span></span><span></span><span></span>
+              </div>
 
-            <img
-              [src]="category.imageUrl"
-              [alt]="category | localizedName"
-              loading="lazy"
-            />
+              <div class="category-card__ornament category-card__ornament--right" aria-hidden="true">
+                <span></span><span></span><span></span>
+              </div>
 
-          </div>  
-          </div>
+              <div class="category-card__cutout">
+                <img
+                  [src]="category.imageUrl"
+                  [alt]="category | localizedName"
+                  loading="lazy"
+                />
+              </div>
 
-          </div>
+              <div class="category-card__floor" aria-hidden="true"></div>
 
+            </div>
 
+            <div class="category-card__caption">
+              <span class="category-card__caption-line"></span>
 
+              <span class="category-card__label-text">
+                {{ category | localizedName }}
+              </span>
 
-          <!-- CATEGORY NAME -->
-          <div class="category-card__label">
+              <span class="category-card__label-cta">
+                <span>Explore</span>
+                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+              </span>
+            </div>
 
-            <span class="category-card__label-text">
-              {{ category | localizedName }}
-            </span>
-
-          </div>
-
-        </a>
-
+          </a>
       }
 
     </div>

@@ -1,71 +1,143 @@
 <app-hero-banner />
-<app-banners [bannerType]="bannerType.HeroSlider" />
 <app-banners [bannerType]="bannerType.HomeBanner" />
-<app-banners [bannerType]="bannerType.OfferBanner" />
 <app-banners [bannerType]="bannerType.CategoryBanner" />
 
-<section class="scaffold-page">
-  <div class="section-header">
-    <div>
-      <p class="section-kicker">{{ 'home.shopByCategory' | translate }}</p>
-      <h2 class="section-title">{{ 'home.findYourStyle' | translate }}</h2>
+<section class="scaffold-page category-experience">
+  <div class="category-experience__header">
+
+    <div class="category-experience__heading">
+      <div class="category-experience__kicker">
+        <span class="category-experience__kicker-line"></span>
+        <span>{{ 'home.shopByCategory' | translate }}</span>
+      </div>
+
+      <h2 class="section-title category-experience__title">
+        {{ 'home.findYourStyle' | translate }}
+      </h2>
+
+      <p class="category-experience__description">
+        Explore our curated categories and discover pieces
+        that make you feel extraordinary.
+      </p>
     </div>
+
+    <a
+      routerLink="/categories"
+      class="category-experience__all"
+    >
+      <span>View All Categories</span>
+      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+    </a>
   </div>
 
   @if (categoriesLoading()) {
-    <div class="category-strip">
-      @for (i of [1, 2, 3, 4]; track i) {
-        <div class="category-card--skeleton"></div>
-      }
+
+    <div class="category-strip-wrapper category-strip-wrapper--loading">
+      <div class="category-strip">
+        @for (i of [1, 2, 3, 4, 5]; track i) {
+          <div class="category-card--skeleton"></div>
+        }
+      </div>
     </div>
+
   } @else if (categories().length === 0) {
-    <p class="muted">{{ 'home.noCategories' | translate }}</p>
+
+    <p class="muted category-experience__empty">
+      {{ 'home.noCategories' | translate }}
+    </p>
+
   } @else {
+
     <div class="category-strip-wrapper">
-      <button class="category-strip__nav category-strip__nav--prev" (click)="scrollCategories(-1)" aria-label="Previous">
-        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+
+      <button
+        type="button"
+        class="category-strip__nav category-strip__nav--prev"
+        (click)="scrollCategories(-1)"
+        aria-label="Previous categories"
+      >
+        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
       </button>
 
-      <div class="category-strip" #categoryStrip>
-        @for (category of categories(); track category.id; let i = $index) {
+      <div
+        class="category-strip"
+        #categoryStrip
+        aria-label="Shop by category"
+      >
+        @for (
+          category of categories();
+          track category.id;
+          let i = $index
+        ) {
+
           <a
             [routerLink]="['/categories', category.id]"
             class="category-card"
             [style.--card-index]="i"
           >
-            <div class="category-card__frame">
-              <div class="category-card__stage" aria-hidden="true">
-                
-            <div class="category-card__cutout">
-             <img
-                [src]="category.imageUrl"
-                [alt]="category | localizedName"
-                loading="lazy"
-              />
-            </div>
-             
+
+            <div class="category-card__scene">
+
+              <div class="category-card__arch" aria-hidden="true">
+                <span class="category-card__arch-inner"></span>
+                <span class="category-card__arch-glow"></span>
+                <span class="category-card__arch-line"></span>
               </div>
-              
+
+              <div class="category-card__ornament category-card__ornament--left" aria-hidden="true">
+                <span></span><span></span><span></span>
+              </div>
+
+              <div class="category-card__ornament category-card__ornament--right" aria-hidden="true">
+                <span></span><span></span><span></span>
+              </div>
+
+              <div class="category-card__cutout">
+                <img
+                  [src]="category.imageUrl"
+                  [alt]="category | localizedName"
+                  loading="lazy"
+                />
+              </div>
+
+              <div class="category-card__floor" aria-hidden="true"></div>
+
             </div>
 
+            <div class="category-card__caption">
+              <span class="category-card__caption-line"></span>
 
-            <div class="category-card__label">
               <span class="category-card__label-text">
                 {{ category | localizedName }}
               </span>
+
+              <span class="category-card__label-cta">
+                <span>Explore</span>
+                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+              </span>
             </div>
+
           </a>
         }
       </div>
 
-      <button class="category-strip__nav category-strip__nav--next" (click)="scrollCategories(1)" aria-label="Next">
-        <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+      <button
+        type="button"
+        class="category-strip__nav category-strip__nav--next"
+        (click)="scrollCategories(1)"
+        aria-label="Next categories"
+      >
+        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
       </button>
+
     </div>
   }
 </section>
 
+
 <app-featured-products />
+<app-banners [bannerType]="bannerType.OfferBanner" />
+
 <app-testimonials/>
 
 <section class="brand-banner" appScrollReveal>

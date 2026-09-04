@@ -68,14 +68,18 @@
     }
   },
   "featuredProducts": {
-    "justLanded": "Exclusive Pick",
-    "newArrivals": "Featured Collections",
+    "eyebrow": "CURATED SELECTION",
+    "titleLine1": "Pieces that",
+    "titleLine2": "define you",
+    "description": "A curated selection for your everyday elegance.",
     "viewAll": "View All",
     "noProducts": "No products available currently.",
-    "tabAll": "All",
-    "tabNew": "New Arrivals",
-    "tabTop": "Top Rated",
-    "tabOffers": "Exclusive Offers"
+    "ourFavorite1": "OUR",
+    "ourFavorite2": "FAVORITE",
+    "quoteLine1": "Timeless pieces",
+    "quoteLine2": "for a more beautiful",
+    "quoteLine3": "everyday.",
+    "addToBag": "ADD TO BAG"
   },
   "hero": {
     "eyebrow": "LUXURY FASHION",

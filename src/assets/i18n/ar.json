@@ -76,14 +76,18 @@
     }
   },
   "featuredProducts": {
-    "justLanded": "مجموعات حصرية",
-    "newArrivals": "تشكيلات فاخرة لكم",
+      "eyebrow": "اختيارات منتقاة",
+    "titleLine1": "قطع",
+    "titleLine2": "تشبهك",
+    "description": "تشكيلة منتقاة بعناية لأناقتك اليومية.",
     "viewAll": "عرض الكل",
-    "noProducts": "لا توجد منتجات متوفرة حالياً.",
-    "tabAll": "الكل",
-    "tabNew": "الوصل حديثاً",
-    "tabTop": "الأعلى تقييماً",
-    "tabOffers": "العروض الحصرية"
+    "noProducts": "لا توجد منتجات متوفرة حاليًا.",
+    "ourFavorite1": "اختيارنا",
+    "ourFavorite2": "المفضل",
+    "quoteLine1": "قطع خالدة",
+    "quoteLine2": "ليوم أكثر",
+    "quoteLine3": "جمالًا.",
+    "addToBag": "أضف إلى الحقيبة"
   },
   "hero": {
     "eyebrow": "أزياء فاخرة",

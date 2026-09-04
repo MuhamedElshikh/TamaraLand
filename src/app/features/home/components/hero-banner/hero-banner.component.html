@@ -1,46 +1,271 @@
-<section class="hero-intro">
+<section
+  class="hero-intro"
+  aria-labelledby="hero-title"
+>
 
-  <div class="hero-intro__overlay"></div>
+  <!-- =====================================================
+       AMBIENT BACKGROUND
+       ===================================================== -->
 
-  <div class="hero-intro__content">
+  <div
+    class="hero-intro__ambient"
+    aria-hidden="true"
+  ></div>
 
-    <img
-      src="assets/logo.png"
-      [alt]="'sidebar.logoAlt' | translate"
-      class="hero-intro__logo">
 
-    <p class="hero-intro__eyebrow">
-{{ 'hero.eyebrow' | translate }}    </p>
+  <!-- =====================================================
+       EDITORIAL GRID
+       ===================================================== -->
 
-    <h1 class="hero-intro__title">
-{{ 'hero.title' | translate }}
-    </h1>
+  <div class="hero-intro__inner">
 
-    <p class="hero-intro__description">
-      {{ 'hero.description' | translate }}
-    </p>
 
-    <div class="hero-intro__actions">
+    <!-- ===================================================
+         CONTENT
+         =================================================== -->
 
-      <a
-        routerLink="/new-in"
-        class="btn btn-primary">
+    <div class="hero-intro__content">
 
-       {{ 'hero.shopNewIn' | translate }}
+      <div class="hero-intro__eyebrow">
 
-    </a>
+        <span
+          class="hero-intro__eyebrow-line"
+          aria-hidden="true"
+        ></span>
 
-      <a
-        routerLink="/categories"
-        class="btn btn-outline">
+        <span>
+          {{ 'hero.eyebrow' | translate }}
+        </span>
 
-        {{ 'hero.exploreCollections' | translate }}
+      </div>
 
-      </a>
+
+      <!-- Brand -->
+
+      <div class="hero-intro__brand">
+
+        <img
+          src="assets/logo.png"
+          [alt]="'sidebar.logoAlt' | translate"
+          class="hero-intro__logo"
+          width="340"
+          height="120"
+          fetchpriority="high"
+        />
+
+        <span class="hero-intro__brand-caption">
+          EST. / CURATED
+        </span>
+
+      </div>
+
+
+      <!-- Title -->
+
+      <h1
+        id="hero-title"
+        class="hero-intro__title"
+      >
+        {{ 'hero.title' | translate }}
+      </h1>
+
+
+      <!-- Decorative divider -->
+
+      <div
+        class="hero-intro__divider"
+        aria-hidden="true"
+      >
+        <span></span>
+      </div>
+
+
+      <!-- Description -->
+
+      <p class="hero-intro__description">
+        {{ 'hero.description' | translate }}
+      </p>
+
+
+      <!-- Actions -->
+
+      <div class="hero-intro__actions">
+
+        <a
+          routerLink="/new-in"
+          class="hero-intro__cta hero-intro__cta--primary"
+        >
+          <span>
+            {{ 'hero.shopNewIn' | translate }}
+          </span>
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path d="M5 12h13M13 6l6 6-6 6" />
+          </svg>
+        </a>
+
+
+        <a
+          routerLink="/categories"
+          class="hero-intro__cta hero-intro__cta--secondary"
+        >
+          <span>
+            {{ 'hero.exploreCollections' | translate }}
+          </span>
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path d="M5 12h13M13 6l6 6-6 6" />
+          </svg>
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         EDITORIAL VISUAL
+         =================================================== -->
+
+    <div class="hero-intro__visual">
+
+
+      <!-- Section label -->
+
+      <div class="hero-intro__visual-label">
+
+        <span class="hero-intro__visual-index">
+          01
+        </span>
+
+        <span class="hero-intro__visual-label-text">
+          THE CLOSET
+        </span>
+
+      </div>
+
+
+      <!-- Image frame -->
+
+      <div class="hero-intro__frame">
+
+
+        <!-- Top architectural rail -->
+
+        <div
+          class="hero-intro__frame-rail"
+          aria-hidden="true"
+        >
+          <span></span>
+        </div>
+
+
+        <!-- Editorial image -->
+
+        <div class="hero-intro__image-wrap">
+
+          <img
+            src="../../../../../assets/the-closet-editorial.jpg"
+            alt=""
+            class="hero-intro__image"
+            width="960"
+            height="1200"
+            fetchpriority="high"
+            decoding="async"
+          />
+
+          <div
+            class="hero-intro__image-overlay"
+            aria-hidden="true"
+          ></div>
+
+        </div>
+
+
+        <!-- Editorial frame -->
+
+        <div
+          class="hero-intro__frame-grid"
+          aria-hidden="true"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+
+        <!-- Gold corner -->
+
+        <div
+          class="hero-intro__corner hero-intro__corner--top"
+          aria-hidden="true"
+        ></div>
+
+        <div
+          class="hero-intro__corner hero-intro__corner--bottom"
+          aria-hidden="true"
+        ></div>
+
+
+        <!-- Image caption -->
+
+        <div class="hero-intro__image-caption">
+
+          <span>
+            CURATED
+          </span>
+
+          <span>
+            FOR YOU
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- Outside caption -->
+
+      <div class="hero-intro__visual-caption">
+
+        <span>
+          DISCOVER
+        </span>
+
+        <span>
+          YOUR NEXT LOOK
+        </span>
+
+      </div>
+
 
     </div>
 
   </div>
 
+
+  <!-- =====================================================
+       SCROLL INDICATOR
+       ===================================================== -->
+
+  <div
+    class="hero-intro__scroll"
+    aria-hidden="true"
+  >
+
+    <span></span>
+
+    <small>
+      SCROLL
+    </small>
+
+  </div>
 
 </section>

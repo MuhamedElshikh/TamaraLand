@@ -17,6 +17,9 @@ import { ProductCardResponse } from '../../../../core/models/catalog.models';
 import { ProductCardComponent } from '../../../catalog/components/product-card/product-card.component';
 
 import { ScrollRevealDirective } from '../../../../shared/directives/scroll-reveal.directive';
+import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe';
+import { CurrencyFormatPipe } from "../../../../shared/pipes/currency-format.pipe";
+import { DecimalPipe } from '@angular/common';
 
 
 @Component({
@@ -27,13 +30,13 @@ import { ScrollRevealDirective } from '../../../../shared/directives/scroll-reve
   changeDetection:
     ChangeDetectionStrategy.OnPush,
 
-  imports: [
-    RouterLink,
-    ProductCardComponent,
-    TranslatePipe,
-    ScrollRevealDirective,
-  ],
-
+imports: [
+  RouterLink,
+  TranslatePipe,
+  ScrollRevealDirective,
+  DecimalPipe,
+  LocalizedNamePipe
+],
   templateUrl:
     './featured-products.component.html',
 
@@ -82,11 +85,14 @@ export class FeaturedProductsComponent
         },
 
         error: () => {
+
           this.loading.set(false);
+
         },
 
       });
 
   }
+  
 
 }

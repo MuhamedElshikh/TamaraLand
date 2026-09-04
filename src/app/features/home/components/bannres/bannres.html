@@ -2,25 +2,51 @@
 
   @if (homeSlides().length > 0) {
 
-    <!-- Home Banner: سلايدر بيتحرك لوحده باستخدام AutoSlideDirective -->
     <section
-      class="static-banner-strip static-banner-strip--home banner-slider"
+      class="banner-section banner-section--home"
+      aria-label="Featured campaign"
       appAutoSlide="forward"
       [autoSlideInterval]="4000"
       appScrollReveal>
 
-      @for (slide of homeSlides(); track $index) {
+      <div class="banner-shell banner-shell--home">
 
-       <a
-  class="static-banner slider-item"
-  [routerLink]="resolveRouterLink(slide.link)"
->
-          <img
-            [src]="resolveSlideImage(slide)"
-            [alt]="'hero.bannerAlt' | translate">
-        </a>
+        <div class="banner-slider">
 
-      }
+          @for (slide of homeSlides(); track $index) {
+
+            <a
+              class="banner-frame banner-frame--home slider-item"
+              [routerLink]="resolveRouterLink(slide.link)"
+              [attr.aria-label]="'hero.bannerAlt' | translate"
+            >
+
+              <span
+                class="banner-frame__edge"
+                aria-hidden="true">
+              </span>
+
+              <img
+                class="banner-image"
+                [src]="resolveSlideImage(slide)"
+                [alt]="'hero.bannerAlt' | translate"
+                width="1800"
+                height="600"
+                decoding="async"
+              />
+
+              <span
+                class="banner-frame__sheen"
+                aria-hidden="true">
+              </span>
+
+            </a>
+
+          }
+
+        </div>
+
+      </div>
 
     </section>
 
@@ -28,23 +54,51 @@
 
 } @else if (banners().length > 0) {
 
-  <!-- Offer / Category: شريط ثابت جنب بعض من غير أي تبديل -->
   <section
-    class="static-banner-strip"
+    class="banner-section"
     [ngClass]="stripClass()"
+    aria-label="Promotional banners"
     appScrollReveal>
 
-    @for (banner of banners(); track banner.id) {
+    <div class="banner-shell">
 
-<a
-  class="static-banner"
-  [routerLink]="resolveRouterLink(resolveLink(banner))"
->        <img
-          [src]="resolveImage(banner)"
-          [alt]="'hero.bannerAlt' | translate">
-      </a>
+      <div class="banner-list">
 
-    }
+        @for (banner of banners(); track banner.id) {
+
+          <a
+            class="banner-frame"
+            [routerLink]="resolveRouterLink(resolveLink(banner))"
+            [attr.aria-label]="'hero.bannerAlt' | translate"
+          >
+
+            <span
+              class="banner-frame__edge"
+              aria-hidden="true">
+            </span>
+
+            <img
+              class="banner-image"
+              [src]="resolveImage(banner)"
+              [alt]="'hero.bannerAlt' | translate"
+              width="1800"
+              height="600"
+              loading="lazy"
+              decoding="async"
+            />
+
+            <span
+              class="banner-frame__sheen"
+              aria-hidden="true">
+            </span>
+
+          </a>
+
+        }
+
+      </div>
+
+    </div>
 
   </section>
 

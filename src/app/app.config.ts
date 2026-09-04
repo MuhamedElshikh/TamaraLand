@@ -12,6 +12,7 @@ import {
 
 import {
   provideHttpClient,
+  withFetch,
   withInterceptors
 } from '@angular/common/http';
 
@@ -49,6 +50,7 @@ export const appConfig: ApplicationConfig = {
     ),
 
     provideHttpClient(
+       withFetch(),
       withInterceptors([
         guestIdInterceptor,
         jwtInterceptor,

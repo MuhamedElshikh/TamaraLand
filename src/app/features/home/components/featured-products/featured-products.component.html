@@ -1,226 +1,299 @@
-<section
-  class="featured-products"
-  aria-labelledby="featured-products-title"
->
+<section class="featured-editorial" aria-labelledby="featured-editorial-title">
 
-  <!-- =====================================================
+  <!-- ============================================
        HEADER
-       ===================================================== -->
+  ============================================= -->
 
-  <header class="featured-products__header">
+  <header class="featured-editorial__header">
 
-    <div class="featured-products__heading">
+    <div class="featured-editorial__header-main">
 
-      <span class="featured-products__kicker">
-        {{ 'home.featuredKicker' | translate }}
-      </span>
+      <div class="featured-editorial__eyebrow">
+        <strong>{{ 'featuredProducts.eyebrow' | translate }}</strong>
+      </div>
 
-      <h2
-        id="featured-products-title"
-        class="featured-products__title"
-      >
-        {{ 'home.featuredTitle' | translate }}
+      <h2 id="featured-editorial-title" class="featured-editorial__title">
+        {{ 'featuredProducts.titleLine1' | translate }}<br />
+        {{ 'featuredProducts.titleLine2' | translate }}
       </h2>
+
+      <p class="featured-editorial__description">
+        {{ 'featuredProducts.description' | translate }}
+      </p>
+
+      <a routerLink="/products" class="featured-editorial__view-all">
+        <span>{{ 'featuredProducts.viewAll' | translate }}</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12h13M13 6l6 6-6 6" />
+        </svg>
+      </a>
 
     </div>
 
-
-    <a
-      routerLink="/products"
-      class="featured-products__view-all"
-    >
-
-      <span>
-        {{ 'featuredProducts.viewAll' | translate }}
-      </span>
-
-      <svg
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-      >
-        <path
-          d="M5 12h13M13 6l6 6-6 6"
-        />
-      </svg>
-
-    </a>
+    <div class="featured-editorial__header-note" aria-hidden="true">
+      <span>STYLE</span>
+      <span>LIVES</span>
+      <span>BEYOND</span>
+      <span>TRENDS</span>
+      <i></i>
+    </div>
 
   </header>
 
 
-  <!-- =====================================================
+  <!-- ============================================
        LOADING
-       ===================================================== -->
+  ============================================= -->
 
   @if (loading()) {
 
-    <div
-      class="
-        featured-layout
-        featured-layout--loading
-      "
-      aria-hidden="true"
-    >
-
-      <div
-        class="
-          featured-slot
-          featured-slot--hero
-        "
-      >
-        <div class="featured-skeleton"></div>
-      </div>
-
-
-      <div class="featured-side">
-
-        <div class="featured-slot">
-          <div class="featured-skeleton"></div>
-        </div>
-
-        <div class="featured-slot">
-          <div class="featured-skeleton"></div>
-        </div>
-
-      </div>
-
-
-      <div
-        class="
-          featured-slot
-          featured-slot--editorial
-        "
-      >
-        <div class="featured-skeleton"></div>
-      </div>
-
+    <div class="featured-editorial__stage featured-editorial__stage--loading" aria-hidden="true">
+      <div class="featured-skeleton featured-skeleton--01"></div>
+      <div class="featured-skeleton featured-skeleton--hero"></div>
+      <div class="featured-skeleton featured-skeleton--03"></div>
+      <div class="featured-skeleton featured-skeleton--04"></div>
     </div>
 
   }
 
-
-  <!-- =====================================================
-       PRODUCTS
-       ===================================================== -->
+  <!-- ============================================
+       STAGE
+  ============================================= -->
 
   @else if (products().length) {
 
-    <div class="featured-layout">
+    <div class="featured-editorial__stage" appScrollReveal>
 
-      <!-- =================================================
-           HERO PRODUCT
-           ================================================= -->
+      <div class="featured-editorial__arch" aria-hidden="true"></div>
+
+
+      <!-- PRODUCT 01 -->
 
       @if (products()[0]; as product) {
 
-        <article
-          class="
-            featured-slot
-            featured-slot--hero
-          "
-          style="--item-delay: 0ms"
-        >
+        <article class="featured-piece featured-piece--01">
 
-          <app-product-card
-            [product]="product"
-            variant="large"
-          />
+          <div class="featured-piece__copy">
+
+            <span class="featured-piece__number">01</span>
+
+            @if (product.brandName) {
+              <span class="featured-piece__brand">{{ product.brandName }}</span>
+            }
+
+            <a [routerLink]="['/products', product.id]" class="featured-piece__name">
+              {{ product | localizedName }}
+            </a>
+
+            <div class="featured-piece__price">
+              <span>{{ product.price | number:'1.0-2' }}</span>
+              @if (product.originalPrice && product.originalPrice > product.price) {
+                <small>{{ product.originalPrice | number:'1.0-2' }}</small>
+              }
+            </div>
+
+            <a [routerLink]="['/products', product.id]" class="featured-piece__plus" aria-label="View product">+</a>
+
+          </div>
+
+          <a [routerLink]="['/products', product.id]" class="featured-piece__image-link">
+            <img
+              [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
+              [alt]="product | localizedName"
+              class="featured-piece__image"
+              loading="lazy"
+              decoding="async"
+            />
+          </a>
 
         </article>
 
       }
 
 
-      <!-- =================================================
-           SUPPORTING PRODUCTS
-           ================================================= -->
+      <!-- HERO 02 -->
 
-      <div class="featured-side">
+      @if (products()[1]; as product) {
 
-        @if (products()[1]; as product) {
+        <article class="featured-hero">
 
-          <article
-            class="
-              featured-slot
-              featured-slot--side
-            "
-            style="--item-delay: 90ms"
-          >
+          <div class="featured-hero__media">
 
-            <app-product-card
-              [product]="product"
-              variant="compact"
-            />
+            <a [routerLink]="['/products', product.id]" class="featured-hero__image-link">
+              <img
+                [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
+                [alt]="product | localizedName"
+                class="featured-hero__image"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
 
-          </article>
+            <span class="featured-hero__number">02</span>
 
-        }
+            <div class="featured-hero__label">
+              <span>{{ 'featuredProducts.ourFavorite1' | translate }}</span>
+              <span>{{ 'featuredProducts.ourFavorite2' | translate }}</span>
+              <i></i>
+            </div>
+
+          </div>
+
+          <div class="featured-hero__info">
+
+            @if (product.brandName) {
+              <span class="featured-hero__brand">{{ product.brandName }}</span>
+            }
+
+            <a [routerLink]="['/products', product.id]" class="featured-hero__name">
+              {{ product | localizedName }}
+            </a>
+
+            <div class="featured-hero__price-row">
+              <span class="featured-hero__price">{{ product.price | number:'1.0-2' }}</span>
+              @if (product.originalPrice && product.originalPrice > product.price) {
+                <span class="featured-hero__old-price">{{ product.originalPrice | number:'1.0-2' }}</span>
+              }
+            </div>
+
+            <a [routerLink]="['/products', product.id]" class="featured-hero__action">
+              <span>{{ 'featuredProducts.addToBag' | translate }}</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h13M13 6l6 6-6 6" />
+              </svg>
+            </a>
+
+          </div>
+
+        </article>
+
+      }
 
 
-        @if (products()[2]; as product) {
+      <!-- QUOTE + PRODUCTS 03/04 -->
 
-          <article
-            class="
-              featured-slot
-              featured-slot--side
-            "
-            style="--item-delay: 180ms"
-          >
+      <div class="featured-editorial__side">
 
-            <app-product-card
-              [product]="product"
-              variant="compact"
-            />
+        <aside class="featured-editorial__quote">
+          <span class="featured-editorial__quote-mark">"</span>
+          <p>
+            {{ 'featuredProducts.quoteLine1' | translate }}<br />
+            {{ 'featuredProducts.quoteLine2' | translate }}<br />
+            {{ 'featuredProducts.quoteLine3' | translate }}
+          </p>
+          <i></i>
+          <small>TAMARA LAND</small>
+        </aside>
 
-          </article>
+        <div class="featured-editorial__side-pair">
 
-        }
+          @if (products()[2]; as product) {
+
+            <article class="featured-piece featured-piece--pair">
+
+              <a [routerLink]="['/products', product.id]" class="featured-piece__image-link">
+                <img
+                  [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
+                  [alt]="product | localizedName"
+                  class="featured-piece__image"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+
+              <div class="featured-piece__copy featured-piece__copy--pair">
+                <span class="featured-piece__number">03</span>
+                @if (product.brandName) {
+                  <span class="featured-piece__brand">{{ product.brandName }}</span>
+                }
+                <a [routerLink]="['/products', product.id]" class="featured-piece__name">
+                  {{ product | localizedName }}
+                </a>
+                <div class="featured-piece__price">
+                  <span>{{ product.price | number:'1.0-2' }}</span>
+                  @if (product.originalPrice && product.originalPrice > product.price) {
+                    <small>{{ product.originalPrice | number:'1.0-2' }}</small>
+                  }
+                </div>
+                <a [routerLink]="['/products', product.id]" class="featured-piece__plus" aria-label="View product">+</a>
+              </div>
+
+            </article>
+
+          }
+
+          @if (products()[3]; as product) {
+
+            <article class="featured-piece featured-piece--pair">
+
+              <a [routerLink]="['/products', product.id]" class="featured-piece__image-link">
+                <img
+                  [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
+                  [alt]="product | localizedName"
+                  class="featured-piece__image"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+
+              <div class="featured-piece__copy featured-piece__copy--pair">
+                <span class="featured-piece__number">04</span>
+                @if (product.brandName) {
+                  <span class="featured-piece__brand">{{ product.brandName }}</span>
+                }
+                <a [routerLink]="['/products', product.id]" class="featured-piece__name">
+                  {{ product | localizedName }}
+                </a>
+                <div class="featured-piece__price">
+                  <span>{{ product.price | number:'1.0-2' }}</span>
+                  @if (product.originalPrice && product.originalPrice > product.price) {
+                    <small>{{ product.originalPrice | number:'1.0-2' }}</small>
+                  }
+                </div>
+                <a [routerLink]="['/products', product.id]" class="featured-piece__plus" aria-label="View product">+</a>
+              </div>
+
+            </article>
+
+          }
+
+        </div>
 
       </div>
 
-
-      <!-- =================================================
-           EDITORIAL CLOSING PRODUCT
-           ================================================= -->
-
-      @if (products()[3]; as product) {
-
-        <article
-          class="
-            featured-slot
-            featured-slot--editorial
-          "
-          style="--item-delay: 270ms"
-        >
-
-          <app-product-card
-            [product]="product"
-            variant="editorial"
-          />
-
-        </article>
-
-      }
-
     </div>
+
+
+    <!-- ============================================
+         FOOTER
+    ============================================= -->
+
+    <footer class="featured-editorial__footer">
+
+      <div class="featured-editorial__footer-left">
+        <span>CURATED</span>
+        <span>CONSCIOUS</span>
+        <span>TIMELESS</span>
+        <i></i>
+      </div>
+<div class="featured-editorial__footer-right">
+        <strong>TAMARA LAND</strong>
+        <span>MORE THAN FASHION</span>
+        <span>A STATE OF MIND</span>
+      </div>
+
+    </footer>
 
   }
 
-
-  <!-- =====================================================
+  <!-- ============================================
        EMPTY
-       ===================================================== -->
+  ============================================= -->
 
   @else {
-
-    <div class="featured-products__empty">
-
-      <span>
-        {{ 'home.noFeaturedProducts' | translate }}
-      </span>
-
+    <div class="featured-editorial__empty">
+      {{ 'home.noFeaturedProducts' | translate }}
     </div>
-
   }
 
 </section>
