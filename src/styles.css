@@ -2,25 +2,30 @@
 
 :root {
   /* Color Palette — Tamara Land (Gold & Ink theme) */
-  --primary-hsl: 42, 45%, 55%;        /* Gold */
+  --primary-hsl: 42, 45%, 55%;
+  /* Gold */
   --primary: hsl(var(--primary-hsl));
   --primary-light: hsl(45, 60%, 68%);
   --primary-dark: hsl(40, 45%, 35%);
- --label-bg: rgba(18, 15, 10, 0.95);
+  --label-bg: rgba(18, 15, 10, 0.95);
   --label-border: rgba(201, 162, 75, 0.30);
   --label-text: #E8CD82;
   --label-shadow: rgba(0, 0, 0, 0.40);
-  --secondary-hsl: 30, 20%, 8%;       /* Ink black */
+  --secondary-hsl: 30, 20%, 8%;
+  /* Ink black */
   --secondary: hsl(var(--secondary-hsl));
   --secondary-light: hsl(30, 15%, 15%);
   --secondary-dark: hsl(30, 25%, 4%);
 
-  --accent-hsl: 40, 55%, 75%;         /* Champagne highlight */
+  --accent-hsl: 40, 55%, 75%;
+  /* Champagne highlight */
   --accent: hsl(var(--accent-hsl));
 
   /* Neutral tones */
-  --bg-primary: hsl(30, 18%, 5%);     /* page background */
-  --bg-secondary: hsl(30, 15%, 9%);   /* panels/cards */
+  --bg-primary: hsl(30, 18%, 5%);
+  /* page background */
+  --bg-secondary: hsl(30, 15%, 9%);
+  /* panels/cards */
   --bg-card: hsl(30, 15%, 9%);
 
   --text-primary: hsl(42, 40%, 94%);
@@ -45,6 +50,33 @@
   --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ===========================
+   SCROLL REVEAL (Global)
+   يُستخدم مع appScrollReveal directive
+   في أي component في المشروع
+=========================== */
+
+.reveal-init {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .reveal-init,
+  .reveal-active {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Global Reset */
 * {
   box-sizing: border-box;
@@ -66,7 +98,12 @@ a {
 }
 
 /* Typography */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Cormorant Garamond', serif;
   font-weight: 700;
   letter-spacing: -0.01em;
@@ -277,6 +314,7 @@ h1, h2, h3, h4, h5, h6 {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -291,11 +329,6 @@ h1, h2, h3, h4, h5, h6 {
   min-height: 100vh;
 }
 
-.scaffold-page {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 24px 16px 48px;
-}
 
 .scaffold-card {
   background: var(--bg-secondary);
@@ -305,14 +338,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: 24px;
 }
 
-.section-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: end;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 20px;
-}
+
 
 .section-kicker {
   text-transform: uppercase;
@@ -1331,6 +1357,7 @@ app-error-message .error-message {
     font-size: .85rem;
   }
 }
+
 @media (max-width: 340px) {
   .footer-links {
     grid-template-columns: 1fr;
@@ -1340,6 +1367,7 @@ app-error-message .error-message {
     grid-column: auto;
   }
 }
+
 /* ================= Account dropdown (navbar) ================= */
 
 .account-menu {
@@ -1457,7 +1485,7 @@ app-error-message .error-message {
   --primary: hsl(var(--primary-hsl));
   --primary-light: hsl(44, 55%, 58%);
   --primary-dark: hsl(40, 48%, 30%);
- --label-bg: rgba(255, 255, 255, 0.97);
+  --label-bg: rgba(255, 255, 255, 0.97);
   --label-border: rgba(201, 162, 75, 0.25);
   --label-text: var(--text-primary);
   --label-shadow: rgba(60, 45, 15, 0.12);
@@ -1545,7 +1573,7 @@ app-error-message .error-message {
   flex-shrink: 0;
 }
 
-.info-stat > div {
+.info-stat>div {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
@@ -1703,7 +1731,9 @@ html[dir='rtl'] .admin-layout .input-with-icon .form-control {
   padding-right: 42px;
 }
 
-html[dir='rtl'] .admin-layout .data-table__align-left { text-align: right; }
+html[dir='rtl'] .admin-layout .data-table__align-left {
+  text-align: right;
+}
 
 /* Admin sidebar RTL fixes */
 html[dir='rtl'] .admin-sidebar {
@@ -1713,16 +1743,21 @@ html[dir='rtl'] .admin-sidebar {
   border-right: none;
 }
 
-html[dir='rtl'] .admin-sidebar__brand { padding-right: 1.1rem; padding-left: 0; }
+html[dir='rtl'] .admin-sidebar__brand {
+  padding-right: 1.1rem;
+  padding-left: 0;
+}
 
-html[dir='rtl'] .admin-sidebar__link { direction: rtl; }
+html[dir='rtl'] .admin-sidebar__link {
+  direction: rtl;
+}
 
 html[dir='rtl'] .admin-sidebar__link::before {
   left: auto;
   right: 0;
 }
 
-html[dir='rtl'] .admin-sidebar__link:hover .admin-sidebar__icon{
+html[dir='rtl'] .admin-sidebar__link:hover .admin-sidebar__icon {
   transform: translateX(-5px);
 }
 
@@ -1750,7 +1785,9 @@ html[dir='rtl'] .dashboard-section__header {
   justify-content: space-between;
 }
 
-html[dir='rtl'] .admin-layout .data-table__align-right { text-align: left; }
+html[dir='rtl'] .admin-layout .data-table__align-right {
+  text-align: left;
+}
 
 html[dir='rtl'] .admin-layout .admin-sidebar {
   border-left: 1px solid var(--border-color);
@@ -1758,5 +1795,8 @@ html[dir='rtl'] .admin-layout .admin-sidebar {
 }
 
 @media (max-width: 980px) {
-  html[dir='rtl'] .admin-layout .admin-sidebar { right: 0; left: auto; }
+  html[dir='rtl'] .admin-layout .admin-sidebar {
+    right: 0;
+    left: auto;
+  }
 }

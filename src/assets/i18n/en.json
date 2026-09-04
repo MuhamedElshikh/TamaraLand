@@ -19,6 +19,9 @@
   "home": {
     "shopByCategory": "Shop by category",
     "findYourStyle": "Find your style",
+    "featuredKicker": "Curated Selection",
+    "featuredTitle": "Pieces worth discovering",
+    "noFeaturedProducts": "No featured products available",
     "noCategories": "No categories available yet.",
     "customerLove": "Customer Love",
     "whatTheySay": "What They're Saying",
@@ -742,6 +745,18 @@
     "kicker": "Help Center",
     "title": "Frequently Asked Questions",
     "subtitle": "Find quick answers to the most common questions about shopping at Tamara Land.",
+    "searchPlaceholder": "Search questions & answers...",
+    "all": "All",
+    "categories": {
+      "all": "All Questions",
+      "orders": "Orders & Shipping",
+      "products": "Products & Quality",
+      "gifts": "Gifts & Packaging",
+      "payment": "Payment & Discounts"
+    },
+    "needMoreHelp": "Still have questions?",
+    "contactSupport": "Our customer support team is available 24/7 to assist you.",
+    "contactBtn": "Contact Us Now",
     "items": {
       "order": {
         "q": "How do I place an order?",
@@ -1543,3 +1558,5 @@
     "shippingText": "Vacuum-sealed in luxury protective boxes with express temperature-controlled shipping nationwide in 2-4 business days."
   }
 }
+
+

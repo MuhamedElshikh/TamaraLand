@@ -46,12 +46,26 @@ export class AutoSlideDirective implements OnInit, OnDestroy {
   @Input()
   autoSlideResumeDelay = 4000;
 
+  /**
+   * الوقت اللي بننتظره بعد ما العنصر يظهر في الشاشة
+   * قبل ما نبدأ الـ auto-slide، عشان نسيب فرصة
+   * للـ stagger reveal animation إنه يخلص الأول.
+   */
+  @Input()
+  autoSlideStartDelay = 900;
+
 
   private timerId?: ReturnType<typeof setInterval>;
 
   private resumeTimeout?: ReturnType<typeof setTimeout>;
 
+  private startTimeout?: ReturnType<typeof setTimeout>;
+
+  private visibilityObserver?: IntersectionObserver;
+
   private paused = false;
+
+  private started = false;
 
 
   ngOnInit(): void {
@@ -90,13 +104,51 @@ export class AutoSlideDirective implements OnInit, OnDestroy {
     );
 
 
+    // لا تبدأ الـ interval فورًا.
+    // استنى لحد ما العنصر يظهر فعلاً في الـ viewport،
+    // بنفس منطق appScrollReveal تقريبًا،
+    // عشان السلايدر ميبدأش يتحرك وهو لسه مخفي
+    // (opacity: 0) جوه section لسه ماوصلهاش اليوزر بالسكرول.
     this.zone.runOutsideAngular(() => {
 
-      this.timerId =
-        setInterval(
-          this.step,
-          this.autoSlideInterval
+      this.visibilityObserver =
+        new IntersectionObserver(
+          (entries) => {
+
+            entries.forEach((entry) => {
+
+              if (!entry.isIntersecting || this.started) {
+                return;
+              }
+
+
+              this.started = true;
+
+
+              this.startTimeout =
+                setTimeout(() => {
+
+                  this.timerId =
+                    setInterval(
+                      this.step,
+                      this.autoSlideInterval
+                    );
+
+                }, this.autoSlideStartDelay);
+
+
+              this.visibilityObserver?.unobserve(el);
+
+            });
+
+          },
+          {
+            threshold: 0.2,
+            rootMargin: '0px 0px -60px 0px',
+          }
         );
+
+      this.visibilityObserver.observe(el);
 
     });
 
@@ -136,10 +188,10 @@ export class AutoSlideDirective implements OnInit, OnDestroy {
       this.document.body.dir === 'rtl';
 
 
-   const card =
-  el.querySelector(
-    '.slider-item'
-  ) as HTMLElement | null;
+    const card =
+      el.querySelector(
+        '.slider-item'
+      ) as HTMLElement | null;
 
 
     const stepAmount =
@@ -247,6 +299,18 @@ export class AutoSlideDirective implements OnInit, OnDestroy {
     }
 
 
+    if (this.startTimeout) {
+
+      clearTimeout(
+        this.startTimeout
+      );
+
+      this.startTimeout =
+        undefined;
+
+    }
+
+
     if (this.resumeTimeout) {
 
       clearTimeout(
@@ -257,6 +321,10 @@ export class AutoSlideDirective implements OnInit, OnDestroy {
         undefined;
 
     }
+
+
+    this.visibilityObserver?.disconnect();
+    this.visibilityObserver = undefined;
 
 
     // There is no reason to manipulate browser DOM

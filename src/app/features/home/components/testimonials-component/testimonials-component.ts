@@ -39,160 +39,160 @@ export class TestimonialsComponent implements OnInit, OnDestroy {
     });
   }
   ngOnDestroy(): void {
-  this.stopAutoplay();
-}
- activeReviewIndex = signal(0);
+    this.stopAutoplay();
+  }
+  activeReviewIndex = signal(0);
 
-private autoplayInterval?: ReturnType<typeof setInterval>;
+  private autoplayInterval?: ReturnType<typeof setInterval>;
 
-private readonly autoplayDelay = 4500;
+  private readonly autoplayDelay = 4500;
 
 
-/* =========================================================
-   Navigation to product
-   ========================================================= */
+  /* =========================================================
+     Navigation to product
+     ========================================================= */
 
-goToProduct(productId: number | string | undefined): void {
+  goToProduct(productId: number | string | undefined): void {
 
-  if (productId === undefined || productId === null) {
-    return;
+    if (productId === undefined || productId === null) {
+      return;
+    }
+
+    this.router.navigate(['/products', productId]);
   }
 
-  this.router.navigate(['/products', productId]);
-}
 
+  /* =========================================================
+     Carousel Position
+     ========================================================= */
 
-/* =========================================================
-   Carousel Position
-   ========================================================= */
+  getPosition(index: number): 'left' | 'center' | 'right' | 'hidden' {
 
-getPosition(index: number): 'left' | 'center' | 'right' | 'hidden' {
+    const count = this.stars().length;
 
-  const count = this.stars().length;
+    if (count === 0) {
+      return 'hidden';
+    }
 
-  if (count === 0) {
+    const active = this.activeReviewIndex();
+
+    /*
+     * Current card
+     */
+    if (index === active) {
+      return 'center';
+    }
+
+    /*
+     * Previous card
+     */
+    const previous =
+      (active - 1 + count) % count;
+
+    if (index === previous) {
+      return 'left';
+    }
+
+    /*
+     * Next card
+     */
+    const next =
+      (active + 1) % count;
+
+    if (index === next) {
+      return 'right';
+    }
+
     return 'hidden';
   }
 
-  const active = this.activeReviewIndex();
 
-  /*
-   * Current card
-   */
-  if (index === active) {
-    return 'center';
-  }
+  /* =========================================================
+     Navigation
+     ========================================================= */
 
-  /*
-   * Previous card
-   */
-  const previous =
-    (active - 1 + count) % count;
+  nextReview(): void {
 
-  if (index === previous) {
-    return 'left';
-  }
+    const count = this.stars().length;
 
-  /*
-   * Next card
-   */
-  const next =
-    (active + 1) % count;
-
-  if (index === next) {
-    return 'right';
-  }
-
-  return 'hidden';
-}
-
-
-/* =========================================================
-   Navigation
-   ========================================================= */
-
-nextReview(): void {
-
-  const count = this.stars().length;
-
-  if (count <= 1) {
-    return;
-  }
-
-  this.activeReviewIndex.update(index =>
-    (index + 1) % count
-  );
-
-  this.restartAutoplay();
-}
-
-
-previousReview(): void {
-
-  const count = this.stars().length;
-
-  if (count <= 1) {
-    return;
-  }
-
-  this.activeReviewIndex.update(index =>
-    (index - 1 + count) % count
-  );
-
-  this.restartAutoplay();
-}
-
-
-goToReview(index: number): void {
-
-  this.activeReviewIndex.set(index);
-
-  this.restartAutoplay();
-}
-
-
-/* =========================================================
-   Autoplay
-   ========================================================= */
-
-startAutoplay(): void {
-
-  this.stopAutoplay();
-
-  if (this.stars().length <= 1) {
-    return;
-  }
-
-  this.autoplayInterval = setInterval(() => {
+    if (count <= 1) {
+      return;
+    }
 
     this.activeReviewIndex.update(index =>
-      (index + 1) % this.stars().length
+      (index + 1) % count
     );
 
-  }, this.autoplayDelay);
-}
-
-
-stopAutoplay(): void {
-
-  if (this.autoplayInterval) {
-    clearInterval(this.autoplayInterval);
-    this.autoplayInterval = undefined;
+    this.restartAutoplay();
   }
-}
 
 
-pauseTestimonials(): void {
-  this.stopAutoplay();
-}
+  previousReview(): void {
+
+    const count = this.stars().length;
+
+    if (count <= 1) {
+      return;
+    }
+
+    this.activeReviewIndex.update(index =>
+      (index - 1 + count) % count
+    );
+
+    this.restartAutoplay();
+  }
 
 
-resumeTestimonials(): void {
-  this.startAutoplay();
-}
+  goToReview(index: number): void {
+
+    this.activeReviewIndex.set(index);
+
+    this.restartAutoplay();
+  }
 
 
-restartAutoplay(): void {
-  this.startAutoplay();
-}
+  /* =========================================================
+     Autoplay
+     ========================================================= */
+
+  startAutoplay(): void {
+
+    this.stopAutoplay();
+
+    if (this.stars().length <= 1) {
+      return;
+    }
+
+    this.autoplayInterval = setInterval(() => {
+
+      this.activeReviewIndex.update(index =>
+        (index + 1) % this.stars().length
+      );
+
+    }, this.autoplayDelay);
+  }
+
+
+  stopAutoplay(): void {
+
+    if (this.autoplayInterval) {
+      clearInterval(this.autoplayInterval);
+      this.autoplayInterval = undefined;
+    }
+  }
+
+
+  pauseTestimonials(): void {
+    this.stopAutoplay();
+  }
+
+
+  resumeTestimonials(): void {
+    this.startAutoplay();
+  }
+
+
+  restartAutoplay(): void {
+    this.startAutoplay();
+  }
 }

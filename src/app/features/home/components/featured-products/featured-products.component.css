@@ -1,173 +1,778 @@
-/* ─────────────────────────────────────────
-   1. SKELETON: Shimmer بدل الـ Pulse الباهت
-───────────────────────────────────────── */
-@keyframes shimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
+/* =========================================================
+   FEATURED PRODUCTS — FINAL V3.1
+   GOLD & INK
+   QUIET EDITORIAL SHOWCASE
+   ========================================================= */
 
-.product-card--skeleton {
-  aspect-ratio: 3 / 4.3;
-  border-radius: var(--radius-md);
-  background: linear-gradient(
-    90deg,
-    var(--secondary-light) 0%,
-    rgba(255, 255, 255, 0.45) 50%,
-    var(--secondary-light) 100%
-  );
-  background-size: 200% 100%;
-  border: 1px solid var(--border-color);
-  animation: shimmer 1.6s infinite linear;
+:host {
+  display: block;
+  width: 100%;
+  min-width: 0;
 }
 
 
+/* =========================================================
+   SECTION
+   ========================================================= */
 
-/* ─────────────────────────────────────────
-   2. SLIDER WRAPPER: دخول كتلة واحدة ناعمة
-───────────────────────────────────────── */
-@keyframes slideUpFade {
+.featured-products {
+  position: relative;
+
+  width: min(92%, 1400px);
+
+  margin:
+    clamp(4rem, 6vw, 6rem)
+    auto
+    clamp(3.5rem, 5vw, 5rem);
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.featured-products__header {
+  display: flex;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 2rem;
+
+  margin-bottom:
+    clamp(1.4rem, 2vw, 2rem);
+}
+
+
+.featured-products__heading {
+  min-width: 0;
+}
+
+
+.featured-products__kicker {
+  display: block;
+
+  margin-bottom: 0.45rem;
+
+  color:
+    var(--primary-light);
+
+  font-family:
+    'Tajawal',
+    system-ui,
+    sans-serif;
+
+  font-size: 0.6rem;
+
+  font-weight: 700;
+
+  letter-spacing: 0.2em;
+
+  line-height: 1.2;
+
+  text-transform: uppercase;
+
+  opacity: 0.9;
+}
+
+
+.featured-products__title {
+  margin: 0;
+
+  color:
+    var(--text-primary);
+
+  font-family:
+    'Cormorant Garamond',
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(
+      2.2rem,
+      3.7vw,
+      3.55rem
+    );
+
+  font-weight: 600;
+
+  line-height: 0.92;
+
+  letter-spacing: -0.025em;
+}
+
+
+/* =========================================================
+   VIEW ALL
+   ========================================================= */
+
+.featured-products__view-all {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 0.55rem;
+
+  flex-shrink: 0;
+
+  padding-bottom: 0.42rem;
+
+  border-bottom:
+    1px solid
+    rgba(201, 162, 75, 0.38);
+
+  color:
+    var(--text-primary);
+
+  font-family:
+    'Tajawal',
+    system-ui,
+    sans-serif;
+
+  font-size: 0.63rem;
+
+  font-weight: 700;
+
+  letter-spacing: 0.1em;
+
+  line-height: 1;
+
+  text-decoration: none;
+
+  text-transform: uppercase;
+
+  transition:
+    color 250ms ease,
+    border-color 250ms ease;
+}
+
+
+.featured-products__view-all svg {
+  width: 15px;
+  height: 15px;
+
+  fill: none;
+
+  stroke: currentColor;
+
+  stroke-width: 1.6;
+
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  transition:
+    transform 350ms
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+}
+
+
+.featured-products__view-all:hover {
+  color:
+    var(--primary-light);
+
+  border-color:
+    var(--primary);
+}
+
+
+.featured-products__view-all:hover svg {
+  transform:
+    translateX(4px);
+}
+
+
+/* =========================================================
+   MAIN LAYOUT
+   ========================================================= */
+
+.featured-layout {
+  display: grid;
+
+  width: 100%;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1.18fr);
+
+  grid-template-rows:
+    445px
+    215px;
+
+  gap:
+    clamp(
+      0.7rem,
+      1vw,
+      1rem
+    );
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   SLOT
+   ========================================================= */
+
+.featured-slot {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  min-width: 0;
+  min-height: 0;
+
+  overflow: hidden;
+
+  opacity: 0;
+
+  animation:
+    featuredReveal
+    700ms
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    )
+    forwards;
+
+  animation-delay:
+    var(
+      --item-delay,
+      0ms
+    );
+}
+
+
+@keyframes featuredReveal {
+
   from {
     opacity: 0;
-    transform: translateY(30px) scale(0.97);
+
+    transform:
+      translateY(14px)
+      scale(0.995);
   }
+
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+
+    transform:
+      translateY(0)
+      scale(1);
   }
+
 }
 
-.slider-wrapper {
-  position: relative;
+
+/* =========================================================
+   PRODUCT CARD HOST
+   ========================================================= */
+
+.featured-slot > app-product-card {
+  display: block;
+
   width: 100%;
-  /* بيدخل بأنيميشن لما بيظهر في الـ DOM (@else block) */
-  animation: slideUpFade 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  height: 100%;
+
+  min-width: 0;
+  min-height: 0;
 }
 
-/* ─────────────────────────────────────────
-   3. SLIDER ITEMS: بدون fadeInUp الفردي
-      + Hover Lift ظريف
-───────────────────────────────────────── */
-.slider-item {
-  flex: 0 0 auto;
-  width: 250px;
-  scroll-snap-align: start;
-  /* نعمول ترانزيشن ناعم للرفعة */
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.4s ease;
-  will-change: transform;
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.featured-slot--hero {
+  grid-column: 2;
+  grid-row: 1;
+
+  z-index: 2;
 }
 
-.slider-item:hover {
-  transform: translateY(-10px);
+
+/* =========================================================
+   SIDE PRODUCTS
+   ========================================================= */
+
+.featured-side {
+  grid-column: 1;
+  grid-row: 1;
+
+  display: grid;
+
+  grid-template-rows:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  gap:
+    clamp(
+      0.7rem,
+      1vw,
+      1rem
+    );
+
+  width: 100%;
+  height: 100%;
+
+  min-width: 0;
+  min-height: 0;
 }
 
-/* ─────────────────────────────────────────
-   4. SLIDER TRACK
-───────────────────────────────────────── */
-.product-slider {
+
+.featured-slot--side {
+  width: 100%;
+  height: 100%;
+
+  min-width: 0;
+  min-height: 0;
+
+  z-index: 1;
+}
+
+
+/* =========================================================
+   EDITORIAL PRODUCT
+   ========================================================= */
+
+.featured-slot--editorial {
+  grid-column: 1 / -1;
+  grid-row: 2;
+
+  width: 100%;
+  height: 100%;
+
+  min-width: 0;
+  min-height: 0;
+
+  z-index: 1;
+}
+
+
+/* =========================================================
+   HOVER STACKING
+   ========================================================= */
+
+.featured-slot:hover {
+  z-index: 5;
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.featured-layout--loading {
+  opacity: 1;
+}
+
+
+.featured-layout--loading
+.featured-slot {
+  opacity: 1;
+
+  animation: none;
+}
+
+
+.featured-skeleton {
+  width: 100%;
+  height: 100%;
+
+  min-height: 150px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.05);
+
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      110deg,
+      var(--bg-card) 8%,
+      rgba(201, 162, 75, 0.07) 18%,
+      var(--bg-card) 33%
+    );
+
+  background-size: 220% 100%;
+
+  animation:
+    featuredSkeleton
+    1.8s
+    ease-in-out
+    infinite;
+}
+
+
+@keyframes featuredSkeleton {
+
+  from {
+    background-position:
+      120% 0;
+  }
+
+  to {
+    background-position:
+      -120% 0;
+  }
+
+}
+
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.featured-products__empty {
+  min-height: 220px;
+
   display: flex;
-  gap: 1.25rem;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  scroll-snap-type: x proximity;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  padding: 0.5rem 0.25rem;
-}
 
-.product-slider::-webkit-scrollbar {
-  display: none;
-}
-
-/* ─────────────────────────────────────────
-   5. NAV BUTTONS: مايكرو-إنتراكشن scale
-───────────────────────────────────────── */
-.slider-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  color: var(--text-primary);
-  display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  box-shadow: var(--shadow-md);
-  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-              opacity 0.2s ease,
-              border-color 0.2s ease,
-              color 0.2s ease,
-              background 0.2s ease,
-              box-shadow 0.2s ease;
+
+  border:
+    1px solid
+    var(--border-color);
+
+  border-radius: 16px;
+
+  background:
+    var(--bg-card);
+
+  color:
+    var(--text-secondary);
+
+  font-size: 0.85rem;
 }
 
-.slider-nav:hover:not(:disabled) {
-  border-color: var(--primary);
-  color: var(--primary);
-  background: var(--bg-secondary);
-  box-shadow: var(--shadow-glow);
-  transform: translateY(-50%) scale(1.1);
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+  .featured-products {
+    width:
+      min(
+        94%,
+        850px
+      );
+  }
+
+
+  .featured-layout {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+
+    grid-template-rows:
+      420px
+      200px
+      285px;
+  }
+
+
+  .featured-slot--hero {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+
+  .featured-side {
+    grid-column: 1 / -1;
+    grid-row: 2;
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+
+    grid-template-rows: 1fr;
+  }
+
+
+  .featured-slot--editorial {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+
 }
 
-.slider-nav:active:not(:disabled) {
-  transform: translateY(-50%) scale(0.95);
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 640px) {
+
+  .featured-products {
+    width:
+      min(
+        92%,
+        560px
+      );
+
+    margin-top: 3.5rem;
+    margin-bottom: 4rem;
+  }
+
+
+  .featured-products__header {
+    align-items: flex-end;
+
+    gap: 1rem;
+
+    margin-bottom: 1.25rem;
+  }
+
+
+  .featured-products__kicker {
+    margin-bottom: 0.38rem;
+
+    font-size: 0.52rem;
+
+    letter-spacing: 0.16em;
+  }
+
+
+  .featured-products__title {
+    font-size:
+      clamp(
+        1.95rem,
+        8.5vw,
+        2.5rem
+      );
+  }
+
+
+  .featured-products__view-all {
+    padding-bottom: 0.28rem;
+
+    font-size: 0.54rem;
+  }
+
+
+  .featured-layout {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+
+    grid-template-rows:
+      305px
+      205px
+      300px;
+
+    gap: 0.6rem;
+  }
+
+
+  /* HERO */
+
+  .featured-slot--hero {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+
+  /* SIDE */
+
+  .featured-side {
+    grid-column: 1 / -1;
+    grid-row: 2;
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+
+    grid-template-rows: 1fr;
+
+    gap: 0.6rem;
+  }
+
+
+  /* EDITORIAL */
+
+  .featured-slot--editorial {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+
 }
 
-.slider-nav:disabled {
-  opacity: 0.25;
-  cursor: not-allowed;
-  box-shadow: none;
-  transform: translateY(-50%) scale(0.9);
-}
 
-.slider-nav--prev {
-  inset-inline-start: -16px;
-}
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
 
-.slider-nav--next {
-  inset-inline-end: -16px;
-}
+@media (max-width: 420px) {
 
-/* ─────────────────────────────────────────
-   6. RESPONSIVE
-───────────────────────────────────────── */
-@media (max-width: 768px) {
-  .slider-nav {
+  .featured-products {
+    width:
+      min(
+        92%,
+        390px
+      );
+
+    margin-top: 3rem;
+    margin-bottom: 3.5rem;
+  }
+
+
+  .featured-layout {
+    grid-template-rows:
+      285px
+      195px
+      285px;
+
+    gap: 0.55rem;
+  }
+
+
+  .featured-products__header {
+    gap: 0.7rem;
+  }
+
+
+  .featured-products__title {
+    font-size:
+      clamp(
+        1.8rem,
+        8.5vw,
+        2.25rem
+      );
+  }
+
+
+  .featured-products__view-all span {
     display: none;
   }
 
-  .product-slider {
-    gap: 0.85rem;
-    padding-inline: 0.25rem;
-    scroll-padding-inline: 0.25rem;
+
+  .featured-products__view-all svg {
+    width: 17px;
+    height: 17px;
   }
 
-  .slider-item {
-    width: 210px;
-    scroll-snap-align: start;
-  }
 }
 
-@media (max-width: 420px) {
-  .slider-item {
-    width: 185px;
+
+/* =========================================================
+   VERY SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 350px) {
+
+  .featured-layout {
+    grid-template-rows:
+      270px
+      185px
+      275px;
   }
+
 }
 
-/* ─────────────────────────────────────────
-   7. احترام تفضيلات المستخدم (Accessibility)
-───────────────────────────────────────── */
+
+/* =========================================================
+   RTL / DESKTOP
+   ========================================================= */
+
+:host-context([dir='rtl'])
+.featured-slot--hero {
+  grid-column: 2;
+}
+
+
+:host-context([dir='rtl'])
+.featured-side {
+  grid-column: 1;
+}
+
+
+/* =========================================================
+   RTL / MOBILE OVERRIDE
+   ========================================================= */
+
+@media (max-width: 640px) {
+
+  :host-context([dir='rtl'])
+  .featured-slot--hero {
+    grid-column: 1 / -1;
+  }
+
+
+  :host-context([dir='rtl'])
+  .featured-side {
+    grid-column: 1 / -1;
+  }
+
+
+  :host-context([dir='rtl'])
+  .featured-slot--editorial {
+    grid-column: 1 / -1;
+  }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+
+  .featured-slot {
+    opacity: 1;
+
+    animation: none;
   }
+
+
+  .featured-skeleton {
+    animation: none;
+
+    background:
+      var(--bg-card);
+  }
+
+
+  .featured-products__view-all svg {
+    transition: none;
+  }
+
 }

@@ -70,11 +70,29 @@
 
 <section class="brand-banner" appScrollReveal>
   <div class="brand-banner__glow"></div>
-  <p class="brand-banner__eyebrow">{{ 'home.ourPromise' | translate }}</p>
-  <blockquote class="brand-banner__quote">
-   {{ 'home.brandQuote' | translate }}
-  </blockquote>
-  <a routerLink="/categories" class="btn btn-primary">{{ 'home.discoverCollection' | translate }}</a>
+  <div class="brand-banner__glow brand-banner__glow--secondary"></div>
+
+ <svg class="brand-banner__mark" viewBox="0 0 100 80" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <path d="M20 0C8 8 0 22 0 40c0 14 8 24 20 24 10 0 16-7 16-16
+           0-8-6-14-13-14-2 0-4 .5-5 1C19 24 24 14 34 8L20 0z
+           M64 0C52 8 44 22 44 40c0 14 8 24 20 24 10 0 16-7 16-16
+           0-8-6-14-13-14-2 0-4 .5-5 1C63 24 68 14 78 8L64 0z"
+        fill="currentColor"/>
+</svg>
+
+  <div class="brand-banner__content">
+    <p class="brand-banner__eyebrow">{{ 'home.ourPromise' | translate }}</p>
+
+    <blockquote class="brand-banner__quote">
+      {{ 'home.brandQuote' | translate }}
+    </blockquote>
+
+    <span class="brand-banner__cta-wrap">
+      <a routerLink="/categories" class="btn btn-primary">
+        {{ 'home.discoverCollection' | translate }}
+      </a>
+    </span>
+  </div>
 </section>
 
 <section class="trust-strip">

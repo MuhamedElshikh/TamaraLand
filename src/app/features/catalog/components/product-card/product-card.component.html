@@ -1,139 +1,353 @@
-<a [routerLink]="['/products', product.id]" class="product-card" [attr.aria-label]="product | localizedName">
-  <div class="img-container">
-    <img [src]="imageUrl" [alt]="product | localizedName" loading="lazy" />
+<article
+  class="product-card"
+
+  [class.product-card--compact]="variant === 'compact'"
+
+  [class.product-card--large]="variant === 'large'"
+
+  [class.product-card--wide]="variant === 'wide'"
+
+  [class.product-card--editorial]="variant === 'editorial'"
+
+  [class.product-card--out-of-stock]="isOutOfStock"
+
+  [class.product-card--in-cart]="isInCart"
+>
+
+  <!-- =====================================================
+       MEDIA
+       ===================================================== -->
+
+  <div class="product-card__media">
+
+    <a
+      class="product-card__media-link"
+
+      [routerLink]="['/products', product.id]"
+
+      [attr.aria-label]="product | localizedName"
+    >
+
+      <img
+        class="product-card__image"
+
+        [src]="imageUrl"
+
+        [alt]="product | localizedName"
+
+        loading="lazy"
+
+        decoding="async"
+      />
+
+      <span
+        class="product-card__veil"
+        aria-hidden="true"
+      ></span>
+
+    </a>
+
+
+    <!-- ===================================================
+         BADGES
+         =================================================== -->
+
     @if (hasDiscount) {
-      <span class="product-card__badge">-{{ discountPercent }}%</span>
+
+      <span class="product-card__badge">
+        −{{ discountPercent }}%
+      </span>
+
     }
+
+
+    <!-- ===================================================
+         WISHLIST
+         =================================================== -->
+
     <button
       type="button"
-      class="product-card__wishlist-btn"
-      [class.product-card__wishlist-btn--active]="isInWishlist()"
+
+      class="product-card__wishlist"
+
+      [class.product-card__wishlist--active]="isInWishlist()"
+
+      [disabled]="isTogglingWishlist()"
+
+      [attr.aria-label]="
+        isInWishlist()
+          ? 'Remove from wishlist'
+          : 'Add to wishlist'
+      "
+
+      [attr.aria-pressed]="isInWishlist()"
+
       (click)="toggleWishlist($event)"
-      [attr.aria-label]="isInWishlist() ? ('productCard.removeFromWishlist' | translate) : ('productCard.addToWishlist' | translate)">
-      <svg width="16" height="16" viewBox="0 0 24 24" [attr.fill]="isInWishlist() ? 'currentColor' : 'none'">
-        <path d="M12 20s-7-4.35-9.5-8.5C.8 8 2.4 4.5 6 4.5c2 0 3.4 1.1 6 3.6 2.6-2.5 4-3.6 6-3.6 3.6 0 5.2 3.5 3.5 7-2.5 4.15-9.5 8.5-9.5 8.5z" stroke="currentColor" stroke-width="1.8"/>
+    >
+
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+
+        <path
+          d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z"
+        />
+
       </svg>
+
     </button>
 
-    @if (!isInCart) {
 
-      @if (hasSingleVariant) {
-        <!-- ✅ Variant واحد بس: زرار إضافة مباشرة، بيتقفل لو خلص من المخزون -->
-        <button
-          type="button"
-          class="product-card__add-btn"
-          [class.product-card__add-btn--out-of-stock]="isOutOfStock"
-          [disabled]="isAdding() || isOutOfStock"
-          (click)="addToCart($event)"
-        >
-          {{
-            isAdding()
-              ? ('productCard.adding' | translate)
-              : isOutOfStock
-                ? ('productCard.outOfStock' | translate)
-                : ('productCard.addToCart' | translate)
-          }}
-        </button>
-      } @else {
-        <!-- ✅ أكتر من Variant: يودّي لصفحة التفاصيل يختار لون/مقاس إلا لو المنتج ككل خلصان -->
-        <button
-          type="button"
-          class="product-card__add-btn"
-          [class.product-card__add-btn--out-of-stock]="isOutOfStock"
-          [disabled]="isOutOfStock"
-          (click)="addToCart($event)"
-        >
-          {{ isOutOfStock ? ('productCard.outOfStock' | translate) : ('productCard.addToCart' | translate) }}
-        </button>
-      }
+    <!-- ===================================================
+         OUT OF STOCK
+         =================================================== -->
 
-    } @else if (!hasMultipleCartVariants) {
+    @if (isOutOfStock) {
 
       <div
-        class="product-card__cart-control"
-        (click)="$event.stopPropagation()"
+        class="product-card__sold-out"
+        aria-hidden="true"
       >
 
-        <button
-          type="button"
-          class="product-card__cart-btn"
-          [disabled]="isUpdatingCart()"
-          (click)="decreaseCartQuantity($event)"
-          aria-label="Decrease quantity"
-        >
-          −
-        </button>
-
-        <span class="product-card__cart-quantity">
-          {{ cartQuantity }}
+        <span>
+          Sold out
         </span>
 
-        <button
-          type="button"
-          class="product-card__cart-btn"
-          [disabled]="isUpdatingCart() || isAtMaxStock"
-          (click)="increaseCartQuantity($event)"
-          aria-label="Increase quantity"
+      </div>
+
+    }
+
+
+    <!-- ===================================================
+         INFORMATION
+         =================================================== -->
+
+    <div class="product-card__content">
+
+      <div class="product-card__identity">
+
+        @if (product.brandName) {
+
+          <span class="product-card__brand">
+            {{ product.brandName }}
+          </span>
+
+        }
+
+        <a
+          class="product-card__name"
+
+          [routerLink]="[
+            '/products',
+            product.id
+          ]"
         >
-          +
-        </button>
+          {{ product | localizedName }}
+        </a>
 
       </div>
 
-    } @else {
 
-      <div
-        class="product-card__cart-summary"
-        (click)="$event.stopPropagation()"
-      >
-        <span><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i></span>
-        <span>× {{ cartQuantity }}</span>
+      <!-- =================================================
+           PRICE / META
+           ================================================= -->
+
+      <div class="product-card__bottom">
+
+        <div class="product-card__meta">
+
+          @if (ratingValue > 0) {
+
+            <span class="product-card__rating">
+
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+
+                <path
+                  d="m12 3 2.78 5.63 6.22.9-4.5 4.38 1.06 6.2L12 17.18l-5.56 2.93 1.06-6.2L3 9.53l6.22-.9L12 3Z"
+                />
+
+              </svg>
+
+              {{ ratingValue | number:'1.1-1' }}
+
+              @if (reviewCount > 0) {
+
+                <span>
+                  ({{ reviewCount }})
+                </span>
+
+              }
+
+            </span>
+
+          }
+
+        </div>
+
+
+        <div class="product-card__price-wrap">
+
+          <span class="product-card__price">
+            {{ finalPrice | number:'1.0-2' }}
+          </span>
+
+          @if (hasDiscount) {
+
+            <span class="product-card__price-old">
+              {{ originalPrice | number:'1.0-2' }}
+            </span>
+
+          }
+
+        </div>
+
       </div>
 
-    }
-  </div>
 
-  <div class="product-card__info">
-    <p class="product-card__name">{{ product | localizedName }}</p>
-    <div class="product-card__price-row">
-      <p class="product-card__price">{{ finalPrice | number }} {{ 'productCard.currency' | translate }}</p>
-      @if (hasDiscount && originalPrice !== null) {
-        <p class="product-card__price-old">{{ originalPrice | number }} {{ 'productCard.currency' | translate }}</p>
-      }
+      <!-- =================================================
+           ACTION
+           ================================================= -->
+
+      <div class="product-card__action">
+
+        @if (isAdding()) {
+
+          <button
+            type="button"
+
+            class="product-card__action-button"
+
+            disabled
+
+            aria-busy="true"
+          >
+
+            <span
+              class="product-card__spinner"
+              aria-hidden="true"
+            ></span>
+
+            <span>
+              Adding
+            </span>
+
+          </button>
+
+        }
+
+        @else if (isOutOfStock) {
+
+          <button
+            type="button"
+
+            class="
+              product-card__action-button
+              product-card__action-button--disabled
+            "
+
+            disabled
+          >
+            Sold out
+          </button>
+
+        }
+
+        @else if (
+          isInCart &&
+          !hasMultipleCartVariants
+        ) {
+
+          <div
+            class="product-card__quantity"
+
+            role="group"
+
+            aria-label="Quantity"
+          >
+
+            <button
+              type="button"
+
+              aria-label="Decrease quantity"
+
+              [disabled]="isUpdatingCart()"
+
+              (click)="
+                decreaseCartQuantity($event)
+              "
+            >
+              −
+            </button>
+
+
+            <span>
+              {{ cartQuantity }}
+            </span>
+
+
+            <button
+              type="button"
+
+              aria-label="Increase quantity"
+
+              [disabled]="
+                isUpdatingCart() ||
+                isAtMaxStock
+              "
+
+              (click)="
+                increaseCartQuantity($event)
+              "
+            >
+              +
+            </button>
+
+          </div>
+
+        }
+
+        @else {
+
+          <button
+            type="button"
+
+            class="product-card__action-button"
+
+            (click)="addToCart($event)"
+          >
+
+            <span>
+              {{
+                hasMultipleCartVariants
+                  ? 'View options'
+                  : 'Add to bag'
+              }}
+            </span>
+
+
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+
+              <path
+                d="M5 12h13M13 6l6 6-6 6"
+              />
+
+            </svg>
+
+          </button>
+
+        }
+
+      </div>
+
     </div>
-<div class="product-card__footer">
-
-  <div
-    class="product-card__rating"
-    [class.product-card__rating--empty]="ratingValue <= 0"
-  >
-    @if (ratingValue > 0) {
-      <span class="product-card__rating-star"><i class="fa-solid fa-star" aria-hidden="true"></i></span>
-      <span class="product-card__rating-value">
-        {{ ratingValue.toFixed(1) }}
-      </span>
-    } @else {
-      <span class="product-card__rating-star"><i class="fa-regular fa-star" aria-hidden="true"></i></span>
-      <span class="product-card__rating-value">
-        {{ 'productDetails.notRatedYet' | translate }}
-      </span>
-    }
-  </div>
-
-  <div class="product-card__analytics">
-
-    <span>
-      <span class="product-card__analytics-icon"><i class="fa-regular fa-eye" aria-hidden="true"></i></span>
-      {{ product.viewsCount  }}
-    </span>
-
-    <span>
-      <span class="product-card__analytics-icon"><i class="fa-regular fa-comment" aria-hidden="true"></i></span>
-      {{ reviewCount }}
-    </span>
 
   </div>
 
-</div>
-  </div>
-</a>
+</article>

@@ -4,13 +4,14 @@
 
 .testimonials {
   position: relative;
-
-  padding: 4.5rem 12rem 3rem;
-
+padding: 3rem 0 2.5rem;
   overflow: hidden;
 }
 
-
+.section-header{
+width: 90%;
+  margin: 10px auto;
+}
 /* =========================================================
    Carousel
    ========================================================= */
@@ -19,7 +20,7 @@
   width: 100%;
   max-width: 1450px;
 
-  margin: 0 auto;
+  margin: 0  auto;
 }
 
 
@@ -101,8 +102,7 @@
   opacity: 1;
 
   transform:
-    translate(-50%, -50%)
-    scale(1);
+    translate(-50%, -50%) scale(1);
 
   filter: none;
 
@@ -133,11 +133,8 @@
   opacity: 0.82;
 
   transform:
-    translate(
-      calc(-50% - 350px),
-      -50%
-    )
-    scale(0.92);
+    translate(calc(-50% - 350px),
+      -50%) scale(0.92);
 
   filter: saturate(0.85);
 
@@ -157,11 +154,8 @@
   opacity: 0.82;
 
   transform:
-    translate(
-      calc(-50% + 350px),
-      -50%
-    )
-    scale(0.92);
+    translate(calc(-50% + 350px),
+      -50%) scale(0.92);
 
   filter: saturate(0.85);
 
@@ -178,8 +172,7 @@
   opacity: 0;
 
   transform:
-    translate(-50%, -50%)
-    scale(0.7);
+    translate(-50%, -50%) scale(0.7);
 
   z-index: 1;
 }
@@ -196,8 +189,7 @@
   inset: 0;
 
   background:
-    linear-gradient(
-      to bottom,
+    linear-gradient(to bottom,
 
       rgba(0, 0, 0, 0.02) 25%,
 
@@ -205,8 +197,7 @@
 
       rgba(0, 0, 0, 0.38) 62%,
 
-      rgba(10, 9, 8, 0.94) 100%
-    );
+      rgba(10, 9, 8, 0.94) 100%);
 }
 
 
@@ -292,8 +283,7 @@
 
 /* Center typography */
 
-.testimonial-card.position-center
-.testimonial-card__quote {
+.testimonial-card.position-center .testimonial-card__quote {
 
   font-size: 1.28rem;
 
@@ -524,21 +514,15 @@
   .testimonial-card.position-left {
 
     transform:
-      translate(
-        calc(-50% - 290px),
-        -50%
-      )
-      scale(0.88);
+      translate(calc(-50% - 290px),
+        -50%) scale(0.88);
   }
 
   .testimonial-card.position-right {
 
     transform:
-      translate(
-        calc(-50% + 290px),
-        -50%
-      )
-      scale(0.88);
+      translate(calc(-50% + 290px),
+        -50%) scale(0.88);
   }
 
 }
@@ -578,11 +562,8 @@
     height: 370px;
 
     transform:
-      translate(
-        calc(-50% - 245px),
-        -50%
-      )
-      scale(0.8);
+      translate(calc(-50% - 245px),
+        -50%) scale(0.8);
 
     opacity: 0.35;
   }
@@ -595,11 +576,8 @@
     height: 370px;
 
     transform:
-      translate(
-        calc(-50% + 245px),
-        -50%
-      )
-      scale(0.8);
+      translate(calc(-50% + 245px),
+        -50%) scale(0.8);
 
     opacity: 0.35;
   }
@@ -612,8 +590,7 @@
   }
 
 
-  .testimonial-card.position-center
-  .testimonial-card__quote {
+  .testimonial-card.position-center .testimonial-card__quote {
 
     font-size:
       1.1rem;

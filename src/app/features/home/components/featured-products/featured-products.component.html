@@ -1,52 +1,226 @@
-<section class="scaffold-page">
-  <div class="section-header">
-    <div>
-      <p class="section-kicker">{{ 'featuredProducts.justLanded' | translate }}</p>
-      <h2 class="section-title">{{ 'featuredProducts.newArrivals' | translate }}</h2>
+<section
+  class="featured-products"
+  aria-labelledby="featured-products-title"
+>
+
+  <!-- =====================================================
+       HEADER
+       ===================================================== -->
+
+  <header class="featured-products__header">
+
+    <div class="featured-products__heading">
+
+      <span class="featured-products__kicker">
+        {{ 'home.featuredKicker' | translate }}
+      </span>
+
+      <h2
+        id="featured-products-title"
+        class="featured-products__title"
+      >
+        {{ 'home.featuredTitle' | translate }}
+      </h2>
+
     </div>
-    <a routerLink="/new-in" class="btn btn-outline">{{ 'featuredProducts.viewAll' | translate }}</a>
-  </div>
+
+
+    <a
+      routerLink="/products"
+      class="featured-products__view-all"
+    >
+
+      <span>
+        {{ 'featuredProducts.viewAll' | translate }}
+      </span>
+
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          d="M5 12h13M13 6l6 6-6 6"
+        />
+      </svg>
+
+    </a>
+
+  </header>
+
+
+  <!-- =====================================================
+       LOADING
+       ===================================================== -->
 
   @if (loading()) {
-    <div class="product-slider">
-      @for (i of [1, 2, 3, 4]; track i) {
-        <div class="product-card--skeleton slider-item"></div>
-      }
-    </div>
-  } @else if (products().length === 0) {
-    <p class="muted">{{ 'featuredProducts.noProducts' | translate }}</p>
-  } @else {
-    <div class="slider-wrapper">
-      <button
-        type="button"
-        class="slider-nav slider-nav--prev"
-        (click)="scrollSlider(-1)"
-        [disabled]="!canScrollPrev()"
-        aria-label="Previous">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-      </button>
+
+    <div
+      class="
+        featured-layout
+        featured-layout--loading
+      "
+      aria-hidden="true"
+    >
 
       <div
-        class="product-slider"
-        #sliderTrack
-        #sliderTrackAuto="autoSlide"
-        appAutoSlide="reverse"
-        (scroll)="onSliderScroll()">
-        @for (product of products(); track product.id) {
-          <div class="slider-item">
-            <app-product-card [product]="product" />
-          </div>
-        }
+        class="
+          featured-slot
+          featured-slot--hero
+        "
+      >
+        <div class="featured-skeleton"></div>
       </div>
 
-      <button
-        type="button"
-        class="slider-nav slider-nav--next"
-        (click)="scrollSlider(1)"
-        [disabled]="!canScrollNext()"
-        aria-label="Next">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-      </button>
+
+      <div class="featured-side">
+
+        <div class="featured-slot">
+          <div class="featured-skeleton"></div>
+        </div>
+
+        <div class="featured-slot">
+          <div class="featured-skeleton"></div>
+        </div>
+
+      </div>
+
+
+      <div
+        class="
+          featured-slot
+          featured-slot--editorial
+        "
+      >
+        <div class="featured-skeleton"></div>
+      </div>
+
     </div>
+
   }
+
+
+  <!-- =====================================================
+       PRODUCTS
+       ===================================================== -->
+
+  @else if (products().length) {
+
+    <div class="featured-layout">
+
+      <!-- =================================================
+           HERO PRODUCT
+           ================================================= -->
+
+      @if (products()[0]; as product) {
+
+        <article
+          class="
+            featured-slot
+            featured-slot--hero
+          "
+          style="--item-delay: 0ms"
+        >
+
+          <app-product-card
+            [product]="product"
+            variant="large"
+          />
+
+        </article>
+
+      }
+
+
+      <!-- =================================================
+           SUPPORTING PRODUCTS
+           ================================================= -->
+
+      <div class="featured-side">
+
+        @if (products()[1]; as product) {
+
+          <article
+            class="
+              featured-slot
+              featured-slot--side
+            "
+            style="--item-delay: 90ms"
+          >
+
+            <app-product-card
+              [product]="product"
+              variant="compact"
+            />
+
+          </article>
+
+        }
+
+
+        @if (products()[2]; as product) {
+
+          <article
+            class="
+              featured-slot
+              featured-slot--side
+            "
+            style="--item-delay: 180ms"
+          >
+
+            <app-product-card
+              [product]="product"
+              variant="compact"
+            />
+
+          </article>
+
+        }
+
+      </div>
+
+
+      <!-- =================================================
+           EDITORIAL CLOSING PRODUCT
+           ================================================= -->
+
+      @if (products()[3]; as product) {
+
+        <article
+          class="
+            featured-slot
+            featured-slot--editorial
+          "
+          style="--item-delay: 270ms"
+        >
+
+          <app-product-card
+            [product]="product"
+            variant="editorial"
+          />
+
+        </article>
+
+      }
+
+    </div>
+
+  }
+
+
+  <!-- =====================================================
+       EMPTY
+       ===================================================== -->
+
+  @else {
+
+    <div class="featured-products__empty">
+
+      <span>
+        {{ 'home.noFeaturedProducts' | translate }}
+      </span>
+
+    </div>
+
+  }
+
 </section>
