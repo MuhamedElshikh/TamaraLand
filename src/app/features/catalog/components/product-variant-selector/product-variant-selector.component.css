@@ -1,68 +1,93 @@
-/* ================= Product Variant Selector ================= */
+/* =========================================================
+   TAMARA LAND — VARIANT SELECTOR V2
+   LUXURY / JEWELRY DIRECTION
+   HTML + TS remain unchanged
+   ========================================================= */
 
 .variant-shell {
-  padding: 0;
+  --v-ink: var(--text-primary);
+  --v-soft: var(--text-secondary);
+  --v-muted: var(--text-muted);
+  --v-line: var(--border-color);
+  --v-gold: var(--primary);
+  --v-gold-light: var(--primary-light);
+  --v-surface: var(--bg-card);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 1.45rem 0 0;
   background: transparent;
-  border: none;
+  border: 0;
   box-shadow: none;
-  gap: 1.1rem;
-  margin-top: 0.5rem;
 }
 
-.variant-shell__header h3 {
-  margin-top: 0.2rem;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.3rem;
+/* A small couture-style chapter marker */
+.variant-shell::before {
+  content: "01  /  THE SELECTION";
+  display: block;
+  margin-bottom: 1.35rem;
+
+  color: var(--v-gold);
+  font-family: "Tajawal", sans-serif;
+  font-size: 0.56rem;
   font-weight: 700;
-  color: var(--text-primary);
+  line-height: 1;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+[dir="rtl"] .variant-shell::before {
+  content: "01  /  الاختيار";
+  letter-spacing: 0.08em;
 }
 
 /* =========================================================
-   Variant Groups
+   COLOR / SIZE GROUPS
    ========================================================= */
 
 .variant-group {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  gap: 0.9rem;
-
-  margin-bottom: 1rem;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 1.15rem 0 1.3rem;
+  border-top: 1px solid var(--v-line);
 }
 
 .variant-group__label {
-  min-width: 58px;
+  display: block;
+  margin: 0 0 0.95rem;
 
-  align-self: center;
+  color: var(--v-soft);
 
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.8rem;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 0.78rem;
   font-weight: 600;
-
+  line-height: 1;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-
-  color: var(--text-secondary);
-
-  white-space: nowrap;
 }
 
-.variant-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.55rem;
+[dir="rtl"] .variant-group__label {
+  font-family: "Tajawal", sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.07em;
 }
 
 /* =========================================================
-   Color Options — الدايرة هي البطلة، من غير Pill ولا اسم ظاهر
+   COLOR — JEWELRY TREATMENT
    ========================================================= */
 
 .variant-options--colors {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.65rem;
+  gap: 1.05rem;
+  min-width: 0;
 }
 
 .color-swatch {
@@ -72,14 +97,55 @@
   align-items: center;
   justify-content: center;
 
-  width: 40px;
-  height: 40px;
-  padding: 0;
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
 
-  border: none;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
   background: transparent;
 
   cursor: pointer;
+
+  transition:
+    transform 0.28s cubic-bezier(.2, .7, .2, 1),
+    opacity 0.2s ease;
+}
+
+/* Fine jewelry halo */
+.color-swatch::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+
+  border: 1px solid color-mix(
+    in srgb,
+    var(--v-gold) 30%,
+    var(--v-line)
+  );
+  border-radius: 50%;
+
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+/* Tiny underline signature */
+.color-swatch::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+
+  width: 0;
+  height: 1px;
+
+  background: var(--v-gold);
+
+  transform: translateX(-50%);
+  transition: width 0.28s ease;
 }
 
 .color-swatch__circle {
@@ -87,328 +153,528 @@
 
   width: 32px;
   height: 32px;
+  flex: 0 0 32px;
 
+  border: 1px solid color-mix(
+    in srgb,
+    var(--v-line) 75%,
+    transparent
+  );
   border-radius: 50%;
 
-  border: 1px solid var(--border-color);
-
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14);
+  box-shadow:
+    0 3px 12px rgba(0, 0, 0, 0.14);
 
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    transform 0.28s cubic-bezier(.2, .7, .2, 1),
+    box-shadow 0.28s ease;
 }
 
-/* الحلقة الذهبية بتظهر بس وقت hover أو الاختيار — مش خلفية Pill كاملة */
+.color-swatch:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
 
-.color-swatch::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-
-  border-radius: 50%;
-  border: 1px solid transparent;
-
-  transition: border-color 0.2s ease, transform 0.2s ease;
+.color-swatch:hover:not(:disabled)::before {
+  border-color: color-mix(
+    in srgb,
+    var(--v-gold) 65%,
+    var(--v-line)
+  );
 }
 
 .color-swatch:hover:not(:disabled) .color-swatch__circle {
   transform: scale(1.08);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 7px 18px rgba(0, 0, 0, 0.17);
 }
 
-/* Active */
-
+/* Selected jewel */
 .color-swatch--active::before {
-  border-color: var(--primary);
+  border-color: var(--v-gold);
+
+  box-shadow:
+    0 0 0 3px var(--v-surface),
+    0 0 0 4px color-mix(
+      in srgb,
+      var(--v-gold) 78%,
+      transparent
+    ),
+    0 0 18px color-mix(
+      in srgb,
+      var(--v-gold) 13%,
+      transparent
+    );
+}
+
+.color-swatch--active::after {
+  width: 14px;
 }
 
 .color-swatch--active .color-swatch__circle {
   box-shadow:
-    0 0 0 2px var(--bg-card),
-    0 0 0 3px var(--primary),
-    0 1px 4px rgba(0, 0, 0, 0.2);
+    0 0 0 1px var(--v-surface),
+    0 0 0 2px var(--v-gold),
+    0 5px 15px rgba(0, 0, 0, 0.16);
 }
 
-/* علامة الصح البسيطة فوق اللون النشط */
-
 .color-swatch--active .color-swatch__circle::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
 
   border-radius: 50%;
-
-  background: rgba(0, 0, 0, 0.18);
+  background: rgba(0, 0, 0, 0.13);
 
   -webkit-mask:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z'/%3E%3C/svg%3E")
-    center / 14px no-repeat;
+    center / 13px no-repeat;
+
   mask:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z'/%3E%3C/svg%3E")
-    center / 14px no-repeat;
+    center / 13px no-repeat;
 }
 
-/* Disabled */
-
+/* Disabled jewel */
 .color-swatch:disabled,
 .color-swatch--disabled {
   cursor: not-allowed;
+  opacity: 0.32;
 }
 
 .color-swatch--disabled .color-swatch__circle {
-  opacity: 0.3;
-  filter: grayscale(0.6);
+  filter: grayscale(0.75);
+  box-shadow: none;
 }
 
-.color-swatch--disabled .color-swatch__circle::after {
-  content: '';
+.color-swatch--disabled .color-swatch__circle::before {
+  content: "";
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 30px;
+  inset: 50% auto auto 50%;
+
+  width: 34px;
   height: 1px;
+
   background: currentColor;
   transform: translate(-50%, -50%) rotate(45deg);
 }
 
 /* =========================================================
-   Size Options — مربعات رفيعة الحواف بدل Pill عادي
+   SIZE — JEWEL BOX / COUTURE LABEL
    ========================================================= */
 
+.variant-options {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
 .variant-chip {
+  position: relative;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  min-width: 44px;
-  height: 40px;
-  padding: 0 0.9rem;
+  min-width: 58px;
+  height: 46px;
+  padding: 0 1.15rem;
 
-  border-radius: 4px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--v-line);
+  border-radius: 0;
 
   background: transparent;
+  color: var(--v-ink);
 
-  color: var(--text-primary);
-
-  font-family: inherit;
-  font-size: 0.85rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
+  font-family: "Tajawal", sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1;
 
   cursor: pointer;
 
   transition:
-    border-color 0.18s ease,
-    color 0.18s ease,
-    background 0.18s ease;
+    border-color 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.variant-chip::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+
+  border: 1px solid transparent;
+
+  transition: border-color 0.25s ease;
 }
 
 .variant-chip:hover:not(:disabled) {
-  border-color: var(--primary);
-  color: var(--primary);
+  border-color: var(--v-gold);
+  color: var(--v-gold);
+  transform: translateY(-2px);
 }
 
 .variant-chip--active {
-  border-color: var(--primary);
-  background: var(--primary);
-  color: var(--secondary-dark);
-  font-weight: 700;
+  border-color: var(--v-gold);
+  background: var(--v-gold);
+  color: #17130c;
+
+  box-shadow:
+    0 7px 18px color-mix(
+      in srgb,
+      var(--v-gold) 16%,
+      transparent
+    );
+}
+
+.variant-chip--active::before {
+  border-color: rgba(23, 19, 12, 0.2);
+}
+
+.variant-chip--active:hover:not(:disabled) {
+  color: #17130c;
+  transform: translateY(-2px);
 }
 
 .variant-chip:disabled,
 .variant-chip--disabled {
-  opacity: 0.32;
+  opacity: 0.3;
   cursor: not-allowed;
-  color: var(--text-muted);
+  color: var(--v-muted);
   text-decoration: line-through;
   border-style: dashed;
 }
 
 /* =========================================================
-   Status
+   STATUS — MICRO METADATA
    ========================================================= */
 
 .variant-status {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-
+  flex-wrap: wrap;
   gap: 0.35rem;
 
-  color: var(--text-secondary);
+  margin: 0;
+  padding: 0.9rem 0;
 
-  font-size: 0.85rem;
+  border-top: 1px solid var(--v-line);
+
+  color: var(--v-muted);
+
+  font-family: "Tajawal", sans-serif;
+  font-size: 0.68rem;
   line-height: 1.5;
-
-  margin-top: 0.4rem;
 }
 
 .variant-status strong {
-  color: var(--text-primary);
+  color: var(--v-ink);
   font-weight: 600;
+}
+
+.variant-status strong:last-child {
+  color: var(--v-gold);
 }
 
 .dot {
   width: 3px;
   height: 3px;
+  flex: 0 0 3px;
+  margin-inline: 0.22rem;
 
   border-radius: 50%;
-
-  background: var(--text-muted);
-
-  align-self: center;
-
-  margin-inline: 0.2rem;
+  background: var(--v-muted);
 }
 
 /* =========================================================
-   Selected Variant
+   SELECTED VARIANT — JEWEL TAG, NOT A BOX
    ========================================================= */
 
 .variant-selected-info {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   flex-wrap: wrap;
-
   gap: 0.55rem;
 
   width: fit-content;
+  max-width: 100%;
 
-  padding: 0.6rem 0.9rem;
+  margin: 0.1rem 0 0;
+  padding: 0.5rem 0.75rem;
 
-  border-radius: 2px;
+  border: 0;
+  border-inline-start: 1px solid var(--v-gold);
+  border-radius: 0;
 
-  background: transparent;
+  background: color-mix(
+    in srgb,
+    var(--v-gold) 4%,
+    transparent
+  );
 
-  border: 1px solid var(--primary);
-  border-inline-start-width: 3px;
+  color: var(--v-soft);
 
-  color: var(--text-primary);
-
-  font-size: 0.85rem;
+  font-family: "Tajawal", sans-serif;
+  font-size: 0.72rem;
 }
 
 .variant-selected-info__color {
   display: inline-flex;
   align-items: center;
-
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .variant-selected-info__swatch {
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;
 
-  flex: 0 0 18px;
-
+  border: 1px solid var(--v-line);
   border-radius: 50%;
-
-  border: 1px solid var(--border-color);
 }
 
 .variant-selected-info__separator {
-  color: var(--text-muted);
+  color: var(--v-muted);
+}
+
+.variant-selected-info strong {
+  color: var(--v-ink);
+  font-weight: 700;
 }
 
 /* =========================================================
-   Dimensions
+   DIMENSIONS — ATELIER SPECIFICATION
    ========================================================= */
 
 .variant-dimensions {
   display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
 
-  grid-template-columns:
-    repeat(2, minmax(140px, 1fr));
-
-  gap: 0.75rem 1.5rem;
-
-  padding: 1rem 0 0;
+  width: 100%;
 
   margin-top: 0.85rem;
+  padding: 0;
 
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--v-line);
+  border-bottom: 1px solid var(--v-line);
 }
 
 .variant-dimension {
   display: flex;
-  align-items: center;
-  gap: 0.45rem;
+  align-items: baseline;
+  gap: 0.35rem;
 
   min-width: 0;
+  padding: 0.78rem 0.8rem 0.78rem 0;
+
+  border: 0;
+}
+
+.variant-dimension + .variant-dimension {
+  padding-inline-start: 0.8rem;
+  border-inline-start: 1px solid var(--v-line);
 }
 
 .variant-dimension__label {
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
+  color: var(--v-muted);
+
+  font-family: "Tajawal", sans-serif;
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  line-height: 1.4;
   text-transform: uppercase;
-  color: var(--text-muted);
   white-space: nowrap;
 }
 
 .variant-dimension__value {
-  color: var(--text-primary);
+  color: var(--v-ink);
 
-  font-size: 0.88rem;
-  font-weight: 600;
-
+  font-family: "Tajawal", sans-serif;
+  font-size: 0.76rem;
+  font-weight: 700;
   white-space: nowrap;
 }
 
+.variant-dimension .dot {
+  width: 2px;
+  height: 2px;
+  margin-inline: 0.02rem;
+}
+
 /* =========================================================
-   Responsive
+   DARK / LIGHT
    ========================================================= */
 
-@media (max-width: 560px) {
+:root[data-theme="dark"] .variant-shell,
+html[data-theme="dark"] .variant-shell,
+body[data-theme="dark"] .variant-shell,
+html.dark .variant-shell,
+body.dark .variant-shell {
+  --v-gold: var(--primary-light);
+}
+
+:root[data-theme="light"] .variant-shell,
+html[data-theme="light"] .variant-shell,
+body[data-theme="light"] .variant-shell,
+html.light .variant-shell,
+body.light .variant-shell {
+  --v-gold: var(--primary);
+}
+
+/* =========================================================
+   RTL
+   ========================================================= */
+
+[dir="rtl"] .variant-group__label,
+[dir="rtl"] .variant-status,
+[dir="rtl"] .variant-selected-info,
+[dir="rtl"] .variant-dimensions {
+  font-family: "Tajawal", sans-serif;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
   .variant-shell {
-    padding: 0;
-    gap: 1rem;
+    padding-top: 1.1rem;
   }
 
-  .variant-shell__header h3 {
-    font-size: 1.15rem;
+  .variant-shell::before {
+    margin-bottom: 1rem;
+    font-size: 0.52rem;
+    letter-spacing: 0.18em;
+  }
+
+  [dir="rtl"] .variant-shell::before {
+    letter-spacing: 0.05em;
   }
 
   .variant-group {
-    align-items: flex-start;
-    gap: 0.6rem;
+    padding: 1rem 0 1.1rem;
   }
 
   .variant-group__label {
-    min-width: 52px;
-    font-size: 0.72rem;
-    margin-top: 0.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+  }
+
+  [dir="rtl"] .variant-group__label {
+    letter-spacing: 0.05em;
+  }
+
+  .variant-options--colors {
+    gap: 0.85rem;
   }
 
   .color-swatch {
-    width: 36px;
-    height: 36px;
+    width: 46px;
+    height: 46px;
+    flex-basis: 46px;
   }
 
   .color-swatch__circle {
-    width: 28px;
-    height: 28px;
+    width: 29px;
+    height: 29px;
+    flex-basis: 29px;
   }
 
   .variant-chip {
-    height: 38px;
-    padding: 0 0.75rem;
-    font-size: 0.8rem;
+    min-width: 52px;
+    height: 42px;
+    padding-inline: 0.95rem;
+  }
+
+  .variant-selected-info {
+    width: auto;
+  }
+
+  .variant-dimensions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .variant-dimension {
+    padding: 0.72rem 0;
+  }
+
+  .variant-dimension + .variant-dimension {
+    padding-inline-start: 0.7rem;
+  }
+
+  .variant-dimension:last-child {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--v-line);
+    border-inline-start: 0;
   }
 }
 
+/* =========================================================
+   VERY SMALL MOBILE
+   ========================================================= */
+
 @media (max-width: 360px) {
-  .variant-group {
-    flex-direction: column;
-    gap: 0.5rem;
+  .variant-options--colors {
+    gap: 0.65rem;
   }
 
-  .variant-group__label {
-    align-self: flex-start;
+  .color-swatch {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+  }
+
+  .color-swatch__circle {
+    width: 27px;
+    height: 27px;
+    flex-basis: 27px;
+  }
+
+  .variant-chip {
+    min-width: 48px;
+    height: 40px;
+    padding-inline: 0.75rem;
   }
 
   .variant-dimensions {
     grid-template-columns: 1fr;
+  }
+
+  .variant-dimension:last-child {
+    grid-column: auto;
+  }
+
+  .variant-dimension + .variant-dimension {
+    padding-inline-start: 0;
+    border-inline-start: 0;
+    border-top: 1px solid var(--v-line);
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+.color-swatch:focus-visible,
+.variant-chip:focus-visible {
+  outline: 2px solid var(--v-gold);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .color-swatch,
+  .color-swatch::before,
+  .color-swatch::after,
+  .color-swatch__circle,
+  .variant-chip,
+  .variant-chip::before {
+    transition: none !important;
   }
 }
