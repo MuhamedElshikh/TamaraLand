@@ -17,36 +17,80 @@
     "search": "بحث"
   },
   "home": {
-    "shopByCategory": "تسوق حسب القسم",
-    "findYourStyle": "اعثري على استايلك",
-     "featuredKicker": "اختيارات منتقاة",
-    "featuredTitle": "قطع تستحق الاكتشاف",
-    "noFeaturedProducts": "لا توجد منتجات مميزة حاليًا",
-    "noCategories": "لا توجد أقسام متاحة حالياً.",
-    "customerLove": "آراء عملائنا",
-    "whatTheySay": "ايه اللي بيقولوه عننا",
-    "ourPromise": "وعدنا",
-    "brandQuote": "كل قطعة في تمارا لاند تم اختيارها بعناية لتجعلك تشعرين بالثقة والتميز وتعبرين عن شخصيتك بكل فخر.",
-    "discoverCollection": "اكتشف المجموعة",
-    "fastDelivery": "توصيل سريع",
-    "fastDeliveryDescription": "من يومين إلى أربعة أيام عمل داخل جميع المحافظات",
-    "secureCheckout": "دفع آمن",
-    "secureCheckoutDescription": "مدفوعات مشفرة وآمنة دائماً",
-    "luxuryPackaging": "تغليف فاخر",
-    "luxuryPackagingDescription": "علب مجهزة خصيصاً للهدايا والمناسبات",
-    "guaranteedQuality": "جودة مضمونة",
-    "guaranteedQualityDescription": "اختيارات فاخرة ومضمونة 100%",
-    "bentoKicker": "تشكيلات حصرية",
-    "bentoTitle": "عالم من الفخامة والذوق الرفيع",
-    "bentoCard1Title": "أطقم الهدايا الملكية",
-    "bentoCard1Subtitle": "تشكيلات فاخرة معدّة خصيصاً للمناسبات والاهداء الراقي",
-    "bentoCard2Title": "التمور المحشية الفاخرة",
-    "bentoCard2Subtitle": "محشوة بأجود أنواع المكسرات الفاخرة",
-    "bentoCard3Title": "باقات الضيافة الفاخرة",
-    "bentoCard3Subtitle": "اختيارات طازجة ومثالية تليق بضيوفك"
-  },
+  "shopByCategory": "تسوق حسب القسم",
+  "findYourStyle": "اعثري على استايلك",
+  "categoryExperienceDescription": "اكتشفي أقسامنا المنتقاة بعناية وابحثي عن القطع التي تجعلك تشعرين بالتميز.",
+  "viewAllCategories": "عرض جميع الأقسام",
+  "previousCategories": "الأقسام السابقة",
+  "nextCategories": "الأقسام التالية",
+  "shopByCategoryAriaLabel": "تسوق حسب القسم",
+  "exploreCta": "استكشفي",
+  "featuredKicker": "اختيارات منتقاة",
+  "featuredTitle": "قطع تستحق الاكتشاف",
+  "noFeaturedProducts": "لا توجد منتجات مميزة حاليًا",
+  "noCategories": "لا توجد أقسام متاحة حالياً.",
+  "customerLove": "آراء عملائنا",
+  "whatTheySay": "ايه اللي بيقولوه عننا",
+  "ourPromise": "وعدنا",
+  "brandQuote": "كل قطعة في تمارا لاند تم اختيارها بعناية لتجعلك تشعرين بالثقة والتميز وتعبرين عن شخصيتك بكل فخر.",
+  "discoverCollection": "اكتشف المجموعة",
+  "fastDelivery": "توصيل سريع",
+  "fastDeliveryDescription": "من يومين إلى أربعة أيام عمل داخل جميع المحافظات",
+  "secureCheckout": "دفع آمن",
+  "secureCheckoutDescription": "مدفوعات مشفرة وآمنة دائماً",
+  "luxuryPackaging": "تغليف فاخر",
+  "luxuryPackagingDescription": "علب مجهزة خصيصاً للهدايا والمناسبات",
+  "guaranteedQuality": "جودة مضمونة",
+  "guaranteedQualityDescription": "اختيارات فاخرة ومضمونة 100%",
+  "bentoKicker": "تشكيلات حصرية",
+  "bentoTitle": "عالم من الفخامة والذوق الرفيع",
+  "bentoCard1Title": "أطقم الهدايا الملكية",
+  "bentoCard1Subtitle": "تشكيلات فاخرة معدّة خصيصاً للمناسبات والاهداء الراقي",
+  "bentoCard2Title": "التمور المحشية الفاخرة",
+  "bentoCard2Subtitle": "محشوة بأجود أنواع المكسرات الفاخرة",
+  "bentoCard3Title": "باقات الضيافة الفاخرة",
+  "bentoCard3Subtitle": "اختيارات طازجة ومثالية تليق بضيوفك",
+"testimonials": {
+  "metaNote": "كلمات حقيقية من مجتمعنا",
+  "metaCategory": "آراء عملائنا",
+  "title": "ماذا يقولون عنا",
+  "description": "آراء حقيقية من عملائنا، وتجارب تعبّر عن التفاصيل التي تجعل كل قطعة جزءًا من حكايتهم.",
+
+  "featuredLabel": "التشكيلة",
+  "featuredTitle": "المختارة",
+
+  "reviewStars": "تقييم 5 نجوم",
+  "reviewedBy": "تم التقييم بواسطة",
+
+  "previousReview": "التقييم السابق",
+  "nextReview": "التقييم التالي",
+  "reviews": "آراء العملاء",
+  "review": "التقييم {{number}}",
+
+  "footerLeft1": "أصيل",
+  "footerLeft2": "شخصي",
+
+  "brandName": "TAMARA LAND",
+  "brandSlogan": "أكثر من مجرد أزياء",
+
+  "footerRight1": "منتقاة",
+  "footerRight2": "خالدة"
+},
+  "brandBanner": {
+      "eyebrow": "وعدنا",
+      "title": "كل قطعة في تمارا لاند اختيرت بعناية لتشبهك",
+      "description": "كل تفصيلة في تمارا لاند اختيرت بعناية، لتكون أقرب لذوقك وأكثر تعبيرًا عنك.",
+      "cta": "اكتشفي المجموعة",
+      "signature": "تمارا لاند",
+      "imageCaption": "اختيارات تمارا",
+      "established": "منذ 2025",
+      "imageAlt": "إطلالة أنيقة من مجموعة تمارا لاند"
+    }
+
+
+},
   "footer": {
-    "tagline": "كوني فخورة بكونك امرأة",
+    "tagline": "  كوني فخورة بكونك امرأة",
     "newsletter": {
       "title": "انضمي إلى مجتمع تمارا لاند",
       "description": "احصلي على أحدث المجموعات والعروض الحصرية والخصومات المميزة.",
@@ -76,18 +120,36 @@
     }
   },
   "featuredProducts": {
-      "eyebrow": "اختيارات منتقاة",
+     "eyebrow": "المجموعة المختارة",
     "titleLine1": "قطع",
-    "titleLine2": "تشبهك",
-    "description": "تشكيلة منتقاة بعناية لأناقتك اليومية.",
+    "titleLine2": "لا تُقاوَم",
+    "description": "تشكيلة مختارة بعناية من أرقى القطع، حيث يلتقي التصميم الخالد بروح العصر.",
     "viewAll": "عرض الكل",
-    "noProducts": "لا توجد منتجات متوفرة حاليًا.",
-    "ourFavorite1": "اختيارنا",
-    "ourFavorite2": "المفضل",
-    "quoteLine1": "قطع خالدة",
-    "quoteLine2": "ليوم أكثر",
-    "quoteLine3": "جمالًا.",
-    "addToBag": "أضف إلى الحقيبة"
+
+    "headerNote1": "الأناقة",
+    "headerNote2": "تتجاوز",
+    "headerNote3": "حدود",
+    "headerNote4": "الموضة",
+
+    "viewProduct": "عرض المنتج",
+
+    "ourFavorite1": "المفضلة",
+    "ourFavorite2": "لدينا",
+
+    "addToBag": "أضيفي للحقيبة",
+
+    "quoteLine1": "الأناقة ليست",
+    "quoteLine2": "ما ترتدينه",
+    "quoteLine3": "بل كيف تعيشينه",
+
+    "brandName": "TAMARA LAND",
+
+    "footerTag1": "مُنتقاة",
+    "footerTag2": "واعية",
+    "footerTag3": "خالدة",
+
+    "footerSlogan1": "أكثر من مجرد أزياء",
+    "footerSlogan2": "إنها أسلوب حياة"
   },
   "hero": {
     "eyebrow": "أزياء فاخرة",

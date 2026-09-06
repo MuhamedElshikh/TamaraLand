@@ -263,9 +263,8 @@
       4.5rem
     );
 
-  font-weight: 700;
-
-  line-height: .94;
+  letter-spacing: 0;
+  line-height: 1.35;
 
   letter-spacing: -.045em;
 
@@ -1133,7 +1132,7 @@
         3.8rem
       );
 
-    line-height: .95;
+    line-height: 1.08;
 
     white-space: normal;
 
@@ -1717,14 +1716,134 @@
 
 @media (max-width: 767px) {
 
-  .hero-intro__inner > * {
-    min-width: 0;
-    max-width: 100%;
+  .hero-intro {
+    width: 100%;
+    min-height: auto;
+    box-sizing: border-box;
+    padding: 2.5rem 1rem 3rem;
+    overflow: clip;
   }
 
-  .hero-intro__visual,
-  .hero-intro__closet,
-  .hero-intro__closet-panel {
+  .hero-intro__inner {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    gap: 2.5rem;
+    box-sizing: border-box;
+  }
+
+  /* CONTENT */
+  .hero-intro__content {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .hero-intro__title {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    font-size: clamp(2.5rem, 12vw, 3.8rem);
+    line-height: 1.2;
+    white-space: normal;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .hero-intro__description {
+    width: 100%;
+    max-width: 100%;
+    margin: 1rem 0 0;
+    font-size: .84rem;
+    line-height: 1.8;
+  }
+
+  /* ACTIONS */
+  .hero-intro__actions {
+    width: 100%;
+    max-width: 360px;
+    margin-top: 1.35rem;
+    display: flex;
+    flex-direction: column;
+    gap: .65rem;
+    box-sizing: border-box;
+  }
+
+  .hero-intro__cta {
+    width: 100%;
+    min-width: 0;
+    min-height: 50px;
+    box-sizing: border-box;
+  }
+
+  /* VISUAL */
+  .hero-intro__visual {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding-top: 1.4rem;
+    position: relative;
+    box-sizing: border-box;
+    overflow: visible;
+    transform: none;
+  }
+
+  .hero-intro__visual-label {
+    position: absolute;
+    top: 0;
+    inset-inline-start: 0;
+    z-index: 5;
+    font-size: .52rem;
+    letter-spacing: .15rem;
+    white-space: nowrap;
+  }
+
+  /* IMAGE FRAME — نفس الكلاس المستخدم فعليًا في الـ HTML */
+  .hero-intro__frame {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    position: relative;
+    height: auto;
+    aspect-ratio: 4 / 5;
     overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  /* الصورة لازم تفضل width:100% height:100% عشان تعمل cover صح جوه الفريم */
+  .hero-intro__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+    box-sizing: border-box;
+  }
+
+  .hero-intro__visual-caption {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: .55rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: .35rem;
+    font-size: .42rem;
+    letter-spacing: .12rem;
+    white-space: nowrap;
+  }
+
+  .hero-intro__scroll {
+    display: none;
   }
 }

@@ -16,8 +16,7 @@
       </h2>
 
       <p class="category-experience__description">
-        Explore our curated categories and discover pieces
-        that make you feel extraordinary.
+        {{ 'home.categoryExperienceDescription' | translate }}
       </p>
     </div>
 
@@ -25,7 +24,7 @@
       routerLink="/categories"
       class="category-experience__all"
     >
-      <span>View All Categories</span>
+      <span>{{ 'home.viewAllCategories' | translate }}</span>
       <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
     </a>
   </div>
@@ -54,7 +53,7 @@
         type="button"
         class="category-strip__nav category-strip__nav--prev"
         (click)="scrollCategories(-1)"
-        aria-label="Previous categories"
+        [attr.aria-label]="'home.previousCategories' | translate"
       >
         <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
       </button>
@@ -62,7 +61,7 @@
       <div
         class="category-strip"
         #categoryStrip
-        aria-label="Shop by category"
+        [attr.aria-label]="'home.shopByCategoryAriaLabel' | translate"
       >
         @for (
           category of categories();
@@ -112,7 +111,7 @@
               </span>
 
               <span class="category-card__label-cta">
-                <span>Explore</span>
+                <span>{{ 'home.exploreCta' | translate }}</span>
                 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
               </span>
             </div>
@@ -125,7 +124,7 @@
         type="button"
         class="category-strip__nav category-strip__nav--next"
         (click)="scrollCategories(1)"
-        aria-label="Next categories"
+        [attr.aria-label]="'home.nextCategories' | translate"
       >
         <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
       </button>
@@ -140,68 +139,204 @@
 
 <app-testimonials/>
 
-<section class="brand-banner" appScrollReveal>
-  <div class="brand-banner__glow"></div>
-  <div class="brand-banner__glow brand-banner__glow--secondary"></div>
+<!-- =========================================================
+     BRAND BANNER — EDITORIAL PROMISE
+     ========================================================= -->
+<!-- =========================================================
+     BRAND BANNER — EDITORIAL PROMISE
+     ========================================================= -->
 
- <svg class="brand-banner__mark" viewBox="0 0 100 80" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-  <path d="M20 0C8 8 0 22 0 40c0 14 8 24 20 24 10 0 16-7 16-16
-           0-8-6-14-13-14-2 0-4 .5-5 1C19 24 24 14 34 8L20 0z
-           M64 0C52 8 44 22 44 40c0 14 8 24 20 24 10 0 16-7 16-16
-           0-8-6-14-13-14-2 0-4 .5-5 1C63 24 68 14 78 8L64 0z"
-        fill="currentColor"/>
-</svg>
+<section
+  class="brand-banner"
+  appScrollReveal
+  aria-labelledby="brand-banner-title"
+>
 
-  <div class="brand-banner__content">
-    <p class="brand-banner__eyebrow">{{ 'home.ourPromise' | translate }}</p>
+  <!-- Editorial frame -->
+  <div
+    class="brand-banner__frame"
+    aria-hidden="true"
+  ></div>
 
-    <blockquote class="brand-banner__quote">
-      {{ 'home.brandQuote' | translate }}
-    </blockquote>
+  <!-- Image -->
+  <div class="brand-banner__visual">
 
-    <span class="brand-banner__cta-wrap">
-      <a routerLink="/categories" class="btn btn-primary">
-        {{ 'home.discoverCollection' | translate }}
-      </a>
-    </span>
+    <div class="brand-banner__visual-inner">
+
+      <img
+        class="brand-banner__image"
+        src="assets/brand-banner-editorial.jpg"
+        alt="{{ 'home.brandBanner.imageAlt' | translate }}"
+        loading="lazy"
+        decoding="async"
+      />
+
+      <div
+        class="brand-banner__image-overlay"
+        aria-hidden="true"
+      ></div>
+
+      <div class="brand-banner__image-caption">
+        <span>
+          {{ 'home.brandBanner.imageCaption' | translate }}
+        </span>
+
+        <span>
+          {{ 'home.brandBanner.established' | translate }}
+        </span>
+      </div>
+
+    </div>
+
   </div>
+
+  <!-- Content -->
+  <div class="brand-banner__content">
+
+    <!-- Meta -->
+    <div class="brand-banner__meta">
+
+      <div class="brand-banner__eyebrow">
+        <span
+          class="brand-banner__eyebrow-line"
+          aria-hidden="true"
+        ></span>
+
+        <span>
+          {{ 'home.brandBanner.eyebrow' | translate }}
+        </span>
+      </div>
+
+    </div>
+
+    <!-- Main copy -->
+    <div class="brand-banner__copy">
+
+      <h2
+        id="brand-banner-title"
+        class="brand-banner__title"
+      >
+        {{ 'home.brandBanner.title' | translate }}
+      </h2>
+
+      <p class="brand-banner__description">
+        {{ 'home.brandBanner.description' | translate }}
+      </p>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="brand-banner__footer">
+
+      <a
+        routerLink="/categories"
+        class="brand-banner__cta"
+      >
+        <span>
+          {{ 'home.brandBanner.cta' | translate }}
+        </span>
+
+        <svg
+          class="brand-banner__cta-icon"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </a>
+
+      <div class="brand-banner__signature">
+        <span
+          class="brand-banner__signature-line"
+          aria-hidden="true"
+        ></span>
+
+        <span>
+          {{ 'home.brandBanner.signature' | translate }}
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+
 </section>
 
-<section class="trust-strip">
+<section class="trust-strip" aria-label="Trust and service benefits">
+
   <div class="trust-item" [appScrollReveal]="0">
+    <span class="trust-item__number">01</span>
+
     <span class="trust-item__icon">
       <i class="fa-solid fa-truck" aria-hidden="true"></i>
     </span>
-    <div>
-      <p class="trust-item__title">{{ 'home.fastDelivery' | translate }}</p>
-      <p class="trust-item__copy">{{ 'home.fastDeliveryDescription' | translate }}</p>
+
+    <div class="trust-item__content">
+      <p class="trust-item__title">
+        {{ 'home.fastDelivery' | translate }}
+      </p>
+
+      <p class="trust-item__copy">
+        {{ 'home.fastDeliveryDescription' | translate }}
+      </p>
     </div>
   </div>
-  <div class="trust-item" appScrollReveal="100">
+
+
+  <div class="trust-item" [appScrollReveal]="100">
+    <span class="trust-item__number">02</span>
+
     <span class="trust-item__icon">
       <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
     </span>
-    <div>
-      <p class="trust-item__title">{{ 'home.secureCheckout' | translate }}</p>
-      <p class="trust-item__copy">{{ 'home.secureCheckoutDescription' | translate }}</p>
+
+    <div class="trust-item__content">
+      <p class="trust-item__title">
+        {{ 'home.secureCheckout' | translate }}
+      </p>
+
+      <p class="trust-item__copy">
+        {{ 'home.secureCheckoutDescription' | translate }}
+      </p>
     </div>
   </div>
-  <div class="trust-item" appScrollReveal="200">
+
+
+  <div class="trust-item" [appScrollReveal]="200">
+    <span class="trust-item__number">03</span>
+
     <span class="trust-item__icon">
       <i class="fa-solid fa-gift" aria-hidden="true"></i>
     </span>
-    <div>
-      <p class="trust-item__title">{{ 'home.luxuryPackaging' | translate }}</p>
-      <p class="trust-item__copy">{{ 'home.luxuryPackagingDescription' | translate }}</p>
+
+    <div class="trust-item__content">
+      <p class="trust-item__title">
+        {{ 'home.luxuryPackaging' | translate }}
+      </p>
+
+      <p class="trust-item__copy">
+        {{ 'home.luxuryPackagingDescription' | translate }}
+      </p>
     </div>
   </div>
-  <div class="trust-item" appScrollReveal="300">
+
+
+  <div class="trust-item" [appScrollReveal]="300">
+    <span class="trust-item__number">04</span>
+
     <span class="trust-item__icon">
       <i class="fa-solid fa-star" aria-hidden="true"></i>
     </span>
-    <div>
-      <p class="trust-item__title">{{ 'home.guaranteedQuality' | translate }}</p>
-      <p class="trust-item__copy">{{ 'home.guaranteedQualityDescription' | translate }}</p>
+
+    <div class="trust-item__content">
+      <p class="trust-item__title">
+        {{ 'home.guaranteedQuality' | translate }}
+      </p>
+
+      <p class="trust-item__copy">
+        {{ 'home.guaranteedQualityDescription' | translate }}
+      </p>
     </div>
   </div>
+
 </section>

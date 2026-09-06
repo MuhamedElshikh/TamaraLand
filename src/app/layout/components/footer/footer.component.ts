@@ -9,6 +9,7 @@ import { LanguageService } from '../../../core/services/language.service';
   standalone: true,
   imports: [RouterLink, TranslatePipe],
   templateUrl: './footer.component.html',
+  styleUrl: './footer.component.css'
 })
 export class FooterComponent {
   readonly year = new Date().getFullYear();

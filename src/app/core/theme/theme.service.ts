@@ -28,11 +28,9 @@ export class ThemeService {
   private applyTheme(mode: ThemeMode): void {
     if (!this.isBrowser) return;
 
-    if (mode === 'light') {
-      document.documentElement.setAttribute('data-theme', 'light');
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-    }
+    // بنحط القيمة صراحةً في الحالتين عشان أي CSS selector
+    // بيدور على [data-theme='dark'] أو [data-theme='light'] يشتغل صح
+    document.documentElement.setAttribute('data-theme', mode);
   }
 
   private getInitialTheme(): ThemeMode {
@@ -41,7 +39,6 @@ export class ThemeService {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved === 'light' || saved === 'dark') return saved;
 
-    // لو مفيش حاجة متخزنة، بنحترم تفضيل نظام التشغيل بتاع المستخدم
     const prefersLight = window.matchMedia?.('(prefers-color-scheme: light)').matches;
     return prefersLight ? 'light' : 'dark';
   }

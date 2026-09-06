@@ -1,138 +1,521 @@
 <footer class="site-footer">
 
-  <div class="site-footer__overlay"></div>
+  <div class="site-footer__overlay" aria-hidden="true">
+    <span class="site-footer__overlay-leaf site-footer__overlay-leaf--left"></span>
+    <span class="site-footer__overlay-leaf site-footer__overlay-leaf--right"></span>
+  </div>
 
-  <!-- ================= Newsletter Bar ================= -->
-  <section class="footer-newsletter">
+
+  <!-- =====================================================
+       NEWSLETTER
+       ===================================================== -->
+
+  <section
+    class="footer-newsletter"
+    aria-labelledby="footer-newsletter-title"
+  >
+
     <div class="footer-newsletter__inner">
+
+      <!-- Newsletter Copy -->
       <div class="footer-newsletter__text">
-        <h3>{{ 'footer.newsletter.title' | translate }}</h3>
-        <p>{{ 'footer.newsletter.description' | translate }}</p>
+
+        <div class="footer-newsletter__eyebrow">
+          <span class="footer-newsletter__eyebrow-line"></span>
+          <span>STAY IN TOUCH</span>
+        </div>
+
+        <h2
+          id="footer-newsletter-title"
+          class="footer-newsletter__title"
+        >
+          {{ 'footer.newsletter.title' | translate }}
+        </h2>
+
+        <p class="footer-newsletter__description">
+          {{ 'footer.newsletter.description' | translate }}
+        </p>
+
+        <div class="footer-newsletter__microcopy">
+          <span>BE THE FIRST TO KNOW</span>
+        </div>
+
       </div>
 
-      <form class="footer-newsletter__form">
-        <input
-          type="email"
-          [placeholder]="'footer.newsletter.placeholder' | translate">
 
-        <button type="button">
-          {{ 'footer.newsletter.subscribe' | translate }}
-        </button>
-      </form>
+      <!-- Newsletter Form -->
+      <div class="footer-newsletter__form-area">
+
+        <form
+          class="footer-newsletter__form"
+          novalidate
+        >
+
+          <label
+            class="sr-only"
+            for="footer-email"
+          >
+            {{ 'footer.newsletter.placeholder' | translate }}
+          </label>
+
+          <div class="footer-newsletter__input-wrap">
+
+            <span
+              class="footer-newsletter__input-icon"
+              aria-hidden="true"
+            >
+        
+              <i class="fa-regular fa-envelope"></i>
+            </span>
+
+            <input
+              id="footer-email"
+              type="email"
+              autocomplete="email"
+              [placeholder]="'footer.newsletter.placeholder' | translate"
+            />
+
+          </div>
+
+
+          <button
+            type="button"
+            class="footer-newsletter__submit"
+          >
+            <span>
+              {{ 'footer.newsletter.subscribe' | translate }}
+            </span>
+
+            <svg
+              class="footer-newsletter__submit-icon"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </button>
+
+        </form>
+
+
+        <!-- Privacy Note -->
+        <p class="footer-newsletter__privacy">
+
+          <i
+            class="fa-solid fa-lock"
+            aria-hidden="true"
+          ></i>
+
+          <span>
+            {{ 'footer.newsletter.privacy' | translate }}
+          </span>
+
+        </p>
+
+      </div>
+
     </div>
+
   </section>
+
+
+
+  <!-- =====================================================
+       MAIN FOOTER
+       ===================================================== -->
 
   <div class="site-footer__container">
 
     <div class="footer-main">
 
-      <!-- ================= Brand ================= -->
+
+      <!-- =================================================
+           BRAND
+           ================================================= -->
+
       <section class="footer-brand">
 
         <img
           class="footer-brand__logo"
           [src]="settings()?.logoUrl || 'assets/logo.png'"
-          [alt]="settings()?.storeName">
+          [alt]="settings()?.storeName"
+          loading="lazy"
+        />
+
 
         <h2 class="footer-brand__title">
+
           {{
             languageService.isArabic()
               ? (settings()?.storeArabicName || settings()?.storeName)
               : (settings()?.storeName || settings()?.storeArabicName)
           }}
+
         </h2>
+
+
+        <div class="footer-brand__microtitle">
+          <span>MORE THAN FASHION</span>
+        </div>
+
 
         <p class="footer-brand__tagline">
           {{ 'footer.tagline' | translate }}
         </p>
 
-        <div class="footer-social">
 
-          @if (settings()?.facebookUrl) {
-            <a class="footer-social__item"
-               [href]="settings()?.facebookUrl"
-               target="_blank"
-               rel="noopener noreferrer"
-               aria-label="Facebook">
-              <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
-            </a>
-          }
+        <!-- Social -->
+        <div
+          class="footer-social"
+          aria-label="Social media"
+        >
 
           @if (settings()?.instagramUrl) {
-            <a class="footer-social__item"
-               [href]="settings()?.instagramUrl"
-               target="_blank"
-               rel="noopener noreferrer"
-               aria-label="Instagram">
-              <i class="fa-brands fa-instagram" aria-hidden="true"></i>
-            
+
+            <a
+              class="footer-social__item"
+              [href]="settings()?.instagramUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+            >
+              <i
+                class="fa-brands fa-instagram"
+                aria-hidden="true"
+              ></i>
             </a>
+
           }
+
+
+          @if (settings()?.facebookUrl) {
+
+            <a
+              class="footer-social__item"
+              [href]="settings()?.facebookUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+            >
+              <i
+                class="fa-brands fa-facebook-f"
+                aria-hidden="true"
+              ></i>
+            </a>
+
+          }
+
 
           @if (settings()?.whatsAppNumber) {
-            <a class="footer-social__item footer-social__item--whatsapp"
-               [href]="'https://wa.me/' + settings()?.whatsAppNumber"
-               target="_blank"
-               rel="noopener noreferrer"
-               aria-label="WhatsApp">
-              <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
 
-
+            <a
+              class="footer-social__item footer-social__item--whatsapp"
+              [href]="'https://wa.me/' + settings()?.whatsAppNumber"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp"
+            >
+              <i
+                class="fa-brands fa-whatsapp"
+                aria-hidden="true"
+              ></i>
             </a>
+
           }
+
+        </div>
+
+
+        <!-- Editorial Signature -->
+        <div class="footer-brand__signature">
+
+          <span>STYLE CONNECTS US</span>
+
+          <span
+            class="footer-brand__signature-line"
+            aria-hidden="true"
+          ></span>
 
         </div>
 
       </section>
 
-      <!-- ================= Links ================= -->
-     <section class="footer-links">
-  <div class="footer-links__column">
-    <h3>{{ 'footer.shop.title' | translate }}</h3>
-    <div class="footer-links__divider"></div>
-    <a routerLink="/new-in">{{ 'footer.shop.newIn' | translate }}</a>
-    <a routerLink="/categories">{{ 'footer.shop.collections' | translate }}</a>
-    <a routerLink="/brands">{{ 'footer.shop.brands' | translate }}</a>
-    <a routerLink="/sale">{{ 'footer.shop.sale' | translate }}</a>
-  </div>
 
-  <div class="footer-links__column">
-    <h3>{{ 'footer.support.title' | translate }}</h3>
-    <div class="footer-links__divider"></div>
-    <a routerLink="/contact">{{ 'footer.support.contact' | translate }}</a>
-    <a routerLink="/shipping">{{ 'footer.support.shipping' | translate }}</a>
-    <a routerLink="/faq">{{ 'footer.support.faq' | translate }}</a>
-  </div>
 
- <div class="footer-links__column footer-links__column--contact">
-  <h3>{{ 'footer.contact.title' | translate }}</h3>
-  <div class="footer-links__divider"></div>
-  <p><span class="contact-icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></span> {{ settings()?.supportEmail }}</p>
-  <p><span class="contact-icon"><i class="fa-solid fa-phone" aria-hidden="true"></i></span> {{ settings()?.supportPhone }}</p>
-  <p><span class="contact-icon"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></span> {{ settings()?.address }}</p>
-</div>
-</section>
+      <!-- =================================================
+           LINKS
+           ================================================= -->
+
+      <section class="footer-links">
+
+
+        <!-- SHOP -->
+        <div class="footer-links__column">
+
+          <div class="footer-links__heading">
+
+            <span class="footer-links__heading-ar">
+              {{ 'footer.shop.title' | translate }}
+            </span>
+
+            <span class="footer-links__heading-en">
+              SHOP
+            </span>
+
+            <span
+              class="footer-links__heading-line"
+              aria-hidden="true"
+            ></span>
+
+          </div>
+
+
+          <nav
+            class="footer-links__nav"
+            aria-label="Shop"
+          >
+
+            <a routerLink="/new-in">
+              {{ 'footer.shop.newIn' | translate }}
+            </a>
+
+            <a routerLink="/categories">
+              {{ 'footer.shop.collections' | translate }}
+            </a>
+
+            <a routerLink="/brands">
+              {{ 'footer.shop.brands' | translate }}
+            </a>
+
+            <a routerLink="/sale">
+              {{ 'footer.shop.sale' | translate }}
+            </a>
+
+          </nav>
+
+        </div>
+
+
+
+        <!-- SUPPORT -->
+        <div class="footer-links__column">
+
+          <div class="footer-links__heading">
+
+            <span class="footer-links__heading-ar">
+              {{ 'footer.support.title' | translate }}
+            </span>
+
+            <span class="footer-links__heading-en">
+              SUPPORT
+            </span>
+
+            <span
+              class="footer-links__heading-line"
+              aria-hidden="true"
+            ></span>
+
+          </div>
+
+
+          <nav
+            class="footer-links__nav"
+            aria-label="Support"
+          >
+
+            <a routerLink="/contact">
+              {{ 'footer.support.contact' | translate }}
+            </a>
+
+            <a routerLink="/shipping">
+              {{ 'footer.support.shipping' | translate }}
+            </a>
+
+            <a routerLink="/faq">
+              {{ 'footer.support.faq' | translate }}
+            </a>
+
+          </nav>
+
+        </div>
+
+
+
+        <!-- CONTACT -->
+        <div class="footer-links__column footer-links__column--contact">
+
+          <div class="footer-links__heading">
+
+            <span class="footer-links__heading-ar">
+              {{ 'footer.contact.title' | translate }}
+            </span>
+
+            <span class="footer-links__heading-en">
+              CONTACT
+            </span>
+
+            <span
+              class="footer-links__heading-line"
+              aria-hidden="true"
+            ></span>
+
+          </div>
+
+
+          <div class="footer-contact-list">
+
+
+            <!-- Email -->
+            <p class="footer-contact">
+
+              <span
+                class="footer-contact__icon"
+                aria-hidden="true"
+              >
+                <i class="fa-regular fa-envelope"></i>
+              </span>
+
+              <span class="footer-contact__text">
+                {{ settings()?.supportEmail }}
+              </span>
+
+            </p>
+
+
+            <!-- Phone -->
+            <p class="footer-contact">
+
+              <span
+                class="footer-contact__icon"
+                aria-hidden="true"
+              >
+                <i class="fa-solid fa-phone"></i>
+              </span>
+
+              <span class="footer-contact__text">
+                {{ settings()?.supportPhone }}
+              </span>
+
+            </p>
+
+
+            <!-- Address -->
+            <p class="footer-contact">
+
+              <span
+                class="footer-contact__icon"
+                aria-hidden="true"
+              >
+                <i class="fa-solid fa-location-dot"></i>
+              </span>
+
+              <span class="footer-contact__text">
+                {{ settings()?.address }}
+              </span>
+
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =================================================
+           EDITORIAL SIDE NOTE
+           ================================================= -->
+
+      <aside
+        class="footer-editorial-note"
+        aria-hidden="true"
+      >
+
+        <span>ELEVATING</span>
+        <span>EVERY</span>
+        <span>DETAIL</span>
+
+        <span class="footer-editorial-note__line"></span>
+
+      </aside>
 
     </div>
 
   </div>
 
-  <!-- ================= Bottom ================= -->
+
+
+  <!-- =====================================================
+       BOTTOM BAR
+       ===================================================== -->
+
   <div class="footer-bottom">
-    <p>
-      © {{ year }}
-      {{
-        languageService.isArabic()
-          ? (settings()?.storeArabicName || settings()?.storeName)
-          : (settings()?.storeName || settings()?.storeArabicName)
-      }}
-      • {{ 'footer.bottom.rights' | translate }}
-    </p>
 
-    <div class="footer-bottom__links">
-      <a routerLink="/privacy">{{ 'footer.bottom.privacy' | translate }}</a>
-      <a routerLink="/terms">{{ 'footer.bottom.terms' | translate }}</a>
+    <div class="footer-bottom__copyright">
+
+      <span>
+        © {{ year }}
+      </span>
+
+      <span>
+        {{
+          languageService.isArabic()
+            ? (settings()?.storeArabicName || settings()?.storeName)
+            : (settings()?.storeName || settings()?.storeArabicName)
+        }}
+      </span>
+
+      <span
+        class="footer-bottom__dot"
+        aria-hidden="true"
+      >
+        •
+      </span>
+
+      <span>
+        {{ 'footer.bottom.rights' | translate }}
+      </span>
+
     </div>
+
+
+    <nav
+      class="footer-bottom__links"
+      aria-label="Legal"
+    >
+
+      <a routerLink="/privacy">
+        {{ 'footer.bottom.privacy' | translate }}
+      </a>
+
+      <span
+        class="footer-bottom__separator"
+        aria-hidden="true"
+      >
+        |
+      </span>
+
+      <a routerLink="/terms">
+        {{ 'footer.bottom.terms' | translate }}
+      </a>
+
+    </nav>
+
+
+    <div class="footer-bottom__signature">
+      <span>MADE WITH</span>
+
+      <span
+        class="footer-bottom__heart"
+        aria-hidden="true"
+      >
+        ♡
+      </span>
+
+      <span>FOR YOU</span>
+    </div>
+
   </div>
 
 </footer>
