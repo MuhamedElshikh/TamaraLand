@@ -22,24 +22,34 @@
 
    <header class="collection-hero">
 
-  <div class="collection-hero__media" aria-hidden="true">
+  <!-- Full-width atmospheric background using the SAME brand image -->
+  <div class="collection-hero__backdrop" aria-hidden="true">
     <img
-      class="collection-hero__image"
+      class="collection-hero__backdrop-image"
       [src]="brand()?.imageUrl"
-      [alt]="''"
+      alt=""
+      loading="eager"
+      decoding="async"
+    />
+  </div>
+
+  <!-- Soft editorial foreground: keeps the portrait image readable -->
+  <div class="collection-hero__foreground" aria-hidden="true">
+    <img
+      class="collection-hero__foreground-image"
+      [src]="brand()?.imageUrl"
+      alt=""
       loading="eager"
       decoding="async"
     />
   </div>
 
   <div class="collection-hero__overlay" aria-hidden="true"></div>
-
   <div class="collection-hero__frame" aria-hidden="true"></div>
 
   <div class="collection-hero__content">
 
     <div class="collection-hero__breadcrumb">
-
       <app-breadcrumbs
         [items]="[
           {
@@ -57,37 +67,27 @@
           }
         ]"
       />
-
     </div>
 
     <div class="collection-hero__copy">
 
       <div class="collection-hero__eyebrow">
-
         <span class="collection-hero__eyebrow-line"></span>
-
-        <span>
-          {{ 'brandPage.brand' | translate }}
-        </span>
-
+        <span>{{ 'brandPage.brand' | translate }}</span>
       </div>
 
       <h1 class="collection-hero__title">
-
         {{
           brand()
             ? (brand() | localizedName)
             : ('brandPage.loading' | translate)
         }}
-
       </h1>
 
       @if (brand()?.description) {
-
         <p class="collection-hero__description">
           {{ brand()?.description }}
         </p>
-
       }
 
     </div>
