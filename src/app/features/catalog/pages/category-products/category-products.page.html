@@ -2,50 +2,77 @@
 
   @if (notFound()) {
 
+    <!-- =====================================================
+         NOT FOUND
+    ====================================================== -->
+
     <div class="collection-page__not-found">
+
+      <span
+        class="collection-page__not-found-line"
+        aria-hidden="true"
+      ></span>
+
       <p class="section-copy">
         {{ 'categoryPage.notFound' | translate }}
       </p>
+
     </div>
 
   } @else {
 
     <!-- =====================================================
-         HERO
-         ===================================================== -->
+         EDITORIAL HERO
+    ====================================================== -->
 
     <header class="collection-page__hero">
 
-      <app-breadcrumbs
-        [items]="[
-          {
-            label: ('categoryPage.home' | translate),
-            link: '/'
-          },
-          {
-            label: ('categoryPage.categories' | translate),
-            link: '/categories'
-          },
-          {
-            label: category()
-              ? (category() | localizedName)
-              : ('categoryPage.category' | translate)
-          }
-        ]"
-      />
+      <!-- Breadcrumbs -->
+
+      <div class="collection-page__breadcrumbs">
+
+        <app-breadcrumbs
+          [items]="[
+            {
+              label: ('categoryPage.home' | translate),
+              link: '/'
+            },
+            {
+              label: ('categoryPage.categories' | translate),
+              link: '/categories'
+            },
+            {
+              label: category()
+                ? (category() | localizedName)
+                : ('categoryPage.category' | translate)
+            }
+          ]"
+        />
+
+      </div>
+
+
+      <!-- Hero Copy -->
 
       <div class="collection-page__hero-content">
+
+        <span
+          class="collection-page__hero-line"
+          aria-hidden="true"
+        ></span>
 
         <p class="section-kicker">
           {{ 'categoryPage.category' | translate }}
         </p>
 
         <h1 class="section-title">
+
           {{
             category()
               ? (category() | localizedName)
               : ('categoryPage.loading' | translate)
           }}
+
         </h1>
 
         @if (category()?.description) {
@@ -62,67 +89,106 @@
 
 
     <!-- =====================================================
-         PAGE CONTENT
-         ===================================================== -->
+         CATALOG
+    ====================================================== -->
 
     <div class="collection-page__layout">
 
+
       <!-- ===================================================
-           DESKTOP FILTERS
-           =================================================== -->
+           FILTER RAIL — DESKTOP
+      ==================================================== -->
 
-      <aside class="collection-page__filters">
+      <aside
+        class="collection-page__filters"
+        aria-label="Product filters"
+      >
 
-        <app-product-filters
-          [hideCategoryFilter]="true"
-          (filtersChanged)="onFiltersChanged($event)"
-        />
+        <div class="collection-page__filter-rail">
+
+          <div class="collection-page__filter-header">
+
+            <span class="collection-page__filter-kicker">
+              REFINE
+            </span>
+
+            <span
+              class="collection-page__filter-rule"
+              aria-hidden="true"
+            ></span>
+
+          </div>
+
+
+          <div class="collection-page__filter-body">
+
+            <app-product-filters
+              [hideCategoryFilter]="true"
+              (filtersChanged)="onFiltersChanged($event)"
+            />
+
+          </div>
+
+        </div>
 
       </aside>
 
 
       <!-- ===================================================
-           PRODUCTS
-           =================================================== -->
+           PRODUCTS CONTENT
+      ==================================================== -->
 
-      <div class="collection-page__content">
+      <main class="collection-page__content">
 
-        <!-- Toolbar -->
+
+        <!-- =================================================
+             TOOLBAR
+        ================================================== -->
 
         <div class="collection-page__toolbar">
 
-          <p class="collection-page__summary">
+          <div class="collection-page__toolbar-meta">
 
-            @if (totalCount() === 1) {
+            <span
+              class="collection-page__toolbar-line"
+              aria-hidden="true"
+            ></span>
 
-              {{
-                'categoryPage.productCount'
-                  | translate:{
-                      count: totalCount()
-                    }
-              }}
+            <p class="collection-page__summary">
 
-            } @else {
+              @if (totalCount() === 1) {
 
-              {{
-                'categoryPage.productsCount'
-                  | translate:{
-                      count: totalCount()
-                    }
-              }}
+                {{
+                  'categoryPage.productCount'
+                    | translate:{
+                        count: totalCount()
+                      }
+                }}
 
-            }
+              } @else {
 
-          </p>
+                {{
+                  'categoryPage.productsCount'
+                    | translate:{
+                        count: totalCount()
+                      }
+                }}
+
+              }
+
+            </p>
+
+          </div>
 
 
-          <!-- Mobile Filters -->
+          <!-- Mobile Filter Trigger -->
 
           <button
             type="button"
             class="filters-toggle"
             (click)="openFilters()"
             [attr.aria-expanded]="filtersOpen()"
+            aria-controls="category-mobile-filters"
           >
 
             <svg
@@ -132,13 +198,16 @@
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="2"
+              stroke-width="1.6"
               stroke-linecap="round"
               stroke-linejoin="round"
+              aria-hidden="true"
             >
+
               <polygon
                 points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"
               />
+
             </svg>
 
             <span>
@@ -151,29 +220,45 @@
 
 
         <!-- =================================================
-             PRODUCTS
-             ================================================= -->
+             LOADING
+        ================================================== -->
 
         @if (isLoading()) {
 
-          <div class="collection-page__grid">
+          <div
+            class="collection-page__grid collection-page__grid--loading"
+            aria-busy="true"
+          >
 
             @for (
-              i of [1, 2, 3, 4, 5, 6];
+              i of [1, 2, 3, 4, 5, 6, 7, 8];
               track i
             ) {
 
               <div
                 class="collection-page__skeleton"
+                aria-hidden="true"
               ></div>
 
             }
 
           </div>
 
-        } @else if (products().length === 0) {
+        }
+
+
+        <!-- =================================================
+             EMPTY
+        ================================================== -->
+
+        @else if (products().length === 0) {
 
           <div class="collection-page__empty">
+
+            <span
+              class="collection-page__empty-line"
+              aria-hidden="true"
+            ></span>
 
             <p class="section-copy">
               {{ 'categoryPage.noProducts' | translate }}
@@ -181,7 +266,14 @@
 
           </div>
 
-        } @else {
+        }
+
+
+        <!-- =================================================
+             PRODUCT GRID
+        ================================================== -->
+
+        @else {
 
           <div class="collection-page__grid">
 
@@ -190,60 +282,81 @@
               track product.id
             ) {
 
-              <app-product-card
-                [product]="product"
-              />
+              <div class="collection-page__product">
+
+                <app-product-card
+                  [product]="product"
+                  [variant]="'editorial'"
+                />
+
+              </div>
 
             }
 
           </div>
 
 
-          <app-pagination
-            [currentPage]="pageNumber()"
-            [totalPages]="totalPages()"
-            (pageChange)="onPageChange($event)"
-          />
+          <!-- =================================================
+               PAGINATION
+          ================================================== -->
+
+          <div class="collection-page__pagination">
+
+            <app-pagination
+              [currentPage]="pageNumber()"
+              [totalPages]="totalPages()"
+              (pageChange)="onPageChange($event)"
+            />
+
+          </div>
 
         }
 
-      </div>
+      </main>
 
     </div>
 
 
     <!-- =====================================================
          MOBILE FILTER BACKDROP
-         ===================================================== -->
+    ====================================================== -->
 
     <div
       class="filters-backdrop"
       [class.filters-backdrop--visible]="filtersOpen()"
       (click)="closeFilters()"
+      aria-hidden="true"
     ></div>
 
 
     <!-- =====================================================
          MOBILE FILTER DRAWER
-         ===================================================== -->
+    ====================================================== -->
 
     <section
+      id="category-mobile-filters"
       class="filters-drawer"
       [class.filters-drawer--open]="filtersOpen()"
       aria-label="Product filters"
+      [attr.aria-hidden]="!filtersOpen()"
     >
 
-      <div class="filters-drawer__handle"></div>
+      <!-- Drawer Handle -->
+
+      <div
+        class="filters-drawer__handle"
+        aria-hidden="true"
+      ></div>
 
 
-      <!-- Header -->
+      <!-- Drawer Header -->
 
       <header class="filters-drawer__header">
 
-        <div>
+        <div class="filters-drawer__heading">
 
           <span class="filters-drawer__eyebrow">
-            {{ 'categoryPage.filters' | translate }}
+            REFINE
           </span>
 
           <h2 class="filters-drawer__title">
@@ -267,10 +380,12 @@
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"
+            stroke-width="1.6"
             stroke-linecap="round"
             stroke-linejoin="round"
+            aria-hidden="true"
           >
+
             <line
               x1="18"
               y1="6"
@@ -284,6 +399,7 @@
               x2="18"
               y2="18"
             ></line>
+
           </svg>
 
         </button>
@@ -291,7 +407,7 @@
       </header>
 
 
-      <!-- Filter Body -->
+      <!-- Drawer Body -->
 
       <div class="filters-drawer__body">
 
@@ -303,7 +419,7 @@
       </div>
 
 
-      <!-- Footer -->
+      <!-- Drawer Footer -->
 
       <footer class="filters-drawer__footer">
 

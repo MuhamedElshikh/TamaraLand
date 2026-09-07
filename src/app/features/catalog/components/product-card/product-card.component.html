@@ -9,7 +9,7 @@
 >
 
   <!-- =====================================================
-       OBJECT / IMAGE
+       PRODUCT MEDIA / ARCH
   ====================================================== -->
 
   <a
@@ -31,8 +31,6 @@
       aria-hidden="true"
     ></span>
 
-    
-
   </a>
 
 
@@ -40,38 +38,36 @@
        TOP CONTROLS
   ====================================================== -->
 
-  <div class="tl-product__controls">
+ <div class="tl-product__controls">
 
-    @if (hasDiscount) {
+  @if (hasDiscount) {
+    <span class="tl-product__discount">
+      {{ discountPercent }}%
+    </span>
+  }
 
-      <span class="tl-product__discount">
-        −{{ discountPercent }}%
-      </span>
+  <button
+    type="button"
+    class="tl-product__wishlist"
+    [class.tl-product__wishlist--active]="isInWishlist()"
+    [disabled]="isTogglingWishlist()"
+    [attr.aria-label]="
+      isInWishlist()
+        ? ('common.removeFromWishlist' | translate)
+        : ('common.addToWishlist' | translate)
+    "
+    [attr.aria-pressed]="isInWishlist()"
+    (click)="toggleWishlist($event)"
+  >
+    <i
+      [class.fa-regular]="!isInWishlist()"
+      [class.fa-solid]="isInWishlist()"
+      class="fa-heart"
+      aria-hidden="true"
+    ></i>
+  </button>
 
-    }
-
-    <button
-      type="button"
-      class="tl-product__wishlist"
-      [class.tl-product__wishlist--active]="isInWishlist()"
-      [disabled]="isTogglingWishlist()"
-      [attr.aria-label]="
-        isInWishlist()
-          ? ('common.removeFromWishlist' | translate)
-          : ('common.addToWishlist' | translate)
-      "
-      [attr.aria-pressed]="isInWishlist()"
-      (click)="toggleWishlist($event)"
-    >
-
-      <i
-        class="fa-regular fa-heart"
-        aria-hidden="true"
-      ></i>
-
-    </button>
-
-  </div>
+</div>
 
 
   <!-- =====================================================
@@ -91,6 +87,8 @@
   ====================================================== -->
 
   <div class="tl-product__info">
+
+    <!-- BRAND + NAME -->
 
     <div class="tl-product__identity">
 
@@ -112,9 +110,13 @@
     </div>
 
 
+    <!-- PRICE + ACTION -->
+
     <div class="tl-product__bottom">
 
       <div class="tl-product__pricing">
+
+        <!-- RATING -->
 
         @if (ratingValue > 0) {
 
@@ -141,6 +143,9 @@
 
         }
 
+
+        <!-- PRICE -->
+
         <div class="tl-product__price">
 
           <span class="tl-product__price-current">
@@ -166,6 +171,8 @@
 
       <div class="tl-product__action">
 
+        <!-- LOADING -->
+
         @if (isAdding()) {
 
           <button
@@ -176,11 +183,17 @@
             [attr.aria-label]="'common.adding' | translate"
           >
 
-            <span class="tl-product__spinner"></span>
+            <span
+              class="tl-product__spinner"
+              aria-hidden="true"
+            ></span>
 
           </button>
 
         }
+
+
+        <!-- OUT OF STOCK -->
 
         @else if (isOutOfStock) {
 
@@ -199,6 +212,9 @@
           </button>
 
         }
+
+
+        <!-- ALREADY IN CART -->
 
         @else if (
           isInCart &&
@@ -240,6 +256,9 @@
 
         }
 
+
+        <!-- ADD TO BAG -->
+
         @else {
 
           <button
@@ -279,9 +298,11 @@
       class="tl-product__sold-out"
       aria-hidden="true"
     >
+
       <span>
         {{ 'common.soldOut' | translate }}
       </span>
+
     </div>
 
   }

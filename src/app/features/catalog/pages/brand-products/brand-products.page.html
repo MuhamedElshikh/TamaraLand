@@ -2,33 +2,54 @@
 
   @if (notFound()) {
 
-    <p class="section-copy">
-      {{ 'brandPage.notFound' | translate }}
-    </p>
+    <!-- =====================================================
+         NOT FOUND
+    ====================================================== -->
+
+    <div class="collection-page__not-found">
+
+      <p class="section-copy">
+        {{ 'brandPage.notFound' | translate }}
+      </p>
+
+    </div>
 
   } @else {
 
+    <!-- =====================================================
+         COLLECTION HERO
+    ====================================================== -->
+
     <header class="collection-page__hero">
 
-      <app-breadcrumbs
-        [items]="[
-          {
-            label: ('brandPage.home' | translate),
-            link: '/'
-          },
-          {
-            label: ('brandPage.brands' | translate),
-            link: '/brands'
-          },
-          {
-            label: brand()
-              ? (brand() | localizedName)
-              : ('brandPage.brand' | translate)
-          }
-        ]"
-      />
+      <div class="collection-page__breadcrumbs">
+        <app-breadcrumbs
+          [items]="[
+            {
+              label: ('brandPage.home' | translate),
+              link: '/'
+            },
+            {
+              label: ('brandPage.brands' | translate),
+              link: '/brands'
+            },
+            {
+              label: brand()
+                ? (brand() | localizedName)
+                : ('brandPage.brand' | translate)
+            }
+          ]"
+        />
+      </div>
 
-      <div>
+
+      <div class="collection-page__hero-copy">
+
+        <span
+          class="collection-page__hero-line"
+          aria-hidden="true"
+        ></span>
+
         <p class="section-kicker">
           {{ 'brandPage.brand' | translate }}
         </p>
@@ -41,54 +62,113 @@
         </h1>
 
         @if (brand()?.description) {
+
           <p class="section-copy">
             {{ brand()?.description }}
           </p>
+
         }
+
       </div>
 
     </header>
 
 
+    <!-- =====================================================
+         CATALOG LAYOUT
+    ====================================================== -->
+
     <div class="collection-page__layout">
 
-      <!-- Desktop Filters -->
-      <aside class="collection-page__filters">
 
-        <app-product-filters
-          [hideBrandFilter]="true"
-          (filtersChanged)="onFiltersChanged($event)"
-        />
+      <!-- ===================================================
+           DESKTOP FILTER RAIL
+      ==================================================== -->
+
+      <aside
+        class="collection-page__filters"
+        aria-label="Product filters"
+      >
+
+        <div class="collection-page__filter-rail">
+
+          <div class="collection-page__filter-rail-head">
+
+            <span class="collection-page__filter-kicker">
+              {{ 'brandPage.filters' | translate }}
+            </span>
+
+            <span
+              class="collection-page__filter-line"
+              aria-hidden="true"
+            ></span>
+
+          </div>
+
+
+          <div class="collection-page__filter-content">
+
+            <app-product-filters
+              [hideBrandFilter]="true"
+              (filtersChanged)="onFiltersChanged($event)"
+            />
+
+          </div>
+
+        </div>
 
       </aside>
 
 
-      <!-- Products Content -->
-      <div class="collection-page__content">
+      <!-- ===================================================
+           PRODUCT CONTENT
+      ==================================================== -->
+
+      <main class="collection-page__content">
+
+
+        <!-- =================================================
+             CATALOG TOOLBAR
+        ================================================== -->
 
         <div class="collection-page__toolbar">
 
-          <p class="collection-page__summary">
+          <div class="collection-page__toolbar-left">
 
-            @if (totalCount() === 1) {
-              {{ 'brandPage.productCount' | translate:{
-                count: totalCount()
-              } }}
-            } @else {
-              {{ 'brandPage.productsCount' | translate:{
-                count: totalCount()
-              } }}
-            }
+            <span
+              class="collection-page__toolbar-line"
+              aria-hidden="true"
+            ></span>
 
-          </p>
+            <p class="collection-page__summary">
+
+              @if (totalCount() === 1) {
+
+                {{ 'brandPage.productCount' | translate:{
+                  count: totalCount()
+                } }}
+
+              } @else {
+
+                {{ 'brandPage.productsCount' | translate:{
+                  count: totalCount()
+                } }}
+
+              }
+
+            </p>
+
+          </div>
 
 
-          <!-- Mobile Filter Button -->
+          <!-- Mobile Filter -->
+
           <button
             type="button"
             class="filters-toggle"
             (click)="openFilters()"
             [attr.aria-expanded]="filtersOpen()"
+            aria-controls="mobile-filters"
           >
 
             <svg
@@ -98,9 +178,10 @@
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="2"
+              stroke-width="1.6"
               stroke-linecap="round"
               stroke-linejoin="round"
+              aria-hidden="true"
             >
               <polygon
                 points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"
@@ -116,73 +197,138 @@
         </div>
 
 
+        <!-- =================================================
+             LOADING
+        ================================================== -->
+
         @if (isLoading()) {
 
-          <div class="collection-page__grid">
+          <div
+            class="collection-page__grid collection-page__grid--loading"
+            aria-busy="true"
+          >
 
-            @for (i of [1, 2, 3, 4]; track i) {
-              <div class="collection-page__skeleton"></div>
-            }
+            @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
 
-          </div>
-
-        } @else if (products().length === 0) {
-
-          <p class="section-copy">
-            {{ 'brandPage.noProducts' | translate }}
-          </p>
-
-        } @else {
-
-          <div class="collection-page__grid">
-
-            @for (product of products(); track product.id) {
-
-              <app-product-card
-                [product]="product"
-              />
+              <div
+                class="collection-page__skeleton"
+                aria-hidden="true"
+              ></div>
 
             }
 
           </div>
-
-
-          <app-pagination
-            [currentPage]="pageNumber()"
-            [totalPages]="totalPages()"
-            (pageChange)="onPageChange($event)"
-          />
 
         }
 
-      </div>
+
+        <!-- =================================================
+             EMPTY
+        ================================================== -->
+
+        @else if (products().length === 0) {
+
+          <div class="collection-page__empty">
+
+            <span
+              class="collection-page__empty-line"
+              aria-hidden="true"
+            ></span>
+
+            <p class="section-copy">
+              {{ 'brandPage.noProducts' | translate }}
+            </p>
+
+          </div>
+
+        }
+
+
+        <!-- =================================================
+             PRODUCTS
+        ================================================== -->
+
+        @else {
+
+          <div class="collection-page__grid">
+
+            @for (
+              product of products();
+              track product.id
+            ) {
+
+              <div class="collection-page__product">
+
+                <app-product-card
+                  [product]="product"
+                  [variant]="'editorial'"
+                />
+
+              </div>
+
+            }
+
+          </div>
+
+
+          <!-- =================================================
+               PAGINATION
+          ================================================== -->
+
+          <div class="collection-page__pagination">
+
+            <app-pagination
+              [currentPage]="pageNumber()"
+              [totalPages]="totalPages()"
+              (pageChange)="onPageChange($event)"
+            />
+
+          </div>
+
+        }
+
+      </main>
 
     </div>
 
 
     <!-- =====================================================
-         MOBILE FILTER DRAWER
-         ===================================================== -->
+         MOBILE FILTER BACKDROP
+    ====================================================== -->
 
     <div
       class="filters-backdrop"
       [class.filters-backdrop--visible]="filtersOpen()"
       (click)="closeFilters()"
+      aria-hidden="true"
     ></div>
 
 
+    <!-- =====================================================
+         MOBILE FILTER DRAWER
+    ====================================================== -->
+
     <section
+      id="mobile-filters"
       class="filters-drawer"
       [class.filters-drawer--open]="filtersOpen()"
       aria-label="Product filters"
+      [attr.aria-hidden]="!filtersOpen()"
     >
 
-      <div class="filters-drawer__handle"></div>
+      <!-- Handle -->
 
+      <div
+        class="filters-drawer__handle"
+        aria-hidden="true"
+      ></div>
+
+
+      <!-- Header -->
 
       <header class="filters-drawer__header">
 
-        <div>
+        <div class="filters-drawer__heading">
 
           <span class="filters-drawer__eyebrow">
             {{ 'brandPage.filters' | translate }}
@@ -209,18 +355,32 @@
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"
+            stroke-width="1.6"
             stroke-linecap="round"
             stroke-linejoin="round"
+            aria-hidden="true"
           >
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
+            <line
+              x1="18"
+              y1="6"
+              x2="6"
+              y2="18"
+            ></line>
+
+            <line
+              x1="6"
+              y1="6"
+              x2="18"
+              y2="18"
+            ></line>
           </svg>
 
         </button>
 
       </header>
 
+
+      <!-- Body -->
 
       <div class="filters-drawer__body">
 
@@ -231,6 +391,8 @@
 
       </div>
 
+
+      <!-- Footer -->
 
       <footer class="filters-drawer__footer">
 

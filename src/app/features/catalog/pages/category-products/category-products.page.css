@@ -1,127 +1,151 @@
 /* =========================================================
-   CATEGORY PRODUCTS PAGE
-   ========================================================= */
+   TAMARA LAND — COLLECTION / PRODUCT LISTING
+   EDITORIAL FILTER RAIL
+   Product Grid + Mobile Drawer
+========================================================= */
+
+
+/* =========================================================
+   PAGE
+========================================================= */
 
 .collection-page {
   width: 100%;
   min-width: 0;
-
-  box-sizing: border-box;
 
   display: flex;
   flex-direction: column;
 
   gap: 1.5rem;
 
-  /*
-   * The page itself owns the horizontal spacing.
-   * Do NOT add 10px margins/padding to children.
-   */
-  padding:
-    1.5rem
-    1.25rem
-    3rem;
+  padding-inline: 1rem;
+
+  overflow: visible;
+
+  box-sizing: border-box;
+}
+
+
+.collection-page,
+.collection-page *,
+.collection-page *::before,
+.collection-page *::after {
+  box-sizing: border-box;
 }
 
 
 /* =========================================================
    HERO
-   ========================================================= */
+========================================================= */
 
 .collection-page__hero {
   width: 100%;
   min-width: 0;
 
-  box-sizing: border-box;
-
   display: flex;
   flex-direction: column;
 
-  gap: 0.75rem;
+  gap: 0.65rem;
 
   padding:
-    0.5rem
+    1.25rem
     0
-    0;
+    0.5rem;
 }
 
-.collection-page__hero-content {
-  width: 100%;
+
+.collection-page__hero > * {
   min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 0.35rem;
-}
-
-.collection-page__hero .section-kicker {
-  margin-bottom: 0.25rem;
-}
-
-.collection-page__hero .section-title {
-  margin-bottom: 0.25rem;
 }
 
 
 /* =========================================================
-   LAYOUT
-   ========================================================= */
+   MAIN DESKTOP LAYOUT
+========================================================= */
 
 .collection-page__layout {
   width: 100%;
   min-width: 0;
 
-  box-sizing: border-box;
+  display: grid;
 
-  display: flex;
-  flex-direction: column;
+  grid-template-columns:
+    272px
+    minmax(0, 1fr);
 
-  gap: 1.25rem;
+  align-items: start;
+
+  gap: clamp(
+    2rem,
+    3.5vw,
+    4rem
+  );
+
+  padding-bottom: 4rem;
 }
 
 
 /* =========================================================
-   DESKTOP FILTERS
-   ========================================================= */
+   FILTER RAIL
+========================================================= */
 
 .collection-page__filters {
-  width: 100%;
+  width: 272px;
+  max-width: 272px;
+
   min-width: 0;
 
-  position: static !important;
+  position: STATIC;
 
-  box-sizing: border-box;
+  top: 6.5rem;
+
+  align-self: start;
+
+  padding: 0;
+
+  margin: 0;
+}
+
+
+/*
+  The actual filter component owns
+  the editorial visual treatment.
+*/
+
+.collection-page__filters .filters-bar {
+  width: 100%;
+  max-width: 100%;
+
+  margin: 0;
 }
 
 
 /* =========================================================
    PRODUCTS CONTENT
-   ========================================================= */
+========================================================= */
 
 .collection-page__content {
   width: 100%;
   min-width: 0;
 
-  box-sizing: border-box;
-
   display: flex;
   flex-direction: column;
 
-  gap: 1rem;
+  gap: 1.25rem;
+
+  overflow: visible;
 }
 
 
 /* =========================================================
    TOOLBAR
-   ========================================================= */
+========================================================= */
 
 .collection-page__toolbar {
   width: 100%;
+  min-width: 0;
 
-  min-height: 42px;
-
-  box-sizing: border-box;
+  min-height: 44px;
 
   display: flex;
 
@@ -130,30 +154,61 @@
 
   gap: 1rem;
 
-  /*
-   * No margin.
-   * No card around it on desktop.
-   */
-  margin: 0;
+  padding: 0 0 0.8rem;
 
-  padding: 0;
+  border-bottom: 1px solid var(--border-color);
 }
 
+
 .collection-page__summary {
+  min-width: 0;
+
   margin: 0;
 
-  color:
-    var(--text-secondary);
+  color: var(--text-secondary);
 
-  font-size: 0.9rem;
+  font-family:
+    "Tajawal",
+    sans-serif;
 
-  line-height: 1.4;
+  font-size: 0.7rem;
+
+  font-weight: 700;
+
+  letter-spacing: 0.16em;
+
+  text-transform: uppercase;
+
+  white-space: nowrap;
+}
+
+
+/* Gold line beside summary */
+
+.collection-page__toolbar::before {
+  content: "";
+
+  width: 28px;
+  height: 1px;
+
+  flex: 0 0 auto;
+
+  background: var(--primary);
+}
+
+
+/*
+  Keep toolbar content visually ordered.
+*/
+
+.collection-page__toolbar > * {
+  min-width: 0;
 }
 
 
 /* =========================================================
-   FILTER TOGGLE
-   ========================================================= */
+   MOBILE FILTER BUTTON
+========================================================= */
 
 .filters-toggle {
   display: none;
@@ -161,164 +216,183 @@
   align-items: center;
   justify-content: center;
 
-  gap: 0.5rem;
+  gap: 0.55rem;
 
-  min-height: 42px;
+  min-height: 40px;
 
   padding:
-    0.6rem
-    1rem;
+    0.55rem
+    0.9rem;
 
-  border:
-    1px solid
-    var(--border-color);
+  border: 1px solid var(--border-color);
 
   border-radius: 999px;
 
-  background:
-    var(--bg-card);
+  background: transparent;
 
-  color:
-    var(--text-primary);
+  color: var(--text-primary);
 
-  font-family: inherit;
+  font-family:
+    "Tajawal",
+    sans-serif;
 
-  font-size: 0.84rem;
+  font-size: 0.72rem;
 
-  font-weight: 600;
+  font-weight: 700;
 
   cursor: pointer;
 
   transition:
+    color 0.2s ease,
     border-color 0.2s ease,
     background 0.2s ease,
     transform 0.2s ease;
 }
 
+
 .filters-toggle:hover {
-  border-color:
-    var(--primary);
+  color: var(--primary-light);
+
+  border-color: var(--primary);
+
+  background:
+    color-mix(
+      in srgb,
+      var(--primary) 5%,
+      transparent
+    );
 }
+
 
 .filters-toggle:active {
-  transform:
-    scale(0.97);
+  transform: scale(0.97);
 }
 
-.filters-toggle svg {
-  width: 17px;
-  height: 17px;
 
-  flex-shrink: 0;
+.filters-toggle svg {
+  width: 15px;
+  height: 15px;
+
+  flex: 0 0 auto;
 }
 
 
 /* =========================================================
    PRODUCT GRID
-   ========================================================= */
+========================================================= */
 
 .collection-page__grid {
   width: 100%;
   min-width: 0;
 
-  box-sizing: border-box;
-
   display: grid;
 
   grid-template-columns:
-    repeat(4, minmax(0, 1fr));
+    repeat(
+      4,
+      minmax(0, 1fr)
+    );
 
-  gap: 1rem;
+  gap:
+    clamp(
+      1.15rem,
+      2vw,
+      1.75rem
+    );
 
-  /*
-   * IMPORTANT:
-   * No padding here.
-   * Parent page already has padding.
-   */
-  padding: 0;
+  align-items: start;
+}
+
+
+/*
+  IMPORTANT:
+  Product cards must not stretch
+  outside their grid cell.
+*/
+
+.collection-page__grid > * {
+  min-width: 0;
+  max-width: 100%;
 }
 
 
 /* =========================================================
-   EMPTY
-   ========================================================= */
+   PRODUCT CARD SAFETY
+========================================================= */
 
-.collection-page__empty {
+.collection-page__grid
+.tl-product {
   width: 100%;
+  max-width: 100%;
 
-  min-height: 220px;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  text-align: center;
+  min-width: 0;
 }
 
 
-/* =========================================================
-   NOT FOUND
-   ========================================================= */
+/*
+  Don't let large/editorial variants
+  explode inside the listing grid.
+*/
 
-.collection-page__not-found {
+.collection-page__grid
+.tl-product--large,
+.collection-page__grid
+.tl-product--wide {
   width: 100%;
-
-  min-height: 300px;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  text-align: center;
+  max-width: 100%;
 }
 
 
 /* =========================================================
    SKELETON
-   ========================================================= */
+========================================================= */
 
 .collection-page__skeleton {
   width: 100%;
 
   aspect-ratio:
-    3 / 4.3;
+    4 / 5.25;
+
+  border: 1px solid var(--border-color);
 
   border-radius:
-    var(--radius-md);
+    50% 50% 16px 16px;
 
   background:
-    var(--secondary-light);
+    linear-gradient(
+      110deg,
+      var(--bg-secondary) 8%,
+      var(--bg-card) 18%,
+      var(--bg-secondary) 33%
+    );
 
-  border:
-    1px solid
-    var(--border-color);
+  background-size: 200% 100%;
 
   animation:
-    skeletonPulse
-    1.4s
+    collectionSkeleton
+    1.5s
     ease-in-out
     infinite;
 }
 
-@keyframes skeletonPulse {
 
-  0%,
+@keyframes collectionSkeleton {
+
+  0% {
+    background-position:
+      200% 0;
+  }
+
   100% {
-    opacity: 0.5;
+    background-position:
+      -200% 0;
   }
-
-  50% {
-    opacity: 0.9;
-  }
-
 }
 
 
 /* =========================================================
-   FILTER BACKDROP
-   ========================================================= */
+   BACKDROP
+========================================================= */
 
 .filters-backdrop {
   position: fixed !important;
@@ -331,7 +405,7 @@
   z-index: 9999;
 
   background:
-    rgba(0, 0, 0, 0.52);
+    rgba(0, 0, 0, 0.55);
 
   opacity: 0;
 
@@ -344,11 +418,12 @@
     visibility 0.3s ease;
 
   backdrop-filter:
-    blur(3px);
+    blur(4px);
 
   -webkit-backdrop-filter:
-    blur(3px);
+    blur(4px);
 }
+
 
 .filters-backdrop--visible {
   opacity: 1;
@@ -361,14 +436,14 @@
 
 /* =========================================================
    MOBILE FILTER DRAWER
-   ========================================================= */
+========================================================= */
 
 .filters-drawer {
   position: fixed !important;
 
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
+  inset-inline-start: 0 !important;
+  inset-inline-end: 0 !important;
+  inset-block-end: 0 !important;
 
   width: 100vw !important;
   max-width: 100vw !important;
@@ -381,10 +456,16 @@
 
   flex-direction: column;
 
-  box-sizing: border-box;
-
   background:
     var(--bg-card);
+
+  color:
+    var(--text-primary);
+
+  border:
+    1px solid var(--border-color);
+
+  border-bottom: 0;
 
   border-radius:
     22px
@@ -392,13 +473,9 @@
     0
     0;
 
-  border-top:
-    1px solid
-    var(--border-color);
-
   box-shadow:
-    0 -15px 45px
-    rgba(0, 0, 0, 0.25);
+    0 -20px 55px
+      rgba(0, 0, 0, 0.3);
 
   overflow: hidden;
 
@@ -409,41 +486,43 @@
 
   transition:
     transform
-    0.38s
-    cubic-bezier(0.22, 1, 0.36, 1),
-
+      0.38s
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      ),
     visibility
-    0.38s
-    ease;
+      0.38s
+      ease;
 }
+
 
 .filters-drawer--open {
   transform:
     translateY(0);
 
-  visibility:
-    visible;
+  visibility: visible;
 }
 
 
 /* =========================================================
    DRAWER HANDLE
-   ========================================================= */
+========================================================= */
 
 .filters-drawer__handle {
-  flex:
-    0 0 auto;
+  flex: 0 0 auto;
 
   width: 42px;
-  height: 4px;
+  height: 3px;
 
   margin:
     10px
     auto
-    5px;
+    4px;
 
-  border-radius:
-    999px;
+  border-radius: 999px;
 
   background:
     var(--border-color);
@@ -452,9 +531,11 @@
 
 /* =========================================================
    DRAWER HEADER
-   ========================================================= */
+========================================================= */
 
 .filters-drawer__header {
+  flex: 0 0 auto;
+
   display: flex;
 
   align-items: center;
@@ -464,37 +545,42 @@
 
   padding:
     0.8rem
-    1rem;
+    1rem
+    0.9rem;
 
   border-bottom:
     1px solid
     var(--border-color);
-
-  flex:
-    0 0 auto;
 }
+
 
 .filters-drawer__eyebrow {
   display: block;
 
-  margin-bottom:
-    0.1rem;
+  margin:
+    0 0
+    0.15rem;
 
   color:
-    var(--text-secondary);
+    var(--primary);
+
+  font-family:
+    "Tajawal",
+    sans-serif;
 
   font-size:
-    0.68rem;
+    0.58rem;
 
   font-weight:
-    600;
+    800;
+
+  letter-spacing:
+    0.16em;
 
   text-transform:
     uppercase;
-
-  letter-spacing:
-    0.08em;
 }
+
 
 .filters-drawer__title {
   margin: 0;
@@ -503,34 +589,35 @@
     var(--text-primary);
 
   font-family:
-    'Cormorant Garamond',
-    serif;
+    "Tajawal",
+    sans-serif;
 
   font-size:
-    1.3rem;
+    1.05rem;
 
   font-weight:
     700;
 }
 
-.filters-drawer__close {
-  display: flex;
 
-  align-items: center;
-  justify-content: center;
+.filters-drawer__close {
+  flex:
+    0 0 38px;
 
   width: 38px;
   height: 38px;
 
-  flex:
-    0 0 auto;
+  display: grid;
+
+  place-items: center;
+
+  padding: 0;
 
   border:
     1px solid
     var(--border-color);
 
-  border-radius:
-    50%;
+  border-radius: 50%;
 
   background:
     transparent;
@@ -541,14 +628,28 @@
   cursor: pointer;
 
   transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
     background 0.2s ease,
     transform 0.2s ease;
 }
 
+
 .filters-drawer__close:hover {
+  color:
+    var(--primary);
+
+  border-color:
+    var(--primary);
+
   background:
-    var(--secondary-light);
+    color-mix(
+      in srgb,
+      var(--primary) 6%,
+      transparent
+    );
 }
+
 
 .filters-drawer__close:active {
   transform:
@@ -558,7 +659,7 @@
 
 /* =========================================================
    DRAWER BODY
-   ========================================================= */
+========================================================= */
 
 .filters-drawer__body {
   flex:
@@ -580,27 +681,41 @@
 }
 
 
+/*
+  The filter component inside drawer
+  should lose desktop constraints.
+*/
+
+.filters-drawer__body .filters-bar {
+  width: 100%;
+  max-width: 100%;
+
+  position: static;
+
+  padding: 0;
+}
+
+
 /* =========================================================
    DRAWER FOOTER
-   ========================================================= */
+========================================================= */
 
 .filters-drawer__footer {
+  flex: 0 0 auto;
+
   display: grid;
 
   grid-template-columns:
     1fr
     1.4fr;
 
-  gap:
-    0.65rem;
+  gap: 0.6rem;
 
   padding:
-    0.8rem
-    1rem;
-
-  padding-bottom:
+    0.75rem
+    1rem
     calc(
-      0.8rem +
+      0.75rem +
       env(safe-area-inset-bottom)
     );
 
@@ -610,145 +725,291 @@
   border-top:
     1px solid
     var(--border-color);
-
-  flex:
-    0 0 auto;
 }
 
+
 .filters-drawer__footer .btn {
-  min-height:
-    46px;
+  min-height: 45px;
 
-  padding:
-    0.7rem;
+  border-radius: 0;
 
-  border-radius:
-    12px;
+  font-family:
+    "Tajawal",
+    sans-serif;
 
-  font-size:
-    0.85rem;
+  font-size: 0.75rem;
 
-  font-weight:
-    600;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   DESKTOP
+========================================================= */
+
+@media (min-width: 1201px) {
+
+  .collection-page {
+    padding-inline:
+      clamp(
+        1rem,
+        3vw,
+        3.5rem
+      );
+  }
+
+
+  .collection-page__layout {
+    grid-template-columns:
+      272px
+      minmax(0, 1fr);
+
+    gap:
+      clamp(
+        2.2rem,
+        3.5vw,
+        4rem
+      );
+  }
+
+
+  .collection-page__grid {
+    grid-template-columns:
+      repeat(
+        4,
+        minmax(0, 1fr)
+      );
+  }
+}
+
+
+/* =========================================================
+   STANDARD DESKTOP
+========================================================= */
+
+@media (max-width: 1200px)
+and (min-width: 901px) {
+
+  .collection-page {
+    padding-inline:
+      1.25rem;
+  }
+
+
+  .collection-page__layout {
+    grid-template-columns:
+      240px
+      minmax(0, 1fr);
+
+    gap:
+      1.75rem;
+  }
+
+
+  .collection-page__filters {
+    width: 240px;
+    max-width: 240px;
+  }
+
+
+  .collection-page__grid {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+
+    gap:
+      1.1rem;
+  }
 }
 
 
 /* =========================================================
    TABLET
-   ========================================================= */
+========================================================= */
 
-@media (max-width: 1100px) {
+@media (max-width: 900px)
+and (min-width: 641px) {
+
+  .collection-page {
+    gap: 1.2rem;
+
+    padding-inline:
+      1rem;
+  }
+
+
+  /*
+    Filters become a toolbar on tablet.
+  */
+
+  .collection-page__layout {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 1rem;
+  }
+
 
   .collection-page__filters {
     display: none;
   }
 
+
   .filters-toggle {
     display: inline-flex;
   }
 
-  .collection-page__grid {
-    grid-template-columns:
-      repeat(3, minmax(0, 1fr));
+
+  .collection-page__toolbar {
+    min-height: 42px;
   }
 
-}
-
-
-/* =========================================================
-   TABLET / MOBILE
-   ========================================================= */
-
-@media (max-width: 900px) {
 
   .collection-page__grid {
     grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-  }
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
 
+    gap:
+      0.85rem;
+  }
 }
 
 
 /* =========================================================
    MOBILE
-   ========================================================= */
+========================================================= */
 
 @media (max-width: 640px) {
 
   .collection-page {
-    gap:
-      1.25rem;
+    gap: 1rem;
 
-    /*
-     * Actual mobile page padding.
-     */
-    padding:
-      1rem
-      0.75rem
-      2.5rem;
+    padding-inline:
+      0.75rem;
   }
 
 
   .collection-page__hero {
     padding:
-      0.5rem
+      0.9rem
       0
       0;
   }
 
 
-  .collection-page__toolbar {
-    min-height:
-      40px;
+  .collection-page__layout {
+    display: flex;
 
-    padding:
-      0;
+    flex-direction: column;
+
+    gap: 0.8rem;
+  }
+
+
+  .collection-page__filters {
+    display: none;
+  }
+
+
+  .collection-page__content {
+    gap:
+      0.85rem;
+  }
+
+
+  .collection-page__toolbar {
+    min-height: 40px;
+
+    padding-bottom:
+      0.65rem;
+  }
+
+
+  .collection-page__toolbar::before {
+    display: none;
   }
 
 
   .collection-page__summary {
     font-size:
-      0.82rem;
+      0.62rem;
+
+    letter-spacing:
+      0.12em;
   }
 
 
   .filters-toggle {
-    min-height:
-      40px;
+    display: inline-flex;
 
-    padding:
-      0.55rem
-      0.85rem;
-
-    font-size:
-      0.78rem;
-  }
-
-
-  .filters-toggle svg {
-    width:
-      16px;
-
-    height:
-      16px;
+    flex: 0 0 auto;
   }
 
 
   .collection-page__grid {
     grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
 
     gap:
-      0.65rem;
+      0.7rem;
+  }
+}
 
-    padding:
-      0;
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .collection-page {
+    padding-inline:
+      0.55rem;
   }
 
 
-  .collection-page__skeleton {
-    aspect-ratio:
-      3 / 4;
+  .collection-page__grid {
+    gap:
+      0.55rem;
+  }
+
+
+  .collection-page__summary {
+    max-width:
+      58%;
+
+    overflow:
+      hidden;
+
+    text-overflow:
+      ellipsis;
+
+    white-space:
+      nowrap;
+  }
+
+
+  .filters-toggle {
+    min-height:
+      38px;
+
+    padding:
+      0.5rem
+      0.75rem;
+
+    font-size:
+      0.68rem;
   }
 
 
@@ -771,64 +1032,120 @@
 
 
   .filters-drawer__footer {
-    gap:
-      0.5rem;
-
-    padding-left:
-      0.75rem;
-
-    padding-right:
+    padding-inline:
       0.75rem;
   }
-
 }
 
 
 /* =========================================================
-   VERY SMALL MOBILE
-   ========================================================= */
+   VERY SMALL
+========================================================= */
 
-@media (max-width: 380px) {
+@media (max-width: 360px) {
 
   .collection-page {
     padding-inline:
-      0.65rem;
+      0.45rem;
   }
 
 
   .collection-page__grid {
     gap:
-      0.5rem;
+      0.45rem;
   }
 
 
-  .filters-drawer {
-    max-height:
-      94dvh;
+  .filters-toggle {
+    width:
+      38px;
+
+    padding: 0;
   }
 
 
-  .filters-drawer__footer .btn {
-    min-height:
-      44px;
-
-    font-size:
-      0.8rem;
+  .filters-toggle span {
+    display: none;
   }
 
+
+  .collection-page__summary {
+    max-width:
+      68%;
+  }
+}
+
+
+/* =========================================================
+   RTL
+========================================================= */
+
+[dir="rtl"] .collection-page {
+  text-align:
+    right;
+}
+
+
+[dir="rtl"] .collection-page__summary {
+  text-align:
+    right;
+}
+
+
+/* =========================================================
+   LIGHT THEME
+========================================================= */
+
+:root[data-theme="light"]
+.collection-page,
+
+html[data-theme="light"]
+.collection-page,
+
+body[data-theme="light"]
+.collection-page,
+
+html.light
+.collection-page,
+
+body.light
+.collection-page {
+  color:
+    var(--text-primary);
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+.filters-toggle:focus-visible,
+.filters-drawer__close:focus-visible {
+  outline:
+    2px solid
+    var(--primary);
+
+  outline-offset:
+    3px;
 }
 
 
 /* =========================================================
    REDUCED MOTION
-   ========================================================= */
+========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
 
-  .filters-drawer,
-  .filters-backdrop {
-    transition:
-      none;
+  .collection-page *,
+  .collection-page *::before,
+  .collection-page *::after {
+
+    animation: none !important;
+
+    transition: none !important;
   }
 
+  .filters-drawer {
+    transition: none;
+  }
 }
