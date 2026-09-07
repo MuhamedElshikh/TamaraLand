@@ -20,59 +20,86 @@
          COLLECTION HERO
     ====================================================== -->
 
-    <header class="collection-page__hero">
+   <header class="collection-hero">
 
-      <div class="collection-page__breadcrumbs">
-        <app-breadcrumbs
-          [items]="[
-            {
-              label: ('brandPage.home' | translate),
-              link: '/'
-            },
-            {
-              label: ('brandPage.brands' | translate),
-              link: '/brands'
-            },
-            {
-              label: brand()
-                ? (brand() | localizedName)
-                : ('brandPage.brand' | translate)
-            }
-          ]"
-        />
+  <div class="collection-hero__media" aria-hidden="true">
+    <img
+      class="collection-hero__image"
+      [src]="brand()?.imageUrl"
+      [alt]="''"
+      loading="eager"
+      decoding="async"
+    />
+  </div>
+
+  <div class="collection-hero__overlay" aria-hidden="true"></div>
+
+  <div class="collection-hero__frame" aria-hidden="true"></div>
+
+  <div class="collection-hero__content">
+
+    <div class="collection-hero__breadcrumb">
+
+      <app-breadcrumbs
+        [items]="[
+          {
+            label: ('brandPage.home' | translate),
+            link: '/'
+          },
+          {
+            label: ('brandPage.brands' | translate),
+            link: '/brands'
+          },
+          {
+            label: brand()
+              ? (brand() | localizedName)
+              : ('brandPage.brand' | translate)
+          }
+        ]"
+      />
+
+    </div>
+
+    <div class="collection-hero__copy">
+
+      <div class="collection-hero__eyebrow">
+
+        <span class="collection-hero__eyebrow-line"></span>
+
+        <span>
+          {{ 'brandPage.brand' | translate }}
+        </span>
+
       </div>
 
+      <h1 class="collection-hero__title">
 
-      <div class="collection-page__hero-copy">
-
-        <span
-          class="collection-page__hero-line"
-          aria-hidden="true"
-        ></span>
-
-        <p class="section-kicker">
-          {{ 'brandPage.brand' | translate }}
-        </p>
-
-        <h1 class="section-title">
-          {{ brand()
+        {{
+          brand()
             ? (brand() | localizedName)
             : ('brandPage.loading' | translate)
-          }}
-        </h1>
+        }}
 
-        @if (brand()?.description) {
+      </h1>
 
-          <p class="section-copy">
-            {{ brand()?.description }}
-          </p>
+      @if (brand()?.description) {
 
-        }
+        <p class="collection-hero__description">
+          {{ brand()?.description }}
+        </p>
 
-      </div>
+      }
 
-    </header>
+    </div>
 
+    <div class="collection-hero__signature" aria-hidden="true">
+      <span>THE EDIT</span>
+      <span>TAMARA LAND</span>
+    </div>
+
+  </div>
+
+</header>
 
     <!-- =====================================================
          CATALOG LAYOUT
