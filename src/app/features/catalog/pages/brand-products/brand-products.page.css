@@ -1149,10 +1149,11 @@ body.light
     transition: none;
   }
 }
+
 /* =========================================================
    TAMARA LAND
-   COLLECTION HERO — SAME IMAGE, TWO VISUAL LAYERS
-   Frontend-only: no backend field required
+   COLLECTION HERO — EDITORIAL IMAGE + OVERLAY
+   Frontend-only / no backend changes
 ========================================================= */
 
 .collection-hero {
@@ -1170,58 +1171,34 @@ body.light
   overflow: hidden;
 
   background: var(--bg-secondary);
-
   border: 1px solid var(--border-color);
 
-  box-shadow:
-    0 24px 70px rgba(0, 0, 0, .18);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .18);
 }
-
-
-/* =========================================================
-   LAYER 01 — ATMOSPHERIC BACKDROP
-   Same portrait image, expanded safely.
-========================================================= */
 
 .collection-hero__backdrop {
   position: absolute;
   inset: -5%;
-
   z-index: 0;
-
   overflow: hidden;
-
   background: var(--bg-secondary);
 }
 
 .collection-hero__backdrop-image {
   display: block;
-
   width: 100%;
   height: 100%;
 
   object-fit: cover;
   object-position: center;
 
-  filter:
-    blur(16px)
-    saturate(.72)
-    brightness(.58);
-
+  filter: blur(16px) saturate(.72) brightness(.58);
   transform: scale(1.08);
-
   opacity: .82;
 }
 
-
-/* =========================================================
-   LAYER 02 — FOREGROUND PORTRAIT
-   Keeps the original image composition visible.
-========================================================= */
-
 .collection-hero__foreground {
   position: absolute;
-
   inset-block: 0;
   inset-inline-end: 0;
 
@@ -1235,106 +1212,71 @@ body.light
   justify-content: flex-end;
 
   overflow: hidden;
-
   pointer-events: none;
 
-  /*
-    Fade the left edge so the portrait merges
-    into the editorial background instead of
-    looking like a separate rectangular image.
-  */
-  -webkit-mask-image:
-    linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(0,0,0,.45) 13%,
-      #000 27%,
-      #000 100%
-    );
-
-  mask-image:
-    linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(0,0,0,.45) 13%,
-      #000 27%,
-      #000 100%
-    );
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0,0,0,.45) 13%,
+    #000 27%,
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0,0,0,.45) 13%,
+    #000 27%,
+    #000 100%
+  );
 }
 
 .collection-hero__foreground-image {
   display: block;
-
   width: 100%;
   height: 100%;
 
-  /*
-    contain = do NOT crop the portrait.
-    This is the key difference from the old Hero.
-  */
   object-fit: contain;
   object-position: right bottom;
 
-  filter:
-    saturate(.86)
-    contrast(.98);
-
+  filter: saturate(.86) contrast(.98);
   transform: scale(1.01);
-
   opacity: .96;
 }
-
-
-/* =========================================================
-   EDITORIAL OVERLAY
-========================================================= */
 
 .collection-hero__overlay {
   position: absolute;
   inset: 0;
-
   z-index: 2;
-
   pointer-events: none;
 
-  background:
-    linear-gradient(
-      90deg,
-      rgba(8, 7, 5, .96) 0%,
-      rgba(8, 7, 5, .87) 20%,
-      rgba(8, 7, 5, .55) 38%,
-      rgba(8, 7, 5, .16) 62%,
-      rgba(8, 7, 5, .04) 100%
-    );
+  background: linear-gradient(
+    90deg,
+    rgba(8, 7, 5, .96) 0%,
+    rgba(8, 7, 5, .87) 20%,
+    rgba(8, 7, 5, .55) 38%,
+    rgba(8, 7, 5, .16) 62%,
+    rgba(8, 7, 5, .04) 100%
+  );
 }
-
-
-/* =========================================================
-   GOLD INNER FRAME
-========================================================= */
 
 .collection-hero__frame {
   position: absolute;
   inset: 12px;
-
   z-index: 4;
 
   pointer-events: none;
-
   border: 1px solid rgba(201, 162, 75, .28);
 }
 
 .collection-hero__frame::before,
 .collection-hero__frame::after {
   content: "";
-
   position: absolute;
 
   width: 58px;
   height: 1px;
 
   background: var(--ch-gold);
-
   opacity: .7;
 }
 
@@ -1348,11 +1290,6 @@ body.light
   right: 34px;
 }
 
-
-/* =========================================================
-   CONTENT
-========================================================= */
-
 .collection-hero__content {
   position: relative;
   z-index: 5;
@@ -1361,41 +1298,28 @@ body.light
 
   display: flex;
   flex-direction: column;
-
   justify-content: space-between;
 
   padding: clamp(1.25rem, 3vw, 3rem);
 }
 
-
-/* =========================================================
-   BREADCRUMB
-========================================================= */
-
 .collection-hero__breadcrumb {
   max-width: 100%;
-
   margin-bottom: auto;
 }
 
 .collection-hero__breadcrumb app-breadcrumbs {
   display: block;
+  max-width: 100%;
 }
-
-
-/* =========================================================
-   COPY
-========================================================= */
 
 .collection-hero__copy {
   width: min(620px, 48%);
-
   margin-top: clamp(3rem, 7vw, 7rem);
 }
 
 .collection-hero__eyebrow {
   display: inline-flex;
-
   align-items: center;
   gap: .7rem;
 
@@ -1404,179 +1328,217 @@ body.light
   color: var(--ch-gold-light);
 
   font-family: "Tajawal", sans-serif;
-
   font-size: .72rem;
   font-weight: 700;
-
   letter-spacing: .24em;
   text-transform: uppercase;
 }
 
 .collection-hero__eyebrow-line {
   display: block;
-
   width: 42px;
   height: 1px;
-
   flex: 0 0 auto;
-
   background: var(--ch-gold);
 }
-
 
 .collection-hero__title {
   margin: 0;
 
   color: #f6f0e5;
 
-  font-family:
-    "Cormorant Garamond",
-    Georgia,
-    serif;
-
+  font-family: "Cormorant Garamond", Georgia, serif;
   font-size: clamp(2.7rem, 5vw, 5.4rem);
-
   font-weight: 500;
-
   line-height: .95;
-
   letter-spacing: -.025em;
 
   text-wrap: balance;
 }
 
-
 .collection-hero__description {
   max-width: 570px;
-
   margin: 1.35rem 0 0;
 
   color: rgba(246, 240, 229, .72);
 
   font-family: "Tajawal", sans-serif;
-
   font-size: clamp(.9rem, 1.15vw, 1.08rem);
-
-  font-weight: 400;
-
   line-height: 1.8;
 
   text-wrap: balance;
 }
 
-
-/* =========================================================
-   SIGNATURE
-========================================================= */
-
 .collection-hero__signature {
   position: absolute;
-
   right: clamp(1.5rem, 4vw, 4rem);
   bottom: clamp(1.5rem, 3vw, 3rem);
 
   display: flex;
   flex-direction: column;
-
   align-items: flex-end;
-
   gap: .25rem;
 
   color: rgba(246, 240, 229, .58);
 
   font-family: "Tajawal", sans-serif;
-
   font-size: .58rem;
   font-weight: 600;
-
   letter-spacing: .28em;
 }
 
 .collection-hero__signature::before {
   content: "";
-
   width: 46px;
   height: 1px;
-
   margin-bottom: .35rem;
 
   background: var(--ch-gold);
-
   opacity: .65;
 }
 
-
 /* =========================================================
-   RTL — TEXT RIGHT / PORTRAIT LEFT
+   RTL DESKTOP — KEEP THE EDITORIAL COMPOSITION
+   IMPORTANT:
+   The artwork is NOT mirrored.
+   The image stays on the RIGHT exactly like English.
+   Arabic text is aligned RTL inside the LEFT editorial panel.
 ========================================================= */
 
-[dir="rtl"] .collection-hero__foreground {
-  inset-inline-end: auto;
-  inset-inline-start: 0;
-}
+@media (min-width: 992px) {
 
-[dir="rtl"] .collection-hero__foreground {
-  -webkit-mask-image:
-    linear-gradient(
-      270deg,
+  [dir="rtl"] .collection-hero {
+    direction: rtl;
+  }
+
+  /* Keep artwork on the RIGHT. Do not move or mirror it. */
+  [dir="rtl"] .collection-hero__foreground {
+    inset-block: 0;
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+
+    width: min(66%, 920px);
+
+    -webkit-mask-image: linear-gradient(
+      90deg,
       transparent 0%,
       rgba(0,0,0,.45) 13%,
       #000 27%,
       #000 100%
     );
-
-  mask-image:
-    linear-gradient(
-      270deg,
+    mask-image: linear-gradient(
+      90deg,
       transparent 0%,
       rgba(0,0,0,.45) 13%,
       #000 27%,
       #000 100%
     );
-}
+  }
 
-[dir="rtl"] .collection-hero__foreground-image {
-  object-position: left bottom;
-}
+  [dir="rtl"] .collection-hero__foreground-image {
+    object-position: right bottom;
+    transform: scale(1.01);
+  }
 
-[dir="rtl"] .collection-hero__overlay {
-  background:
-    linear-gradient(
-      270deg,
+  /* Same dark editorial panel on the LEFT as English. */
+  [dir="rtl"] .collection-hero__overlay {
+    background: linear-gradient(
+      90deg,
       rgba(8, 7, 5, .96) 0%,
       rgba(8, 7, 5, .87) 20%,
       rgba(8, 7, 5, .55) 38%,
       rgba(8, 7, 5, .16) 62%,
       rgba(8, 7, 5, .04) 100%
     );
+  }
+
+  /* Breadcrumb remains at the TOP-RIGHT for Arabic. */
+  [dir="rtl"] .collection-hero__breadcrumb {
+    direction: rtl;
+    text-align: right;
+  }
+
+  /*
+    The editorial copy stays in the LEFT visual panel,
+    but its typography is RTL/right-aligned.
+    This avoids putting Arabic over the model.
+  */
+  [dir="rtl"] .collection-hero__copy {
+    width: min(620px, 48%);
+    margin-top: clamp(3rem, 7vw, 7rem);
+    margin-left: auto;
+    margin-right: 0;
+
+    direction: rtl;
+    text-align: right;
+  }
+
+  [dir="rtl"] .collection-hero__eyebrow {
+    flex-direction: row;
+    justify-content: flex-start;
+
+    gap: .7rem;
+
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  [dir="rtl"] .collection-hero__eyebrow-line {
+    order: 0;
+  }
+
+  [dir="rtl"] .collection-hero__title {
+    max-width: 100%;
+
+    font-family:
+      "Tajawal",
+      "Noto Sans Arabic",
+      sans-serif;
+
+    font-size: clamp(2.8rem, 4.8vw, 5rem);
+    font-weight: 500;
+    line-height: 1.25;
+
+    letter-spacing: 0;
+    text-align: right;
+  }
+
+  [dir="rtl"] .collection-hero__description {
+    max-width: 570px;
+
+    font-family:
+      "Tajawal",
+      "Noto Sans Arabic",
+      sans-serif;
+
+    line-height: 1.9;
+    text-align: right;
+  }
+
+  /* Signature stays in the BOTTOM-RIGHT. */
+  [dir="rtl"] .collection-hero__signature {
+    right: clamp(1.5rem, 4vw, 4rem);
+    left: auto;
+
+    align-items: flex-end;
+
+    direction: ltr;
+  }
+
+  [dir="rtl"] .collection-hero__signature::before {
+    align-self: flex-end;
+  }
+
+  /* Never mirror the artwork or its embedded HOUSE wordmark. */
+  [dir="rtl"] .collection-hero img {
+    transform: none;
+  }
+
+  [dir="rtl"] .collection-hero__foreground-image {
+    transform: none !important;
+    object-position: right bottom;
+  }
 }
-
-[dir="rtl"] .collection-hero__copy {
-  margin-left: auto;
-  margin-right: 0;
-
-  text-align: right;
-}
-
-[dir="rtl"] .collection-hero__eyebrow {
-  flex-direction: row-reverse;
-
-  letter-spacing: 0;
-}
-
-[dir="rtl"] .collection-hero__eyebrow-line {
-  order: 2;
-}
-
-[dir="rtl"] .collection-hero__signature {
-  right: auto;
-  left: clamp(1.5rem, 4vw, 4rem);
-
-  align-items: flex-start;
-
-  direction: ltr;
-}
-
 
 /* =========================================================
    LIGHT MODE
@@ -1586,25 +1548,21 @@ html[data-theme="light"] .collection-hero__overlay,
 body[data-theme="light"] .collection-hero__overlay,
 html.light .collection-hero__overlay,
 body.light .collection-hero__overlay {
-  background:
-    linear-gradient(
-      90deg,
-      rgba(18, 15, 11, .86) 0%,
-      rgba(18, 15, 11, .70) 20%,
-      rgba(18, 15, 11, .42) 42%,
-      rgba(18, 15, 11, .12) 70%,
-      rgba(18, 15, 11, .03) 100%
-    );
+  background: linear-gradient(
+    90deg,
+    rgba(18, 15, 11, .86) 0%,
+    rgba(18, 15, 11, .70) 20%,
+    rgba(18, 15, 11, .42) 42%,
+    rgba(18, 15, 11, .12) 70%,
+    rgba(18, 15, 11, .03) 100%
+  );
 }
 
 html[data-theme="light"] .collection-hero__backdrop-image,
 body[data-theme="light"] .collection-hero__backdrop-image,
 html.light .collection-hero__backdrop-image,
 body.light .collection-hero__backdrop-image {
-  filter:
-    blur(16px)
-    saturate(.72)
-    brightness(.82);
+  filter: blur(16px) saturate(.72) brightness(.82);
 }
 
 html[data-theme="light"] .collection-hero__title,
@@ -1618,27 +1576,23 @@ body.light .collection-hero__title {
 [dir="rtl"] body[data-theme="light"] .collection-hero__overlay,
 [dir="rtl"] html.light .collection-hero__overlay,
 [dir="rtl"] body.light .collection-hero__overlay {
-  background:
-    linear-gradient(
-      270deg,
-      rgba(18, 15, 11, .86) 0%,
-      rgba(18, 15, 11, .70) 20%,
-      rgba(18, 15, 11, .42) 42%,
-      rgba(18, 15, 11, .12) 70%,
-      rgba(18, 15, 11, .03) 100%
-    );
+  background: linear-gradient(
+    270deg,
+    rgba(18, 15, 11, .86) 0%,
+    rgba(18, 15, 11, .70) 20%,
+    rgba(18, 15, 11, .42) 42%,
+    rgba(18, 15, 11, .12) 70%,
+    rgba(18, 15, 11, .03) 100%
+  );
 }
-
 
 /* =========================================================
    TABLET
 ========================================================= */
 
 @media (max-width: 991px) {
-
   .collection-hero {
     width: min(100% - 2rem, 1720px);
-
     min-height: 430px;
   }
 
@@ -1655,209 +1609,564 @@ body.light .collection-hero__title {
   }
 }
 
-
 /* =========================================================
    MOBILE
-   Portrait image becomes the visual top,
-   with the same image still reused for the atmosphere.
+   IMPORTANT:
+   - one single image fills the whole card
+   - no black block under the image
+   - brand copy overlays the bottom of the image
+   - no blurred backdrop
+========================================================= */
+/* =========================================================
+   MOBILE — EDITORIAL BRAND HERO
+   Full image + overlay content
 ========================================================= */
 
 @media (max-width: 767px) {
 
   .collection-hero {
+    position: relative;
+
     width: calc(100% - 1.25rem);
 
-    min-height: 520px;
+    /*
+      The source artwork is landscape.
+      Let the image keep its natural composition.
+    */
+    min-height: auto;
 
-    margin-top: 1rem;
+    margin: 1rem auto 0;
+
+    overflow: hidden;
+
+    isolation: isolate;
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 0;
+
+    background: var(--bg-secondary);
+
+    box-shadow:
+      0 18px 45px rgba(0, 0, 0, .22);
   }
+
+
+  /* -------------------------------------------------------
+     FRAME
+  ------------------------------------------------------- */
 
   .collection-hero__frame {
+    position: absolute;
+
     inset: 8px;
+
+    z-index: 20;
+
+    pointer-events: none;
+
+    border:
+      1px solid
+      rgba(201, 162, 75, .38);
   }
+
+
+  .collection-hero__frame::before,
+  .collection-hero__frame::after {
+    content: "";
+
+    position: absolute;
+
+    width: 38px;
+    height: 1px;
+
+    background: var(--ch-gold);
+
+    opacity: .75;
+  }
+
+  .collection-hero__frame::before {
+    top: -1px;
+    left: 22px;
+  }
+
+  .collection-hero__frame::after {
+    bottom: -1px;
+    right: 22px;
+  }
+
+
+  /* -------------------------------------------------------
+     CONTENT
+  ------------------------------------------------------- */
 
   .collection-hero__content {
-    padding: 1.1rem;
-  }
+    position: relative;
 
-  .collection-hero__backdrop-image {
-    object-position: center;
-    filter:
-      blur(12px)
-      saturate(.7)
-      brightness(.5);
-
-    transform: scale(1.12);
-  }
-
-  .collection-hero__foreground {
-    inset-inline: 0;
-    inset-block-start: 0;
-    inset-block-end: auto;
+    z-index: 10;
 
     width: 100%;
-    height: 76%;
 
-    align-items: flex-start;
-    justify-content: center;
+    min-height: 0;
 
-    -webkit-mask-image:
-      linear-gradient(
-        180deg,
-        #000 0%,
-        #000 58%,
-        rgba(0,0,0,.72) 74%,
-        transparent 100%
-      );
+    height: auto;
 
-    mask-image:
-      linear-gradient(
-        180deg,
-        #000 0%,
-        #000 58%,
-        rgba(0,0,0,.72) 74%,
-        transparent 100%
-      );
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: flex-start;
+
+    padding: 0;
   }
 
+
+  /* -------------------------------------------------------
+     BACKDROP
+     Disabled — no blur on mobile.
+  ------------------------------------------------------- */
+
+  .collection-hero__backdrop {
+    display: none;
+  }
+
+
+  .collection-hero__backdrop-image {
+    display: none;
+  }
+
+
+  /* -------------------------------------------------------
+     FOREGROUND IMAGE
+     
+     IMPORTANT:
+     contain + natural aspect ratio prevents
+     HOUSE from being cropped.
+  ------------------------------------------------------- */
+
+  .collection-hero__foreground {
+    position: relative;
+
+    inset: auto;
+
+    width: 100%;
+
+    height: auto;
+
+    aspect-ratio: 3 / 2;
+
+    display: block;
+
+    overflow: hidden;
+
+    z-index: 1;
+
+    pointer-events: none;
+
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+
   .collection-hero__foreground-image {
+    display: block;
+
     width: 100%;
     height: 100%;
 
     object-fit: contain;
-    object-position: center top;
+
+    object-position: center center;
+
+    filter:
+      saturate(.92)
+      contrast(.98);
+
+    transform: none;
+
+    opacity: 1;
   }
+
+
+  /* -------------------------------------------------------
+     DARK EDITORIAL GRADIENT
+     
+     Only bottom portion becomes dark so the
+     image remains visible.
+  ------------------------------------------------------- */
 
   .collection-hero__overlay {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 3;
+
+    pointer-events: none;
+
     background:
       linear-gradient(
-        180deg,
-        rgba(8, 7, 5, .10) 0%,
-        rgba(8, 7, 5, .08) 30%,
-        rgba(8, 7, 5, .58) 60%,
-        rgba(8, 7, 5, .96) 100%
+        to bottom,
+        rgba(8, 7, 5, 0) 0%,
+        rgba(8, 7, 5, 0) 45%,
+        rgba(8, 7, 5, .10) 57%,
+        rgba(8, 7, 5, .58) 78%,
+        rgba(8, 7, 5, .94) 100%
       );
   }
 
-  .collection-hero__copy {
-    width: 100%;
 
-    margin-top: auto;
-    margin-bottom: 3.6rem;
+  /* -------------------------------------------------------
+     BREADCRUMB
+  ------------------------------------------------------- */
+
+  .collection-hero__breadcrumb {
+    position: absolute;
+
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
+
+    z-index: 15;
+
+    margin: 0;
+
+    max-width: calc(100% - 2rem);
+
+    overflow: hidden;
+
+    /*
+      Very subtle backdrop so breadcrumb remains readable
+      without looking like a box.
+    */
+    text-shadow:
+      0 1px 8px rgba(0, 0, 0, .35);
   }
+
+
+  .collection-hero__breadcrumb app-breadcrumbs {
+    display: block;
+
+    max-width: 100%;
+  }
+
+
+  /* -------------------------------------------------------
+     BRAND COPY
+     
+     This is now an actual overlay over the image.
+  ------------------------------------------------------- */
+
+  .collection-hero__copy {
+    position: absolute;
+
+    left: 1.15rem;
+    right: 1.15rem;
+    bottom: 1.25rem;
+
+    z-index: 12;
+
+    width: auto;
+
+    margin: 0;
+
+    text-align: left;
+  }
+
+
+  /* -------------------------------------------------------
+     EYEBROW
+  ------------------------------------------------------- */
 
   .collection-hero__eyebrow {
-    margin-bottom: .7rem;
+    display: inline-flex;
 
-    font-size: .65rem;
+    align-items: center;
+
+    gap: .55rem;
+
+    margin-bottom: .55rem;
+
+    color: var(--ch-gold-light);
+
+    font-family:
+      "Tajawal",
+      sans-serif;
+
+    font-size: .58rem;
+
+    font-weight: 800;
+
+    letter-spacing: .18em;
+
+    text-transform: uppercase;
   }
+
+
+  .collection-hero__eyebrow-line {
+    width: 34px;
+    height: 1px;
+
+    flex: 0 0 auto;
+
+    background: var(--ch-gold);
+  }
+
+
+  /* -------------------------------------------------------
+     TITLE
+  ------------------------------------------------------- */
 
   .collection-hero__title {
-    max-width: 100%;
+    margin: 0;
 
-    font-size: clamp(2.35rem, 12vw, 3.5rem);
+    max-width: 85%;
 
-    line-height: 1;
+    color: #f7f1e7;
+
+    font-family:
+      "Cormorant Garamond",
+      Georgia,
+      serif;
+
+    font-size:
+      clamp(
+        2.35rem,
+        10vw,
+        3.25rem
+      );
+
+    font-weight: 500;
+
+    line-height: .92;
+
+    letter-spacing: -.02em;
+
+    text-shadow:
+      0 3px 18px rgba(0, 0, 0, .45);
   }
+
+
+  /* -------------------------------------------------------
+     DESCRIPTION
+  ------------------------------------------------------- */
 
   .collection-hero__description {
-    max-width: 100%;
+    max-width: 92%;
 
-    margin-top: 1rem;
+    margin: .65rem 0 0;
 
-    font-size: .88rem;
-    line-height: 1.7;
+    color:
+      rgba(247, 241, 231, .82);
+
+    font-family:
+      "Tajawal",
+      sans-serif;
+
+    font-size: .76rem;
+
+    line-height: 1.65;
+
+    text-shadow:
+      0 2px 10px rgba(0, 0, 0, .35);
   }
+
+
+  /* -------------------------------------------------------
+     SIGNATURE
+  ------------------------------------------------------- */
 
   .collection-hero__signature {
-    right: 1.25rem;
-    bottom: 1.2rem;
+    position: absolute;
 
-    font-size: .5rem;
+    right: 1.15rem;
+    bottom: 1.15rem;
+
+    z-index: 14;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    gap: .15rem;
+
+    color:
+      rgba(247, 241, 231, .72);
+
+    font-family:
+      "Tajawal",
+      sans-serif;
+
+    font-size: .43rem;
+
+    font-weight: 700;
+
+    letter-spacing: .2em;
+
+    direction: ltr;
   }
 
-  [dir="rtl"] .collection-hero__foreground {
-    inset-inline: 0;
+
+  .collection-hero__signature::before {
+    content: "";
+
+    width: 34px;
+    height: 1px;
+
+    margin-bottom: .2rem;
+
+    background: var(--ch-gold);
+
+    opacity: .75;
   }
 
-  [dir="rtl"] .collection-hero__foreground {
-    -webkit-mask-image:
-      linear-gradient(
-        180deg,
-        #000 0%,
-        #000 58%,
-        rgba(0,0,0,.72) 74%,
-        transparent 100%
-      );
 
-    mask-image:
-      linear-gradient(
-        180deg,
-        #000 0%,
-        #000 58%,
-        rgba(0,0,0,.72) 74%,
-        transparent 100%
-      );
+  /* -------------------------------------------------------
+     RTL
+  ------------------------------------------------------- */
+
+  [dir="rtl"] .collection-hero__breadcrumb {
+    left: 1rem;
+    right: 1rem;
+
+    text-align: right;
   }
 
-  [dir="rtl"] .collection-hero__overlay {
-    background:
-      linear-gradient(
-        180deg,
-        rgba(8, 7, 5, .10) 0%,
-        rgba(8, 7, 5, .08) 30%,
-        rgba(8, 7, 5, .58) 60%,
-        rgba(8, 7, 5, .96) 100%
-      );
-  }
 
   [dir="rtl"] .collection-hero__copy {
-    width: 100%;
+    left: 1.15rem;
+    right: 1.15rem;
 
-    margin-left: 0;
-    margin-right: 0;
+    text-align: right;
   }
+
+
+  [dir="rtl"] .collection-hero__eyebrow {
+    flex-direction: row-reverse;
+
+    letter-spacing: 0;
+  }
+
+
+  [dir="rtl"] .collection-hero__eyebrow-line {
+    order: 2;
+  }
+
 
   [dir="rtl"] .collection-hero__signature {
+    left: 1.15rem;
     right: auto;
-    left: 1.25rem;
+
+    align-items: flex-start;
+
+    direction: ltr;
+  }
+
+
+  /* -------------------------------------------------------
+     LIGHT MODE
+  ------------------------------------------------------- */
+
+  html[data-theme="light"] .collection-hero__overlay,
+  body[data-theme="light"] .collection-hero__overlay,
+  html.light .collection-hero__overlay,
+  body.light .collection-hero__overlay {
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(18, 15, 11, 0) 0%,
+        rgba(18, 15, 11, 0) 45%,
+        rgba(18, 15, 11, .08) 57%,
+        rgba(18, 15, 11, .52) 78%,
+        rgba(18, 15, 11, .90) 100%
+      );
+  }
+
+
+  /* -------------------------------------------------------
+     SMALL PHONES
+  ------------------------------------------------------- */
+
+  @media (max-width: 420px) {
+
+    .collection-hero {
+      width: calc(100% - 1rem);
+
+      margin-top: .8rem;
+    }
+
+
+    .collection-hero__foreground {
+      /*
+        Keep exact image ratio.
+        Do NOT set height: 72%.
+      */
+      aspect-ratio: 3 / 2;
+    }
+
+
+    .collection-hero__breadcrumb {
+      top: .85rem;
+
+      left: .85rem;
+      right: .85rem;
+    }
+
+
+    .collection-hero__copy {
+      left: .9rem;
+      right: .9rem;
+      bottom: 1rem;
+    }
+
+
+    .collection-hero__title {
+      font-size:
+        clamp(
+          2.15rem,
+          11vw,
+          2.8rem
+        );
+    }
+
+
+    .collection-hero__eyebrow {
+      font-size: .54rem;
+    }
+
+
+    .collection-hero__description {
+      font-size: .7rem;
+    }
+
+
+    .collection-hero__signature {
+      right: .9rem;
+      bottom: .9rem;
+    }
+
+
+    [dir="rtl"] .collection-hero__signature {
+      left: .9rem;
+      right: auto;
+    }
   }
 }
-
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
-@media (max-width: 420px) {
-
-  .collection-hero {
-    min-height: 500px;
-  }
-
-  .collection-hero__foreground {
-    height: 72%;
-  }
-
-  .collection-hero__content {
-    padding: .95rem;
-  }
-
-  .collection-hero__copy {
-    margin-bottom: 3.2rem;
-  }
-}
-
 
 /* =========================================================
    REDUCED MOTION
-   ========================================================= */
+========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-
-  .collection-hero__image {
-    transition: none;
-    transform: none;
+  .collection-page *,
+  .collection-page *::before,
+  .collection-page *::after,
+  .collection-hero *,
+  .collection-hero *::before,
+  .collection-hero *::after {
+    animation: none !important;
+    transition: none !important;
   }
-
 }

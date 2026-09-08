@@ -948,7 +948,8 @@
     "saving": "Saving…",
     "saveChanges": "Save changes",
     "deleting": "Deleting…",
-    "error": "Error"
+    "error": "Error",
+    "soldOut": "Sold out"
   },
   "admin": {
     "labels": {

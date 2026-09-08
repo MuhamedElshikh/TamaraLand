@@ -956,7 +956,8 @@
     "saving": "جارٍ الحفظ...",
     "saveChanges": "حفظ التغييرات",
     "deleting": "جارٍ الحذف...",
-    "error": "خطأ"
+    "error": "خطأ",
+    "soldOut": "غير متوفر"
   },
   "admin": {
     "labels": {
