@@ -24,6 +24,23 @@
   <!-- Filters Toolbar -->
   <div class="filters-card">
     <div class="filters-grid">
+       <label
+    class="form-label"
+    for="featured-filter"
+  >
+    Featured
+  </label>
+
+  <select
+    id="featured-filter"
+    class="form-control form-select"
+    [ngModel]="isFeatured() ?? ''"
+    (ngModelChange)="onFeaturedChange($event)"
+  >
+    <option value="">All Products</option>
+    <option [value]="true">Featured</option>
+    <option [value]="false">Not Featured</option>
+  </select>
       <!-- Search Input -->
       <div class="filter-group filter-group--search">
         <label class="form-label" for="product-search">{{ 'admin.products.search' | translate }}</label>

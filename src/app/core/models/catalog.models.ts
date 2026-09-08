@@ -95,6 +95,7 @@ export interface ProductCardResponse {
   arabicBrandName: string;
   categoryName: string;
   arabicCategoryName: string;
+  isFeatured: boolean;
 
   // ✅ جديد
   variantsCount: number;
@@ -141,6 +142,8 @@ export interface ProductFilterRequest {
   sortBy?: string;
   desc?: boolean;
   inStockOnly?: boolean;
+    isFeatured?: boolean;
+
 }
 
 export type RelatedProductResponse = ProductCardResponse;

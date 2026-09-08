@@ -54,6 +54,15 @@ updateProductPublishStatus(
     isPublished
   );
 }
+updateProductFeaturedStatus(
+  id: number,
+  isFeatured: boolean
+): Observable<ApiResponse<void>> {
+  return this.http.patch<ApiResponse<void>>(
+    `${this.productUrl}/${id}/featured`,
+    isFeatured
+  );
+}
   getProductById(id: number): Observable<ApiResponse<ProductAdminResponse>> {
     return this.http.get<ApiResponse<ProductAdminResponse>>(`${this.productUrl}/admin/${id}`);
   }

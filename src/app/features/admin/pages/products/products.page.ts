@@ -21,6 +21,7 @@ const PAGE_SIZE = 10;
 export class ProductsPage implements OnInit {
   private readonly adminCatalogService = inject(AdminCatalogService);
   private readonly router = inject(Router);
+readonly isFeatured = signal<boolean | undefined>(undefined);
 
   readonly products = signal<ProductAdminResponse[]>([]);
   readonly isLoading = signal(true);
@@ -63,6 +64,12 @@ export class ProductsPage implements OnInit {
     type: 'toggle',
     align: 'center'
   },
+  {
+  key: 'isFeatured',
+  header: 'Featured',
+  type: 'toggle',
+  align: 'center'
+},
   ];
 
   ngOnInit(): void {
@@ -86,7 +93,16 @@ export class ProductsPage implements OnInit {
     this.brandId.set(bId);
     this.load(1);
   }
+onFeaturedChange(val: string): void {
+  const featured =
+    val === ''
+      ? undefined
+      : val === 'true';
 
+  this.isFeatured.set(featured);
+
+  this.load(1);
+}
   onPageChange(page: number): void {
     this.load(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -141,6 +157,7 @@ export class ProductsPage implements OnInit {
       search: this.search().trim() || undefined,
       categoryId: this.categoryId(),
       brandId: this.brandId(),
+      isFeatured: false,
       pageNumber,
       pageSize: PAGE_SIZE,
     };
@@ -172,8 +189,22 @@ onStatusToggle(event: {
 }): void {
   const product = event.row;
 
+  if (event.column.key === 'isPublished') {
+    this.updatePublishStatus(product, event.value);
+    return;
+  }
+
+  if (event.column.key === 'isFeatured') {
+    this.updateFeaturedStatus(product, event.value);
+    return;
+  }
+}
+private updatePublishStatus(
+  product: ProductAdminResponse,
+  isPublished: boolean
+): void {
   this.adminCatalogService
-    .updateProductPublishStatus(product.id, event.value)
+    .updateProductPublishStatus(product.id, isPublished)
     .subscribe({
       next: (res) => {
         if (res.success) {
@@ -182,7 +213,30 @@ onStatusToggle(event: {
               item.id === product.id
                 ? {
                     ...item,
-                    isPublished: event.value
+                    isPublished
+                  }
+                : item
+            )
+          );
+        }
+      }
+    });
+}
+private updateFeaturedStatus(
+  product: ProductAdminResponse,
+  isFeatured: boolean
+): void {
+  this.adminCatalogService
+    .updateProductFeaturedStatus(product.id, isFeatured)
+    .subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.products.update(products =>
+            products.map(item =>
+              item.id === product.id
+                ? {
+                    ...item,
+                    isFeatured
                   }
                 : item
             )

@@ -1,619 +1,194 @@
-<section
-  class="featured-editorial"
-  aria-labelledby="featured-editorial-title"
->
-
-  <!-- =========================================================
-       HEADER
-  ========================================================== -->
+<section class="featured-editorial" aria-labelledby="featured-editorial-title">
 
   <header class="featured-editorial__header">
-
-    <!-- ROW 1: EYEBROW + NOTICE — SAME LINE -->
-
-    <div class="featured-editorial__top-row">
-
+    <div class="featured-editorial__heading">
       <div class="featured-editorial__eyebrow">
-        <span class="featured-editorial__eyebrow-line"></span>
-
-        <strong>
-          {{ 'featuredProducts.eyebrow' | translate }}
-        </strong>
+        <span>01</span>
+        <i aria-hidden="true"></i>
+        <strong>{{ 'featuredProducts.eyebrow' | translate }}</strong>
       </div>
 
-      <div
-        class="featured-editorial__notice"
-        aria-hidden="true"
-      >
-        <span class="featured-editorial__notice-text">
-          {{ 'featuredProducts.headerNote1' | translate }}
-          {{ 'featuredProducts.headerNote2' | translate }}
-          {{ 'featuredProducts.headerNote3' | translate }}
-          {{ 'featuredProducts.headerNote4' | translate }}
-        </span>
-
-        <i class="featured-editorial__notice-line"></i>
-      </div>
-
-    </div>
-
-
-    <!-- ROW 2: TITLE + VIEW ALL — SAME LINE, VIEW ALL AT SECTION EDGE -->
-
-    <div class="featured-editorial__title-row">
-
-      <h2
-        id="featured-editorial-title"
-        class="featured-editorial__title"
-      >
-        <span class="featured-editorial__title-line">
-          {{ 'featuredProducts.titleLine1' | translate }}
-        </span>
-        <span class="featured-editorial__title-line featured-editorial__title-line--two">
-          {{ 'featuredProducts.titleLine2' | translate }}
-        </span>
+      <h2 id="featured-editorial-title" class="featured-editorial__title">
+        <span>{{ 'featuredProducts.titleLine1' | translate }}</span>
+        <span>{{ 'featuredProducts.titleLine2' | translate }}</span>
       </h2>
 
-      <a
-        routerLink="/products"
-        class="featured-editorial__view-all"
-      >
-        <span>
-          {{ 'featuredProducts.viewAll' | translate }}
-        </span>
+      <p class="featured-editorial__description">
+        {{ 'featuredProducts.description' | translate }}
+      </p>
+    </div>
 
+    <div class="featured-editorial__header-side">
+      <div class="featured-editorial__header-note" aria-hidden="true">
+        <span>STYLE LIVES BEYOND TRENDS</span><i></i>
+        
+      </div>
+
+      <a routerLink="/products" class="featured-editorial__view-all">
+        <span>{{ 'featuredProducts.viewAll' | translate }}</span>
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M5 12h13M13 6l6 6-6 6" />
         </svg>
       </a>
-
     </div>
-
-
-    <p class="featured-editorial__description">
-      {{ 'featuredProducts.description' | translate }}
-    </p>
-
   </header>
 
-
-  <!-- =========================================================
-       LOADING
-  ========================================================== -->
-
   @if (loading()) {
-
-    <div
-      class="featured-editorial__loading"
-      aria-hidden="true"
-    >
-
-      <div class="featured-skeleton featured-skeleton--small"></div>
-
-      <div class="featured-skeleton featured-skeleton--hero"></div>
-
-      <div class="featured-skeleton featured-skeleton--side"></div>
-
+    <div class="featured-editorial__loading">
+      <div class="featured-skeleton"></div>
+      <div class="featured-skeleton"></div>
+      <div class="featured-skeleton"></div>
     </div>
+  } @else if (products().length) {
 
-  }
-
-
-  <!-- =========================================================
-       PRODUCTS
-  ========================================================== -->
-
-  @else if (products().length) {
-
-    <div
-      class="featured-editorial__composition"
-      appScrollReveal
-    >
-
-      <!-- =====================================================
-           DECORATIVE ARCH
-      ====================================================== -->
+    <div class="featured-editorial__stage" appScrollReveal>
 
       <div
-        class="featured-editorial__arch-line"
-        aria-hidden="true"
-      ></div>
+        class="featured-editorial__main-row"
+        [class.is-transitioning]="isTransitioning()"
+        [class.is-next]="transitionDirection() === 'next'"
+        [class.is-prev]="transitionDirection() === 'prev'"
+      >
 
+        @if (canSlide()) {
+          <button
+            type="button"
+            class="featured-editorial__nav featured-editorial__nav--prev"
+            (click)="prevHero()"
+            [disabled]="isTransitioning()"
+            aria-label="Previous products"
+          >
+            <span class="featured-editorial__nav-arrow">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M19 12H5M11 6l-6 6 6 6" />
+              </svg>
+            </span>
+            <span class="featured-editorial__nav-label">PREV</span>
+          </button>
+        }
 
-      <!-- =====================================================
-           PRODUCT 01 — SMALL EDITORIAL
-      ====================================================== -->
+        <!--
+          ONE DOM NODE PER PRODUCT.
+          The node changes only its slot class.
+          This is essential: P4 can physically travel from square-1
+          into arch-3 instead of being destroyed and recreated.
+        -->
+        <div class="featured-product-layer">
 
-      @if (products()[0]; as product) {
-
-        <article class="featured-product featured-product--one">
-
-          <div class="featured-product__visual">
-
-            <a
-              [routerLink]="['/products', product.id]"
-              class="featured-product__image-link"
+          @for (product of products(); track product.id) {
+            <article
+              #productNode
+              [class]="'featured-product-node ' + slotClass(product)"
+              [attr.data-product-id]="product.id"
+              [attr.aria-hidden]="!isVisible(product)"
             >
-
-              <img
-                [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
-                [alt]="product | localizedName"
-                class="featured-product__image"
-                loading="lazy"
-                decoding="async"
-              />
-
-            </a>
-
-          </div>
-
-
-          <div class="featured-product__content">
-
-            <div class="featured-product__meta">
-
-              <span class="featured-product__number">
-                01
-              </span>
-
-              <span class="featured-product__meta-line"></span>
-
-            </div>
-
-
-            @if (product.brandName) {
-
-              <span class="featured-product__brand">
-                {{ product.brandName }}
-              </span>
-
-            }
-
-
-            <a
-              [routerLink]="['/products', product.id]"
-              class="featured-product__name"
-            >
-              {{ product | localizedName }}
-            </a>
-
-
-            <div class="featured-product__bottom">
-
-              <div class="featured-product__price">
-
-                <span>
-                  {{ product.price | number:'1.0-2' }}
-                </span>
-
-                @if (
-                  product.originalPrice &&
-                  product.originalPrice > product.price
-                ) {
-
-                  <small>
-                    {{ product.originalPrice | number:'1.0-2' }}
-                  </small>
-
-                }
-
-              </div>
-
 
               <a
                 [routerLink]="['/products', product.id]"
-                class="featured-product__plus"
-                [attr.aria-label]="'featuredProducts.viewProduct' | translate"
+                class="featured-product-node__media"
               >
-                <span>+</span>
+                <img
+                  [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
+                  [alt]="product | localizedName"
+                  class="featured-product-node__image"
+                  loading="lazy"
+                  decoding="async"
+                />
               </a>
 
-            </div>
+              @if (slotFor(product) === 'arch-2') {
 
-          </div>
+                <div class="featured-product-node__hero-mark">
+                  <span>{{ 'featuredProducts.ourFavorite1' | translate }}</span>
+                  <span>{{ 'featuredProducts.ourFavorite2' | translate }}</span>
+                  <i></i>
+                </div>
 
-        </article>
-
-      }
-
-
-      <!-- =====================================================
-           PRODUCT 02 — HERO ARCH
-      ====================================================== -->
-
-      @if (products()[1]; as product) {
-
-        <article class="featured-hero">
-
-          <!-- ARCH MEDIA -->
-
-          <a
-            [routerLink]="['/products', product.id]"
-            class="featured-hero__media"
-            [attr.aria-label]="product | localizedName"
-          >
-
-            <div class="featured-hero__arch">
-
-              <img
-                [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
-                [alt]="product | localizedName"
-                class="featured-hero__image"
-                loading="lazy"
-                decoding="async"
-              />
-
-              <div
-                class="featured-hero__image-shade"
-                aria-hidden="true"
-              ></div>
-
-
-              <span class="featured-hero__number">
-                02
-              </span>
-
-
-              <div class="featured-hero__favorite">
-
-                <span>
-                  {{ 'featuredProducts.ourFavorite1' | translate }}
-                </span>
-
-                <span>
-                  {{ 'featuredProducts.ourFavorite2' | translate }}
-                </span>
-
-                <i></i>
-
-              </div>
-
-            </div>
-
-          </a>
-
-
-          <!-- HERO INFORMATION -->
-
-          <div class="featured-hero__content">
-
-            <div class="featured-hero__identity">
-
-              @if (product.brandName) {
-
-                <span class="featured-hero__brand">
-                  {{ product.brandName }}
-                </span>
-
+                <span class="featured-product-node__gold-sweep"></span>
               }
 
-              <a
-                [routerLink]="['/products', product.id]"
-                class="featured-hero__name"
-              >
-                {{ product | localizedName }}
-              </a>
+              <div class="featured-product-node__info">
 
-            </div>
+                @if (product.brandName) {
+                  <span class="featured-product-node__brand">
+                    {{ product.brandName }}
+                  </span>
+                }
 
+                <a
+                  [routerLink]="['/products', product.id]"
+                  class="featured-product-node__name"
+                >
+                  {{ product | localizedName }}
+                </a>
 
-            <div class="featured-hero__purchase">
+                <div class="featured-product-node__price">
+                  <span>{{ product.price | number:'1.0-2' }}</span>
 
-              <div class="featured-hero__price">
+                  @if (product.originalPrice && product.originalPrice > product.price) {
+                    <small>
+                      {{ product.originalPrice | number:'1.0-2' }}
+                    </small>
+                  }
+                </div>
 
-                <span>
-                  {{ product.price | number:'1.0-2' }}
-                </span>
-
-                @if (
-                  product.originalPrice &&
-                  product.originalPrice > product.price
-                ) {
-
-                  <small>
-                    {{ product.originalPrice | number:'1.0-2' }}
-                  </small>
-
+                @if (slotFor(product) === 'arch-2') {
+                  <a
+                    [routerLink]="['/products', product.id]"
+                    class="featured-product-node__action"
+                  >
+                    <span>{{ 'featuredProducts.addToBag' | translate }}</span>
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M5 12h13M13 6l6 6-6 6" />
+                    </svg>
+                  </a>
                 }
 
               </div>
-
-
-              <a
-                [routerLink]="['/products', product.id]"
-                class="featured-hero__action"
-              >
-
-                <span class="featured-hero__action-line"></span>
-
-                <span>
-                  {{ 'featuredProducts.addToBag' | translate }}
-                </span>
-
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M5 12h13M13 6l6 6-6 6" />
-                </svg>
-
-              </a>
-
-            </div>
-
-          </div>
-
-        </article>
-
-      }
-
-
-      <!-- =====================================================
-           RIGHT EDITORIAL COLUMN
-      ====================================================== -->
-
-      <aside class="featured-editorial__right">
-
-        <!-- QUOTE -->
-
-        <div class="featured-editorial__quote">
-
-          <span class="featured-editorial__quote-mark">
-            “
-          </span>
-
-          <p>
-            {{ 'featuredProducts.quoteLine1' | translate }}
-            <br />
-            {{ 'featuredProducts.quoteLine2' | translate }}
-            <br />
-            {{ 'featuredProducts.quoteLine3' | translate }}
-          </p>
-
-          <span class="featured-editorial__quote-line"></span>
-
-          <small>
-            {{ 'featuredProducts.brandName' | translate }}
-          </small>
+            </article>
+          }
 
         </div>
 
-
-        <!-- ===================================================
-             PRODUCT 03
-        ==================================================== -->
-
-        @if (products()[2]; as product) {
-
-          <article class="featured-mini">
-
-            <a
-              [routerLink]="['/products', product.id]"
-              class="featured-mini__image-link"
-            >
-
-              <img
-                [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
-                [alt]="product | localizedName"
-                class="featured-mini__image"
-                loading="lazy"
-                decoding="async"
-              />
-
-            </a>
-
-
-            <div class="featured-mini__content">
-
-              <div class="featured-mini__top">
-
-                <span class="featured-mini__number">
-                  03
-                </span>
-
-                <span class="featured-mini__line"></span>
-
-              </div>
-
-
-              @if (product.brandName) {
-
-                <span class="featured-mini__brand">
-                  {{ product.brandName }}
-                </span>
-
-              }
-
-
-              <a
-                [routerLink]="['/products', product.id]"
-                class="featured-mini__name"
-              >
-                {{ product | localizedName }}
-              </a>
-
-
-              <div class="featured-mini__bottom">
-
-                <div class="featured-mini__price">
-
-                  <span>
-                    {{ product.price | number:'1.0-2' }}
-                  </span>
-
-                  @if (
-                    product.originalPrice &&
-                    product.originalPrice > product.price
-                  ) {
-
-                    <small>
-                      {{ product.originalPrice | number:'1.0-2' }}
-                    </small>
-
-                  }
-
-                </div>
-
-
-                <a
-                  [routerLink]="['/products', product.id]"
-                  class="featured-mini__plus"
-                  [attr.aria-label]="'featuredProducts.viewProduct' | translate"
-                >
-                  +
-                </a>
-
-              </div>
-
-            </div>
-
-          </article>
-
+        @if (canSlide()) {
+          <button
+            type="button"
+            class="featured-editorial__nav featured-editorial__nav--next"
+            (click)="nextHero()"
+            [disabled]="isTransitioning()"
+            aria-label="Next products"
+          >
+            <span class="featured-editorial__nav-arrow">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </span>
+            <span class="featured-editorial__nav-label">NEXT</span>
+          </button>
         }
 
+        <div class="featured-editorial__bottom-heading">
+          <span class="featured-editorial__bottom-line"></span>
+          <span class="featured-editorial__bottom-label">NEXT IN EDITION</span>
+        </div>
 
-        <!-- ===================================================
-             PRODUCT 04
-        ==================================================== -->
+      </div>
 
-        @if (products()[3]; as product) {
+      <footer class="featured-editorial__footer">
+        <div class="featured-editorial__footer-copy">
+          <span>{{ 'featuredProducts.footerTag1' | translate }}</span>
+          <span>{{ 'featuredProducts.footerTag2' | translate }}</span>
+          <span>{{ 'featuredProducts.footerTag3' | translate }}</span>
+        </div>
 
-          <article class="featured-mini">
-
-            <a
-              [routerLink]="['/products', product.id]"
-              class="featured-mini__image-link"
-            >
-
-              <img
-                [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
-                [alt]="product | localizedName"
-                class="featured-mini__image"
-                loading="lazy"
-                decoding="async"
-              />
-
-            </a>
-
-
-            <div class="featured-mini__content">
-
-              <div class="featured-mini__top">
-
-                <span class="featured-mini__number">
-                  04
-                </span>
-
-                <span class="featured-mini__line"></span>
-
-              </div>
-
-
-              @if (product.brandName) {
-
-                <span class="featured-mini__brand">
-                  {{ product.brandName }}
-                </span>
-
-              }
-
-
-              <a
-                [routerLink]="['/products', product.id]"
-                class="featured-mini__name"
-              >
-                {{ product | localizedName }}
-              </a>
-
-
-              <div class="featured-mini__bottom">
-
-                <div class="featured-mini__price">
-
-                  <span>
-                    {{ product.price | number:'1.0-2' }}
-                  </span>
-
-                  @if (
-                    product.originalPrice &&
-                    product.originalPrice > product.price
-                  ) {
-
-                    <small>
-                      {{ product.originalPrice | number:'1.0-2' }}
-                    </small>
-
-                  }
-
-                </div>
-
-
-                <a
-                  [routerLink]="['/products', product.id]"
-                  class="featured-mini__plus"
-                  [attr.aria-label]="'featuredProducts.viewProduct' | translate"
-                >
-                  +
-                </a>
-
-              </div>
-
-            </div>
-
-          </article>
-
-        }
-
-      </aside>
+      
+      </footer>
 
     </div>
-
-
-    <!-- =======================================================
-         SECTION FOOTER
-    ======================================================== -->
-
-    <footer class="featured-editorial__footer">
-
-      <div class="featured-editorial__footer-manifesto">
-
-        <span>{{ 'featuredProducts.footerTag1' | translate }}</span>
-        <span>{{ 'featuredProducts.footerTag2' | translate }}</span>
-        <span>{{ 'featuredProducts.footerTag3' | translate }}</span>
-
-        <i></i>
-
-      </div>
-
-
-      <div class="featured-editorial__footer-brand">
-
-        <strong>
-          {{ 'featuredProducts.brandName' | translate }}
-        </strong>
-
-        <span>
-          {{ 'featuredProducts.footerSlogan1' | translate }}
-        </span>
-
-        <span>
-          {{ 'featuredProducts.footerSlogan2' | translate }}
-        </span>
-
-      </div>
-
-    </footer>
-
-  }
-
-
-  <!-- =========================================================
-       EMPTY
-  ========================================================== -->
-
-  @else {
-
+  } @else {
     <div class="featured-editorial__empty">
-      {{ 'home.noFeaturedProducts' | translate }}
+      {{ 'featuredProducts.empty' | translate }}
     </div>
-
   }
 
 </section>

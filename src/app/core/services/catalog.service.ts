@@ -49,7 +49,11 @@
     getProductById(id: number): Observable<ApiResponse<ProductDetailsResponse>> {
       return this.http.get<ApiResponse<ProductDetailsResponse>>(`${API_BASE_URL}/api/Product/${id}`);
     }
-
+getFeaturedProducts(): Observable<ApiResponse<ProductCardResponse[]>> {
+  return this.http.get<ApiResponse<ProductCardResponse[]>>(
+    `${API_BASE_URL}/api/Product/featured`
+  );
+}
     private buildParams<T extends object>(filter: T): Record<string, string> {
       const params: Record<string, string> = {};
       Object.entries(filter).forEach(([key, val]) => {
