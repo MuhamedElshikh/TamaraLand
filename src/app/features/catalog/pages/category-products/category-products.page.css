@@ -744,19 +744,21 @@
 
 
 /* =========================================================
-   MOBILE
-   ========================================================= */
+   MOBILE — COMPACT CATEGORY HERO
+========================================================= */
 
 @media (max-width: 900px) {
 
   .category-hero__inner {
     width: calc(100% - 24px);
-    min-height: 690px;
+
+    /* was 690px */
+    min-height: 470px;
   }
 
 
   .category-hero__breadcrumbs {
-    top: 18px;
+    top: 16px;
     inset-inline-start: 18px;
   }
 
@@ -769,7 +771,9 @@
     width: calc(100% - 36px);
 
     margin-inline: auto;
-    padding-top: 105px;
+
+    /* was 105px */
+    padding-top: 82px;
 
     transform: none;
 
@@ -779,36 +783,62 @@
 
   .category-hero__eyebrow {
     justify-content: center;
+
+    margin-bottom: 12px;
+
+    font-size: .62rem;
   }
 
 
   .category-hero__title {
     max-width: none;
 
-    font-size: clamp(2.8rem, 13vw, 4.5rem);
+    font-size: clamp(
+      2.25rem,
+      11vw,
+      3.6rem
+    );
+
+    line-height: 1;
   }
 
 
   .category-hero__description {
-    max-width: 520px;
+    max-width: 430px;
+
     margin-inline: auto;
 
-    font-size: .9rem;
+    margin-top: 14px;
+
+    font-size: .78rem;
+
+    line-height: 1.7;
   }
 
 
   .category-hero__cta {
-    margin-top: 22px;
+    margin-top: 16px;
+
+    padding: 10px 16px;
+
+    font-size: .68rem;
   }
 
+
+  /* -----------------------------------------
+     VISUAL
+  ----------------------------------------- */
 
   .category-hero__visual {
     position: absolute;
 
     width: 100%;
-    height: 390px;
+
+    /* was 390px */
+    height: 285px;
 
     top: auto;
+
     bottom: 0;
 
     inset-inline: 0;
@@ -817,18 +847,29 @@
   }
 
 
-  .category-hero__arch {
-    width: min(330px, 76vw);
-    height: 360px;
+  /* -----------------------------------------
+     ARCH
+  ----------------------------------------- */
 
-    bottom: -20px;
+  .category-hero__arch {
+    width: min(250px, 68vw);
+
+    /* was 360px */
+    height: 265px;
+
+    bottom: -16px;
   }
 
 
-  .category-hero__model {
-    height: 410px;
+  /* -----------------------------------------
+     MODEL
+  ----------------------------------------- */
 
-    bottom: -10px;
+  .category-hero__model {
+    /* was 410px */
+    height: 295px;
+
+    bottom: -8px;
   }
 
 
@@ -839,17 +880,23 @@
 
 
   .category-hero__visual-label {
-    bottom: 24px;
-    inset-inline-start: 20px;
+    bottom: 18px;
+    inset-inline-start: 18px;
+
+    font-size: .48rem;
   }
 
+
+  /* -----------------------------------------
+     PRODUCTS
+  ----------------------------------------- */
 
   .collection-page__layout {
     display: block;
 
     width: calc(100% - 28px);
 
-    margin-top: 42px;
+    margin-top: 30px;
   }
 
 
@@ -859,7 +906,7 @@
 
 
   .collection-page__toolbar {
-    margin-bottom: 22px;
+    margin-bottom: 20px;
   }
 
 
@@ -872,62 +919,99 @@
     grid-template-columns:
       repeat(2, minmax(0, 1fr));
 
-    gap: 32px 14px;
+    gap: 28px 12px;
   }
-
 }
 
 
 /* =========================================================
-   SMALL MOBILE
-   ========================================================= */
+   SMALL MOBILE — EVEN MORE COMPACT
+========================================================= */
 
 @media (max-width: 560px) {
 
   .category-hero__inner {
-    min-height: 650px;
+    /* was 650px */
+    min-height: 430px;
   }
 
 
   .category-hero__content {
-    padding-top: 94px;
+    /* was 94px */
+    padding-top: 72px;
+  }
+
+
+  .category-hero__eyebrow {
+    margin-bottom: 9px;
+
+    font-size: .56rem;
   }
 
 
   .category-hero__title {
-    font-size: 2.8rem;
+    font-size: 2.45rem;
   }
 
 
   [dir='rtl'] .category-hero__title {
-    font-size: 2.55rem;
+    font-size: 2.2rem;
+
+    line-height: 1.15;
   }
 
 
   .category-hero__description {
-    font-size: .82rem;
-    line-height: 1.8;
+    margin-top: 11px;
+
+    font-size: .72rem;
+
+    line-height: 1.65;
+
+    max-width: 340px;
   }
 
 
+  .category-hero__cta {
+    margin-top: 13px;
+
+    padding: 9px 14px;
+  }
+
+
+  /* Visual */
   .category-hero__visual {
-    height: 355px;
+    height: 255px;
   }
 
 
+  /* Arch */
   .category-hero__arch {
-    width: 290px;
-    height: 335px;
+    width: 235px;
+    height: 240px;
+
+    bottom: -12px;
   }
 
 
+  /* Model */
   .category-hero__model {
-    height: 370px;
+    height: 270px;
+
+    bottom: -7px;
+  }
+
+
+  .category-hero__visual-label {
+    bottom: 15px;
+    inset-inline-start: 16px;
+
+    font-size: .44rem;
   }
 
 
   .collection-page__grid {
-    gap: 28px 12px;
+    gap: 24px 10px;
   }
 
 
@@ -942,35 +1026,61 @@
 
 
   .collection-page__summary {
-    font-size: .62rem;
-    letter-spacing: .12em;
+    font-size: .6rem;
+    letter-spacing: .1em;
   }
-
 }
 
 
 /* =========================================================
    VERY SMALL
-   ========================================================= */
+========================================================= */
 
 @media (max-width: 380px) {
 
-  .collection-page__grid {
-    grid-template-columns: 1fr;
+  .category-hero__inner {
+    min-height: 405px;
+  }
+
+
+  .category-hero__content {
+    padding-top: 68px;
   }
 
 
   .category-hero__title {
-    font-size: 2.45rem;
+    font-size: 2.25rem;
   }
 
 
   [dir='rtl'] .category-hero__title {
-    font-size: 2.25rem;
+    font-size: 2.05rem;
   }
 
-}
 
+  .category-hero__description {
+    font-size: .68rem;
+  }
+
+
+  .category-hero__visual {
+    height: 235px;
+  }
+
+
+  .category-hero__arch {
+    width: 215px;
+    height: 225px;
+  }
+
+
+  .category-hero__model {
+    height: 250px;
+  }
+
+
+
+}
 
 /* =========================================================
    REDUCED MOTION
