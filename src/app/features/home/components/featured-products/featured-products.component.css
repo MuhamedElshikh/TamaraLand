@@ -2444,3 +2444,69 @@
 .featured-editorial__nav {
   touch-action: manipulation;
 }
+/* =========================================================
+   MOBILE — SHOW ONLY 2 SQUARE PRODUCTS
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+  /* Keep only square 1 + square 2 visible */
+  .featured-product-node.is-square-1,
+  .featured-product-node.is-square-2 {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    width: calc(50% - 4px) !important;
+  }
+
+  /* First square */
+  .featured-product-node.is-square-1 {
+    left: 0 !important;
+    right: auto !important;
+  }
+
+  /* Second square */
+  .featured-product-node.is-square-2 {
+    left: calc(50% + 4px) !important;
+    right: auto !important;
+  }
+
+  /* Hide the remaining squares */
+  .featured-product-node.is-square-3,
+  .featured-product-node.is-square-4 {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  /* Small clean gap between the two cards */
+  .featured-product-node.is-square-1
+  .featured-product-node__media,
+
+  .featured-product-node.is-square-2
+  .featured-product-node__media {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 390px) {
+
+  .featured-product-node.is-square-1,
+  .featured-product-node.is-square-2 {
+    width: calc(50% - 3px) !important;
+  }
+
+  .featured-product-node.is-square-1 {
+    left: 0 !important;
+  }
+
+  .featured-product-node.is-square-2 {
+    left: calc(50% + 3px) !important;
+  }
+}
