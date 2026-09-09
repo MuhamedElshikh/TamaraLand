@@ -408,14 +408,24 @@
 
                 <div
                   class="featured-product-node__topbar"
-                  aria-hidden="true"
                 >
 
-                  <span
+                  <button
+                    type="button"
                     class="featured-product-node__favorite"
+                    [class.is-active]="isInWishlist(product.id)"
+                    [class.is-loading]="isTogglingWishlist(product.id)"
+                    [disabled]="isTogglingWishlist(product.id)"
+                    (click)="toggleWishlist($event, product)"
+                    [attr.aria-pressed]="isInWishlist(product.id)"
+                    [attr.aria-label]="
+                      isInWishlist(product.id)
+                        ? 'Remove from wishlist'
+                        : 'Add to wishlist'
+                    "
                   >
 
-                    <svg viewBox="0 0 24 24">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
 
                       <path
                         d="
@@ -429,7 +439,7 @@
 
                     </svg>
 
-                  </span>
+                  </button>
 
 
                   @if (

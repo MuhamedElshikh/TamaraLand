@@ -2188,3 +2188,204 @@
     right: 7px !important;
   }
 }
+
+
+/* =========================================================
+   FINAL WISHLIST + SQUARE DISCOUNT FIX
+   ========================================================= */
+
+.featured-product-node__favorite {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.featured-product-node__favorite:disabled {
+  cursor: wait;
+}
+
+.featured-product-node__favorite.is-loading {
+  opacity: .65;
+}
+
+.featured-product-node__favorite.is-active {
+  color: var(--fe-gold-light);
+}
+
+.featured-product-node__favorite.is-active svg {
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+/* Square-card discount: same gold pill language as hero,
+   but clipped inside the square card. */
+.featured-product-node.is-square-1 .featured-product-node__topbar,
+.featured-product-node.is-square-2 .featured-product-node__topbar,
+.featured-product-node.is-square-3 .featured-product-node__topbar,
+.featured-product-node.is-square-4 .featured-product-node__topbar {
+  z-index: 25;
+  top: .65rem;
+  left: .65rem;
+  right: .65rem;
+  width: auto;
+  height: auto;
+  min-height: 28px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .45rem;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.featured-product-node.is-square-1 .featured-product-node__discount,
+.featured-product-node.is-square-2 .featured-product-node__discount,
+.featured-product-node.is-square-3 .featured-product-node__discount,
+.featured-product-node.is-square-4 .featured-product-node__discount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  width: auto;
+  height: 28px;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0 .55rem;
+  border: 1px solid var(--fe-gold-light);
+  border-radius: 999px;
+  background: linear-gradient(
+    135deg,
+    rgba(72, 67, 55, .94),
+    rgba(35, 33, 29, .94)
+  );
+  color: var(--fe-gold-light);
+  font: 800 .45rem/1 'Tajawal', sans-serif;
+  letter-spacing: 0;
+  white-space: nowrap;
+  box-shadow: 0 5px 16px rgba(0, 0, 0, .22);
+  pointer-events: auto;
+}
+
+.featured-product-node.is-square-1 .featured-product-node__favorite,
+.featured-product-node.is-square-2 .featured-product-node__favorite,
+.featured-product-node.is-square-3 .featured-product-node__favorite,
+.featured-product-node.is-square-4 .featured-product-node__favorite {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(238, 235, 227, .88);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .18);
+  pointer-events: auto;
+}
+
+.featured-product-node.is-square-1 .featured-product-node__favorite svg,
+.featured-product-node.is-square-2 .featured-product-node__favorite svg,
+.featured-product-node.is-square-3 .featured-product-node__favorite svg,
+.featured-product-node.is-square-4 .featured-product-node__favorite svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.featured-product-node.is-square-1 .featured-product-node__favorite.is-active,
+.featured-product-node.is-square-2 .featured-product-node__favorite.is-active,
+.featured-product-node.is-square-3 .featured-product-node__favorite.is-active,
+.featured-product-node.is-square-4 .featured-product-node__favorite.is-active {
+  background: rgba(238, 235, 227, .94);
+  color: var(--fe-gold-light);
+}
+
+.featured-product-node.is-square-1 .featured-product-node__favorite.is-active svg,
+.featured-product-node.is-square-2 .featured-product-node__favorite.is-active svg,
+.featured-product-node.is-square-3 .featured-product-node__favorite.is-active svg,
+.featured-product-node.is-square-4 .featured-product-node__favorite.is-active svg {
+  fill: currentColor;
+}
+
+@media (max-width: 767px) {
+  .featured-product-node.is-square-1 .featured-product-node__topbar,
+  .featured-product-node.is-square-2 .featured-product-node__topbar,
+  .featured-product-node.is-square-3 .featured-product-node__topbar {
+    top: .3rem;
+    left: .3rem;
+    right: .3rem;
+    min-height: 22px;
+    gap: .2rem;
+  }
+
+  .featured-product-node.is-square-1 .featured-product-node__favorite,
+  .featured-product-node.is-square-2 .featured-product-node__favorite,
+  .featured-product-node.is-square-3 .featured-product-node__favorite {
+    width: 22px;
+    height: 22px;
+    flex-basis: 22px;
+  }
+
+  .featured-product-node.is-square-1 .featured-product-node__favorite svg,
+  .featured-product-node.is-square-2 .featured-product-node__favorite svg,
+  .featured-product-node.is-square-3 .featured-product-node__favorite svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  .featured-product-node.is-square-1 .featured-product-node__discount,
+  .featured-product-node.is-square-2 .featured-product-node__discount,
+  .featured-product-node.is-square-3 .featured-product-node__discount {
+    min-width: 34px;
+    height: 20px;
+    padding: 0 .3rem;
+    font-size: .32rem;
+  }
+}
+/* =========================================================
+   WISHLIST ACTIVE STATE — HERO / MAIN 3 CARDS
+   Must override the stronger arch-card selectors.
+   ========================================================= */
+
+.featured-product-node.is-arch-1
+.featured-product-node__favorite.is-active,
+
+.featured-product-node.is-arch-2
+.featured-product-node__favorite.is-active,
+
+.featured-product-node.is-arch-3
+.featured-product-node__favorite.is-active {
+  color: var(--fe-gold-light) !important;
+  background: rgba(238, 235, 227, .92);
+}
+
+/* Filled gold heart when product is in wishlist */
+.featured-product-node.is-arch-1
+.featured-product-node__favorite.is-active svg,
+
+.featured-product-node.is-arch-2
+.featured-product-node__favorite.is-active svg,
+
+.featured-product-node.is-arch-3
+.featured-product-node__favorite.is-active svg {
+  fill: var(--fe-gold-light) !important;
+  stroke: var(--fe-gold-light) !important;
+}
+
+/* Small visual feedback while request is running */
+.featured-product-node__favorite.is-loading {
+  opacity: .65;
+  cursor: wait;
+  pointer-events: none;
+}
+
+.featured-product-node__favorite.is-active:hover {
+  transform: scale(1.04);
+}

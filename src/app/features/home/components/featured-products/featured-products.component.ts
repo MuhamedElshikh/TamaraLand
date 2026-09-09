@@ -21,6 +21,7 @@ import { ScrollRevealDirective } from '../../../../shared/directives/scroll-reve
 import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe';
 
 import { CartService } from '../../../../core/services/cart.service';
+import { WishlistService } from '../../../../core/services/wishlist.service';
 import { AnalyticsService } from '../../../../core/services/analytics.service';
 import { ToastService } from '../../../../shared/toast/toast.service';
 
@@ -52,6 +53,7 @@ type ProductSlot =
 export class FeaturedProductsComponent implements OnInit, OnDestroy {
   private readonly catalog = inject(CatalogService);
   private readonly cartService = inject(CartService);
+  private readonly wishlistService = inject(WishlistService);
   private readonly analytics = inject(AnalyticsService);
   private readonly toast = inject(ToastService);
   private readonly router = inject(Router);
@@ -68,6 +70,16 @@ export class FeaturedProductsComponent implements OnInit, OnDestroy {
      so the hero "add to bag" button can show its own loading state
      without a signal per product. */
   private readonly addingProductIds = signal<ReadonlySet<number>>(new Set());
+
+  /*
+   * Wishlist state is tracked per product because this component renders
+   * several product nodes from the same component instance.
+   */
+  private readonly wishlistProductIds =
+    signal<ReadonlySet<number>>(new Set());
+
+  private readonly togglingWishlistIds =
+    signal<ReadonlySet<number>>(new Set());
 
   @ViewChildren('productNode', { read: ElementRef })
   private productNodes!: QueryList<ElementRef<HTMLElement>>;
@@ -472,5 +484,147 @@ export class FeaturedProductsComponent implements OnInit, OnDestroy {
       },
     });
   }
+
+
+  /* =====================================================
+     WISHLIST
+     Same optimistic add/remove behaviour as ProductCardComponent.
+     State is tracked per product id because this component
+     renders multiple cards at the same time.
+     ===================================================== */
+
+  isInWishlist(productId: number): boolean {
+    return this.wishlistProductIds().has(productId);
+  }
+
+  isTogglingWishlist(productId: number): boolean {
+    return this.togglingWishlistIds().has(productId);
+  }
+
+  private setWishlistProduct(productId: number, value: boolean): void {
+    this.wishlistProductIds.update((prev) => {
+      const next = new Set(prev);
+
+      if (value) {
+        next.add(productId);
+      } else {
+        next.delete(productId);
+      }
+
+      return next;
+    });
+  }
+
+  private setTogglingWishlist(productId: number, value: boolean): void {
+    this.togglingWishlistIds.update((prev) => {
+      const next = new Set(prev);
+
+      if (value) {
+        next.add(productId);
+      } else {
+        next.delete(productId);
+      }
+
+      return next;
+    });
+  }
+
+  toggleWishlist(
+    event: Event,
+    product: ProductCardResponse
+  ): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (this.isTogglingWishlist(product.id)) {
+      return;
+    }
+
+    const wasInWishlist =
+      this.isInWishlist(product.id);
+
+    this.setTogglingWishlist(product.id, true);
+
+    /* Optimistic update — same behaviour as ProductCardComponent. */
+    this.setWishlistProduct(
+      product.id,
+      !wasInWishlist
+    );
+
+    const request$ =
+      wasInWishlist
+        ? this.wishlistService.removeFromWishlist(product.id)
+        : this.wishlistService.addToWishlist(product.id);
+
+    request$.subscribe({
+      next: (res) => {
+        this.setTogglingWishlist(product.id, false);
+
+        if (!res.success) {
+          this.setWishlistProduct(
+            product.id,
+            wasInWishlist
+          );
+
+          this.toast.error(
+            res.message ||
+            'Failed to update wishlist'
+          );
+
+          return;
+        }
+
+        if (wasInWishlist) {
+          this.toast.success(
+            'Removed from wishlist'
+          );
+
+          this.analytics.removeWishlist({
+            id: product.id,
+            name: product.name,
+            category: product.categoryName,
+            brand: product.brandName,
+            price: product.price,
+            originalPrice: product.originalPrice,
+            discount: Math.max(
+              0,
+              product.originalPrice - product.price
+            ),
+          });
+        } else {
+          this.toast.success(
+            'Added to wishlist'
+          );
+
+          this.analytics.wishlist({
+            id: product.id,
+            name: product.name,
+            category: product.categoryName,
+            brand: product.brandName,
+            price: product.price,
+            originalPrice: product.originalPrice,
+            discount: Math.max(
+              0,
+              product.originalPrice - product.price
+            ),
+          });
+        }
+      },
+
+      error: () => {
+        this.setTogglingWishlist(product.id, false);
+
+        this.setWishlistProduct(
+          product.id,
+          wasInWishlist
+        );
+
+        this.toast.error(
+          'An error occurred while updating wishlist'
+        );
+      },
+    });
+  }
+
 
 }
