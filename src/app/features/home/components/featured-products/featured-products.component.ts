@@ -625,6 +625,103 @@ export class FeaturedProductsComponent implements OnInit, OnDestroy {
       },
     });
   }
+/* =========================================================
+   TOUCH / SWIPE
+   ========================================================= */
 
+private swipeStartX = 0;
+private swipeStartY = 0;
+private swipePointerId: number | null = null;
+
+private readonly swipeThreshold = 45;
+
+
+onSwipeStart(event: PointerEvent): void {
+
+  /*
+   * Only handle primary pointer.
+   * This prevents multi-touch from triggering the slider.
+   */
+  if (!event.isPrimary) {
+    return;
+  }
+
+  /*
+   * Don't start a swipe while the FLIP animation
+   * is already running.
+   */
+  if (this.isTransitioning()) {
+    return;
+  }
+
+  this.swipePointerId = event.pointerId;
+
+  this.swipeStartX = event.clientX;
+  this.swipeStartY = event.clientY;
+}
+
+
+onSwipeEnd(event: PointerEvent): void {
+
+  if (
+    !event.isPrimary ||
+    this.swipePointerId !== event.pointerId
+  ) {
+    return;
+  }
+
+  const deltaX =
+    event.clientX - this.swipeStartX;
+
+  const deltaY =
+    event.clientY - this.swipeStartY;
+
+
+  this.swipePointerId = null;
+
+
+  /*
+   * Ignore vertical gestures.
+   *
+   * This is important because the user should still
+   * be able to scroll the page normally.
+   */
+  if (
+    Math.abs(deltaY) > Math.abs(deltaX)
+  ) {
+    return;
+  }
+
+
+  /*
+   * Ignore tiny movements.
+   */
+  if (
+    Math.abs(deltaX) <
+    this.swipeThreshold
+  ) {
+    return;
+  }
+
+
+  /*
+   * Swipe LEFT  -> NEXT
+   * Swipe RIGHT -> PREVIOUS
+   */
+  if (deltaX < 0) {
+
+    this.nextHero();
+
+  } else {
+
+    this.prevHero();
+
+  }
+}
+
+
+onSwipeCancel(): void {
+  this.swipePointerId = null;
+}
 
 }

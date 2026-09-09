@@ -102,12 +102,16 @@
       appScrollReveal
     >
 
-      <div
-        class="featured-editorial__main-row"
-        [class.is-transitioning]="isTransitioning()"
-        [class.is-next]="transitionDirection() === 'next'"
-        [class.is-prev]="transitionDirection() === 'prev'"
-      >
+    <div
+  class="featured-editorial__main-row"
+  [class.is-transitioning]="isTransitioning()"
+  [class.is-next]="transitionDirection() === 'next'"
+  [class.is-prev]="transitionDirection() === 'prev'"
+
+  (pointerdown)="onSwipeStart($event)"
+  (pointerup)="onSwipeEnd($event)"
+  (pointercancel)="onSwipeCancel()"
+>
 
         <!-- =====================================================
              PREVIOUS

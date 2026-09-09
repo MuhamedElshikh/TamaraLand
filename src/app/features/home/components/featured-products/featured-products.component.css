@@ -2389,3 +2389,58 @@
 .featured-product-node__favorite.is-active:hover {
   transform: scale(1.04);
 }
+/* =========================================================
+   TOUCH SWIPE
+   ========================================================= */
+
+.featured-editorial__main-row {
+  /*
+   * Allow normal vertical page scrolling,
+   * while letting Pointer Events detect horizontal swipes.
+   */
+  touch-action: pan-y;
+
+  /*
+   * Prevent browser selection/drag behavior
+   * from interfering with the gesture.
+   */
+  user-select: none;
+
+  -webkit-user-select: none;
+
+  cursor: default;
+}
+
+
+/*
+ * Images must not start the browser's native
+ * image-drag behavior.
+ */
+.featured-product-node__image,
+.featured-product-node__image-link {
+  -webkit-user-drag: none;
+
+  user-select: none;
+}
+
+
+/*
+ * While the slider is animating, don't allow
+ * another gesture to interfere with FLIP.
+ */
+.featured-editorial__main-row.is-transitioning {
+  touch-action: none;
+}
+
+
+/*
+ * Keep interactive controls clickable.
+ * A click on wishlist/cart/nav must remain a click,
+ * not become a swipe.
+ */
+.featured-product-node__favorite,
+.featured-product-node__action,
+.featured-product-node__qty-button,
+.featured-editorial__nav {
+  touch-action: manipulation;
+}
