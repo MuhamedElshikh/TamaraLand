@@ -12,13 +12,17 @@ import {
 } from '@angular/core';
 
 import { DecimalPipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { CatalogService } from '../../../../core/services/catalog.service';
 import { ProductCardResponse } from '../../../../core/models/catalog.models';
 import { ScrollRevealDirective } from '../../../../shared/directives/scroll-reveal.directive';
 import { LocalizedNamePipe } from '../../../../shared/pipes/localized-name.pipe';
+
+import { CartService } from '../../../../core/services/cart.service';
+import { AnalyticsService } from '../../../../core/services/analytics.service';
+import { ToastService } from '../../../../shared/toast/toast.service';
 
 type SlideDirection = 'next' | 'prev';
 type ProductSlot =
@@ -47,6 +51,10 @@ type ProductSlot =
 })
 export class FeaturedProductsComponent implements OnInit, OnDestroy {
   private readonly catalog = inject(CatalogService);
+  private readonly cartService = inject(CartService);
+  private readonly analytics = inject(AnalyticsService);
+  private readonly toast = inject(ToastService);
+  private readonly router = inject(Router);
 
   readonly products = signal<ProductCardResponse[]>([]);
   readonly loading = signal(true);
@@ -56,12 +64,21 @@ export class FeaturedProductsComponent implements OnInit, OnDestroy {
 
   readonly canSlide = computed(() => this.products().length > 3);
 
+  /* Tracks which product ids are currently being added to the cart,
+     so the hero "add to bag" button can show its own loading state
+     without a signal per product. */
+  private readonly addingProductIds = signal<ReadonlySet<number>>(new Set());
+
   @ViewChildren('productNode', { read: ElementRef })
   private productNodes!: QueryList<ElementRef<HTMLElement>>;
 
   private finishTimer?: ReturnType<typeof setTimeout>;
 
   ngOnInit(): void {
+    if (!this.cartService.cart()) {
+      this.cartService.getCart().subscribe();
+    }
+
     this.catalog.getFeaturedProducts().subscribe({
       next: (res) => {
         this.products.set(
@@ -255,4 +272,205 @@ export class FeaturedProductsComponent implements OnInit, OnDestroy {
   isVisible(product: ProductCardResponse): boolean {
     return this.slotFor(product) !== 'offstage';
   }
+
+  /* =====================================================
+     ADD TO CART
+     Same rules as ProductCardComponent:
+     - single-variant products are added directly
+     - multi-variant products navigate to the PDP so the
+       shopper can pick a variant
+     - out-of-stock products can't be added
+     ===================================================== */
+
+  hasSingleVariant(product: ProductCardResponse): boolean {
+    return (
+      product.variantsCount === 1 &&
+      product.singleVariantId != null
+    );
+  }
+
+  isOutOfStock(product: ProductCardResponse): boolean {
+    if (product.inStock === false) {
+      return true;
+    }
+
+    if (this.hasSingleVariant(product)) {
+      return Number(product.singleVariantStock ?? 0) <= 0;
+    }
+
+    return false;
+  }
+
+  isAddingProduct(productId: number): boolean {
+    return this.addingProductIds().has(productId);
+  }
+
+  private setAdding(productId: number, value: boolean): void {
+    this.addingProductIds.update((prev) => {
+      const next = new Set(prev);
+      if (value) {
+        next.add(productId);
+      } else {
+        next.delete(productId);
+      }
+      return next;
+    });
+  }
+
+  cartItem(product: ProductCardResponse) {
+    if (!product.singleVariantId) {
+      return null;
+    }
+
+    return (
+      this.cartService
+        .cart()
+        ?.items.find(
+          item => item.productVariantId === product.singleVariantId
+        ) ?? null
+    );
+  }
+
+  cartQuantity(product: ProductCardResponse): number {
+    return this.cartItem(product)?.quantity ?? 0;
+  }
+
+  isAtMaxStock(product: ProductCardResponse): boolean {
+    const item = this.cartItem(product);
+
+    if (!item) {
+      return false;
+    }
+
+    return item.quantity >= item.availableStock;
+  }
+
+  addToCart(event: Event, product: ProductCardResponse): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (this.isOutOfStock(product)) {
+      return;
+    }
+
+    if (this.hasSingleVariant(product)) {
+      this.addSingleVariantToCart(product);
+      return;
+    }
+
+    void this.router.navigate(['/products', product.id]);
+  }
+
+  private addSingleVariantToCart(product: ProductCardResponse): void {
+    if (
+      this.isAddingProduct(product.id) ||
+      this.isOutOfStock(product) ||
+      this.isAtMaxStock(product) ||
+      !product.singleVariantId
+    ) {
+      return;
+    }
+
+    this.setAdding(product.id, true);
+
+    this.cartService
+      .addItem({
+        productVariantId: product.singleVariantId,
+        quantity: 1,
+      })
+      .subscribe({
+        next: () => {
+          this.setAdding(product.id, false);
+          this.toast.success('Added to cart');
+
+          this.analytics.addToCart({
+            id: product.id,
+            name: product.name,
+            category: product.categoryName,
+            brand: product.brandName,
+            quantity: 1,
+            price: product.price,
+            originalPrice: product.originalPrice,
+            discount: Math.max(
+              0,
+              product.originalPrice - product.price
+            ),
+          });
+        },
+        error: () => {
+          this.setAdding(product.id, false);
+          this.toast.error('Failed to add to cart');
+        },
+      });
+  }
+  increaseCartQuantity(
+    event: Event,
+    product: ProductCardResponse
+  ): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const item = this.cartItem(product);
+
+    if (
+      !item ||
+      !product.singleVariantId ||
+      this.isAddingProduct(product.id) ||
+      item.quantity >= item.availableStock
+    ) {
+      return;
+    }
+
+    this.setAdding(product.id, true);
+
+    this.cartService
+      .updateItem({
+        productVariantId: product.singleVariantId,
+        quantity: item.quantity + 1,
+      })
+      .subscribe({
+        next: () => this.setAdding(product.id, false),
+        error: () => {
+          this.setAdding(product.id, false);
+          this.toast.error('Failed to update cart');
+        },
+      });
+  }
+
+  decreaseCartQuantity(
+    event: Event,
+    product: ProductCardResponse
+  ): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const item = this.cartItem(product);
+
+    if (
+      !item ||
+      !product.singleVariantId ||
+      this.isAddingProduct(product.id)
+    ) {
+      return;
+    }
+
+    this.setAdding(product.id, true);
+
+    const request$ =
+      item.quantity <= 1
+        ? this.cartService.removeItem(product.singleVariantId)
+        : this.cartService.updateItem({
+            productVariantId: product.singleVariantId,
+            quantity: item.quantity - 1,
+          });
+
+    request$.subscribe({
+      next: () => this.setAdding(product.id, false),
+      error: () => {
+        this.setAdding(product.id, false);
+        this.toast.error('Failed to update cart');
+      },
+    });
+  }
+
 }

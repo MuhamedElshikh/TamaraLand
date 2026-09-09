@@ -125,7 +125,17 @@
     "titleLine2": "لا تُقاوَم",
     "description": "تشكيلة مختارة بعناية من أرقى القطع، حيث يلتقي التصميم الخالد بروح العصر.",
     "viewAll": "عرض الكل",
+"headerNote": "الأناقة تتجاوز صيحات الموضة",
 
+"prevLabel": "السابق",
+
+"prevAriaLabel": "المنتجات السابقة",
+
+"nextLabel": "التالي",
+
+"nextAriaLabel": "المنتجات التالية",
+
+"bottomLabel": "التالي في الإصدار",
     "headerNote1": "الأناقة",
     "headerNote2": "تتجاوز",
     "headerNote3": "حدود",

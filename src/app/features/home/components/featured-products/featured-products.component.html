@@ -1,47 +1,106 @@
-<section class="featured-editorial" aria-labelledby="featured-editorial-title">
+<section
+  class="featured-editorial"
+  aria-labelledby="featured-editorial-title"
+>
+
+  <!-- =========================================================
+       HEADER
+       ========================================================= -->
 
   <header class="featured-editorial__header">
+
     <div class="featured-editorial__heading">
+
       <div class="featured-editorial__eyebrow">
         <span>01</span>
         <i aria-hidden="true"></i>
-        <strong>{{ 'featuredProducts.eyebrow' | translate }}</strong>
+
+        <strong>
+          {{ 'featuredProducts.eyebrow' | translate }}
+        </strong>
       </div>
 
-      <h2 id="featured-editorial-title" class="featured-editorial__title">
-        <span>{{ 'featuredProducts.titleLine1' | translate }}</span>
-        <span>{{ 'featuredProducts.titleLine2' | translate }}</span>
+      <h2
+        id="featured-editorial-title"
+        class="featured-editorial__title"
+      >
+        <span>
+          {{ 'featuredProducts.titleLine1' | translate }}
+        </span>
+
+        <span>
+          {{ 'featuredProducts.titleLine2' | translate }}
+        </span>
       </h2>
 
       <p class="featured-editorial__description">
         {{ 'featuredProducts.description' | translate }}
       </p>
+
     </div>
 
+
     <div class="featured-editorial__header-side">
-      <div class="featured-editorial__header-note" aria-hidden="true">
-        <span>STYLE LIVES BEYOND TRENDS</span><i></i>
-        
+
+      <div
+        class="featured-editorial__header-note"
+        aria-hidden="true"
+      >
+        <span>
+          {{ 'featuredProducts.headerNote' | translate }}
+        </span>
+
+        <i></i>
       </div>
 
-      <a routerLink="/products" class="featured-editorial__view-all">
-        <span>{{ 'featuredProducts.viewAll' | translate }}</span>
-        <svg viewBox="0 0 24 24" aria-hidden="true">
+      <a
+        routerLink="/products"
+        class="featured-editorial__view-all"
+      >
+        <span>
+          {{ 'featuredProducts.viewAll' | translate }}
+        </span>
+
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
           <path d="M5 12h13M13 6l6 6-6 6" />
         </svg>
       </a>
+
     </div>
+
   </header>
 
-  @if (loading()) {
-    <div class="featured-editorial__loading">
-      <div class="featured-skeleton"></div>
-      <div class="featured-skeleton"></div>
-      <div class="featured-skeleton"></div>
-    </div>
-  } @else if (products().length) {
 
-    <div class="featured-editorial__stage" appScrollReveal>
+  <!-- =========================================================
+       LOADING
+       ========================================================= -->
+
+  @if (loading()) {
+
+    <div class="featured-editorial__loading">
+
+      <div class="featured-skeleton"></div>
+      <div class="featured-skeleton"></div>
+      <div class="featured-skeleton"></div>
+
+    </div>
+
+  }
+
+
+  <!-- =========================================================
+       PRODUCTS
+       ========================================================= -->
+
+  @else if (products().length) {
+
+    <div
+      class="featured-editorial__stage"
+      appScrollReveal
+    >
 
       <div
         class="featured-editorial__main-row"
@@ -50,32 +109,59 @@
         [class.is-prev]="transitionDirection() === 'prev'"
       >
 
+        <!-- =====================================================
+             PREVIOUS
+             ===================================================== -->
+
         @if (canSlide()) {
+
           <button
             type="button"
             class="featured-editorial__nav featured-editorial__nav--prev"
             (click)="prevHero()"
             [disabled]="isTransitioning()"
-            aria-label="Previous products"
+            [attr.aria-label]="
+              'featuredProducts.prevAriaLabel' | translate
+            "
           >
+
             <span class="featured-editorial__nav-arrow">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
+
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
                 <path d="M19 12H5M11 6l-6 6 6 6" />
               </svg>
+
             </span>
-            <span class="featured-editorial__nav-label">PREV</span>
+
+            <span class="featured-editorial__nav-label">
+              {{ 'featuredProducts.prevLabel' | translate }}
+            </span>
+
           </button>
+
         }
 
-        <!--
-          ONE DOM NODE PER PRODUCT.
-          The node changes only its slot class.
-          This is essential: P4 can physically travel from square-1
-          into arch-3 instead of being destroyed and recreated.
-        -->
+
+        <!-- =====================================================
+             SHARED PRODUCT DOM LAYER
+
+             ONE DOM NODE PER PRODUCT.
+             The node changes only its slot class.
+
+             This allows the FLIP animation to physically move
+             the same product between positions.
+             ===================================================== -->
+
         <div class="featured-product-layer">
 
-          @for (product of products(); track product.id) {
+          @for (
+            product of products();
+            track product.id
+          ) {
+
             <article
               #productNode
               [class]="'featured-product-node ' + slotClass(product)"
@@ -83,112 +169,432 @@
               [attr.aria-hidden]="!isVisible(product)"
             >
 
-              <a
-                [routerLink]="['/products', product.id]"
-                class="featured-product-node__media"
-              >
-                <img
-                  [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
-                  [alt]="product | localizedName"
-                  class="featured-product-node__image"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </a>
+              <div class="featured-product-node__media">
 
-              @if (slotFor(product) === 'arch-2') {
-
-                <div class="featured-product-node__hero-mark">
-                  <span>{{ 'featuredProducts.ourFavorite1' | translate }}</span>
-                  <span>{{ 'featuredProducts.ourFavorite2' | translate }}</span>
-                  <i></i>
-                </div>
-
-                <span class="featured-product-node__gold-sweep"></span>
-              }
-
-              <div class="featured-product-node__info">
-
-                @if (product.brandName) {
-                  <span class="featured-product-node__brand">
-                    {{ product.brandName }}
-                  </span>
-                }
+                <!-- =================================================
+                     IMAGE
+                     ================================================= -->
 
                 <a
-                  [routerLink]="['/products', product.id]"
-                  class="featured-product-node__name"
+                  [routerLink]="[
+                    '/products',
+                    product.id
+                  ]"
+                  class="featured-product-node__image-link"
+                  [attr.aria-label]="
+                    product | localizedName
+                  "
                 >
-                  {{ product | localizedName }}
+
+                  <img
+                    [src]="
+                      product.imageUrl ||
+                      'assets/placeholder-product.jpg'
+                    "
+                    [alt]="product | localizedName"
+                    class="featured-product-node__image"
+                    loading="lazy"
+                    decoding="async"
+                  />
+
                 </a>
 
-                <div class="featured-product-node__price">
-                  <span>{{ product.price | number:'1.0-2' }}</span>
 
-                  @if (product.originalPrice && product.originalPrice > product.price) {
-                    <small>
-                      {{ product.originalPrice | number:'1.0-2' }}
-                    </small>
-                  }
+                <!-- =================================================
+                     PRODUCT OVERLAY
+                     ================================================= -->
+
+                <div class="featured-product-node__overlay">
+
+                  <div class="featured-product-node__info">
+
+                    @if (product.brandName) {
+
+                      <span
+                        class="featured-product-node__brand"
+                      >
+                        {{ product.brandName }}
+                      </span>
+
+                    }
+
+
+                    <a
+                      [routerLink]="[
+                        '/products',
+                        product.id
+                      ]"
+                      class="featured-product-node__name"
+                    >
+                      {{ product | localizedName }}
+                    </a>
+
+                  </div>
+
+
+                  <!-- =================================================
+                       BOTTOM AREA
+                       ================================================= -->
+
+                  <div class="featured-product-node__bottom">
+
+                    <!-- =================================================
+                         QUANTITY
+                         ================================================= -->
+
+                    @if (cartQuantity(product) > 0) {
+
+                      <div
+                        class="
+                          featured-product-node__quantity-control
+                        "
+                        [class.is-loading]="
+                          isAddingProduct(product.id)
+                        "
+                      >
+
+                        <button
+                          type="button"
+                          class="
+                            featured-product-node__qty-button
+                          "
+                          [disabled]="
+                            isAddingProduct(product.id) ||
+                            isAtMaxStock(product)
+                          "
+                          (click)="
+                            increaseCartQuantity(
+                              $event,
+                              product
+                            )
+                          "
+                          aria-label="Increase quantity"
+                        >
+                          +
+                        </button>
+
+
+                        <span
+                          class="
+                            featured-product-node__quantity
+                          "
+                        >
+                          {{ cartQuantity(product) }}
+                        </span>
+
+
+                        <button
+                          type="button"
+                          class="
+                            featured-product-node__qty-button
+                          "
+                          [disabled]="
+                            isAddingProduct(product.id)
+                          "
+                          (click)="
+                            decreaseCartQuantity(
+                              $event,
+                              product
+                            )
+                          "
+                          aria-label="Decrease quantity"
+                        >
+                          −
+                        </button>
+
+                      </div>
+
+                    }
+
+
+                    <!-- =================================================
+                         ADD TO CART
+                         ================================================= -->
+
+                    @else {
+
+                      <button
+                        type="button"
+                        class="
+                          featured-product-node__action
+                        "
+                        [class.is-loading]="
+                          isAddingProduct(product.id)
+                        "
+                        [disabled]="
+                          isOutOfStock(product) ||
+                          isAddingProduct(product.id)
+                        "
+                        (click)="
+                          addToCart(
+                            $event,
+                            product
+                          )
+                        "
+                        [attr.aria-label]="
+                          isOutOfStock(product)
+                            ? 'Out of stock'
+                            : 'Add to cart'
+                        "
+                      >
+
+                        <i
+                          class="fa-solid fa-bag-shopping"
+                          aria-hidden="true"
+                        ></i>
+
+                        <span>
+
+                          {{
+                            isOutOfStock(product)
+                              ? (
+                                  'featuredProducts.outOfStock'
+                                  | translate
+                                )
+                              : (
+                                  'featuredProducts.addToBag'
+                                  | translate
+                                )
+                          }}
+
+                        </span>
+
+                      </button>
+
+                    }
+
+
+                    <!-- =================================================
+                         PRICE
+                         ================================================= -->
+
+                    <div
+                      class="
+                        featured-product-node__price
+                      "
+                    >
+
+                      <span>
+                        {{ product.price | number:'1.0-2' }}
+                      </span>
+
+
+                      @if (
+                        product.originalPrice &&
+                        product.originalPrice > product.price
+                      ) {
+
+                        <small>
+                          {{
+                            product.originalPrice
+                              | number:'1.0-2'
+                          }}
+                        </small>
+
+                      }
+
+                    </div>
+
+                  </div>
+
                 </div>
 
-                @if (slotFor(product) === 'arch-2') {
-                  <a
-                    [routerLink]="['/products', product.id]"
-                    class="featured-product-node__action"
-                  >
-                    <span>{{ 'featuredProducts.addToBag' | translate }}</span>
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M5 12h13M13 6l6 6-6 6" />
-                    </svg>
-                  </a>
-                }
-
               </div>
+
+
+                <!-- =================================================
+                     TOP CONTROLS
+                     ================================================= -->
+
+                <div
+                  class="featured-product-node__topbar"
+                  aria-hidden="true"
+                >
+
+                  <span
+                    class="featured-product-node__favorite"
+                  >
+
+                    <svg viewBox="0 0 24 24">
+
+                      <path
+                        d="
+                          M20.84 8.72
+                          c0 5.22-8.84 10.28-8.84 10.28
+                          S3.16 13.94 3.16 8.72
+                          A4.72 4.72 0 0 1 12 6.16
+                          a4.72 4.72 0 0 1 8.84 2.56Z
+                        "
+                      />
+
+                    </svg>
+
+                  </span>
+
+
+                  @if (
+                    product.originalPrice &&
+                    product.originalPrice > product.price
+                  ) {
+
+                    <span
+                      class="featured-product-node__discount"
+                    >
+
+                      {{
+                        (
+                          (
+                            product.originalPrice -
+                            product.price
+                          ) /
+                          product.originalPrice *
+                          100
+                        ) | number:'1.0-0'
+                      }}%
+
+                    </span>
+
+                  }
+
+                </div>
+
+
+
             </article>
+
           }
 
         </div>
 
+
+        <!-- =====================================================
+             NEXT
+             ===================================================== -->
+
         @if (canSlide()) {
+
           <button
             type="button"
-            class="featured-editorial__nav featured-editorial__nav--next"
+            class="
+              featured-editorial__nav
+              featured-editorial__nav--next
+            "
             (click)="nextHero()"
             [disabled]="isTransitioning()"
-            aria-label="Next products"
+            [attr.aria-label]="
+              'featuredProducts.nextAriaLabel' | translate
+            "
           >
-            <span class="featured-editorial__nav-arrow">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
+
+            <span
+              class="
+                featured-editorial__nav-arrow
+              "
+            >
+
+              <!-- Correct direction for NEXT -->
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
                 <path d="M5 12h14M13 6l6 6-6 6" />
               </svg>
+
             </span>
-            <span class="featured-editorial__nav-label">NEXT</span>
+
+            <span
+              class="
+                featured-editorial__nav-label
+              "
+            >
+              {{ 'featuredProducts.nextLabel' | translate }}
+            </span>
+
           </button>
+
         }
 
-        <div class="featured-editorial__bottom-heading">
-          <span class="featured-editorial__bottom-line"></span>
-          <span class="featured-editorial__bottom-label">NEXT IN EDITION</span>
+
+        <!-- =====================================================
+             BOTTOM SECTION LABEL
+             ===================================================== -->
+
+        <div
+          class="
+            featured-editorial__bottom-heading
+          "
+        >
+
+          <span
+            class="
+              featured-editorial__bottom-line
+            "
+          ></span>
+
+          <span
+            class="
+              featured-editorial__bottom-label
+            "
+          >
+            {{ 'featuredProducts.bottomLabel' | translate }}
+          </span>
+
         </div>
 
       </div>
 
-      <footer class="featured-editorial__footer">
-        <div class="featured-editorial__footer-copy">
-          <span>{{ 'featuredProducts.footerTag1' | translate }}</span>
-          <span>{{ 'featuredProducts.footerTag2' | translate }}</span>
-          <span>{{ 'featuredProducts.footerTag3' | translate }}</span>
+
+      <!-- =========================================================
+           FOOTER
+           ========================================================= -->
+
+      <footer
+        class="
+          featured-editorial__footer
+        "
+      >
+
+        <div
+          class="
+            featured-editorial__footer-copy
+          "
+        >
+
+          <span>
+            {{ 'featuredProducts.footerTag1' | translate }}
+          </span>
+
+          <span>
+            {{ 'featuredProducts.footerTag2' | translate }}
+          </span>
+
+          <span>
+            {{ 'featuredProducts.footerTag3' | translate }}
+          </span>
+
         </div>
 
-      
       </footer>
 
     </div>
-  } @else {
-    <div class="featured-editorial__empty">
+
+  }
+
+
+  <!-- =========================================================
+       EMPTY
+       ========================================================= -->
+
+  @else {
+
+    <div
+      class="
+        featured-editorial__empty
+      "
+    >
       {{ 'featuredProducts.empty' | translate }}
     </div>
+
   }
 
 </section>

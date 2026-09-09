@@ -116,7 +116,12 @@
     "titleLine2": "You'll Love",
     "description": "A carefully curated edit of our finest pieces, where timeless design meets modern spirit.",
     "viewAll": "View All",
-
+"headerNote": "STYLE LIVES BEYOND TRENDS",
+"prevLabel": "PREV",
+"prevAriaLabel": "Previous products",
+"nextLabel": "NEXT",
+"nextAriaLabel": "Next products",
+"bottomLabel": "NEXT IN EDITION",
     "headerNote1": "STYLE",
     "headerNote2": "LIVES",
     "headerNote3": "BEYOND",
