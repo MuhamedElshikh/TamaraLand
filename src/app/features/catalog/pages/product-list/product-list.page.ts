@@ -672,7 +672,7 @@ export class ProductListPage implements OnInit {
             name: product.name,
 
             url:
-              `https://www.tamaraland.shop/products/${product.id}`,
+              `https://www.tamaraland.shop/products/${product.slug}`,
 
           };
 

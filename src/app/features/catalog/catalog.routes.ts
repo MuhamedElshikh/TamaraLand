@@ -52,14 +52,15 @@ export const CATALOG_ROUTES: Routes = [
     },
   },
 
-  {
-    path: 'products/:id',
-    loadComponent: () =>
-      import('./pages/product-details/product-details.page').then((m) => m.ProductDetailsPage),
-    resolve: {
-      product: productDetailsResolver
-    }
+{
+  path: 'products/:slug',
+  loadComponent: () =>
+    import('./pages/product-details/product-details.page')
+      .then((m) => m.ProductDetailsPage),
+  resolve: {
+    product: productDetailsResolver,
   },
+},
 
   {
     path: 'categories',

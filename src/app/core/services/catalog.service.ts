@@ -54,6 +54,18 @@ getFeaturedProducts(): Observable<ApiResponse<ProductCardResponse[]>> {
     `${API_BASE_URL}/api/Product/featured`
   );
 }
+getProductBySlug(
+  slug: string
+): Observable<ApiResponse<ProductDetailsResponse>> {
+  return this.http.get<ApiResponse<ProductDetailsResponse>>(
+    `${API_BASE_URL}/api/Product/slug/${encodeURIComponent(slug)}`
+  );
+}
+getAllProductSlugs(): Observable<ApiResponse<string[]>> {
+  return this.http.get<ApiResponse<string[]>>(
+    `${API_BASE_URL}/api/Product/all-slugs`
+  );
+}
     private buildParams<T extends object>(filter: T): Record<string, string> {
       const params: Record<string, string> = {};
       Object.entries(filter).forEach(([key, val]) => {

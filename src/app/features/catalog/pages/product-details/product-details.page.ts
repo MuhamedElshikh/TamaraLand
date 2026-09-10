@@ -873,19 +873,42 @@ private readonly isBrowser = isPlatformBrowser(this.platformId);
       },
     });
   }
+
 private setProductSeo(
   product: ProductDetailsResponse
 ): void {
 
-  const title =
-    `${product.name} | Tamara Land`;
+  const isArabic =
+    this.translate.currentLang === 'ar';
+
+  const localizedName =
+    isArabic
+      ? product.arabicName
+      : product.name;
+
+  const localizedBrandName =
+    isArabic
+      ? product.arabicBrandName
+      : product.brandName;
+
+  const localizedCategoryName =
+    isArabic
+      ? product.arabicCategoryName
+      : product.categoryName;
+
+  const fallbackDescription = isArabic
+    ? `تسوق ${localizedName} من تمارا لاند واكتشف أحدث الأزياء النسائية في مصر.`
+    : `Shop ${localizedName} from Tamara Land. Discover quality women's fashion in Egypt.`;
+
+  const rawDescription =
+    product.description?.trim() ||
+    fallbackDescription;
 
   const description =
-    product.description?.trim() ||
-    `Shop ${product.name} from Tamara Land. Discover quality women's fashion in Egypt.`;
+    this.truncateSeoDescription(rawDescription);
 
   const canonicalUrl =
-    `/products/${product.id}`;
+    `/products/${product.slug}`;
 
   const mainImage =
     product.images?.find(
@@ -894,17 +917,25 @@ private setProductSeo(
     product.imageUrl ??
     product.images?.[0]?.imageUrl;
 
+  const locale =
+    isArabic
+      ? 'ar_EG'
+      : 'en_EG';
+
   this.seo.setSeo({
 
-    title,
+    title:
+      `${localizedName} | Tamara Land`,
 
     description,
 
     canonicalUrl,
 
-    image: mainImage,
+    image:
+      mainImage,
 
-    type: 'product',
+    type:
+      'product',
 
     robots:
       'index, follow',
@@ -912,17 +943,52 @@ private setProductSeo(
     siteName:
       'Tamara Land',
 
+    locale,
+
     jsonLd:
-      this.buildProductSchema(product)
-
+      [
+        this.buildProductSchema(product),
+        this.buildBreadcrumbSchema(
+          product,
+          localizedName
+        )
+      ]
   });
-
 }
 
 
 private buildProductSchema(
   product: ProductDetailsResponse
 ): Record<string, unknown> {
+
+  const isArabic =
+    this.translate.currentLang === 'ar';
+
+  const localizedName =
+    isArabic
+      ? product.arabicName
+      : product.name;
+
+  const localizedBrandName =
+    isArabic
+      ? product.arabicBrandName
+      : product.brandName;
+
+  const localizedCategoryName =
+    isArabic
+      ? product.arabicCategoryName
+      : product.categoryName;
+
+  const localizedDescription =
+    product.description?.trim() ||
+    (
+      isArabic
+        ? `تسوق ${localizedName} من تمارا لاند واكتشف أحدث الأزياء النسائية في مصر.`
+        : `Shop ${localizedName} from Tamara Land. Discover quality women's fashion in Egypt.`
+    );
+
+  const productUrl =
+    `https://www.tamaraland.shop/products/${product.slug}`;
 
   const mainImage =
     product.images?.find(
@@ -931,109 +997,284 @@ private buildProductSchema(
     product.imageUrl ??
     product.images?.[0]?.imageUrl;
 
-  const variant =
-    product.variants?.[0];
+  const variants =
+    (product.variants ?? [])
+      .map(variant => {
 
-  const price =
-    Number(
-      variant?.price ??
-      product.price
-    );
+        const variantColorName =
+          isArabic
+            ? variant.colorArabicName
+            : variant.colorName;
 
-  const schema: Record<string, unknown> = {
+        const variantNameParts = [
+          localizedName,
+          variantColorName,
+          variant.sizeName
+        ].filter(Boolean);
+
+        const variantProduct:
+          Record<string, unknown> = {
+
+          '@type':
+            'Product',
+
+          name:
+            variantNameParts.join(' - '),
+
+          sku:
+            variant.sku,
+
+          ...(mainImage
+            ? {
+                image: [
+                  this.seoAbsoluteUrl(
+                    mainImage
+                  )
+                ]
+              }
+            : {}),
+
+          ...(variantColorName
+            ? {
+                color:
+                  variantColorName
+              }
+            : {}),
+
+          ...(variant.sizeName
+            ? {
+                size:
+                  variant.sizeName
+              }
+            : {}),
+
+          offers: {
+            '@type':
+              'Offer',
+
+            url:
+              productUrl,
+
+            priceCurrency:
+              'EGP',
+
+            price:
+              Number(
+                variant.price
+              ).toFixed(2),
+
+            availability:
+              Number(variant.stock) > 0
+                ? 'https://schema.org/InStock'
+                : 'https://schema.org/OutOfStock',
+
+            itemCondition:
+              'https://schema.org/NewCondition'
+          }
+        };
+
+        return variantProduct;
+      });
+
+  const schema:
+    Record<string, unknown> = {
 
     '@context':
       'https://schema.org',
 
     '@type':
-      'Product',
+      'ProductGroup',
+
+    '@id':
+      `${productUrl}#product`,
 
     name:
-      product.name,
+      localizedName,
 
     description:
-      product.description,
+      localizedDescription,
+
+    url:
+      productUrl,
+
+    productGroupID:
+      String(product.id),
 
     brand: {
       '@type':
         'Brand',
 
       name:
-        product.brandName
+        localizedBrandName
     },
 
     category:
-      product.categoryName,
+      localizedCategoryName,
 
-    offers: {
+    ...(mainImage
+      ? {
+          image: [
+            this.seoAbsoluteUrl(
+              mainImage
+            )
+          ]
+        }
+      : {}),
 
-      '@type':
-        'Offer',
+    ...(variants.length > 0
+      ? {
+          variesBy: [
+            'https://schema.org/color',
+            'https://schema.org/size'
+          ],
 
-      url:
-        `https://www.tamaraland.shop/products/${product.id}`,
+          hasVariant:
+            variants
+        }
+      : {}),
 
-      priceCurrency:
-        'EGP',
+    ...(product.reviewsCount > 0 &&
+        product.rating > 0
+      ? {
+          aggregateRating: {
+            '@type':
+              'AggregateRating',
 
-      price:
-        price,
+            ratingValue:
+              Number(
+                product.rating
+              ),
 
-      availability:
-        product.inStock
-          ? 'https://schema.org/InStock'
-          : 'https://schema.org/OutOfStock'
-
-    }
-
+            reviewCount:
+              Number(
+                product.reviewsCount
+              )
+          }
+        }
+      : {})
   };
 
+  return schema;
+}
 
-  if (mainImage) {
 
-    schema['image'] = [
-      mainImage
-    ];
+private buildBreadcrumbSchema(
+  product: ProductDetailsResponse,
+  localizedProductName: string
+): Record<string, unknown> {
 
+  const isArabic =
+    this.translate.currentLang === 'ar';
+
+  const categoryName =
+    isArabic
+      ? product.arabicCategoryName
+      : product.categoryName;
+
+  const homeName =
+    isArabic
+      ? 'الرئيسية'
+      : 'Home';
+
+  const categoryUrl =
+    `https://www.tamaraland.shop/categories/${product.id}`;
+
+  const productUrl =
+    `https://www.tamaraland.shop/products/${product.slug}`;
+
+  return {
+
+    '@context':
+      'https://schema.org',
+
+    '@type':
+      'BreadcrumbList',
+
+    itemListElement: [
+
+      {
+        '@type':
+          'ListItem',
+
+        position:
+          1,
+
+        name:
+          homeName,
+
+        item:
+          'https://www.tamaraland.shop/'
+      },
+
+      {
+        '@type':
+          'ListItem',
+
+        position:
+          2,
+
+        name:
+          categoryName,
+
+        item:
+          categoryUrl
+      },
+
+      {
+        '@type':
+          'ListItem',
+
+        position:
+          3,
+
+        name:
+          localizedProductName,
+
+        item:
+          productUrl
+      }
+    ]
+  };
+}
+
+
+private truncateSeoDescription(
+  description: string
+): string {
+
+  const normalized =
+    description
+      .replace(/\s+/g, ' ')
+      .trim();
+
+  if (normalized.length <= 160) {
+    return normalized;
   }
 
+  return `${normalized
+    .slice(0, 157)
+    .trimEnd()}...`;
+}
 
-  if (variant?.sku) {
 
-    schema['sku'] =
-      variant.sku;
-
-  }
-
+private seoAbsoluteUrl(
+  url: string
+): string {
 
   if (
-    product.reviewsCount > 0 &&
-    product.rating > 0
+    url.startsWith('http://') ||
+    url.startsWith('https://')
   ) {
-
-    schema['aggregateRating'] = {
-
-      '@type':
-        'AggregateRating',
-
-      ratingValue:
-        Number(product.rating),
-
-      reviewCount:
-        Number(product.reviewsCount),
-
-      bestRating:
-        5,
-
-      worstRating:
-        1
-
-    };
-
+    return url;
   }
 
-
-  return schema;
-
+  return `https://www.tamaraland.shop${
+    url.startsWith('/')
+      ? ''
+      : '/'
+  }${url}`;
 }
+
+
+
 }

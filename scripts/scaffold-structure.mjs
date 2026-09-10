@@ -298,7 +298,10 @@ for (const [folder, className, desc] of catalogComponents) {
 resolver(join(root, 'features/catalog/resolvers/product-details.resolver.ts'), 'productDetailsResolver', 'Preloads product details before ProductDetailsPage.');
 routes(join(root, 'features/catalog/catalog.routes.ts'), 'CATALOG_ROUTES', [
   `{ path: 'products', loadComponent: () => import('./pages/product-list/product-list.page').then(m => m.ProductListPage) }`,
-  `{ path: 'products/:id', resolve: { product: productDetailsResolver }, loadComponent: () => import('./pages/product-details/product-details.page').then(m => m.ProductDetailsPage) }`,
+  `{ path: 'products/:slug',
+  resolve: { product: productDetailsResolver },
+  loadComponent: () => import('./pages/product-details/product-details.page').then(m => m.ProductDetailsPage)
+}`,
   `{ path: 'categories/:id', loadComponent: () => import('./pages/category-products/category-products.page').then(m => m.CategoryProductsPage) }`,
   `{ path: 'brands/:id', loadComponent: () => import('./pages/brand-products/brand-products.page').then(m => m.BrandProductsPage) }`,
 ]);
@@ -396,7 +399,10 @@ import { productDetailsResolver } from './resolvers/product-details.resolver';
 /** Feature routes - lazy-loaded from app.routes.ts */
 export const CATALOG_ROUTES: Routes = [
   { path: 'products', loadComponent: () => import('./pages/product-list/product-list.page').then(m => m.ProductListPage) },
-  { path: 'products/:id', resolve: { product: productDetailsResolver }, loadComponent: () => import('./pages/product-details/product-details.page').then(m => m.ProductDetailsPage) },
+  { path: 'products/:slug',
+  resolve: { product: productDetailsResolver },
+  loadComponent: () => import('./pages/product-details/product-details.page').then(m => m.ProductDetailsPage)
+},
   { path: 'categories/:id', loadComponent: () => import('./pages/category-products/category-products.page').then(m => m.CategoryProductsPage) },
   { path: 'brands/:id', loadComponent: () => import('./pages/brand-products/brand-products.page').then(m => m.BrandProductsPage) },
 ];

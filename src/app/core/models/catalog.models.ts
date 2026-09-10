@@ -81,6 +81,7 @@ export interface ProductVariantResponse {
 export interface ProductCardResponse {
   id: number;
   name: string;
+  slug: string;
   arabicName: string;
   imageUrl?: string;
   viewsCount: number;
@@ -116,7 +117,6 @@ export interface ProductSearchSuggestion {
 }
 
 export interface ProductDetailsResponse extends ProductResponse {
-  slug: string;
   isInWishlist: boolean;
   viewsCount:number;
   images: ProductImageResponse[];
@@ -148,25 +148,10 @@ export interface ProductFilterRequest {
 
 export type RelatedProductResponse = ProductCardResponse;
 
-export interface ProductResponse  {
-  id:number;
-  price:number;
-  name:string;
-  arabicName:string;
-  rating:number;
-  description:string;
-  inStock:boolean;
-  originalPrice:number;
-  reviewsCount:number;
-  imageUrl:string;
-  categoryName: string;
-arabicCategoryName: string;
-  brandName: string;
-arabicBrandName: string;
-  viewsCount:number;
+export interface ProductResponse extends ProductCardResponse {
+  isPublished: boolean;
   variants: ProductVariantResponse[];
 }
-
 export interface CategoryFilterRequest {
   search?: string;
   pageNumber?: number;

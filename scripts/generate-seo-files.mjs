@@ -10,7 +10,8 @@ const OUTPUT_DIR = path.resolve(
   'tmaraland-frontend',
   'browser'
 );
-
+const PRODUCT_ALL_SLUGS_URL =
+  `${API_BASE_URL}/api/Product/all-slugs`;
 const PRODUCTS_IDS_URL =
   `${API_BASE_URL}/api/Product/all-ids`;
 
@@ -69,7 +70,29 @@ async function fetchJson(url) {
 
   return response.json();
 }
+async function fetchSlugs(url, name) {
+  const json = await fetchJson(url);
 
+  if (!json?.success) {
+    throw new Error(
+      `[seo] ${name} API returned success=false`
+    );
+  }
+
+  if (!Array.isArray(json.data)) {
+    throw new Error(
+      `[seo] ${name} API returned invalid data format`
+    );
+  }
+
+  return json.data
+    .filter(
+      (slug) =>
+        typeof slug === 'string' &&
+        slug.trim().length > 0
+    )
+    .map((slug) => slug.trim());
+}
 
 async function fetchIds(url, name) {
   const json = await fetchJson(url);
@@ -184,9 +207,15 @@ function buildRobotsTxt() {
     .join('\n');
 
   return `User-agent: *
+
+Allow: /
+${disallowLines}
+
+User-agent: OAI-SearchBot
 Allow: /
 
-${disallowLines}
+User-agent: OAI-AdsBot
+Allow: /
 
 Sitemap: ${SITE_URL}/sitemap.xml
 `;
@@ -216,33 +245,27 @@ async function main() {
      --------------------------------------------------------- */
 
   const [
-    productIds,
-    categoryIds,
-    brandIds,
-  ] = await Promise.all([
-
-    fetchIds(
-      PRODUCTS_IDS_URL,
-      'Products'
-    ),
-
-    fetchIds(
-      CATEGORIES_IDS_URL,
-      'Categories'
-    ),
-
-    fetchIds(
-      BRANDS_IDS_URL,
-      'Brands'
-    ),
-
-  ]);
-
-
+  productSlugs,
+  categoryIds,
+  brandIds,
+] = await Promise.all([
+  fetchSlugs(
+    PRODUCT_ALL_SLUGS_URL,
+    'Products'
+  ),
+  fetchIds(
+    CATEGORIES_IDS_URL,
+    'Categories'
+  ),
+  fetchIds(
+    BRANDS_IDS_URL,
+    'Brands'
+  ),
+]);
   console.log('');
 
   console.log(
-    `[seo] Products: ${productIds.length}`
+    `[seo] Products: ${productSlugs.length}`
   );
 
   console.log(
@@ -259,9 +282,10 @@ async function main() {
      --------------------------------------------------------- */
 
   const productRoutes =
-    productIds.map(
-      (id) => `/products/${id}`
-    );
+  productSlugs.map(
+    (slug) =>
+      `/products/${encodeURIComponent(slug)}`
+  );
 
 
   const categoryRoutes =

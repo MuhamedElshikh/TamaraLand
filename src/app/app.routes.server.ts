@@ -1,30 +1,86 @@
 import { RenderMode, ServerRoute } from '@angular/ssr';
 
-const PRODUCT_ALL_IDS_URL = 'https://tamaraland.runasp.net/api/Product/all-ids';
-const CATEGORY_ALL_IDS_URL = 'https://tamaraland.runasp.net/api/Categories/all-ids';
-const BRAND_ALL_IDS_URL = 'https://tamaraland.runasp.net/api/Brand/all-ids';
+const PRODUCT_ALL_SLUGS_URL =
+  'https://tamaraland.runasp.net/api/Product/all-slugs';
 
-async function fetchIds(url: string): Promise<number[]> {
+const CATEGORY_ALL_IDS_URL =
+  'https://tamaraland.runasp.net/api/Categories/all-ids';
+
+const BRAND_ALL_IDS_URL =
+  'https://tamaraland.runasp.net/api/Brand/all-ids';
+
+async function fetchSlugs(url: string): Promise<string[]> {
   try {
     const res = await fetch(url);
+
     if (!res.ok) {
-      console.error(`[prerender] Failed to fetch ${url}: ${res.status}`);
+      console.error(
+        `[prerender] Failed to fetch ${url}: ${res.status}`
+      );
       return [];
     }
 
     const json = await res.json();
 
-    // الباك اند بيلف النتيجة جوه { success, data } - نفكها هنا
-    const raw = Array.isArray(json) ? json : json?.data;
+    // الباك اند بيلف النتيجة جوه { success, data }
+    const raw = Array.isArray(json)
+      ? json
+      : json?.data;
 
     if (!Array.isArray(raw)) {
-      console.error(`[prerender] Unexpected response shape from ${url}:`, json);
+      console.error(
+        `[prerender] Unexpected response shape from ${url}:`,
+        json
+      );
+      return [];
+    }
+
+    return raw
+      .filter(
+        (slug): slug is string =>
+          typeof slug === 'string' && slug.trim().length > 0
+      )
+      .map((slug) => slug.trim());
+  } catch (err) {
+    console.error(
+      `[prerender] Error fetching ${url}:`,
+      err
+    );
+    return [];
+  }
+}
+
+async function fetchIds(url: string): Promise<number[]> {
+  try {
+    const res = await fetch(url);
+
+    if (!res.ok) {
+      console.error(
+        `[prerender] Failed to fetch ${url}: ${res.status}`
+      );
+      return [];
+    }
+
+    const json = await res.json();
+
+    const raw = Array.isArray(json)
+      ? json
+      : json?.data;
+
+    if (!Array.isArray(raw)) {
+      console.error(
+        `[prerender] Unexpected response shape from ${url}:`,
+        json
+      );
       return [];
     }
 
     return raw;
   } catch (err) {
-    console.error(`[prerender] Error fetching ${url}:`, err);
+    console.error(
+      `[prerender] Error fetching ${url}:`,
+      err
+    );
     return [];
   }
 }
@@ -33,12 +89,16 @@ export const serverRoutes: ServerRoute[] = [
   { path: '', renderMode: RenderMode.Prerender },
 
   { path: 'products', renderMode: RenderMode.Prerender },
+
   {
-    path: 'products/:id',
+    path: 'products/:slug',
     renderMode: RenderMode.Prerender,
     async getPrerenderParams() {
-      const ids = await fetchIds(PRODUCT_ALL_IDS_URL);
-      return ids.map((id) => ({ id: String(id) }));
+      const slugs = await fetchSlugs(PRODUCT_ALL_SLUGS_URL);
+
+      return slugs.map((slug) => ({
+        slug,
+      }));
     },
   },
 
@@ -47,22 +107,30 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'under-800', renderMode: RenderMode.Prerender },
 
   { path: 'categories', renderMode: RenderMode.Prerender },
+
   {
     path: 'categories/:id',
     renderMode: RenderMode.Prerender,
     async getPrerenderParams() {
       const ids = await fetchIds(CATEGORY_ALL_IDS_URL);
-      return ids.map((id) => ({ id: String(id) }));
+
+      return ids.map((id) => ({
+        id: String(id),
+      }));
     },
   },
 
   { path: 'brands', renderMode: RenderMode.Prerender },
+
   {
     path: 'brands/:id',
     renderMode: RenderMode.Prerender,
     async getPrerenderParams() {
       const ids = await fetchIds(BRAND_ALL_IDS_URL);
-      return ids.map((id) => ({ id: String(id) }));
+
+      return ids.map((id) => ({
+        id: String(id),
+      }));
     },
   },
 
