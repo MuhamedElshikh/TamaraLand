@@ -47,7 +47,7 @@ this.seo.setSeo({
 
   canonicalUrl: '/',
 
-  image: '../../../../../assets/home-og.jpg',
+  image: '/assets/home-og.jpg',
 
   imageType: 'image/jpeg',
   imageWidth: 1200,

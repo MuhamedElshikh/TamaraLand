@@ -154,46 +154,63 @@ export class SeoService {
     }
 
 
- if (data.image) {
+if (data.image) {
 
   const imageUrl = this.absoluteUrl(data.image);
-if (data.imageType) {
-  this.updateProperty(
-    'og:image:type',
-    data.imageType
-  );
-} else {
-  this.removeProperty(
-    'og:image:type'
-  );
-}
 
-if (data.imageWidth) {
+  // Main OG image
   this.updateProperty(
-    'og:image:width',
-    String(data.imageWidth)
+    'og:image',
+    imageUrl
   );
-} else {
-  this.removeProperty(
-    'og:image:width'
-  );
-}
 
-if (data.imageHeight) {
+  // Secure OG image
   this.updateProperty(
-    'og:image:height',
-    String(data.imageHeight)
+    'og:image:secure_url',
+    imageUrl
   );
-} else {
-  this.removeProperty(
-    'og:image:height'
-  );
-}
 
-this.updateProperty(
-  'og:image:alt',
-  data.imageAlt ?? data.title
-);
+  // Image type
+  if (data.imageType) {
+    this.updateProperty(
+      'og:image:type',
+      data.imageType
+    );
+  } else {
+    this.removeProperty(
+      'og:image:type'
+    );
+  }
+
+  // Image width
+  if (data.imageWidth) {
+    this.updateProperty(
+      'og:image:width',
+      String(data.imageWidth)
+    );
+  } else {
+    this.removeProperty(
+      'og:image:width'
+    );
+  }
+
+  // Image height
+  if (data.imageHeight) {
+    this.updateProperty(
+      'og:image:height',
+      String(data.imageHeight)
+    );
+  } else {
+    this.removeProperty(
+      'og:image:height'
+    );
+  }
+
+  // Image alt
+  this.updateProperty(
+    'og:image:alt',
+    data.imageAlt ?? data.title
+  );
 
 } else {
 
@@ -205,7 +222,7 @@ this.updateProperty(
   this.removeProperty('og:image:alt');
 
 }
-   
+  
 
 
     // -------------------------------------------------------
