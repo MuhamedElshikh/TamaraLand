@@ -1049,28 +1049,39 @@ private buildProductSchema(
             : {}),
 
           offers: {
-            '@type':
-              'Offer',
+  '@type':
+    'Offer',
 
-            url:
-              productUrl,
+  url:
+    productUrl,
 
-            priceCurrency:
-              'EGP',
+  priceCurrency:
+    'EGP',
 
-            price:
-              Number(
-                variant.price
-              ).toFixed(2),
+  price:
+    Number(
+      variant.price
+    ).toFixed(2),
 
-            availability:
-              Number(variant.stock) > 0
-                ? 'https://schema.org/InStock'
-                : 'https://schema.org/OutOfStock',
+  availability:
+    Number(variant.stock) > 0
+      ? 'https://schema.org/InStock'
+      : 'https://schema.org/OutOfStock',
 
-            itemCondition:
-              'https://schema.org/NewCondition'
-          }
+  itemCondition:
+    'https://schema.org/NewCondition',
+
+  hasMerchantReturnPolicy: {
+    '@type':
+      'MerchantReturnPolicy',
+
+    applicableCountry:
+      'EG',
+
+    returnPolicyCategory:
+      'https://schema.org/MerchantReturnNotPermitted'
+  }
+}
         };
 
         return variantProduct;
@@ -1177,7 +1188,7 @@ private buildBreadcrumbSchema(
       : 'Home';
 
   const categoryUrl =
-    `https://www.tamaraland.shop/categories/${product.id}`;
+    `https://www.tamaraland.shop/categories/${product.categoryId}`;
 
   const productUrl =
     `https://www.tamaraland.shop/products/${product.slug}`;

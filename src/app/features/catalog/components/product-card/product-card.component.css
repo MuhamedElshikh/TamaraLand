@@ -702,7 +702,7 @@ body[dir="rtl"] .tl-product__discount {
     "Tajawal",
     sans-serif;
 
-  font-size: .62rem;
+  font-size: .9rem;
 
   text-decoration: line-through;
 }
@@ -1089,7 +1089,7 @@ body[dir="rtl"] .tl-product__discount {
   }
 
   .tl-product__price-original {
-    font-size: .52rem;
+    font-size: .7rem;
   }
 
   .tl-product__bag {

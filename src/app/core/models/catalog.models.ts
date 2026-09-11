@@ -81,6 +81,7 @@ export interface ProductVariantResponse {
 export interface ProductCardResponse {
   id: number;
   name: string;
+  categoryId: number;
   slug: string;
   arabicName: string;
   imageUrl?: string;
