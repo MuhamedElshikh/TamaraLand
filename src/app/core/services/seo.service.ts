@@ -10,6 +10,13 @@ export interface SeoData {
   canonicalUrl?: string;
 
   image?: string;
+  imageType?: string;
+
+imageWidth?: number;
+
+imageHeight?: number;
+
+imageAlt?: string;
 
   type?: 'website' | 'product' | 'article';
 
@@ -147,22 +154,58 @@ export class SeoService {
     }
 
 
-    if (data.image) {
+ if (data.image) {
 
-      this.updateProperty(
-        'og:image',
-        this.absoluteUrl(
-          data.image
-        )
-      );
+  const imageUrl = this.absoluteUrl(data.image);
+if (data.imageType) {
+  this.updateProperty(
+    'og:image:type',
+    data.imageType
+  );
+} else {
+  this.removeProperty(
+    'og:image:type'
+  );
+}
 
-    } else {
+if (data.imageWidth) {
+  this.updateProperty(
+    'og:image:width',
+    String(data.imageWidth)
+  );
+} else {
+  this.removeProperty(
+    'og:image:width'
+  );
+}
 
-      this.removeProperty(
-        'og:image'
-      );
+if (data.imageHeight) {
+  this.updateProperty(
+    'og:image:height',
+    String(data.imageHeight)
+  );
+} else {
+  this.removeProperty(
+    'og:image:height'
+  );
+}
 
-    }
+this.updateProperty(
+  'og:image:alt',
+  data.imageAlt ?? data.title
+);
+
+} else {
+
+  this.removeProperty('og:image');
+  this.removeProperty('og:image:secure_url');
+  this.removeProperty('og:image:type');
+  this.removeProperty('og:image:width');
+  this.removeProperty('og:image:height');
+  this.removeProperty('og:image:alt');
+
+}
+   
 
 
     // -------------------------------------------------------
