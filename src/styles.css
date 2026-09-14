@@ -1317,3 +1317,7 @@ html[dir='rtl'] .admin-layout .admin-sidebar {
     left: auto;
   }
 }
+html,
+body {
+  forced-color-adjust: none !important;
+}
