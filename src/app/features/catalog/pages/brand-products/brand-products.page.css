@@ -70,7 +70,7 @@
   display: grid;
 
   grid-template-columns:
-    272px
+    max-content
     minmax(0, 1fr);
 
   align-items: start;
@@ -90,14 +90,12 @@
 ========================================================= */
 
 .collection-page__filters {
-  width: 272px;
-  max-width: 272px;
+  width: auto;
+  max-width: 100%;
 
   min-width: 0;
 
-  position: STATIC;
-
-  top: 6.5rem;
+  position: static;
 
   align-self: start;
 
@@ -107,15 +105,7 @@
 }
 
 
-/*
-  The actual filter component owns
-  the editorial visual treatment.
-*/
-
 .collection-page__filters .filters-bar {
-  width: 100%;
-  max-width: 100%;
-
   margin: 0;
 }
 
@@ -183,8 +173,6 @@
 }
 
 
-/* Gold line beside summary */
-
 .collection-page__toolbar::before {
   content: "";
 
@@ -196,10 +184,6 @@
   background: var(--primary);
 }
 
-
-/*
-  Keep toolbar content visually ordered.
-*/
 
 .collection-page__toolbar > * {
   min-width: 0;
@@ -304,21 +288,11 @@
 }
 
 
-/*
-  IMPORTANT:
-  Product cards must not stretch
-  outside their grid cell.
-*/
-
 .collection-page__grid > * {
   min-width: 0;
   max-width: 100%;
 }
 
-
-/* =========================================================
-   PRODUCT CARD SAFETY
-========================================================= */
 
 .collection-page__grid
 .tl-product {
@@ -328,11 +302,6 @@
   min-width: 0;
 }
 
-
-/*
-  Don't let large/editorial variants
-  explode inside the listing grid.
-*/
 
 .collection-page__grid
 .tl-product--large,
@@ -391,355 +360,207 @@
 
 
 /* =========================================================
-   BACKDROP
+   MOBILE FILTER DRAWER + BACKDROP
+   CHANGED: this used to be its own bottom-sheet implementation
+   (handle, rounded top corners, blurred backdrop, double
+   eyebrow+title header, rectangular gold buttons). Replaced
+   with the exact same side-panel drawer used on the catalog
+   page, so all three listing pages share one drawer look.
+   The template's handle and eyebrow elements are kept in the
+   DOM but collapsed/hidden below rather than edited out, so no
+   HTML/component changes were needed.
 ========================================================= */
 
 .filters-backdrop {
-  position: fixed !important;
+  position: fixed;
+  inset: 0;
 
-  inset: 0 !important;
+  z-index: 1090;
 
-  width: 100vw;
-  height: 100dvh;
+  display: block;
 
-  z-index: 9999;
-
-  background:
-    rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, .58);
 
   opacity: 0;
-
   visibility: hidden;
-
   pointer-events: none;
 
   transition:
-    opacity 0.3s ease,
-    visibility 0.3s ease;
-
-  backdrop-filter:
-    blur(4px);
-
-  -webkit-backdrop-filter:
-    blur(4px);
+    opacity .25s ease,
+    visibility .25s ease;
 }
-
 
 .filters-backdrop--visible {
   opacity: 1;
-
   visibility: visible;
-
   pointer-events: auto;
 }
 
-
-/* =========================================================
-   MOBILE FILTER DRAWER
-========================================================= */
-
 .filters-drawer {
-  position: fixed !important;
+  position: fixed;
 
-  inset-inline-start: 0 !important;
-  inset-inline-end: 0 !important;
-  inset-block-end: 0 !important;
+  inset-block: 0;
+  inset-inline-end: 0;
 
-  width: 100vw !important;
-  max-width: 100vw !important;
-
-  max-height: 90dvh;
-
-  z-index: 10000;
+  z-index: 1100;
 
   display: flex;
-
   flex-direction: column;
 
-  background:
-    var(--bg-card);
+  width: min(88vw, 390px);
+  max-width: 100%;
+  height: 100dvh;
 
-  color:
-    var(--text-primary);
+  background: var(--bg-primary);
+  border-inline-start: 1px solid var(--border-color);
 
-  border:
-    1px solid var(--border-color);
+  box-shadow: -20px 0 60px rgba(0, 0, 0, .24);
 
-  border-bottom: 0;
-
-  border-radius:
-    22px
-    22px
-    0
-    0;
-
-  box-shadow:
-    0 -20px 55px
-      rgba(0, 0, 0, 0.3);
-
-  overflow: hidden;
-
-  transform:
-    translateY(105%);
-
+  transform: translateX(105%);
   visibility: hidden;
 
   transition:
-    transform
-      0.38s
-      cubic-bezier(
-        0.22,
-        1,
-        0.36,
-        1
-      ),
-    visibility
-      0.38s
-      ease;
+    transform .32s cubic-bezier(.22, 1, .36, 1),
+    visibility .32s ease;
 }
 
-
 .filters-drawer--open {
-  transform:
-    translateY(0);
-
+  transform: translateX(0);
   visibility: visible;
 }
 
-
-/* =========================================================
-   DRAWER HANDLE
-========================================================= */
-
-.filters-drawer__handle {
-  flex: 0 0 auto;
-
-  width: 42px;
-  height: 3px;
-
-  margin:
-    10px
-    auto
-    4px;
-
-  border-radius: 999px;
-
-  background:
-    var(--border-color);
+[dir="rtl"] .filters-drawer {
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+  border-inline-start: 0;
+  border-inline-end: 1px solid var(--border-color);
+  transform: translateX(-105%);
 }
 
+[dir="rtl"] .filters-drawer--open {
+  transform: translateX(0);
+}
 
-/* =========================================================
-   DRAWER HEADER
-========================================================= */
+/* Drag handle isn't part of this drawer style — hide it. */
+.filters-drawer__handle {
+  display: none;
+}
 
 .filters-drawer__header {
   flex: 0 0 auto;
 
   display: flex;
-
   align-items: center;
   justify-content: space-between;
 
-  gap: 1rem;
+  min-height: 68px;
+  padding: 0 1.1rem;
 
-  padding:
-    0.8rem
-    1rem
-    0.9rem;
-
-  border-bottom:
-    1px solid
-    var(--border-color);
+  border-bottom: 1px solid var(--border-color);
 }
 
+/* Let the eyebrow+title wrapper generate no box of its own,
+   so .filters-drawer__title lays out directly inside the
+   header the same way it does on the catalog page. */
+.filters-drawer__heading {
+  display: contents;
+}
 
+/* One-line "Filters" heading only — no small-caps eyebrow
+   above it. */
 .filters-drawer__eyebrow {
-  display: block;
-
-  margin:
-    0 0
-    0.15rem;
-
-  color:
-    var(--primary);
-
-  font-family:
-    "Tajawal",
-    sans-serif;
-
-  font-size:
-    0.58rem;
-
-  font-weight:
-    800;
-
-  letter-spacing:
-    0.16em;
-
-  text-transform:
-    uppercase;
+  display: none;
 }
-
 
 .filters-drawer__title {
-  margin: 0;
+  color: var(--text-primary);
 
-  color:
-    var(--text-primary);
-
-  font-family:
-    "Tajawal",
-    sans-serif;
-
-  font-size:
-    1.05rem;
-
-  font-weight:
-    700;
+  font-family: "Tajawal", sans-serif;
+  font-size: .95rem;
+  font-weight: 800;
+  letter-spacing: .04em;
 }
 
-
 .filters-drawer__close {
-  flex:
-    0 0 38px;
+  flex: 0 0 38px;
 
   width: 38px;
   height: 38px;
 
   display: grid;
-
   place-items: center;
 
   padding: 0;
 
-  border:
-    1px solid
-    var(--border-color);
-
+  border: 1px solid var(--border-color);
   border-radius: 50%;
 
-  background:
-    transparent;
-
-  color:
-    var(--text-primary);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
 
   cursor: pointer;
 
   transition:
-    color 0.2s ease,
-    border-color 0.2s ease,
-    background 0.2s ease,
-    transform 0.2s ease;
+    color .2s ease,
+    border-color .2s ease,
+    background .2s ease,
+    transform .2s ease;
 }
-
 
 .filters-drawer__close:hover {
-  color:
-    var(--primary);
+  color: var(--primary);
+  border-color: var(--primary);
 
-  border-color:
-    var(--primary);
-
-  background:
-    color-mix(
-      in srgb,
-      var(--primary) 6%,
-      transparent
-    );
+  background: color-mix(in srgb, var(--primary) 6%, transparent);
 }
-
 
 .filters-drawer__close:active {
-  transform:
-    scale(0.94);
+  transform: scale(.94);
 }
 
-
-/* =========================================================
-   DRAWER BODY
-========================================================= */
-
 .filters-drawer__body {
-  flex:
-    1 1 auto;
-
+  flex: 1 1 auto;
   min-height: 0;
 
   overflow-y: auto;
   overflow-x: hidden;
 
-  padding:
-    1rem;
+  padding: 1rem;
 
-  overscroll-behavior:
-    contain;
-
-  -webkit-overflow-scrolling:
-    touch;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
-
-
-/*
-  The filter component inside drawer
-  should lose desktop constraints.
-*/
 
 .filters-drawer__body .filters-bar {
   width: 100%;
   max-width: 100%;
 
   position: static;
-
   padding: 0;
 }
-
-
-/* =========================================================
-   DRAWER FOOTER
-========================================================= */
 
 .filters-drawer__footer {
   flex: 0 0 auto;
 
   display: grid;
+  grid-template-columns: 1fr 1.35fr;
 
-  grid-template-columns:
-    1fr
-    1.4fr;
+  gap: .65rem;
 
-  gap: 0.6rem;
+  padding: .85rem 1rem calc(.85rem + env(safe-area-inset-bottom));
 
-  padding:
-    0.75rem
-    1rem
-    calc(
-      0.75rem +
-      env(safe-area-inset-bottom)
-    );
-
-  background:
-    var(--bg-card);
-
-  border-top:
-    1px solid
-    var(--border-color);
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-primary);
 }
 
-
 .filters-drawer__footer .btn {
-  min-height: 45px;
+  min-height: 44px;
 
-  border-radius: 0;
+  border-radius: 999px;
 
-  font-family:
-    "Tajawal",
-    sans-serif;
-
-  font-size: 0.75rem;
-
-  font-weight: 700;
+  font-family: "Tajawal", sans-serif;
+  font-size: .75rem;
+  font-weight: 800;
 
   cursor: pointer;
 }
@@ -762,10 +583,6 @@
 
 
   .collection-page__layout {
-    grid-template-columns:
-      272px
-      minmax(0, 1fr);
-
     gap:
       clamp(
         2.2rem,
@@ -799,18 +616,8 @@ and (min-width: 901px) {
 
 
   .collection-page__layout {
-    grid-template-columns:
-      240px
-      minmax(0, 1fr);
-
     gap:
       1.75rem;
-  }
-
-
-  .collection-page__filters {
-    width: 240px;
-    max-width: 240px;
   }
 
 
@@ -841,10 +648,6 @@ and (min-width: 641px) {
       1rem;
   }
 
-
-  /*
-    Filters become a toolbar on tablet.
-  */
 
   .collection-page__layout {
     display: flex;
@@ -1014,14 +817,7 @@ and (min-width: 641px) {
 
 
   .filters-drawer {
-    max-height:
-      92dvh;
-
-    border-radius:
-      18px
-      18px
-      0
-      0;
+    width: min(94vw, 370px);
   }
 
 
@@ -1397,21 +1193,12 @@ body.light
   opacity: .65;
 }
 
-/* =========================================================
-   RTL DESKTOP — KEEP THE EDITORIAL COMPOSITION
-   IMPORTANT:
-   The artwork is NOT mirrored.
-   The image stays on the RIGHT exactly like English.
-   Arabic text is aligned RTL inside the LEFT editorial panel.
-========================================================= */
-
 @media (min-width: 992px) {
 
   [dir="rtl"] .collection-hero {
     direction: rtl;
   }
 
-  /* Keep artwork on the RIGHT. Do not move or mirror it. */
   [dir="rtl"] .collection-hero__foreground {
     inset-block: 0;
     inset-inline-start: auto;
@@ -1440,7 +1227,6 @@ body.light
     transform: scale(1.01);
   }
 
-  /* Same dark editorial panel on the LEFT as English. */
   [dir="rtl"] .collection-hero__overlay {
     background: linear-gradient(
       90deg,
@@ -1452,17 +1238,11 @@ body.light
     );
   }
 
-  /* Breadcrumb remains at the TOP-RIGHT for Arabic. */
   [dir="rtl"] .collection-hero__breadcrumb {
     direction: rtl;
     text-align: right;
   }
 
-  /*
-    The editorial copy stays in the LEFT visual panel,
-    but its typography is RTL/right-aligned.
-    This avoids putting Arabic over the model.
-  */
   [dir="rtl"] .collection-hero__copy {
     width: min(620px, 48%);
     margin-top: clamp(3rem, 7vw, 7rem);
@@ -1515,7 +1295,6 @@ body.light
     text-align: right;
   }
 
-  /* Signature stays in the BOTTOM-RIGHT. */
   [dir="rtl"] .collection-hero__signature {
     right: clamp(1.5rem, 4vw, 4rem);
     left: auto;
@@ -1529,7 +1308,6 @@ body.light
     align-self: flex-end;
   }
 
-  /* Never mirror the artwork or its embedded HOUSE wordmark. */
   [dir="rtl"] .collection-hero img {
     transform: none;
   }
@@ -1539,10 +1317,6 @@ body.light
     object-position: right bottom;
   }
 }
-
-/* =========================================================
-   LIGHT MODE
-========================================================= */
 
 html[data-theme="light"] .collection-hero__overlay,
 body[data-theme="light"] .collection-hero__overlay,
@@ -1586,10 +1360,6 @@ body.light .collection-hero__title {
   );
 }
 
-/* =========================================================
-   TABLET
-========================================================= */
-
 @media (max-width: 991px) {
   .collection-hero {
     width: min(100% - 2rem, 1720px);
@@ -1609,19 +1379,6 @@ body.light .collection-hero__title {
   }
 }
 
-/* =========================================================
-   MOBILE
-   IMPORTANT:
-   - one single image fills the whole card
-   - no black block under the image
-   - brand copy overlays the bottom of the image
-   - no blurred backdrop
-========================================================= */
-/* =========================================================
-   MOBILE — EDITORIAL BRAND HERO
-   Full image + overlay content
-========================================================= */
-
 @media (max-width: 767px) {
 
   .collection-hero {
@@ -1629,10 +1386,6 @@ body.light .collection-hero__title {
 
     width: calc(100% - 1.25rem);
 
-    /*
-      The source artwork is landscape.
-      Let the image keep its natural composition.
-    */
     min-height: auto;
 
     margin: 1rem auto 0;
@@ -1651,10 +1404,6 @@ body.light .collection-hero__title {
       0 18px 45px rgba(0, 0, 0, .22);
   }
 
-
-  /* -------------------------------------------------------
-     FRAME
-  ------------------------------------------------------- */
 
   .collection-hero__frame {
     position: absolute;
@@ -1696,10 +1445,6 @@ body.light .collection-hero__title {
   }
 
 
-  /* -------------------------------------------------------
-     CONTENT
-  ------------------------------------------------------- */
-
   .collection-hero__content {
     position: relative;
 
@@ -1721,11 +1466,6 @@ body.light .collection-hero__title {
   }
 
 
-  /* -------------------------------------------------------
-     BACKDROP
-     Disabled — no blur on mobile.
-  ------------------------------------------------------- */
-
   .collection-hero__backdrop {
     display: none;
   }
@@ -1735,14 +1475,6 @@ body.light .collection-hero__title {
     display: none;
   }
 
-
-  /* -------------------------------------------------------
-     FOREGROUND IMAGE
-     
-     IMPORTANT:
-     contain + natural aspect ratio prevents
-     HOUSE from being cropped.
-  ------------------------------------------------------- */
 
   .collection-hero__foreground {
     position: relative;
@@ -1788,13 +1520,6 @@ body.light .collection-hero__title {
   }
 
 
-  /* -------------------------------------------------------
-     DARK EDITORIAL GRADIENT
-     
-     Only bottom portion becomes dark so the
-     image remains visible.
-  ------------------------------------------------------- */
-
   .collection-hero__overlay {
     position: absolute;
 
@@ -1816,10 +1541,6 @@ body.light .collection-hero__title {
   }
 
 
-  /* -------------------------------------------------------
-     BREADCRUMB
-  ------------------------------------------------------- */
-
   .collection-hero__breadcrumb {
     position: absolute;
 
@@ -1835,10 +1556,6 @@ body.light .collection-hero__title {
 
     overflow: hidden;
 
-    /*
-      Very subtle backdrop so breadcrumb remains readable
-      without looking like a box.
-    */
     text-shadow:
       0 1px 8px rgba(0, 0, 0, .35);
   }
@@ -1850,12 +1567,6 @@ body.light .collection-hero__title {
     max-width: 100%;
   }
 
-
-  /* -------------------------------------------------------
-     BRAND COPY
-     
-     This is now an actual overlay over the image.
-  ------------------------------------------------------- */
 
   .collection-hero__copy {
     position: absolute;
@@ -1873,10 +1584,6 @@ body.light .collection-hero__title {
     text-align: left;
   }
 
-
-  /* -------------------------------------------------------
-     EYEBROW
-  ------------------------------------------------------- */
 
   .collection-hero__eyebrow {
     display: inline-flex;
@@ -1913,10 +1620,6 @@ body.light .collection-hero__title {
   }
 
 
-  /* -------------------------------------------------------
-     TITLE
-  ------------------------------------------------------- */
-
   .collection-hero__title {
     margin: 0;
 
@@ -1947,10 +1650,6 @@ body.light .collection-hero__title {
   }
 
 
-  /* -------------------------------------------------------
-     DESCRIPTION
-  ------------------------------------------------------- */
-
   .collection-hero__description {
     max-width: 92%;
 
@@ -1971,10 +1670,6 @@ body.light .collection-hero__title {
       0 2px 10px rgba(0, 0, 0, .35);
   }
 
-
-  /* -------------------------------------------------------
-     SIGNATURE
-  ------------------------------------------------------- */
 
   .collection-hero__signature {
     position: absolute;
@@ -2023,10 +1718,6 @@ body.light .collection-hero__title {
   }
 
 
-  /* -------------------------------------------------------
-     RTL
-  ------------------------------------------------------- */
-
   [dir="rtl"] .collection-hero__breadcrumb {
     left: 1rem;
     right: 1rem;
@@ -2065,10 +1756,6 @@ body.light .collection-hero__title {
   }
 
 
-  /* -------------------------------------------------------
-     LIGHT MODE
-  ------------------------------------------------------- */
-
   html[data-theme="light"] .collection-hero__overlay,
   body[data-theme="light"] .collection-hero__overlay,
   html.light .collection-hero__overlay,
@@ -2085,10 +1772,6 @@ body.light .collection-hero__title {
   }
 
 
-  /* -------------------------------------------------------
-     SMALL PHONES
-  ------------------------------------------------------- */
-
   @media (max-width: 420px) {
 
     .collection-hero {
@@ -2099,10 +1782,6 @@ body.light .collection-hero__title {
 
 
     .collection-hero__foreground {
-      /*
-        Keep exact image ratio.
-        Do NOT set height: 72%.
-      */
       aspect-ratio: 3 / 2;
     }
 
@@ -2154,10 +1833,6 @@ body.light .collection-hero__title {
     }
   }
 }
-
-/* =========================================================
-   REDUCED MOTION
-========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
   .collection-page *,

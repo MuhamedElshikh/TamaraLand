@@ -41,10 +41,6 @@
 }
 
 
-/* =========================================================
-   BREADCRUMBS
-   ========================================================= */
-
 .category-hero__breadcrumbs {
   position: absolute;
   top: 24px;
@@ -52,10 +48,6 @@
   z-index: 10;
 }
 
-
-/* =========================================================
-   DECOR
-   ========================================================= */
 
 .category-hero__decor {
   position: absolute;
@@ -119,10 +111,6 @@
   opacity: .5;
 }
 
-
-/* =========================================================
-   CONTENT
-   ========================================================= */
 
 .category-hero__content {
   position: absolute;
@@ -237,10 +225,6 @@
 }
 
 
-/* =========================================================
-   MODEL VISUAL
-   ========================================================= */
-
 .category-hero__visual {
   position: absolute;
   z-index: 5;
@@ -254,10 +238,6 @@
   pointer-events: none;
 }
 
-
-/* =========================================================
-   ARCH
-   ========================================================= */
 
 .category-hero__arch {
   position: absolute;
@@ -337,10 +317,6 @@
 }
 
 
-/* =========================================================
-   TRANSPARENT MODEL
-   ========================================================= */
-
 .category-hero__model {
   position: absolute;
 
@@ -366,10 +342,6 @@
   user-select: none;
 }
 
-
-/* =========================================================
-   SIDE NOTE
-   ========================================================= */
 
 .category-hero__side-note {
   position: absolute;
@@ -410,10 +382,6 @@
 }
 
 
-/* =========================================================
-   VISUAL LABEL
-   ========================================================= */
-
 .category-hero__visual-label {
   position: absolute;
 
@@ -438,10 +406,6 @@
   color: var(--primary);
 }
 
-
-/* =========================================================
-   BOTTOM LINE
-   ========================================================= */
 
 .category-hero__bottom-line {
   position: absolute;
@@ -470,7 +434,7 @@
   display: grid;
 
   grid-template-columns:
-    300px
+    max-content
     minmax(0, 1fr);
 
   gap: 54px;
@@ -483,18 +447,11 @@
 }
 
 
-/* =========================================================
-   FILTERS
-   ========================================================= */
-
 .collection-page__filters {
   position: relative;
 
   width: 100%;
 
-  /* IMPORTANT:
-     No sticky here.
-  */
   align-self: start;
 }
 
@@ -505,18 +462,10 @@
 }
 
 
-/* =========================================================
-   PRODUCTS CONTENT
-   ========================================================= */
-
 .collection-page__content {
   min-width: 0;
 }
 
-
-/* =========================================================
-   TOOLBAR
-   ========================================================= */
 
 .collection-page__toolbar {
   display: flex;
@@ -561,10 +510,6 @@
 }
 
 
-/* =========================================================
-   PRODUCT GRID
-   ========================================================= */
-
 .collection-page__grid {
   display: grid;
 
@@ -577,23 +522,12 @@
 }
 
 
-/*
-   IMPORTANT:
-   Don't force product cards to become huge.
-
-   The card itself controls its own aspect ratio.
-*/
-
 .collection-page__grid app-product-card {
   display: block;
   width: 100%;
   min-width: 0;
 }
 
-
-/* =========================================================
-   SKELETON
-   ========================================================= */
 
 .collection-page__skeleton {
   width: 100%;
@@ -626,10 +560,6 @@
 }
 
 
-/* =========================================================
-   EMPTY
-   ========================================================= */
-
 .collection-page__empty {
   min-height: 260px;
 
@@ -640,10 +570,6 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-
-/* =========================================================
-   MOBILE FILTER BUTTON
-   ========================================================= */
 
 .filters-toggle {
   display: none;
@@ -670,6 +596,207 @@
 
   fill: none;
   stroke: currentColor;
+}
+
+
+/* =========================================================
+   MOBILE FILTER DRAWER + BACKDROP
+   Same side-panel drawer used on the catalog and brand pages —
+   see the note in doc 6 for why the handle/eyebrow are hidden
+   via CSS instead of edited out of the template.
+   ========================================================= */
+
+.filters-backdrop {
+  position: fixed;
+  inset: 0;
+
+  z-index: 1090;
+
+  display: block;
+
+  background: rgba(0, 0, 0, .58);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity .25s ease,
+    visibility .25s ease;
+}
+
+.filters-backdrop--visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.filters-drawer {
+  position: fixed;
+
+  inset-block: 0;
+  inset-inline-end: 0;
+
+  z-index: 1100;
+
+  display: flex;
+  flex-direction: column;
+
+  width: min(88vw, 390px);
+  max-width: 100%;
+  height: 100dvh;
+
+  background: var(--bg-primary);
+  border-inline-start: 1px solid var(--border-color);
+
+  box-shadow: -20px 0 60px rgba(0, 0, 0, .24);
+
+  transform: translateX(105%);
+  visibility: hidden;
+
+  transition:
+    transform .32s cubic-bezier(.22, 1, .36, 1),
+    visibility .32s ease;
+}
+
+.filters-drawer--open {
+  transform: translateX(0);
+  visibility: visible;
+}
+
+[dir="rtl"] .filters-drawer {
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+  border-inline-start: 0;
+  border-inline-end: 1px solid var(--border-color);
+  transform: translateX(-105%);
+}
+
+[dir="rtl"] .filters-drawer--open {
+  transform: translateX(0);
+}
+
+.filters-drawer__handle {
+  display: none;
+}
+
+.filters-drawer__header {
+  flex: 0 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  min-height: 68px;
+  padding: 0 1.1rem;
+
+  border-bottom: 1px solid var(--border-color);
+}
+
+.filters-drawer__heading {
+  display: contents;
+}
+
+.filters-drawer__eyebrow {
+  display: none;
+}
+
+.filters-drawer__title {
+  color: var(--text-primary);
+
+  font-family: "Tajawal", sans-serif;
+  font-size: .95rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+}
+
+.filters-drawer__close {
+  flex: 0 0 38px;
+
+  width: 38px;
+  height: 38px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+
+  cursor: pointer;
+
+  transition:
+    color .2s ease,
+    border-color .2s ease,
+    background .2s ease,
+    transform .2s ease;
+}
+
+.filters-drawer__close:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+
+  background: color-mix(in srgb, var(--primary) 6%, transparent);
+}
+
+.filters-drawer__close:active {
+  transform: scale(.94);
+}
+
+.filters-drawer__body {
+  flex: 1 1 auto;
+  min-height: 0;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  padding: 1rem;
+
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.filters-drawer__body .filters-bar {
+  width: 100%;
+  max-width: 100%;
+
+  position: static;
+  padding: 0;
+}
+
+.filters-drawer__footer {
+  flex: 0 0 auto;
+
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+
+  gap: .65rem;
+
+  padding: .85rem 1rem calc(.85rem + env(safe-area-inset-bottom));
+
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-primary);
+}
+
+.filters-drawer__footer .btn {
+  min-height: 44px;
+
+  border-radius: 999px;
+
+  font-family: "Tajawal", sans-serif;
+  font-size: .75rem;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.filters-drawer__close:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
 }
 
 
@@ -730,7 +857,6 @@
 
 
   .collection-page__layout {
-    grid-template-columns: 250px minmax(0, 1fr);
     gap: 34px;
   }
 
@@ -752,7 +878,6 @@
   .category-hero__inner {
     width: calc(100% - 24px);
 
-    /* was 690px */
     min-height: 470px;
   }
 
@@ -772,7 +897,6 @@
 
     margin-inline: auto;
 
-    /* was 105px */
     padding-top: 82px;
 
     transform: none;
@@ -825,16 +949,11 @@
   }
 
 
-  /* -----------------------------------------
-     VISUAL
-  ----------------------------------------- */
-
   .category-hero__visual {
     position: absolute;
 
     width: 100%;
 
-    /* was 390px */
     height: 285px;
 
     top: auto;
@@ -847,26 +966,16 @@
   }
 
 
-  /* -----------------------------------------
-     ARCH
-  ----------------------------------------- */
-
   .category-hero__arch {
     width: min(250px, 68vw);
 
-    /* was 360px */
     height: 265px;
 
     bottom: -16px;
   }
 
 
-  /* -----------------------------------------
-     MODEL
-  ----------------------------------------- */
-
   .category-hero__model {
-    /* was 410px */
     height: 295px;
 
     bottom: -8px;
@@ -886,10 +995,6 @@
     font-size: .48rem;
   }
 
-
-  /* -----------------------------------------
-     PRODUCTS
-  ----------------------------------------- */
 
   .collection-page__layout {
     display: block;
@@ -931,13 +1036,11 @@
 @media (max-width: 560px) {
 
   .category-hero__inner {
-    /* was 650px */
     min-height: 430px;
   }
 
 
   .category-hero__content {
-    /* was 94px */
     padding-top: 72px;
   }
 
@@ -979,13 +1082,11 @@
   }
 
 
-  /* Visual */
   .category-hero__visual {
     height: 255px;
   }
 
 
-  /* Arch */
   .category-hero__arch {
     width: 235px;
     height: 240px;
@@ -994,7 +1095,6 @@
   }
 
 
-  /* Model */
   .category-hero__model {
     height: 270px;
 
@@ -1028,6 +1128,11 @@
   .collection-page__summary {
     font-size: .6rem;
     letter-spacing: .1em;
+  }
+
+
+  .filters-drawer {
+    width: min(94vw, 370px);
   }
 }
 
@@ -1093,4 +1198,7 @@
     animation: none;
   }
 
+  .filters-drawer {
+    transition: none;
+  }
 }
