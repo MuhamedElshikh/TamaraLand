@@ -33,11 +33,20 @@ export class ThemeService {
   }
 
   private applyTheme(mode: ThemeMode): void {
-    if (!this.isBrowser) return;
+  if (!this.isBrowser) return;
 
-    document.documentElement.setAttribute('data-theme', mode);
-    document.body?.setAttribute('data-theme', mode);
+  const html = document.documentElement;
+
+  html.setAttribute('data-theme', mode);
+
+  // Tell the browser that the application owns the active color scheme.
+  // This prevents automatic dark/light transformations where supported.
+  html.style.colorScheme = `${mode} only`;
+
+  if (document.body) {
+    document.body.setAttribute('data-theme', mode);
   }
+}
 
   private getInitialTheme(): ThemeMode {
     if (!this.isBrowser) return 'dark';

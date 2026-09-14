@@ -725,7 +725,7 @@
   border-radius: 50%;
 
   background: var(--bg-secondary);
-  color: var(--text-primary);
+  color: var(--text-secondary);
 
   cursor: pointer;
 

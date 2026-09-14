@@ -735,7 +735,7 @@ body.light .catalog-page__hero .section-copy {
     border: 1px solid var(--border-color);
     border-radius: 50%;
     background: var(--bg-secondary);
-    color: var(--text-primary);
+    color: var(--text-secondary);
 
     cursor: pointer;
   }
