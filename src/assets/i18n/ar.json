@@ -1063,6 +1063,28 @@
 },
     "products": {
       "title": "إدارة المنتجات",
+       "status": "الحالة",
+      "activeProducts": "المنتجات النشطة",
+      "active": "نشط",
+      "softDeleted": "محذوفة",
+
+      "published": "النشر",
+      "publishedOption": "منشور",
+      "unpublished": "غير منشور",
+
+      "discount": "الخصم",
+      "discounted": "عليه خصم",
+      "notDiscounted": "بدون خصم",
+
+      "featured": "مميز",
+      "featuredOption": "مميز",
+      "notFeatured": "غير مميز",
+
+      "stock": "المخزون",
+      "inStock": "متوفر",
+      "outOfStock": "نفد المخزون",
+
+      "all": "الكل",
       "subtitle": "إدارة عناصر الكتالوج والمتغيرات ووسائط المنتجات",
       "add": "إضافة منتج",
       "search": "البحث عن منتج",
@@ -1413,9 +1435,14 @@
         "analytics": "التحليلات"
       },
       "section": {
+          "profitability": {
+          "kicker": "الربحية",
+          "title": "نظرة عامة على الربحية"
+        },
         "store": {
           "kicker": "المتجر",
           "title": "أداء المتجر"
+
         },
         "visitors": {
           "kicker": "الزوار",
@@ -1477,9 +1504,17 @@
         "revenueTrend": "اتجاه الإيرادات",
         "dailyUsers": "المستخدمون اليوميون",
         "dailySessions": "الجلسات اليومية",
+        "profitTrend": "اتجاه الربح",
         "ordersTrend": "اتجاه الطلبات الشهري"
       },
       "store": {
+          "totalCost": "إجمالي التكلفة",
+        "totalProfit": "إجمالي الربح",
+        "profitMargin": "هامش الربح",
+        "todayProfit": "ربح اليوم",
+        "monthProfit": "ربح هذا الشهر",
+        "yearProfit": "ربح هذا العام",
+        "monthProfitMargin": "هامش ربح هذا الشهر",
         "revenueOverview": "نظرة عامة على الإيرادات",
         "totalRevenue": "إجمالي الإيرادات",
         "todaysRevenue": "إيراد اليوم",
@@ -1496,6 +1531,8 @@
       },
       "metric": {
         "revenue": "الإيرادات",
+         "profit": "الربح",
+        "profitMargin": "هامش الربح",
         "orders": "الطلبات",
         "customers": "العملاء",
         "products": "المنتجات",

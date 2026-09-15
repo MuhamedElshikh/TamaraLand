@@ -13,10 +13,13 @@ import {
   RouterLink,
 } from '@angular/router';
 import {
+  AbstractControl,
   FormBuilder,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { forkJoin } from 'rxjs';
@@ -41,14 +44,47 @@ import {
 import { TranslatePipe } from '@ngx-translate/core';
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 
-interface AdminVariantItem extends UpdateProductVariantRequest {
+interface AdminVariantItem
+  extends UpdateProductVariantRequest {
   colorName: string;
   colorArabicName: string;
   colorHexCode?: string | null;
   colorSecondaryHexCode?: string | null;
   sizeName: string;
-}
 
+  // Admin-only pricing information
+  originalPrice?: number;
+  profit?: number;
+  profitMargin?: number;
+  isBelowCost?: boolean;
+}
+const priceMustBeAtLeastCostValidator: ValidatorFn = (
+  control: AbstractControl,
+): ValidationErrors | null => {
+  const costPrice = Number(
+    control.get('costPrice')?.value ?? 0,
+  );
+
+  const price = Number(
+    control.get('price')?.value ?? 0,
+  );
+
+  if (
+    Number.isNaN(costPrice) ||
+    Number.isNaN(price)
+  ) {
+    return null;
+  }
+
+  return price < costPrice
+    ? {
+        priceBelowCost: {
+          costPrice,
+          price,
+        },
+      }
+    : null;
+};
 @Component({
   selector: 'app-admin-product-form',
   standalone: true,
@@ -136,24 +172,50 @@ export class AdminProductFormPage implements OnInit {
     );
   });
 
-  variantForm: FormGroup = this.fb.group({
+ variantForm: FormGroup = this.fb.group(
+  {
     id: [0],
 
     colorId: [null, [Validators.required]],
     sizeId: [null, [Validators.required]],
 
     sku: ['', [Validators.required]],
-    stock: [0, [Validators.required, Validators.min(0)]],
-    price: [0, [Validators.required, Validators.min(0.01)]],
+    stock: [
+      0,
+      [
+        Validators.required,
+        Validators.min(0),
+      ],
+    ],
 
-    costPrice: [0],
+    costPrice: [
+      0,
+      [
+        Validators.required,
+        Validators.min(0),
+      ],
+    ],
+
+    price: [
+      0,
+      [
+        Validators.required,
+        Validators.min(0.01),
+      ],
+    ],
+
     compareAtPrice: [null],
 
     bust: [0],
     waist: [0],
     hip: [0],
     length: [0],
-  });
+  },
+  {
+    validators:
+      priceMustBeAtLeastCostValidator,
+  },
+);
 
   readonly images = signal<AdminProductImageResponse[]>([]);
   readonly isLoadingImages = signal(false);
@@ -245,7 +307,19 @@ export class AdminProductFormPage implements OnInit {
 
       return;
     }
+const invalidVariant = this.variants().find(
+  (variant) =>
+    Number(variant.price) <
+    Number(variant.costPrice ?? 0),
+);
 
+if (invalidVariant) {
+  this.errorMessage.set(
+    `Selling price for SKU "${invalidVariant.sku}" cannot be lower than its cost price.`,
+  );
+
+  return;
+}
     this.isSubmitting.set(true);
     this.errorMessage.set(null);
     this.successMessage.set(null);
@@ -324,24 +398,24 @@ export class AdminProductFormPage implements OnInit {
 
       return;
     }
+const createVariants: CreateProductVariantRequest[] =
+  this.variants().map(
+    (v): CreateProductVariantRequest => ({
+      colorId: Number(v.colorId),
+      sizeId: Number(v.sizeId),
 
-    const createVariants: CreateProductVariantRequest[] =
-      this.variants().map(
-        (v): CreateProductVariantRequest => ({
-          colorId: Number(v.colorId),
-          sizeId: Number(v.sizeId),
+      costPrice: Number(v.costPrice || 0),
+      price: Number(v.price),
 
-          price: Number(v.price),
-          stock: Number(v.stock),
-          sku: v.sku,
+      stock: Number(v.stock),
+      sku: v.sku,
 
-          bust: Number(v.bust || 0),
-          waist: Number(v.waist || 0),
-          hip: Number(v.hip || 0),
-          length: Number(v.length || 0),
-        })
-      );
-
+      bust: Number(v.bust || 0),
+      waist: Number(v.waist || 0),
+      hip: Number(v.hip || 0),
+      length: Number(v.length || 0),
+    }),
+  );
     const createData: CreateProductRequest = {
       name: formVal.name,
       arabicName: formVal.arabicName || '',
@@ -459,7 +533,29 @@ export class AdminProductFormPage implements OnInit {
     const colorId = Number(val.colorId);
     const sizeId = Number(val.sizeId);
     const variantId = Number(val.id || 0);
+const costPrice = Number(
+  val.costPrice ?? 0,
+);
 
+const price = Number(
+  val.price ?? 0,
+);
+
+if (price < costPrice) {
+  this.variantError.set(
+    `Selling price (${price.toFixed(2)} EGP) cannot be lower than cost price (${costPrice.toFixed(2)} EGP).`,
+  );
+
+  this.variantForm
+    .get('price')
+    ?.markAsTouched();
+
+  this.variantForm
+    .get('costPrice')
+    ?.markAsTouched();
+
+  return;
+}
     if (!colorId || !sizeId) {
       this.variantError.set(
         'Please select a color and size.'
@@ -989,17 +1085,36 @@ export class AdminProductFormPage implements OnInit {
                       v.stock ?? 0
                     ),
 
-                    price: Number(
-                      v.price ??
-                      v.finalPrice ??
-                      v.originalPrice ??
-                      0
-                    ),
+                       price: Number(
+                                   v.originalPrice ??
+                                   v.price ??
+                                   v.finalPrice ??
+                                   0,
+                                    ),
 
                     costPrice: Number(
                       v.costPrice ?? 0
                     ),
+originalPrice: Number(
+  v.originalPrice ??
+  v.price ??
+  0,
+),
 
+profit:
+  v.profit !== undefined &&
+  v.profit !== null
+    ? Number(v.profit)
+    : undefined,
+
+profitMargin:
+  v.profitMargin !== undefined &&
+  v.profitMargin !== null
+    ? Number(v.profitMargin)
+    : undefined,
+
+isBelowCost:
+  Boolean(v.isBelowCost),
                     compareAtPrice:
                       v.compareAtPrice ??
                       null,

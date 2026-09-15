@@ -133,20 +133,40 @@ export enum ProductCollection {
 
 export interface ProductFilterRequest {
   search?: string;
+
   categoryId?: number;
+
   brandId?: number;
+
   minPrice?: number;
+
   maxPrice?: number;
+
   collection?: ProductCollection;
+
   pageNumber?: number;
+
   pageSize?: number;
+
   sortBy?: string;
+
   desc?: boolean;
+
+  // Stock
   inStockOnly?: boolean;
-    isFeatured?: boolean;
 
+  // Product status / Soft Delete
+  isActive?: boolean;
+
+  // Publishing status
+  isPublished?: boolean;
+
+  // Active discount
+  hasDiscount?: boolean;
+
+  // Featured
+  isFeatured?: boolean;
 }
-
 export type RelatedProductResponse = ProductCardResponse;
 
 export interface ProductResponse extends ProductCardResponse {

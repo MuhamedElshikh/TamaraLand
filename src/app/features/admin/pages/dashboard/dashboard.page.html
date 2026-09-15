@@ -129,7 +129,20 @@
                 <app-dashboard-stat-card
             title="{{ 'admin.dashboard.metric.revenue' | translate }}"
             icon="payments"
-            [value]="data()?.totalRevenue ?? 0">
+            [value]="((data()?.totalRevenue ?? 0) | number:'1.2-2') + ' EGP'">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+            title="{{ 'admin.dashboard.metric.profit' | translate }}"
+            icon="trending_up"
+            [value]="((data()?.totalProfit ?? 0) | number:'1.2-2') + ' EGP'"
+            [accent]="true">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+            title="{{ 'admin.dashboard.metric.profitMargin' | translate }}"
+            icon="percent"
+            [value]="((data()?.totalProfitMargin ?? 0) | number:'1.1-1') + '%'">
         </app-dashboard-stat-card>
 
         <app-dashboard-stat-card
@@ -370,6 +383,25 @@
             [value]="((data()?.yearRevenue ?? 0) | number:'1.2-2') + ' EGP'">
         </app-dashboard-stat-card>
 
+        <app-dashboard-stat-card
+            title="{{ 'admin.dashboard.store.totalCost' | translate }}"
+            icon="inventory_2"
+            [value]="((data()?.totalCost ?? 0) | number:'1.2-2') + ' EGP'">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+            title="{{ 'admin.dashboard.store.totalProfit' | translate }}"
+            icon="trending_up"
+            [value]="((data()?.totalProfit ?? 0) | number:'1.2-2') + ' EGP'"
+            [accent]="true">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+            title="{{ 'admin.dashboard.store.profitMargin' | translate }}"
+            icon="percent"
+            [value]="((data()?.totalProfitMargin ?? 0) | number:'1.1-1') + '%'">
+        </app-dashboard-stat-card>
+
     </div>
 
     <div class="dashboard-chart-card">
@@ -397,6 +429,82 @@
     </div>
 
 </section>
+
+<section class="dashboard-section">
+
+    <div class="dashboard-section__header">
+
+        <div>
+
+            <p class="section-kicker">
+                {{ 'admin.dashboard.section.profitability.kicker' | translate }}
+            </p>
+
+            <h2>
+                {{ 'admin.dashboard.section.profitability.title' | translate }}
+            </h2>
+
+        </div>
+
+    </div>
+
+    <div class="dashboard-stats">
+
+        <app-dashboard-stat-card
+            title="{{ 'admin.dashboard.store.todayProfit' | translate }}"
+            icon="today"
+            [value]="((data()?.todayProfit ?? 0) | number:'1.2-2') + ' EGP'"
+            [accent]="true">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+            title="{{ 'admin.dashboard.store.monthProfit' | translate }}"
+            icon="calendar_month"
+            [value]="((data()?.monthProfit ?? 0) | number:'1.2-2') + ' EGP'"
+            [accent]="true">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+            title="{{ 'admin.dashboard.store.yearProfit' | translate }}"
+            icon="event"
+            [value]="((data()?.yearProfit ?? 0) | number:'1.2-2') + ' EGP'"
+            [accent]="true">
+        </app-dashboard-stat-card>
+
+        <app-dashboard-stat-card
+            title="{{ 'admin.dashboard.store.monthProfitMargin' | translate }}"
+            icon="percent"
+            [value]="((data()?.monthProfitMargin ?? 0) | number:'1.1-1') + '%'">
+        </app-dashboard-stat-card>
+
+    </div>
+
+    <div class="dashboard-chart-card">
+
+        <div class="dashboard-card__header">
+
+            <div>
+
+                <p class="section-kicker">
+                    {{ 'admin.dashboard.section.profitability.kicker' | translate }}
+                </p>
+
+                <h3>
+                    {{ 'admin.dashboard.chart.profitTrend' | translate }}
+                </h3>
+
+            </div>
+
+        </div>
+
+        <app-dashboard-chart
+            [chartOptions]="revenueChart()">
+        </app-dashboard-chart>
+
+    </div>
+
+</section>
+
 <section class="dashboard-section">
 
     <div class="dashboard-section__header">

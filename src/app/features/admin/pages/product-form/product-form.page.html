@@ -1,4 +1,3 @@
-
 <div class="admin-page">
   <header class="admin-page__header">
     <div class="header-title-group">
@@ -63,6 +62,7 @@
       </h2>
 
       <div class="form-grid">
+
         <!-- Product Name -->
         <div class="form-group form-group--full">
           <label
@@ -254,7 +254,7 @@
 
           <p class="card-subtitle">
             At least 1 variant is required
-            (SKU, Price, Stock, and Measurements)
+            (SKU, Cost Price, Price, Stock, and Measurements)
           </p>
         </div>
 
@@ -307,7 +307,10 @@
           <div [formGroup]="variantForm">
             <div class="form-grid">
 
-              <!-- SKU -->
+              <!-- =================================================
+                   SKU
+                   ================================================= -->
+
               <div class="form-group">
                 <label
                   class="form-label"
@@ -334,7 +337,10 @@
                 }
               </div>
 
-              <!-- Price -->
+              <!-- =================================================
+                   PRICE
+                   ================================================= -->
+
               <div class="form-group">
                 <label
                   class="form-label"
@@ -354,15 +360,76 @@
 
                 @if (
                   variantForm.get('price')?.touched &&
-                  variantForm.get('price')?.invalid
+                  variantForm.get('price')?.hasError('required')
+                ) {
+                  <span class="field-error">
+                    Price is required.
+                  </span>
+                }
+
+                @if (
+                  variantForm.get('price')?.touched &&
+                  variantForm.get('price')?.hasError('min')
                 ) {
                   <span class="field-error">
                     Price must be greater than 0.
                   </span>
                 }
+
+                @if (
+                  variantForm.touched &&
+                  variantForm.hasError('priceBelowCost')
+                ) {
+                  <span class="field-error">
+                    Selling price cannot be lower than cost price.
+                  </span>
+                }
               </div>
 
-              <!-- Stock -->
+              <!-- =================================================
+                   COST PRICE
+                   ================================================= -->
+
+              <div class="form-group">
+                <label
+                  class="form-label"
+                  for="v-cost-price"
+                >
+                  Cost Price (EGP) *
+                </label>
+
+                <input
+                  id="v-cost-price"
+                  type="number"
+                  class="form-control"
+                  formControlName="costPrice"
+                  min="0"
+                  step="0.01"
+                />
+
+                @if (
+                  variantForm.get('costPrice')?.touched &&
+                  variantForm.get('costPrice')?.hasError('min')
+                ) {
+                  <span class="field-error">
+                    Cost price cannot be negative.
+                  </span>
+                }
+
+                @if (
+                  variantForm.touched &&
+                  variantForm.hasError('priceBelowCost')
+                ) {
+                  <span class="field-error">
+                    Cost price cannot be higher than selling price.
+                  </span>
+                }
+              </div>
+
+              <!-- =================================================
+                   STOCK
+                   ================================================= -->
+
               <div class="form-group">
                 <label
                   class="form-label"
@@ -455,7 +522,6 @@
                         ></polyline>
                       </svg>
                     </button>
-
                   </div>
 
                   @if (showColorDropdown()) {
@@ -474,7 +540,9 @@
                           <button
                             type="button"
                             class="variant-search-option"
-                           [class.variant-search-option--selected]="isColorSelected(color.id)"
+                            [class.variant-search-option--selected]="
+                              isColorSelected(color.id)
+                            "
                             (click)="selectColor(color)"
                           >
                             <span
@@ -520,7 +588,6 @@
                         }
 
                       }
-
                     </div>
                   }
                 </div>
@@ -614,7 +681,6 @@
                         ></polyline>
                       </svg>
                     </button>
-
                   </div>
 
                   @if (showSizeDropdown()) {
@@ -633,7 +699,9 @@
                           <button
                             type="button"
                             class="variant-search-option"
-                            [class.variant-search-option--selected]="isSizeSelected(size.id)"
+                            [class.variant-search-option--selected]="
+                              isSizeSelected(size.id)
+                            "
                             (click)="selectSize(size)"
                           >
                             <span class="variant-search-option__content">
@@ -643,7 +711,7 @@
                             </span>
 
                             @if (
-                             isSizeSelected(size.id)
+                              isSizeSelected(size.id)
                             ) {
                               <span class="variant-search-option__check">
                                 ✓
@@ -653,7 +721,6 @@
                         }
 
                       }
-
                     </div>
                   }
                 </div>
@@ -680,7 +747,10 @@
                 }
               </div>
 
-              <!-- Bust -->
+              <!-- =================================================
+                   BUST
+                   ================================================= -->
+
               <div class="form-group">
                 <label
                   class="form-label"
@@ -699,7 +769,10 @@
                 />
               </div>
 
-              <!-- Waist -->
+              <!-- =================================================
+                   WAIST
+                   ================================================= -->
+
               <div class="form-group">
                 <label
                   class="form-label"
@@ -718,7 +791,10 @@
                 />
               </div>
 
-              <!-- Hip -->
+              <!-- =================================================
+                   HIP
+                   ================================================= -->
+
               <div class="form-group">
                 <label
                   class="form-label"
@@ -737,7 +813,10 @@
                 />
               </div>
 
-              <!-- Length -->
+              <!-- =================================================
+                   LENGTH
+                   ================================================= -->
+
               <div class="form-group">
                 <label
                   class="form-label"
@@ -756,27 +835,11 @@
                 />
               </div>
 
-              <!-- Cost Price -->
+              <!-- =================================================
+                   COMPARE AT PRICE
+                   ================================================= -->
+
               @if (isEditMode()) {
-                <div class="form-group">
-                  <label
-                    class="form-label"
-                    for="v-cost-price"
-                  >
-                    Cost Price (EGP)
-                  </label>
-
-                  <input
-                    id="v-cost-price"
-                    type="number"
-                    class="form-control"
-                    formControlName="costPrice"
-                    min="0"
-                    step="0.01"
-                  />
-                </div>
-
-                <!-- Compare At Price -->
                 <div class="form-group">
                   <label
                     class="form-label"
@@ -798,6 +861,7 @@
 
             </div>
 
+            <!-- Variant Actions -->
             <div class="form-actions mt-3">
               <button
                 type="button"
@@ -820,20 +884,52 @@
            ======================================================= -->
 
       @if (variants().length === 0) {
+
         <div class="empty-placeholder">
           {{ 'admin.products.noVariants' | translate }}
         </div>
+
       } @else {
+
         <div class="table-responsive">
           <table class="sub-table">
+
             <thead>
               <tr>
                 <th>SKU</th>
-                <th>{{ 'variant.color' | translate }}</th>
-                <th>{{ 'variant.size' | translate }}</th>
-                <th>{{ 'variant.stock' | translate }}</th>
-                <th>{{ 'admin.products.price' | translate }}</th>
-                <th>{{ 'admin.products.measurements' | translate }}</th>
+
+                <th>
+                  {{ 'variant.color' | translate }}
+                </th>
+
+                <th>
+                  {{ 'variant.size' | translate }}
+                </th>
+
+                <th>
+                  {{ 'variant.stock' | translate }}
+                </th>
+
+                <th>
+                  Cost
+                </th>
+
+                <th>
+                  {{ 'admin.products.price' | translate }}
+                </th>
+
+                <th>
+                  Profit
+                </th>
+
+                <th>
+                  Margin
+                </th>
+
+                <th>
+                  {{ 'admin.products.measurements' | translate }}
+                </th>
+
                 <th class="text-end">
                   {{ 'admin.products.actions' | translate }}
                 </th>
@@ -841,16 +937,25 @@
             </thead>
 
             <tbody>
+
               @for (v of variants(); track $index) {
                 <tr>
-                  <!-- SKU -->
+
+                  <!-- =================================================
+                       SKU
+                       ================================================= -->
+
                   <td>
                     <code>{{ v.sku }}</code>
                   </td>
 
-                  <!-- Color -->
+                  <!-- =================================================
+                       COLOR
+                       ================================================= -->
+
                   <td>
                     <div class="variant-color-cell">
+
                       <span
                         class="variant-color-cell__swatch"
                         [style.background]="
@@ -871,15 +976,22 @@
                       <span>
                         {{ v.colorName || '—' }}
                       </span>
+
                     </div>
                   </td>
 
-                  <!-- Size -->
+                  <!-- =================================================
+                       SIZE
+                       ================================================= -->
+
                   <td>
                     {{ v.sizeName || '—' }}
                   </td>
 
-                  <!-- Stock -->
+                  <!-- =================================================
+                       STOCK
+                       ================================================= -->
+
                   <td>
                     <span
                       [class.text-danger]="v.stock === 0"
@@ -891,14 +1003,77 @@
                     </span>
                   </td>
 
-                  <!-- Price -->
+                  <!-- =================================================
+                       COST PRICE
+                       ================================================= -->
+
                   <td>
-                    <strong>
-                      {{ v.price | number }} EGP
-                    </strong>
+                    <span class="variant-price variant-price--cost">
+                      {{ v.costPrice | number:'1.2-2' }} EGP
+                    </span>
                   </td>
 
-                  <!-- Measurements -->
+                  <!-- =================================================
+                       SELLING PRICE
+                       ================================================= -->
+
+                  <td>
+                    <div class="variant-price-cell">
+
+                      <strong>
+                        {{ v.price | number:'1.2-2' }} EGP
+                      </strong>
+
+                      @if (v.isBelowCost) {
+                        <span class="badge badge-danger">
+                          Below Cost
+                        </span>
+                      }
+
+                    </div>
+                  </td>
+
+                  <!-- =================================================
+                       PROFIT
+                       ================================================= -->
+
+                  <td>
+                    <span
+                      [class.text-danger]="
+                        (v.profit ?? (v.price - v.costPrice)) < 0
+                      "
+                    >
+                      {{
+                        (
+                          v.profit ??
+                          (v.price - v.costPrice)
+                        ) | number:'1.2-2'
+                      }}
+                      EGP
+                    </span>
+                  </td>
+
+                  <!-- =================================================
+                       PROFIT MARGIN
+                       ================================================= -->
+
+                  <td>
+                    {{
+                      (
+                        v.profitMargin ??
+                        (
+                          v.price > 0
+                            ? ((v.price - v.costPrice) / v.price) * 100
+                            : 0
+                        )
+                      ) | number:'1.1-1'
+                    }}%
+                  </td>
+
+                  <!-- =================================================
+                       MEASUREMENTS
+                       ================================================= -->
+
                   <td>
                     <small>
                       B:{{ v.bust || 0 }}
@@ -911,10 +1086,14 @@
                     </small>
                   </td>
 
-                  <!-- Actions -->
+                  <!-- =================================================
+                       ACTIONS
+                       ================================================= -->
+
                   <td class="text-end">
                     <div class="action-buttons">
 
+                      <!-- Edit -->
                       <button
                         type="button"
                         class="btn-icon btn-icon--edit"
@@ -940,6 +1119,7 @@
                         </svg>
                       </button>
 
+                      <!-- Delete -->
                       <button
                         type="button"
                         class="btn-icon btn-icon--delete"
@@ -967,8 +1147,10 @@
 
                     </div>
                   </td>
+
                 </tr>
               }
+
             </tbody>
           </table>
         </div>
@@ -980,21 +1162,26 @@
          ========================================================= -->
 
     <div class="form-actions mb-4">
+
       <button
         type="submit"
         class="btn btn-primary"
         [disabled]="isSubmitting()"
       >
         @if (isSubmitting()) {
+
           <span class="spinner-sm"></span>
 
           {{ 'admin.products.savingProduct' | translate }}
+
         } @else {
+
           {{
             isEditMode()
               ? ('admin.products.edit' | translate)
               : ('admin.products.add' | translate)
           }}
+
         }
       </button>
 
@@ -1004,7 +1191,9 @@
       >
         {{ 'admin.labels.cancel' | translate }}
       </a>
+
     </div>
+
   </form>
 
   <!-- ===========================================================
@@ -1012,8 +1201,11 @@
        =========================================================== -->
 
   @if (isEditMode() && productId()) {
+
     <div class="scaffold-card">
+
       <div class="card-header-flex">
+
         <div>
           <h2 class="card-title">
             Image Gallery
@@ -1023,9 +1215,12 @@
             Upload product images and select the main thumbnail
           </p>
         </div>
+
       </div>
 
+      <!-- Upload -->
       <div class="nested-form-box">
+
         <h3 class="nested-form-title">
           Upload New Images
         </h3>
@@ -1037,6 +1232,7 @@
         }
 
         <div class="upload-flex-row">
+
           <input
             type="file"
             accept="image/*"
@@ -1061,31 +1257,47 @@
             (click)="onUploadImages()"
           >
             @if (isUploadingImage()) {
+
               <span class="spinner-sm"></span>
+
               Uploading...
+
             } @else {
+
               Upload Image(s)
+
             }
           </button>
+
         </div>
       </div>
 
+      <!-- Gallery Loading -->
       @if (isLoadingImages()) {
+
         <div class="loading-placeholder">
           Loading gallery images...
         </div>
+
       } @else if (images().length === 0) {
+
         <div class="empty-placeholder">
           No images uploaded for this product yet.
         </div>
+
       } @else {
+
         <div class="image-gallery-grid">
+
           @for (img of images(); track img.id) {
+
             <div
               class="gallery-card"
               [class.gallery-card--main]="img.isMain"
             >
+
               <div class="gallery-img-wrap">
+
                 <img
                   [src]="img.imageUrl"
                   [alt]="'Product Image ' + img.id"
@@ -1096,9 +1308,11 @@
                     Main
                   </span>
                 }
+
               </div>
 
               <div class="gallery-card-actions">
+
                 @if (!img.isMain) {
                   <button
                     type="button"
@@ -1116,11 +1330,16 @@
                 >
                   Delete
                 </button>
+
               </div>
+
             </div>
           }
+
         </div>
       }
+
     </div>
   }
+
 </div>

@@ -182,6 +182,10 @@ export class DashboardPage implements OnInit, OnDestroy {
         {
           name: this.translate.instant('admin.dashboard.metric.revenue'),
           data: data.monthlyRevenue.map((x) => x.value)
+        },
+        {
+          name: this.translate.instant('admin.dashboard.metric.profit'),
+          data: data.monthlyProfit.map((x) => x.value)
         }
       ],
       xaxis: { categories: data.monthlyRevenue.map((x) => x.label) }
@@ -370,7 +374,7 @@ export class DashboardPage implements OnInit, OnDestroy {
         formatter: (value) => `${value} EGP`
       }
     },
-    colors: ['#C9A24B']
+    colors: ['#C9A24B', '#22C55E']
   });
 
   readonly ordersChart = signal<ChartOptions>({

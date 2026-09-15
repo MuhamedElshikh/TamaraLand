@@ -1,149 +1,538 @@
 <div class="admin-page">
-  <!-- Page Header -->
+
+  <!-- ================================================
+       PAGE HEADER
+  ================================================= -->
+
   <header class="admin-page__header">
+
     <div>
-      <h1 class="admin-page__title">{{ 'admin.products.title' | translate }}</h1>
-      <p class="admin-page__subtitle">{{ 'admin.products.subtitle' | translate }}</p>
+
+      <h1 class="admin-page__title">
+        {{ 'admin.products.title' | translate }}
+      </h1>
+
+      <p class="admin-page__subtitle">
+        {{ 'admin.products.subtitle' | translate }}
+      </p>
+
     </div>
-    <a routerLink="/admin/product-form" class="btn btn-primary">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="12" y1="5" x2="12" y2="19"></line>
-        <line x1="5" y1="12" x2="19" y2="12"></line>
+
+    <a
+      routerLink="/admin/product-form"
+      class="btn btn-primary"
+    >
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <line
+          x1="12"
+          y1="5"
+          x2="12"
+          y2="19"
+        ></line>
+
+        <line
+          x1="5"
+          y1="12"
+          x2="19"
+          y2="12"
+        ></line>
       </svg>
+
       {{ 'admin.products.add' | translate }}
+
     </a>
+
   </header>
 
-  <!-- Error Alert -->
+
+  <!-- ================================================
+       ERROR ALERT
+  ================================================= -->
+
   @if (deleteError()) {
+
     <div class="alert alert-danger">
       {{ deleteError() }}
     </div>
+
   }
 
-  <!-- Filters Toolbar -->
-  <div class="filters-card">
-    <div class="filters-grid">
-       <label
-    class="form-label"
-    for="featured-filter"
-  >
-    Featured
-  </label>
 
-  <select
-    id="featured-filter"
-    class="form-control form-select"
-    [ngModel]="isFeatured() ?? ''"
-    (ngModelChange)="onFeaturedChange($event)"
-  >
-    <option value="">All Products</option>
-    <option [value]="true">Featured</option>
-    <option [value]="false">Not Featured</option>
-  </select>
-      <!-- Search Input -->
+  <!-- ================================================
+       FILTERS
+  ================================================= -->
+
+  <div class="filters-card">
+
+    <div class="filters-grid">
+
+      <!-- ==========================================
+           SEARCH
+      =========================================== -->
+
       <div class="filter-group filter-group--search">
-        <label class="form-label" for="product-search">{{ 'admin.products.search' | translate }}</label>
+
+        <label
+          class="form-label"
+          for="product-search"
+        >
+          {{ 'admin.products.search' | translate }}
+        </label>
+
         <div class="input-with-icon">
-          <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+
+          <svg
+            class="input-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle
+              cx="11"
+              cy="11"
+              r="8"
+            ></circle>
+
+            <line
+              x1="21"
+              y1="21"
+              x2="16.65"
+              y2="16.65"
+            ></line>
           </svg>
+
           <input
             id="product-search"
             type="text"
             class="form-control"
-            [placeholder]="'admin.products.searchPlaceholder' | translate"
+            [placeholder]="
+              'admin.products.searchPlaceholder'
+                | translate
+            "
             [ngModel]="search()"
             (ngModelChange)="onSearchChange($event)"
           />
+
         </div>
+
       </div>
 
-      <!-- Category Filter -->
+
+      <!-- ==========================================
+           ACTIVE / SOFT DELETE
+      =========================================== -->
+
       <div class="filter-group">
-        <label class="form-label" for="category-filter">{{ 'admin.products.category' | translate }}</label>
+
+        <label
+          class="form-label"
+          for="active-filter"
+        >
+          {{ 'admin.products.status' | translate }}
+        </label>
+
+        <select
+          id="active-filter"
+          class="form-control form-select"
+          [ngModel]="isActive()"
+          (ngModelChange)="onActiveChange($event)"
+        >
+
+          <option [ngValue]="undefined">
+            {{ 'admin.products.activeProducts' | translate }}
+          </option>
+
+          <option [ngValue]="true">
+            {{ 'admin.products.active' | translate }}
+          </option>
+
+          <option [ngValue]="false">
+            {{ 'admin.products.softDeleted' | translate }}
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- ==========================================
+           PUBLISHED
+      =========================================== -->
+
+      <div class="filter-group">
+
+        <label
+          class="form-label"
+          for="published-filter"
+        >
+          {{ 'admin.products.published' | translate }}
+        </label>
+
+        <select
+          id="published-filter"
+          class="form-control form-select"
+          [ngModel]="isPublished()"
+          (ngModelChange)="onPublishedChange($event)"
+        >
+
+          <option [ngValue]="undefined">
+            {{ 'admin.products.all' | translate }}
+          </option>
+
+          <option [ngValue]="true">
+            {{ 'admin.products.publishedOption' | translate }}
+          </option>
+
+          <option [ngValue]="false">
+            {{ 'admin.products.unpublished' | translate }}
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- ==========================================
+           DISCOUNT
+      =========================================== -->
+
+      <div class="filter-group">
+
+        <label
+          class="form-label"
+          for="discount-filter"
+        >
+          {{ 'admin.products.discount' | translate }}
+        </label>
+
+        <select
+          id="discount-filter"
+          class="form-control form-select"
+          [ngModel]="hasDiscount()"
+          (ngModelChange)="onDiscountChange($event)"
+        >
+
+          <option [ngValue]="undefined">
+            {{ 'admin.products.all' | translate }}
+          </option>
+
+          <option [ngValue]="true">
+            {{ 'admin.products.discounted' | translate }}
+          </option>
+
+          <option [ngValue]="false">
+            {{ 'admin.products.notDiscounted' | translate }}
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- ==========================================
+           FEATURED
+      =========================================== -->
+
+      <div class="filter-group">
+
+        <label
+          class="form-label"
+          for="featured-filter"
+        >
+          {{ 'admin.products.featured' | translate }}
+        </label>
+
+        <select
+          id="featured-filter"
+          class="form-control form-select"
+          [ngModel]="isFeatured()"
+          (ngModelChange)="onFeaturedChange($event)"
+        >
+
+          <option [ngValue]="undefined">
+            {{ 'admin.products.all' | translate }}
+          </option>
+
+          <option [ngValue]="true">
+            {{ 'admin.products.featuredOption' | translate }}
+          </option>
+
+          <option [ngValue]="false">
+            {{ 'admin.products.notFeatured' | translate }}
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- ==========================================
+           STOCK
+      =========================================== -->
+
+      <div class="filter-group">
+
+        <label
+          class="form-label"
+          for="stock-filter"
+        >
+          {{ 'admin.products.stock' | translate }}
+        </label>
+
+        <select
+          id="stock-filter"
+          class="form-control form-select"
+          [ngModel]="inStockOnly()"
+          (ngModelChange)="onStockChange($event)"
+        >
+
+          <option [ngValue]="undefined">
+            {{ 'admin.products.all' | translate }}
+          </option>
+
+          <option [ngValue]="true">
+            {{ 'admin.products.inStock' | translate }}
+          </option>
+
+          <option [ngValue]="false">
+            {{ 'admin.products.outOfStock' | translate }}
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- ==========================================
+           CATEGORY
+      =========================================== -->
+
+      <div class="filter-group">
+
+        <label
+          class="form-label"
+          for="category-filter"
+        >
+          {{ 'admin.products.category' | translate }}
+        </label>
+
         <select
           id="category-filter"
           class="form-control form-select"
-          [ngModel]="categoryId() ?? ''"
+          [ngModel]="categoryId()"
           (ngModelChange)="onCategoryChange($event)"
         >
-          <option value="">{{ 'admin.products.allCategories' | translate }}</option>
-          @for (cat of categories(); track cat.id) {
-            <option [value]="cat.id">{{ cat.name }}</option>
+
+          <option [ngValue]="undefined">
+            {{ 'admin.products.allCategories' | translate }}
+          </option>
+
+          @for (
+            cat of categories();
+            track cat.id
+          ) {
+
+            <option [ngValue]="cat.id">
+              {{ cat.name }}
+            </option>
+
           }
+
         </select>
+
       </div>
 
-      <!-- Brand Filter -->
+
+      <!-- ==========================================
+           BRAND
+      =========================================== -->
+
       <div class="filter-group">
-        <label class="form-label" for="brand-filter">{{ 'admin.products.brand' | translate }}</label>
+
+        <label
+          class="form-label"
+          for="brand-filter"
+        >
+          {{ 'admin.products.brand' | translate }}
+        </label>
+
         <select
           id="brand-filter"
           class="form-control form-select"
-          [ngModel]="brandId() ?? ''"
+          [ngModel]="brandId()"
           (ngModelChange)="onBrandChange($event)"
         >
-          <option value="">{{ 'admin.products.allBrands' | translate }}</option>
-          @for (brand of brands(); track brand.id) {
-            <option [value]="brand.id">{{ brand.name }}</option>
+
+          <option [ngValue]="undefined">
+            {{ 'admin.products.allBrands' | translate }}
+          </option>
+
+          @for (
+            brand of brands();
+            track brand.id
+          ) {
+
+            <option [ngValue]="brand.id">
+              {{ brand.name }}
+            </option>
+
           }
+
         </select>
+
       </div>
+
     </div>
+
   </div>
 
-  <!-- Data Table -->
- <app-data-table
-  [columns]="columns"
-  [rows]="products()"
-  [isLoading]="isLoading()"
-  (toggleChange)="onStatusToggle($event)"
-  (rowClick)="onRowClick($event)"
->
-    <ng-template #actions let-row>
+
+  <!-- ================================================
+       DATA TABLE
+  ================================================= -->
+
+  <app-data-table
+    [columns]="columns"
+    [rows]="products()"
+    [isLoading]="isLoading()"
+    (toggleChange)="onStatusToggle($event)"
+    (rowClick)="onRowClick($event)"
+  >
+
+    <ng-template
+      #actions
+      let-row
+    >
+
       <div class="action-buttons">
+
+        <!-- ======================================
+             EDIT
+        ======================================= -->
+
         <button
           type="button"
           class="btn-icon btn-icon--edit"
-          [title]="'admin.products.edit' | translate"
+          [title]="
+            'admin.products.edit'
+              | translate
+          "
           (click)="editProduct(row)"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+
+            <path
+              d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+            ></path>
+
+            <path
+              d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+            ></path>
+
           </svg>
+
         </button>
+
+
+        <!-- ======================================
+             DELETE
+        ======================================= -->
 
         <button
           type="button"
           class="btn-icon btn-icon--delete"
-          [title]="'admin.products.delete' | translate"
-          [disabled]="isDeleting() === row.id"
+          [title]="
+            'admin.products.delete'
+              | translate
+          "
+          [disabled]="
+            isDeleting() === row.id
+          "
           (click)="deleteProduct(row)"
         >
-          @if (isDeleting() === row.id) {
-            <span class="spinner-sm"></span>
+
+          @if (
+            isDeleting() === row.id
+          ) {
+
+            <span
+              class="spinner-sm"
+            ></span>
+
           } @else {
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="3 6 5 6 21 6"></polyline>
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+
+              <polyline
+                points="3 6 5 6 21 6"
+              ></polyline>
+
+              <path
+                d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+              ></path>
+
             </svg>
+
           }
+
         </button>
+
       </div>
+
     </ng-template>
+
   </app-data-table>
 
-  <!-- Pagination -->
-  @if (!isLoading() && totalPages() > 1) {
+
+  <!-- ================================================
+       PAGINATION
+  ================================================= -->
+
+  @if (
+    !isLoading() &&
+    totalPages() > 1
+  ) {
+
     <div class="pagination-wrapper">
+
       <app-pagination
         [currentPage]="pageNumber()"
         [totalPages]="totalPages()"
         (pageChange)="onPageChange($event)"
       />
+
     </div>
+
   }
+
 </div>

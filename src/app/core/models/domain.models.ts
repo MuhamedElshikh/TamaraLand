@@ -413,42 +413,58 @@ export interface AppliedCouponResponse {
 
 
   export interface DashboardResponse {
-    totalProducts: number;
-    totalCustomers: number;
-    totalOrders: number;
-    pendingOrders: number;
-    totalRevenue: number;
-    todayRevenue: number;
+  totalProducts: number;
+  totalCustomers: number;
+  totalOrders: number;
+  pendingOrders: number;
 
-    lowStockProducts: number;
-    activeCoupons: number;
-    activeDiscounts: number;
+  totalRevenue: number;
+  totalCost: number;
+  totalProfit: number;
+  totalProfitMargin: number;
 
-    wishlistItems: number;
-    totalReviews: number;
+  todayRevenue: number;
+  todayCost: number;
+  todayProfit: number;
+  todayProfitMargin: number;
 
-    totalCategories: number;
-    totalBrands: number;
+  monthRevenue: number;
+  monthCost: number;
+  monthProfit: number;
+  monthProfitMargin: number;
 
-    outOfStockProducts: number;
-    deliveredOrders: number;
-    cancelledOrders: number;
+  yearRevenue: number;
+  yearCost: number;
+  yearProfit: number;
+  yearProfitMargin: number;
 
-    monthRevenue: number;
-    yearRevenue: number;
+  lowStockProducts: number;
+  activeCoupons: number;
+  activeDiscounts: number;
 
-    latestOrders: LatestOrder[];
-    topSellingProducts: TopSellingProduct[];
+  wishlistItems: number;
+  totalReviews: number;
 
-    mostViewedProducts: MostViewedProduct[];
-    mostWishlistedProducts: MostWishlistedProduct[];
+  totalCategories: number;
+  totalBrands: number;
 
-    monthlyRevenue: MonthlyChartItem[];
-    monthlyOrders: MonthlyChartItem[];
+  outOfStockProducts: number;
+  deliveredOrders: number;
+  cancelledOrders: number;
 
-    topCategories: DashboardChartPoint[];
-    topBrands: DashboardChartPoint[];
-  }
+  latestOrders: LatestOrder[];
+  topSellingProducts: TopSellingProduct[];
+
+  mostViewedProducts: MostViewedProduct[];
+  mostWishlistedProducts: MostWishlistedProduct[];
+
+  monthlyRevenue: MonthlyChartItem[];
+  monthlyProfit: MonthlyChartItem[];
+  monthlyOrders: MonthlyChartItem[];
+
+  topCategories: DashboardChartPoint[];
+  topBrands: DashboardChartPoint[];
+}
 
   export interface TopSellingProduct {
     productId: number;
@@ -501,18 +517,41 @@ export interface AppliedCouponResponse {
     isActive: boolean;
   }
   
-  export interface CreateDiscountRequest {
-    name: string;
-    discountType: number;
-    discountValue: number;
-    maximumDiscount: number | null;
-    target: number;
-    targetIds: number[];
-    priority: number;
-    startDate: string;
-    endDate: string;
-    isActive: boolean;
-  }
+export interface CreateDiscountRequest {
+  name: string;
+  discountType: number;
+  discountValue: number;
+  maximumDiscount: number | null;
+  target: number;
+  targetIds: number[];
+  priority: number;
+  startDate: string;
+  endDate: string;
+  isActive: boolean;
+  allowBelowCost: boolean;
+}
+export interface BelowCostItem {
+  productId: number;
+    productName: string;
+  variantId: number;
+  sku: string;
+
+  costPrice: number;
+  originalPrice: number;
+  finalPrice: number;
+
+  lossAmount: number;
+}
+
+export interface BelowCostErrorResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+
+  data: BelowCostItem[];
+
+  errors?: Record<string, string[]> | null;
+}
 
   export type UpdateDiscountRequest = CreateDiscountRequest;
 
@@ -624,17 +663,18 @@ export interface AppliedCouponResponse {
       isPublished:boolean;
 
   }
-  export interface CreateProductVariantRequest {
-    colorId: number;
-    sizeId: number;
-    price: number;
-    stock: number;
-    sku: string;
-    bust: number;
-    waist: number;
-    hip: number;
-    length: number;
-  }
+ export interface CreateProductVariantRequest {
+  colorId: number;
+  sizeId: number;
+  costPrice: number;
+  price: number;
+  stock: number;
+  sku: string;
+  bust: number;
+  waist: number;
+  hip: number;
+  length: number;
+}
   export interface CreateProductRequest {
     name: string;
     arabicName: string;
@@ -644,20 +684,18 @@ export interface AppliedCouponResponse {
     variants: CreateProductVariantRequest[];
   }
 
-  export interface UpdateProductVariantRequest {
-    id?: number;
-    colorId: number;
-    sizeId: number;
-    costPrice: number;
-    compareAtPrice?: number | null;
-    price: number;
-    stock: number;
-    bust: number;
-    waist: number;
-    hip: number;
-    length: number;
-    sku: string;
-  }
+export interface ProductVariantRequest {
+  colorId: number;
+  sizeId: number;
+  costPrice: number;
+  price: number;
+  stock: number;
+  bust: number;
+  waist: number;
+  hip: number;
+  length: number;
+  sku: string;
+}
 
   export interface UpdateProductRequest {
     name: string;
@@ -668,8 +706,22 @@ export interface AppliedCouponResponse {
     brandId: number;
     isPublished: boolean;
     variants: UpdateProductVariantRequest[];
-  }
 
+  }
+export interface UpdateProductVariantRequest {
+  id?: number;
+  colorId: number;
+  sizeId: number;
+  costPrice: number;
+  compareAtPrice?: number | null;
+  price: number;
+  stock: number;
+  bust: number;
+  waist: number;
+  hip: number;
+  length: number;
+  sku: string;
+}
   export interface ProductVariantRequest {
     colorId: number;
     sizeId: number;
@@ -682,31 +734,38 @@ export interface AppliedCouponResponse {
     sku: string;
   }
 
-  export interface AdminProductVariantResponse {
-    id: number;
-    productId?: number;
+ export interface AdminProductVariantResponse {
+  id: number;
+  productId?: number;
 
-    colorId: number;
-    colorName: string;
-    colorArabicName: string;
-    colorHexCode?: string | null;
-    colorSecondaryHexCode?: string | null;
-    sizeId: number;
-    sizeName: string;
-    sku: string;
-    costPrice?: number;
-    compareAtPrice?: number | null;
-    price: number;
-    originalPrice?: number;
-    finalPrice?: number;
-    stock: number;
-    bust: number;
-    waist: number;
-    hip: number;
-    length: number;
-    isActive: boolean;
-    discountPercentage?: number;
-  }
+  colorId: number;
+  colorName: string;
+  colorArabicName: string;
+  colorHexCode?: string | null;
+  colorSecondaryHexCode?: string | null;
+
+  sizeId: number;
+  sizeName: string;
+
+  sku: string;
+
+  costPrice: number;
+  originalPrice: number;
+  price: number;
+
+  profit: number;
+  profitMargin: number;
+
+  hasDiscount: boolean;
+  isBelowCost: boolean;
+
+  stock: number;
+
+  bust: number;
+  waist: number;
+  hip: number;
+  length: number;
+}
 
   export interface ProductImageRequest {
     imageUrl: string;

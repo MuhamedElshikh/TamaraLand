@@ -1,5 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ApiResponse } from '../models/api-response.model';
+import { BelowCostItem } from '../models/domain.models';
+
 
 type ApiErrorPayload = Partial<ApiResponse<unknown>> & {
   title?: unknown;
@@ -38,7 +40,62 @@ export function extractErrorMessage(
 
   return fallback;
 }
+export function extractBelowCostItems(error: unknown): BelowCostItem[] {
+  if (!(error instanceof HttpErrorResponse)) {
+    return [];
+  }
 
+  const body = error.error as
+    | {
+        data?: unknown;
+        Data?: unknown;
+      }
+    | undefined;
+
+  const data = body?.data ?? body?.Data;
+
+ 
+  if (!Array.isArray(data)) {
+    return [];
+  }
+
+  return data
+    .map((item: any): BelowCostItem => ({
+      productId: Number(
+        item.productId ?? item.ProductId
+      ),
+productName: String(
+        item.productName ?? item.ProductName ?? ''
+      ),
+      variantId: Number(
+        item.variantId ?? item.VariantId
+      ),
+
+      sku: String(
+        item.sku ?? item.SKU ?? ''
+      ),
+
+      costPrice: Number(
+        item.costPrice ?? item.CostPrice ?? 0
+      ),
+
+      originalPrice: Number(
+        item.originalPrice ?? item.OriginalPrice ?? 0
+      ),
+
+      finalPrice: Number(
+        item.finalPrice ?? item.FinalPrice ?? 0
+      ),
+
+      lossAmount: Number(
+        item.lossAmount ?? item.LossAmount ?? 0
+      ),
+    }))
+    .filter(item =>
+      item.variantId > 0 &&
+      item.sku.length > 0
+    );
+}
 function collectErrors(errors: unknown): string | null {
   if (!errors) {
     return null;

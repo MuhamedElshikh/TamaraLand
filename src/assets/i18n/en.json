@@ -1068,7 +1068,29 @@
                      "noVariants": "No variants added yet. Please click \"Add Variant\" above to add at least one variant before saving.",
                      "price": "Price",
                      "measurements": "Measurements (cm)",
-                     "actions": "Actions"
+                     "actions": "Actions",
+                      "status": "Status",
+      "activeProducts": "Active Products",
+      "active": "Active",
+      "softDeleted": "Soft Deleted",
+
+      "published": "Published",
+      "publishedOption": "Published",
+      "unpublished": "Unpublished",
+
+      "discount": "Discount",
+      "discounted": "Discounted",
+      "notDiscounted": "Not Discounted",
+
+      "featured": "Featured",
+      "featuredOption": "Featured",
+      "notFeatured": "Not Featured",
+
+      "stock": "Stock",
+      "inStock": "In Stock",
+      "outOfStock": "Out of Stock",
+
+      "all": "All"
     },
     "orders": {
       "title": "Orders Management",
@@ -1393,6 +1415,10 @@
         "analytics": "Analytics"
       },
       "section": {
+         "profitability": {
+          "kicker": "PROFITABILITY",
+          "title": "Profitability overview"
+        },
         "store": {
           "kicker": "Store performance",
           "title": "Store overview"
@@ -1457,10 +1483,18 @@
         "revenueTrend": "Revenue trend",
         "dailyUsers": "Daily users",
         "dailySessions": "Daily sessions",
-        "ordersTrend": "Orders trend"
+        "ordersTrend": "Orders trend",
+        "profitTrend": "Profit trend"
       },
       "store": {
         "revenueOverview": "Revenue overview",
+         "totalCost": "Total Cost",
+        "totalProfit": "Total Profit",
+        "profitMargin": "Profit Margin",
+        "todayProfit": "Today's Profit",
+        "monthProfit": "This Month's Profit",
+        "yearProfit": "This Year's Profit",
+        "monthProfitMargin": "This Month's Profit Margin",
         "totalRevenue": "Total revenue",
         "todaysRevenue": "Today's revenue",
         "thisMonth": "This month",
@@ -1476,6 +1510,8 @@
       },
       "metric": {
         "revenue": "Revenue",
+        "profit": "Profit",
+        "profitMargin": "Profit Margin",
         "orders": "Orders",
         "customers": "Customers",
         "products": "Products",

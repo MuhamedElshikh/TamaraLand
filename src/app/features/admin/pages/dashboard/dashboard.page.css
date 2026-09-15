@@ -1,5 +1,7 @@
 /* =====================================================
+
    Dashboard
+
 ===================================================== */
 
 .dashboard-page {
@@ -219,6 +221,18 @@
 
 .dashboard-link:hover {
   opacity: 0.8;
+}
+
+/* =====================================================
+   Profitability
+===================================================== */
+
+.dashboard-section:has(.dashboard-chart-card app-dashboard-chart) {
+  min-width: 0;
+}
+
+.dashboard-chart-card app-dashboard-chart {
+  min-width: 0;
 }
 
 /* =====================================================

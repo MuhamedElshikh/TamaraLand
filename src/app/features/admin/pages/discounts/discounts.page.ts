@@ -26,8 +26,17 @@ import {
 import { AdminDiscountService } from '../../../../core/services/admin-discount.service';
 import { CatalogService } from '../../../../core/services/catalog.service';
 
-import { DiscountResponse } from '../../../../core/models/domain.models';
-import { extractErrorMessage } from '../../../../core/utils/error-message.util';
+import {
+  BelowCostItem,
+  CreateDiscountRequest,
+  DiscountResponse,
+  UpdateDiscountRequest,
+} from '../../../../core/models/domain.models';
+
+import {
+  extractBelowCostItems,
+  extractErrorMessage,
+} from '../../../../core/utils/error-message.util';
 
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -121,7 +130,14 @@ export class DiscountsPage implements OnInit {
 
   readonly formError =
     signal<string | null>(null);
+readonly belowCostItems =
+  signal<BelowCostItem[]>([]);
 
+readonly isBelowCostWarningOpen =
+  signal(false);
+
+private pendingDiscountPayload:
+  CreateDiscountRequest | UpdateDiscountRequest | null = null;
 
   readonly isPickerOpen =
     signal(false);
@@ -686,7 +702,7 @@ export class DiscountsPage implements OnInit {
   // =========================================================
 
   openCreateForm(): void {
-
+this.closeBelowCostWarning();
     this.editingDiscount.set(null);
 
     this.formError.set(null);
@@ -720,6 +736,7 @@ export class DiscountsPage implements OnInit {
   openEditForm(
     discount: DiscountResponse,
   ): void {
+  this.closeBelowCostWarning();
 
     this.editingDiscount.set(
       discount,
@@ -782,17 +799,14 @@ export class DiscountsPage implements OnInit {
   // CLOSE
   // =========================================================
 
-  closeForm(): void {
+ closeForm(): void {
+  this.isFormOpen.set(false);
+  this.editingDiscount.set(null);
+  this.formError.set(null);
+  this.isPickerOpen.set(false);
 
-    this.isFormOpen.set(false);
-
-    this.editingDiscount.set(null);
-
-    this.formError.set(null);
-
-    this.isPickerOpen.set(false);
-
-  }
+  this.closeBelowCostWarning();
+}
 
 
   // =========================================================
@@ -819,110 +833,161 @@ export class DiscountsPage implements OnInit {
   // =========================================================
   // SUBMIT
   // =========================================================
-
-  submit(): void {
-
-    if (
-      this.form.invalid ||
-      this.isSubmitting()
-    ) {
-
-      this.form.markAllAsTouched();
-
-      return;
-    }
-
-
-    this.isSubmitting.set(true);
-
-    this.formError.set(null);
-
-
-    const value =
-      this.form.getRawValue();
-
-
-    const payload = {
-
-      ...value,
-
-      targetIds: [
-        ...new Set(
-          value.targetIds,
-        ),
-      ],
-
-      startDate:
-        new Date(
-          value.startDate,
-        ).toISOString(),
-
-      endDate:
-        new Date(
-          value.endDate,
-        ).toISOString(),
-
-    };
-
-
-    const existing =
-      this.editingDiscount();
-
-
-    const request$ =
-      existing
-
-        ? this.discountService.update(
-            existing.id,
-            payload,
-          )
-
-        : this.discountService.create(
-            payload,
-          );
-
-
-    request$.subscribe({
-
-      next: res => {
-
-        this.isSubmitting.set(false);
-
-
-        if (res.success) {
-
-          this.closeForm();
-
-          this.load();
-
-        } else {
-
-          this.formError.set(
-            res.message,
-          );
-
-        }
-
-      },
-
-
-      error: error => {
-
-        this.isSubmitting.set(false);
-
-        this.formError.set(
-          extractErrorMessage(
-            error,
-            'Could not save this discount.',
-          ),
-        );
-
-      },
-
-    });
-
+submit(): void {
+  if (
+    this.form.invalid ||
+    this.isSubmitting()
+  ) {
+    this.form.markAllAsTouched();
+    return;
   }
 
+  const value = this.form.getRawValue();
+
+  const payload: CreateDiscountRequest = {
+    name: value.name.trim(),
+    discountType: Number(value.discountType),
+    discountValue: Number(value.discountValue),
+    maximumDiscount:
+      value.maximumDiscount === null
+        ? null
+        : Number(value.maximumDiscount),
+
+    target: Number(value.target),
+
+    targetIds: [
+      ...new Set(
+        value.targetIds.map(Number),
+      ),
+    ],
+
+    priority: Number(value.priority),
+
+    startDate:
+      new Date(value.startDate).toISOString(),
+
+    endDate:
+      new Date(value.endDate).toISOString(),
+
+    isActive: value.isActive,
+
+    // First attempt is always without confirmation.
+    allowBelowCost: false,
+  };
+
+  this.pendingDiscountPayload = payload;
+
+  this.executeSave(payload);
+}
+private executeSave(
+  payload:
+    CreateDiscountRequest |
+    UpdateDiscountRequest,
+): void {
+  const existing = this.editingDiscount();
+
+  this.isSubmitting.set(true);
+  this.formError.set(null);
+
+  const request$ = existing
+    ? this.discountService.update(
+        existing.id,
+        payload,
+      )
+    : this.discountService.create(
+        payload,
+      );
+
+  request$.subscribe({
+    next: res => {
+      this.isSubmitting.set(false);
+
+      if (res.success) {
+        this.pendingDiscountPayload = null;
+
+        this.closeBelowCostWarning();
+        this.closeForm();
+        this.load();
+
+        return;
+      }
+
+      this.formError.set(
+        res.message ||
+        'Could not save this discount.',
+      );
+    },
+
+    error: error => {
+      this.isSubmitting.set(false);
+
+      const belowCostItems =
+        extractBelowCostItems(error);
+
+      if (belowCostItems.length > 0) {
+        this.belowCostItems.set(
+          belowCostItems,
+        );
+
+        this.isBelowCostWarningOpen.set(true);
+
+        return;
+      }
+
+      this.formError.set(
+        extractErrorMessage(
+          error,
+          'Could not save this discount.',
+        ),
+      );
+    },
+  });
+}
+proceedBelowCost(): void {
+  const payload =
+    this.pendingDiscountPayload;
+
+  if (!payload) {
+    this.closeBelowCostWarning();
+    return;
+  }
+
+  const confirmedPayload = {
+    ...payload,
+    allowBelowCost: true,
+  };
+
+  this.closeBelowCostWarning();
+
+  this.executeSave(
+    confirmedPayload,
+  );
+}
+cancelBelowCost(): void {
+  this.closeBelowCostWarning();
+}
+private closeBelowCostWarning(): void {
+  this.isBelowCostWarningOpen.set(false);
+  this.belowCostItems.set([]);
+}
+formatMoney(value: number): string {
+  return value.toLocaleString(
+    'en-EG',
+    {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    },
+  );
+}
+
+getBelowCostTitle(): string {
+  const count =
+    this.belowCostItems().length;
+
+  return count === 1
+    ? '1 variant will be sold below cost'
+    : `${count} variants will be sold below cost`;
+}
 
   // =========================================================
   // DELETE

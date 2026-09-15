@@ -809,6 +809,192 @@
 
   }
 
+  <!-- =========================================================
+       BELOW COST WARNING
+       ========================================================= -->
+  @if (isBelowCostWarningOpen()) {
+    <div class="below-cost-modal">
+      <div
+        class="below-cost-modal__backdrop"
+        (click)="cancelBelowCost()"
+        aria-hidden="true"
+      ></div>
+
+      <div
+        class="below-cost-modal__dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="below-cost-title"
+        (click)="$event.stopPropagation()"
+      >
+
+        <!-- HEADER -->
+        <div class="below-cost-modal__header">
+
+          <div class="below-cost-modal__icon" aria-hidden="true">
+            !
+          </div>
+
+          <div class="below-cost-modal__heading">
+            <h2 id="below-cost-title">
+              Discount Below Cost
+            </h2>
+
+            <p>
+              {{ belowCostItems().length }}
+              variant{{ belowCostItems().length === 1 ? '' : 's' }}
+              will be sold below purchase cost.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            class="below-cost-modal__close"
+            (click)="cancelBelowCost()"
+            aria-label="Close"
+            title="Close"
+          >
+            ×
+          </button>
+
+        </div>
+
+
+        <!-- WARNING -->
+        <div class="below-cost-modal__warning">
+          <div>
+            <strong>
+              This discount will cause a loss on the following variants.
+            </strong>
+
+            <span>
+              Review the prices below before deciding whether to continue.
+            </span>
+          </div>
+        </div>
+
+
+        <!-- ITEMS -->
+        <div class="below-cost-modal__items">
+
+          @for (
+            item of belowCostItems();
+            track item.variantId
+          ) {
+
+            <div class="below-cost-item">
+
+              <!-- PRODUCT INFO -->
+              <div class="below-cost-item__main">
+
+                <div class="below-cost-item__product">
+                  {{ item.productName || ('Product #' + item.productId) }}
+                </div>
+
+                <div class="below-cost-item__sku">
+                  SKU: {{ item.sku }}
+                </div>
+
+                <div class="below-cost-item__variant">
+                  Variant #{{ item.variantId }}
+                </div>
+
+              </div>
+
+
+              <!-- PRICE SUMMARY -->
+              <div class="below-cost-item__prices">
+
+                <div class="below-cost-item__price below-cost-item__price--cost">
+                  <span>Cost</span>
+
+                  <strong>
+                    {{ item.costPrice.toFixed(2) }} EGP
+                  </strong>
+                </div>
+
+
+                <div class="below-cost-item__price">
+                  <span>Original</span>
+
+                  <strong>
+                    {{ item.originalPrice.toFixed(2) }} EGP
+                  </strong>
+                </div>
+
+
+                <div class="below-cost-item__price below-cost-item__price--final">
+                  <span>Final Price</span>
+
+                  <strong>
+                    {{ item.finalPrice.toFixed(2) }} EGP
+                  </strong>
+                </div>
+
+
+                <div class="below-cost-item__loss">
+                  <span>Loss</span>
+
+                  <strong>
+                    {{ item.lossAmount.toFixed(2) }} EGP
+                  </strong>
+                </div>
+
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
+
+        <!-- FOOTER -->
+        <div class="below-cost-modal__footer">
+
+          <div class="below-cost-modal__footer-text">
+            <strong>
+              Continue with this discount?
+            </strong>
+
+            <span>
+              Proceeding will allow these variants to be sold below purchase cost.
+            </span>
+          </div>
+
+
+          <div class="below-cost-modal__actions">
+
+            <button
+              type="button"
+              class="btn-outline"
+              (click)="cancelBelowCost()"
+              [disabled]="isSubmitting()"
+            >
+              Cancel
+            </button>
+
+            <button
+              type="button"
+              class="below-cost-modal__proceed"
+              [disabled]="isSubmitting()"
+              (click)="proceedBelowCost()"
+            >
+              @if (isSubmitting()) {
+                <span class="btn__spinner"></span>
+                Saving...
+              } @else {
+                Proceed Anyway
+              }
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  }
 
   <!-- =========================================================
        DISCOUNT LIST
