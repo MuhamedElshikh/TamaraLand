@@ -413,8 +413,13 @@ export class ProductListPage implements OnInit {
           desc:
             params['desc'] === 'true',
 
+          // FIX: لازم تبقى true أو undefined بس.
+          // لو بعتنا false الباك إند بيفسرها "الخلصان بس".
+          // undefined = كل المنتجات (buildParams بتتخطاها).
           inStockOnly:
-            params['inStockOnly'] === 'true',
+            params['inStockOnly'] === 'true'
+              ? true
+              : undefined,
 
           pageNumber:
             +(params['page'] ?? 1),
