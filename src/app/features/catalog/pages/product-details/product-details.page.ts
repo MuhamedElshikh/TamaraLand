@@ -487,8 +487,22 @@ private readonly isBrowser = isPlatformBrowser(this.platformId);
     if (productData) {
       this.setProductSeo(productData);
     }
+if (productData) {
+  this.setProductSeo(productData);
 
-    // analytics...
+  this.analyticsService.viewItem({
+    id: productData.id,
+    name: productData.name,
+    brand: productData.brandName,
+    category: productData.categoryName,
+    price: productData.price,
+    originalPrice: productData.originalPrice,
+    discount: Math.max(
+      0,
+      productData.originalPrice - productData.price
+    )
+  });
+}
   });
     // Deep-link / refresh:
     // make sure cart state is available.
@@ -565,47 +579,22 @@ private readonly isBrowser = isPlatformBrowser(this.platformId);
             return;
           }
 
-          const variant =
-            prod.variants.find(
-              item =>
-                item.id ===
-                variantId
-            );
+          const variant = prod.variants.find(v => v.id === variantId);
 
-          this.analyticsService.addToCart({
-            id: prod.id,
-            name: prod.name,
-            category:
-              prod.categoryName,
-            brand:
-              prod.brandName,
-
-            variant: variant
-              ? `${variant.colorName} / ${variant.sizeName}`
-              : undefined,
-
-            sku: variant?.sku,
-
-            quantity: 1,
-
-            price:
-              variant?.price ??
-              prod.price,
-
-            originalPrice:
-              variant?.originalPrice ??
-              prod.originalPrice,
-
-            discount:
-              (
-                variant?.originalPrice ??
-                prod.originalPrice
-              ) -
-              (
-                variant?.price ??
-                prod.price
-              ),
-          });
+if (variant) {
+  this.analyticsService.addToCart({
+    id: variant.id,
+    name: prod.name,
+    brand: prod.brandName,
+    category: prod.categoryName,
+    variant: `${variant.colorName} - ${variant.sizeName}`,
+    sku: variant.sku,
+    quantity :1,
+    price: variant.price,
+    originalPrice: variant.originalPrice,
+    discount: Math.max(0, variant.originalPrice - variant.price)
+  });
+};
         },
 
         error: () => {

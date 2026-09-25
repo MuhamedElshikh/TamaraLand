@@ -7,7 +7,7 @@ export const environment = {
     gaMeasurementId: 'G-5034LL8T94',
     gadsConversionId: '',
     gtmId: 'GTM-T8TMR38X',
-    
+
   },
   socialAuth: {
     googleClientId: '673486800223-gdcljglad4eiq8hldroa2m2qhc7emnf8.apps.googleusercontent.com',

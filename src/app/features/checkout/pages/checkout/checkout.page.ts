@@ -144,47 +144,46 @@ export class CheckoutPage implements OnInit {
           // BEGIN CHECKOUT ANALYTICS
           // =====================================================
 
-          this.analyticsService.beginCheckout(
+  this.analyticsService.beginCheckout(
+  cart.items.map((item) => ({
+    id: item.productVariantId,
 
-            cart.items.map(
-              (item) => ({
+    name: item.productName,
 
-                id:
-                  item.productVariantId,
+    category:
+      item.categoryName ?? undefined,
 
-                name:
-                  item.productName,
+    brand:
+      item.brandName ?? undefined,
 
-                category:
-                  item.categoryName ?? undefined,
+    sku:
+      item.sku ?? undefined,
 
-                brand:
-                  item.brandName ?? undefined,
+    variant: [
+      item.color,
+      item.size,
+    ]
+      .filter(Boolean)
+      .join(' / '),
 
-                sku:
-                  item.sku ?? undefined,
+    price:
+      item.unitPrice,
 
-                variant:
-                  [
-                    item.color,
-                    item.size,
-                  ]
-                    .filter(Boolean)
-                    .join(' / '),
+    originalPrice:
+      item.originalUnitPrice,
 
-                price:
-                  item.unitPrice,
+    discount:
+      Math.max(
+        0,
+        item.originalUnitPrice - item.unitPrice
+      ),
 
-                originalPrice:
-                  item.originalUnitPrice,
+    quantity:
+      item.quantity,
+  })),
 
-                quantity:
-                  item.quantity,
-              })
-            ),
-
-            cart.subTotal
-          );
+  cart.subTotal
+);
         },
 
         error: () => {
@@ -265,50 +264,46 @@ export class CheckoutPage implements OnInit {
             // ================================================
             // PURCHASE ANALYTICS
             // ================================================
+this.analyticsService.purchase(
+  res.data.orderNumber,
+  res.data.total,
+  cart.coupon?.code ?? null,
+  address.shippingCost,
 
-            this.analyticsService.purchase(
+  cart.items.map((item) => ({
+    id: item.productVariantId,
 
-              res.data.toString(),
+    name: item.productName,
 
-              cart.subTotal,
+    price: item.unitPrice,
 
-              cart.coupon?.code ?? null,
-              address.shippingCost,
+    originalPrice: item.originalUnitPrice,
 
-              cart.items.map(
-                (item) => ({
+    discount:
+      Math.max(
+        0,
+        item.originalUnitPrice - item.unitPrice
+      ),
 
-                  id:
-                    item.productVariantId,
+    quantity: item.quantity,
 
-                  name:
-                    item.productName,
+    category:
+      item.categoryName ?? undefined,
 
-                  price:
-                    item.unitPrice,
+    brand:
+      item.brandName ?? undefined,
 
-                  quantity:
-                    item.quantity,
+    variant: [
+      item.color,
+      item.size,
+    ]
+      .filter(Boolean)
+      .join(' / '),
 
-                  category:
-                    item.categoryName ?? undefined,
-
-                  brand:
-                    item.brandName ?? undefined,
-
-                  variant:
-                    [
-                      item.color,
-                      item.size,
-                    ]
-                      .filter(Boolean)
-                      .join(' / '),
-
-                  sku:
-                    item.sku ?? undefined,
-                })
-              )
-            );
+    sku:
+      item.sku ?? undefined,
+  }))
+);
           }
 
 

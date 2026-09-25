@@ -17,9 +17,14 @@ export class OrderService {
 
   constructor(private http: HttpClient) {}
 
-  checkout(data: CheckoutRequest): Observable<ApiResponse<CheckoutSummaryResponse>> {
-    return this.http.post<ApiResponse<CheckoutSummaryResponse>>(`${API_BASE_URL}/api/Order/checkout`, data);
-  }
+ checkout(
+  data: CheckoutRequest
+): Observable<ApiResponse<OrderResponse>> {
+  return this.http.post<ApiResponse<OrderResponse>>(
+    `${API_BASE_URL}/api/Order/checkout`,
+    data
+  );
+}
 
   getMyOrders(filter: OrderFilterRequest = {}): Observable<ApiResponse<PagedResponse<OrderResponse>>> {
     const params: Record<string, string> = {};

@@ -19,7 +19,7 @@ import { PaginationComponent } from '../../../../shared/pagination/pagination';
 import { BreadcrumbsComponent } from '../../../../shared/breadcrumbs.component/breadcrumbs.component';
 
 import { CatalogService } from '../../../../core/services/catalog.service';
-
+import { AnalyticsService } from '../../../../core/services/analytics.service';
 import {
   ProductCardResponse,
   BrandResponse,
@@ -54,6 +54,7 @@ export class BrandProductsPage implements OnInit, OnDestroy {
   // =========================================================
 
   private readonly catalogService = inject(CatalogService);
+  private readonly analyticsService =inject(AnalyticsService);
   private readonly route = inject(ActivatedRoute);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 private readonly seo = inject(SeoService);
@@ -458,6 +459,21 @@ private buildBrandSchema(
           this.totalPages.set(
             response.data.totalPages || 1
           );
+          this.analyticsService.viewItemList(
+  response.data.items.map(item => ({
+    id: item.id,
+    name: item.name,
+    brand: item.brandName,
+    category: item.categoryName,
+    price: item.price,
+    originalPrice: item.originalPrice,
+    discount: Math.max(
+      0,
+      item.originalPrice - item.price
+    )
+  })),
+  this.brand()?.name ?? 'Brand Products'
+);
 
         } else {
 

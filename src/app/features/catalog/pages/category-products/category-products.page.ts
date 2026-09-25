@@ -20,7 +20,7 @@ import { PaginationComponent } from '../../../../shared/pagination/pagination';
 import { BreadcrumbsComponent } from '../../../../shared/breadcrumbs.component/breadcrumbs.component';
 
 import { CatalogService } from '../../../../core/services/catalog.service';
-
+import { AnalyticsService } from '../../../../core/services/analytics.service';
 import {
   ProductCardResponse,
   CategoryResponse,
@@ -53,6 +53,8 @@ export class CategoryProductsPage
 
   private readonly catalogService =
     inject(CatalogService);
+    private readonly analyticsService =
+  inject(AnalyticsService);
 
   private readonly route =
     inject(ActivatedRoute);
@@ -355,7 +357,21 @@ this.document.body.style.overflow = '';
           this.totalPages.set(
             response.data.totalPages || 1
           );
-
+this.analyticsService.viewItemList(
+  response.data.items.map(item => ({
+    id: item.id,
+    name: item.name,
+    brand: item.brandName,
+    category: item.categoryName,
+    price: item.price,
+    originalPrice: item.originalPrice,
+    discount: Math.max(
+      0,
+      item.originalPrice - item.price
+    )
+  })),
+  this.category()?.name ?? 'Category Products'
+);
         } else {
 
           this.products.set([]);

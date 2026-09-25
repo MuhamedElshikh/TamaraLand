@@ -996,24 +996,21 @@ export class ProductListPage implements OnInit {
             );
 
 
-            this.analyticsService.viewItemList(
-
-              items.map(item => ({
-
-                id:
-                  item.id,
-
-                name:
-                  item.name,
-
-                price:
-                  item.price,
-
-              })),
-
-              this.pageTitle()
-
-            );
+           this.analyticsService.viewItemList(
+  items.map(item => ({
+    id: item.id,
+    name: item.name,
+    brand: item.brandName,
+    category: item.categoryName,
+    price: item.price,
+    originalPrice: item.originalPrice,
+    discount: Math.max(
+      0,
+      item.originalPrice - item.price
+    )
+  })),
+  this.pageTitle()
+);
 
 
             /*

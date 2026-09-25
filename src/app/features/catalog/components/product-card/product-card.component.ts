@@ -509,8 +509,7 @@ export class ProductCardComponent
 
           this.analytics.addToCart({
             id:
-              this.product.id,
-
+              this.product.singleVariantId!,
             name:
               this.product.name,
 
