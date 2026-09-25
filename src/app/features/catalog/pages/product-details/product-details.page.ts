@@ -799,41 +799,53 @@ if (variant) {
               this.translate.instant('productDetails.removedFromWishlist')
             );
 
-            this.analyticsService.removeWishlist({
-              id: product.id,
-              name: product.name,
-              category:
-                product.categoryName,
-              brand:
-                product.brandName,
-              price:
-                product.price,
-              originalPrice:
-                product.originalPrice,
-              discount:
-                product.originalPrice -
-                product.price,
-            });
+           const prod = this.product();
+const variant = this.currentVariant();
+
+if (!prod || !variant) {
+  return;
+}
+
+this.analyticsService.removeWishlist({
+  id: prod.id,
+  name: prod.name,
+  category: prod.categoryName,
+  brand: prod.brandName,
+  variant: `${variant.colorName} - ${variant.sizeName}`,
+  sku: variant.sku,
+  price: variant.price,
+  originalPrice: variant.originalPrice,
+  discount: Math.max(
+    0,
+    variant.originalPrice - variant.price
+  )
+});
           } else {
             this.toast.success(
               this.translate.instant('productDetails.addedToWishlist')
             );
 
-            this.analyticsService.wishlist({
-              id: product.id,
-              name: product.name,
-              category:
-                product.categoryName,
-              brand:
-                product.brandName,
-              price:
-                product.price,
-              originalPrice:
-                product.originalPrice,
-              discount:
-                product.originalPrice -
-                product.price,
-            });
+            const prod = this.product();
+const variant = this.currentVariant();
+
+if (!prod || !variant) {
+  return;
+}
+
+this.analyticsService.wishlist({
+  id: prod.id,
+  name: prod.name,
+  category: prod.categoryName,
+  brand: prod.brandName,
+  variant: `${variant.colorName} - ${variant.sizeName}`,
+  sku: variant.sku,
+  price: variant.price,
+  originalPrice: variant.originalPrice,
+  discount: Math.max(
+    0,
+    variant.originalPrice - variant.price
+  )
+});
           }
         } else {
           this.isInWishlist.set(
