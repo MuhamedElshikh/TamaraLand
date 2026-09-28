@@ -22,9 +22,9 @@
         @if (config()?.isConnected) {
           <div class="whatsapp-card__info">
             <div class="whatsapp-card__row">
-                <span>{{ 'admin.whatsapp.phoneNumber' | translate }}</span>
-                <strong>{{ config()?.phoneNumber || '—' }}</strong>
-              </div>
+              <span>{{ 'admin.whatsapp.phoneNumber' | translate }}</span>
+              <strong dir="ltr">{{ config()?.phoneNumber || '—' }}</strong>
+            </div>
             @if (config()?.lastConnectedAt) {
               <div class="whatsapp-card__row">
                 <span>{{ 'admin.whatsapp.connectedSince' | translate }}</span>
@@ -45,7 +45,7 @@
             } @else if (qrImageUrl()) {
               <img [src]="qrImageUrl()" [alt]="'admin.whatsapp.qrAlt' | translate" />
             } @else {
-              <p class="whatsapp-card__hint">{{ 'admin.whatsapp.qrLoadError' | translate }}</p>
+              <p class="whatsapp-qr__empty">{{ 'admin.whatsapp.qrLoadError' | translate }}</p>
             }
           </div>
 
@@ -57,6 +57,12 @@
         <button type="button" class="whatsapp-card__refresh" [disabled]="isRefreshing()" (click)="refreshStatus()">
           {{ isRefreshing() ? ('admin.whatsapp.refreshing' | translate) : ('admin.whatsapp.refresh' | translate) }}
         </button>
+
+        @if (config()?.lastStatusCheckAt) {
+          <p class="whatsapp-card__hint">
+            {{ 'admin.whatsapp.lastChecked' | translate }} {{ config()?.lastStatusCheckAt | date: 'medium' }}
+          </p>
+        }
       </div>
 
       <!-- Stats card -->
@@ -71,13 +77,21 @@
             <p class="whatsapp-stats__label">{{ 'admin.whatsapp.remaining' | translate }}</p>
           </div>
           <div class="whatsapp-stats__item">
-            <p class="whatsapp-stats__value">{{ config()?.usedMessages ?? '—' }}</p>
+            <p class="whatsapp-stats__value">{{ config()?.monthlySent ?? '—' }}</p>
             <p class="whatsapp-stats__label">{{ 'admin.whatsapp.used' | translate }}</p>
           </div>
           <div class="whatsapp-stats__item">
-            <p class="whatsapp-stats__value">{{ config()?.packageSize ?? '—' }}</p>
+            <p class="whatsapp-stats__value">{{ config()?.monthlyLimit ?? '—' }}</p>
             <p class="whatsapp-stats__label">{{ 'admin.whatsapp.packageSize' | translate }}</p>
           </div>
+        </div>
+
+        <div class="whatsapp-usage" role="progressbar" [attr.aria-valuenow]="usagePercent()" aria-valuemin="0" aria-valuemax="100">
+          <div
+            class="whatsapp-usage__bar"
+            [class.whatsapp-usage__bar--warn]="usagePercent() >= 80"
+            [style.width.%]="usagePercent()"
+          ></div>
         </div>
 
         @if (config()?.lastMessageSentAt) {
@@ -96,70 +110,56 @@
 
       <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
         <label class="field">
-  <span>{{ 'admin.whatsapp.phoneNumber' | translate }}</span>
+          <span>{{ 'admin.whatsapp.phoneNumber' | translate }}</span>
 
-  <div class="whatsapp-recipient-search">
+          <div class="whatsapp-recipient-search">
+            <input
+              type="text"
+              dir="ltr"
+              formControlName="phoneNumber"
+              placeholder="201001234567"
+              autocomplete="off"
+              (keydown.escape)="closeRecipientResults()"
+            />
 
-    <input
-      type="text"
-      formControlName="phoneNumber"
-      placeholder="201001234567"
-      autocomplete="off"
-    />
-
-    @if (isSearchingRecipients()) {
-      <span class="whatsapp-recipient-search__loading">
-        Searching...
-      </span>
-    }
-
-    @if (recipientResults().length > 0) {
-      <div class="whatsapp-recipient-search__results">
-
-        @for (
-          recipient of recipientResults();
-          track recipient.phoneNumber
-        ) {
-          <button
-            type="button"
-            class="whatsapp-recipient"
-            (click)="selectRecipient(recipient)"
-          >
-            <div class="whatsapp-recipient__main">
-              <strong>
-                {{ recipient.name }}
-              </strong>
-
-              <span>
-                {{ recipient.phoneNumber }}
+            @if (isSearchingRecipients()) {
+              <span class="whatsapp-recipient-search__loading">
+                {{ 'admin.whatsapp.searching' | translate }}
               </span>
-            </div>
-
-            @if (recipient.address) {
-              <small>
-                {{ recipient.address }}
-              </small>
             }
-          </button>
-        }
 
-      </div>
-    }
+            @if (recipientResults().length > 0) {
+              <div class="whatsapp-recipient-search__results">
+                @for (recipient of recipientResults(); track recipient.phoneNumber) {
+                  <button type="button" class="whatsapp-recipient" (click)="selectRecipient(recipient)">
+                    <div class="whatsapp-recipient__main">
+                      <strong>{{ recipient.name }}</strong>
+                      <span dir="ltr">{{ recipient.phoneNumber }}</span>
+                    </div>
 
-  </div>
+                    @if (recipient.address) {
+                      <small>{{ recipient.address }}</small>
+                    }
+                  </button>
+                }
+              </div>
+            }
+          </div>
 
-  @if (controlHasError('phoneNumber', 'required')) {
-    <small>
-      {{ 'admin.whatsapp.phoneRequired' | translate }}
-    </small>
-  }
-</label>
+          @if (controlHasError('phoneNumber', 'required')) {
+            <small class="whatsapp-send__error">{{ 'admin.whatsapp.phoneRequired' | translate }}</small>
+          }
+        </label>
 
         <label class="field">
           <span>{{ 'admin.whatsapp.message' | translate }}</span>
-          <textarea formControlName="message" rows="4" placeholder="{{ 'admin.whatsapp.messagePlaceholder' | translate }}"></textarea>
+          <textarea
+            formControlName="message"
+            rows="4"
+            [placeholder]="'admin.whatsapp.messagePlaceholder' | translate"
+          ></textarea>
           @if (controlHasError('message', 'required')) {
-            <small>{{ 'admin.whatsapp.messageRequired' | translate }}</small>
+            <small class="whatsapp-send__error">{{ 'admin.whatsapp.messageRequired' | translate }}</small>
           }
         </label>
 

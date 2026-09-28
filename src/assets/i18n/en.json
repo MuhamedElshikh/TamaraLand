@@ -1285,6 +1285,8 @@
     },
     "whatsapp": {
       "title": "WhatsApp",
+      "searching": "Searching...",
+"lastChecked": "Last checked",
       "subtitle": "Manage WhatsApp integration",
       "connect": "Connect",
       "disconnect": "Disconnect",

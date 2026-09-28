@@ -1305,6 +1305,8 @@
     },
     "whatsapp": {
       "title": "واتساب",
+      "searching": "جاري البحث...",
+"lastChecked": "آخر فحص",
       "subtitle": "إدارة تكامل واتساب",
       "connect": "اتصل",
       "disconnect": "قطع الاتصال",

@@ -1,19 +1,19 @@
 export interface WhatsAppConfigurationResponse {
   isConnected: boolean;
-  phoneNumber?: string;
-  packageSize: number;
-  usedMessages: number;
+  phoneNumber: string | null;
+  monthlyLimit: number;
+  monthlySent: number;
   remainingMessages: number;
-  lastConnectedAt?: string;
-  lastStatusCheckAt?: string;
-  lastMessageSentAt?: string;
+  lastConnectedAt: string | null;
+  lastStatusCheckAt: string | null;
+  lastMessageSentAt: string | null;
 }
 
-// ⚠️ افتراض - مش مؤكد من الباك إند، عدّل لو مختلف
 export interface SendWhatsAppMessageRequest {
   phoneNumber: string;
   message: string;
 }
+
 export interface WhatsAppRecipientResponse {
   userId: number;
   phoneNumber: string;
