@@ -156,6 +156,8 @@ export interface AppliedCouponResponse {
     id: number;
     nameAr: string;
     nameEn: string;
+    centerLatitude: number;
+    centerLongitude: number;
   }
 
   export interface AreaResponse {
@@ -188,6 +190,10 @@ export interface AppliedCouponResponse {
     longitude: number;
 
     isDefault: boolean;
+
+    // Manual area selection (optional)
+    areaId?: number | null;
+    shiyakhaId?: number | null;
   }
 
   export interface UpdateAddressRequest

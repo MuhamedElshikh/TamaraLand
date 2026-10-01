@@ -14,6 +14,7 @@ import { AddressService } from '../../../../core/services/address.service';
 import { AddressResponse } from '../../../../core/models/domain.models';
 
 import { PhoneVerifyDialogComponent } from '../../../phone-verification/components/phone-verify-dialog/phone-verify-dialog';
+import { AddressFormComponent } from '../../../addresses/components/address-form/address-form.component';
 
 @Component({
   selector: 'app-checkout-address',
@@ -21,6 +22,7 @@ import { PhoneVerifyDialogComponent } from '../../../phone-verification/componen
   imports: [
     RouterLink,
     PhoneVerifyDialogComponent,
+    AddressFormComponent,
     TranslatePipe,
   ],
   templateUrl: './checkout-address.component.html',
@@ -47,6 +49,9 @@ export class CheckoutAddressComponent
 
   readonly verifyingAddress =
     signal<AddressResponse | null>(null);
+
+  readonly showAddressForm =
+    signal(false);
 
   private readonly verifiedOverrides =
     signal<Set<number>>(new Set());
@@ -142,5 +147,44 @@ export class CheckoutAddressComponent
     }
 
     this.closeVerifyDialog();
+  }
+
+  // =========================================================
+  // Inline Address Form (Modal)
+  // =========================================================
+
+  openAddressForm(): void {
+    this.showAddressForm.set(true);
+  }
+
+  closeAddressForm(): void {
+    this.showAddressForm.set(false);
+  }
+
+  onAddressFormSaved(): void {
+    this.showAddressForm.set(false);
+
+    // Reload addresses and auto-select the newest one
+    this.addressService
+      .getAddresses()
+      .subscribe({
+        next: (res) => {
+          const list =
+            res.data ?? [];
+
+          // The newest address is likely the default
+          // or the last one added
+          const newest =
+            list.find(
+              (a) => a.isDefault
+            ) ??
+            list[list.length - 1] ??
+            null;
+
+          if (newest) {
+            this.select(newest);
+          }
+        },
+      });
   }
 }

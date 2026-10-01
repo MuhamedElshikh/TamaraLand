@@ -14,14 +14,27 @@
 
     </div>
 
-    <a
-      routerLink="/addresses"
-      [queryParams]="{ returnUrl: '/checkout' }"
-      class="checkout-block__manage-link">
+    <div class="checkout-block__header-actions">
 
-      {{ 'checkout.address.manageAddresses' | translate }}
+      <button
+        type="button"
+        class="checkout-block__add-btn"
+        (click)="openAddressForm()">
 
-    </a>
+        + {{ 'checkout.address.addNew' | translate }}
+
+      </button>
+
+      <a
+        routerLink="/addresses"
+        [queryParams]="{ returnUrl: '/checkout' }"
+        class="checkout-block__manage-link">
+
+        {{ 'checkout.address.manageAddresses' | translate }}
+
+      </a>
+
+    </div>
 
   </div>
 
@@ -39,14 +52,14 @@
         {{ 'checkout.address.empty' | translate }}
       </p>
 
-      <a
-        routerLink="/addresses"
-        [queryParams]="{ returnUrl: '/checkout' }"
-        class="btn btn-primary">
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="openAddressForm()">
 
         {{ 'checkout.address.addAddress' | translate }}
 
-      </a>
+      </button>
 
     </div>
 
@@ -142,5 +155,55 @@
     [phoneNumber]="address.phoneNumber"
     (closed)="closeVerifyDialog()"
     (verified)="onVerified()" />
+
+}
+
+@if (showAddressForm()) {
+
+  <div
+    class="checkout-address-modal__backdrop"
+    (click)="closeAddressForm()">
+
+    <div
+      class="checkout-address-modal"
+      (click)="$event.stopPropagation()">
+
+      <div class="checkout-address-modal__header">
+
+        <div>
+          <h3>
+            {{ 'checkout.address.addAddress' | translate }}
+          </h3>
+          <p class="checkout-address-modal__subtitle">
+            {{ 'checkout.address.modalSubtitle' | translate }}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="checkout-address-modal__close"
+          (click)="closeAddressForm()"
+          [attr.aria-label]="'addressForm.cancel' | translate">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+
+      </div>
+
+      <div class="checkout-address-modal__body">
+
+        <app-address-form
+          [isModal]="true"
+          [showTitle]="false"
+          (saved)="onAddressFormSaved()"
+          (cancelled)="closeAddressForm()" />
+
+      </div>
+
+    </div>
+
+  </div>
 
 }

@@ -1,15 +1,18 @@
 <form
   class="address-form"
+  [class.address-form--modal]="isModal"
   [formGroup]="form"
   (ngSubmit)="submit()">
 
-  <h3 class="address-form__title">
-    {{
-      existingAddress
-        ? ('addressForm.editTitle' | translate)
-        : ('addressForm.addTitle' | translate)
-    }}
-  </h3>
+  @if (showTitle) {
+    <h3 class="address-form__title">
+      {{
+        existingAddress
+          ? ('addressForm.editTitle' | translate)
+          : ('addressForm.addTitle' | translate)
+      }}
+    </h3>
+  }
 
   @if (errorMessage()) {
     <p class="address-form__error">
@@ -26,7 +29,7 @@
     <label class="field">
 
       <span>
-        {{ 'addressForm.fullName' | translate }}
+        {{ 'addressForm.fullName' | translate }} <strong class="req">*</strong>
       </span>
 
       <input
@@ -70,7 +73,7 @@
     <label class="field">
 
       <span>
-        {{ 'addressForm.phoneNumber' | translate }}
+        {{ 'addressForm.phoneNumber' | translate }} <strong class="req">*</strong>
       </span>
 
       <input
@@ -114,62 +117,224 @@
 
 
   <!-- =======================================================
-       Location Picker
+       Automatic Location Detection State
        ======================================================= -->
 
-  <app-address-map-picker
-    [initialLat]="
-      existingAddress?.latitude ??
-      30.0444
-    "
-    [initialLng]="
-      existingAddress?.longitude ??
-      31.2357
-    "
-    [initialLocationSelected]="
-      existingAddress?.latitude != null &&
-      existingAddress?.longitude != null
-    "
-    [initialLocationText]="
-      existingAddress
-        ? existingAddress.governorate +
-          ' - ' +
-          existingAddress.area +
-          ' - ' +
-          existingAddress.shiyakha +
-          ' - ' +
-          existingAddress.street
-        : ''
-    "
-    (locationPicked)="
-      onLocationPicked($event)
-    ">
-  </app-address-map-picker>
+  @if (isDetectingLocation()) {
+
+    <div class="address-form__detecting">
+
+      <div class="address-form__detecting-spinner"></div>
+
+      <div class="address-form__detecting-content">
+        <strong>
+          {{ 'addressForm.detecting.title' | translate }}
+        </strong>
+        <p>
+          {{ 'addressForm.detecting.desc' | translate }}
+        </p>
+      </div>
+
+    </div>
+
+  }
 
 
   <!-- =======================================================
-       Coordinates Validation
+       Manual Location Selection (Automatic Fallback)
        ======================================================= -->
 
-  @if (
-    controlHasError(
-      'latitude',
-      'required'
-    ) ||
-    controlHasError(
-      'longitude',
-      'required'
-    )
-  ) {
-    <small
-      class="location-validation-error">
+  @if (isManualMode()) {
 
-      {{
-        'addressForm.validation.locationRequired'
-          | translate
-      }}
+    <div class="address-form__manual-section">
 
-    </small>
+      @if (manualNotice()) {
+        <div class="address-form__manual-notice">
+          <span class="address-form__manual-notice-icon">ℹ️</span>
+          <span>{{ manualNotice() }}</span>
+        </div>
+      }
+
+      <div class="address-form__manual-header">
+        <span class="address-form__manual-icon">📋</span>
+        <strong>
+          {{ 'addressForm.manual.title' | translate }}
+        </strong>
+      </div>
+
+      <div class="field-grid field-grid--three">
+
+        <!-- Governorate -->
+        <label class="field">
+
+          <span>
+            {{ 'addressForm.governorate' | translate }} <strong class="req">*</strong>
+          </span>
+
+          <select
+            (change)="onGovernorateChange($event)"
+            [disabled]="isLoadingGovernorates()">
+
+            <option value="">
+              {{ 'addressForm.manual.selectGovernorate' | translate }}
+            </option>
+
+            @for (gov of governorates(); track gov.id) {
+              <option
+                [value]="gov.id"
+                [selected]="selectedGovernorateId() === gov.id">
+                {{ gov.nameAr }}
+              </option>
+            }
+
+          </select>
+
+          @if (isLoadingGovernorates()) {
+            <small class="address-form__loading-hint">
+              {{ 'addressForm.manual.loading' | translate }}
+            </small>
+          }
+
+        </label>
+
+        <!-- Area -->
+        <label class="field">
+
+          <span>
+            {{ 'addressForm.area' | translate }} <strong class="req">*</strong>
+          </span>
+
+          <select
+            (change)="onAreaChange($event)"
+            [disabled]="!selectedGovernorateId() || isLoadingAreas()">
+
+            <option value="">
+              {{ !selectedGovernorateId() ? ('addressForm.manual.chooseGovFirst' | translate) : ('addressForm.manual.selectArea' | translate) }}
+            </option>
+
+            @for (area of areas(); track area.id) {
+              <option
+                [value]="area.id"
+                [selected]="selectedAreaId() === area.id">
+                {{ area.nameAr }}
+              </option>
+            }
+
+          </select>
+
+          @if (isLoadingAreas()) {
+            <small class="address-form__loading-hint">
+              {{ 'addressForm.manual.loading' | translate }}
+            </small>
+          }
+
+        </label>
+
+        <!-- Shiyakha -->
+        <label class="field">
+
+          <span>
+            {{ 'addressForm.district' | translate }} <strong class="req">*</strong>
+          </span>
+
+          <select
+            (change)="onShiyakhaChange($event)"
+            [disabled]="!selectedAreaId() || shiyakhas().length === 0">
+
+            <option value="">
+              {{ !selectedAreaId() ? ('addressForm.manual.chooseAreaFirst' | translate) : ('addressForm.manual.selectDistrict' | translate) }}
+            </option>
+
+            @for (shiyakha of shiyakhas(); track shiyakha.id) {
+              <option
+                [value]="shiyakha.id"
+                [selected]="selectedShiyakhaId() === shiyakha.id">
+                {{ shiyakha.nameAr }}
+              </option>
+            }
+
+          </select>
+
+        </label>
+
+      </div>
+
+      <div class="address-form__manual-footer">
+        <button
+          type="button"
+          class="address-form__retry-btn"
+          (click)="retryMapMode()">
+          📍 {{ 'addressForm.manual.tryMap' | translate }}
+        </button>
+      </div>
+
+    </div>
+
+  }
+
+
+  <!-- =======================================================
+       Map Location Picker (When GPS / Map Available)
+       ======================================================= -->
+
+  @if (!isManualMode() && !isDetectingLocation()) {
+
+    <app-address-map-picker
+      [initialLat]="
+        form.get('latitude')?.value ?? (existingAddress?.latitude ?? 30.0444)
+      "
+      [initialLng]="
+        form.get('longitude')?.value ?? (existingAddress?.longitude ?? 31.2357)
+      "
+      [initialLocationSelected]="
+        form.get('latitude')?.value != null &&
+        form.get('longitude')?.value != null
+      "
+      [initialLocationText]="
+        resolvedLocation()
+          ? (resolvedLocation()!.governorateNameAr + ' - ' + resolvedLocation()!.areaNameAr + ' - ' + resolvedLocation()!.shiyakhaNameAr)
+          : (existingAddress
+              ? existingAddress.governorate + ' - ' + existingAddress.area + ' - ' + existingAddress.shiyakha
+              : '')
+      "
+      (locationPicked)="
+        onLocationPicked($event)
+      "
+      (permissionDenied)="
+        switchToManual('تم التحويل للاختيار اليدوي لعدم منح صلاحية الموقع.')
+      ">
+    </app-address-map-picker>
+
+  }
+
+
+  <!-- =======================================================
+       Coordinates Validation (Map Mode Only)
+       ======================================================= -->
+
+  @if (!isManualMode() && !isDetectingLocation()) {
+
+    @if (
+      controlHasError(
+        'latitude',
+        'required'
+      ) ||
+      controlHasError(
+        'longitude',
+        'required'
+      )
+    ) {
+      <small
+        class="location-validation-error">
+
+        {{
+          'addressForm.validation.locationRequired'
+            | translate
+        }}
+
+      </small>
+    }
+
   }
 
 
@@ -181,8 +346,8 @@
 
     <div
       class="address-form__location-status">
-
-{{ 'addressForm.locationStatus.resolving' | translate }}
+      <div class="address-form__mini-spinner"></div>
+      <span>{{ 'addressForm.locationStatus.resolving' | translate }}</span>
     </div>
 
   }
@@ -197,7 +362,16 @@
     <div
       class="address-form__location-error">
 
-      {{ locationError() }}
+      <span>⚠ {{ locationError() }}</span>
+
+      @if (!isManualMode()) {
+        <button
+          type="button"
+          class="address-form__error-switch-btn"
+          (click)="switchToManual('يمكنك اختيار المحافظة والمنطقة يدوياً.')">
+          {{ 'addressForm.manual.title' | translate }}
+        </button>
+      }
 
     </div>
 
@@ -205,7 +379,7 @@
 
 
   <!-- =======================================================
-       Official Resolved Location
+       Official Resolved Location (Verified Area)
        ======================================================= -->
 
   @if (resolvedLocation(); as location) {
@@ -216,13 +390,18 @@
       <div
         class="address-form__location-result-header">
 
-        <strong>
-{{ 'addressForm.resolvedLocation.title' | translate }}
-        </strong>
+        <div class="address-form__location-result-badge">
+          <span class="address-form__check-icon">✓</span>
+          <strong>
+            {{ 'addressForm.resolvedLocation.title' | translate }}
+          </strong>
+        </div>
 
-        <span aria-hidden="true">
-          ✓
-        </span>
+        @if (location.shippingCost != null) {
+          <span class="address-form__shipping-badge">
+            {{ location.shippingCost }} {{ 'common.egp' | translate }}
+          </span>
+        }
 
       </div>
 
@@ -232,7 +411,7 @@
         <div>
 
           <small>
-{{ 'addressForm.resolvedLocation.governorate' | translate }}
+            {{ 'addressForm.resolvedLocation.governorate' | translate }}
           </small>
 
           <strong>
@@ -244,7 +423,7 @@
         <div>
 
           <small>
-{{ 'addressForm.resolvedLocation.area' | translate }}
+            {{ 'addressForm.resolvedLocation.area' | translate }}
           </small>
 
           <strong>
@@ -279,7 +458,7 @@
   <label class="field">
 
     <span>
-      {{ 'addressForm.street' | translate }}
+      {{ 'addressForm.street' | translate }} <strong class="req">*</strong>
     </span>
 
     <input
@@ -317,7 +496,7 @@
     <label class="field">
 
       <span>
-        {{ 'addressForm.building' | translate }}
+        {{ 'addressForm.building' | translate }} <strong class="req">*</strong>
       </span>
 
       <input
@@ -363,7 +542,7 @@
     <label class="field">
 
       <span>
-        {{ 'addressForm.apartment' | translate }}
+        {{ 'addressForm.apartment' | translate }} <strong class="req">*</strong>
       </span>
 
       <input
@@ -442,10 +621,11 @@
 
     <button
       type="submit"
-      class="btn btn-primary"
+      class="btn btn-primary address-form__submit-btn"
       [disabled]="
         isSubmitting() ||
-        isResolvingLocation()
+        isResolvingLocation() ||
+        isDetectingLocation()
       ">
 
       {{
@@ -468,7 +648,7 @@
 
     <button
       type="button"
-      class="btn btn-outline"
+      class="btn btn-outline address-form__cancel-btn"
       (click)="cancel()"
       [disabled]="isSubmitting()">
 

@@ -1,12 +1,25 @@
+:host {
+  display: block;
+}
+
 .address-form {
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
-  padding: 1.5rem;
+  gap: 1.25rem;
+  padding: 1.75rem;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   background: var(--bg-card);
   box-shadow: var(--shadow-sm);
+  transition: var(--transition-fast);
+}
+
+/* Inside modal: strip the outer card styling to prevent card-in-card bug */
+.address-form--modal {
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  background: transparent;
 }
 
 /* =========================================================
@@ -14,41 +27,75 @@
    ========================================================= */
 
 .address-form__title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.4rem;
+  font-family: 'Cormorant Garamond', 'Tajawal', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
   color: var(--text-primary);
+  margin-bottom: 0.25rem;
 }
 
 .address-form__error {
-  padding: 0.7rem 1rem;
+  padding: 0.8rem 1.1rem;
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(224, 132, 132, 0.35);
+  border: 1px solid rgba(224, 132, 132, 0.45);
   background-color: rgba(224, 132, 132, 0.1);
   color: #e08484;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   line-height: 1.6;
 }
 
 /* =========================================================
-   Resolved Location
+   Automatic Location Detection Indicator
+   ========================================================= */
+
+.address-form__detecting {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--primary);
+  background: color-mix(in srgb, var(--bg-card) 94%, var(--primary) 6%);
+  animation: pulseBg 2s infinite ease-in-out;
+}
+
+.address-form__detecting-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(201, 162, 75, 0.25);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+.address-form__detecting-content strong {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.15rem;
+}
+
+.address-form__detecting-content p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* =========================================================
+   Resolved Location (Verified Zone)
    ========================================================= */
 
 .address-form__location-result {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-
-  margin-top: 0.25rem;
+  gap: 0.9rem;
   padding: 1rem 1.25rem;
-
-  border: 1px solid rgba(212, 166, 52, 0.35);
-  border-radius: 14px;
-
-  background: color-mix(
-    in srgb,
-    var(--bg-card) 92%,
-    var(--primary) 8%
-  );
+  border: 1.5px solid rgba(201, 162, 75, 0.4);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--bg-card) 92%, var(--primary) 8%);
+  box-shadow: 0 4px 16px rgba(201, 162, 75, 0.08);
 }
 
 .address-form__location-result-header {
@@ -56,75 +103,66 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-
   padding-bottom: 0.75rem;
-
-  border-bottom: 1px solid var(--border-color);
-
-  color: var(--text-primary);
+  border-bottom: 1px solid color-mix(in srgb, var(--border-color) 70%, var(--primary) 30%);
 }
 
-.address-form__location-result-header strong {
-  font-size: 0.95rem;
-  font-weight: 700;
+.address-form__location-result-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.address-form__location-result-header span {
+.address-form__check-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
-  width: 1.65rem;
-  height: 1.65rem;
-
+  width: 1.5rem;
+  height: 1.5rem;
   border-radius: 50%;
+  background: var(--gold-gradient);
+  color: var(--secondary-dark);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
 
-  background: var(--primary);
-  color: var(--bg-card);
-
-  font-size: 0.8rem;
+.address-form__location-result-badge strong {
+  font-size: 0.92rem;
   font-weight: 700;
+  color: var(--text-primary);
+}
+
+.address-form__shipping-badge {
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-full);
+  background: var(--gold-gradient);
+  color: var(--secondary-dark);
+  font-size: 0.78rem;
+  font-weight: 800;
 }
 
 .address-form__location-result-grid {
   display: grid;
-  grid-template-columns: repeat(
-    3,
-    minmax(0, 1fr)
-  );
-  gap: 1rem 1.25rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem 1.1rem;
 }
 
 .address-form__location-result-grid > div {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-
+  gap: 0.25rem;
   min-width: 0;
 }
 
 .address-form__location-result-grid small {
-  display: block;
-
-  margin: 0;
-
-  font-size: 0.78rem;
-  line-height: 1.4;
-
-  color: var(--text-secondary);
+  font-size: 0.76rem;
+  color: var(--text-muted);
 }
 
 .address-form__location-result-grid strong {
-  display: block;
-
-  margin: 0;
-
-  font-size: 0.95rem;
-  line-height: 1.7;
-  font-weight: 600;
-
+  font-size: 0.92rem;
+  font-weight: 700;
   color: var(--text-primary);
-
   overflow-wrap: anywhere;
 }
 
@@ -132,95 +170,271 @@
    Location Status / Error
    ========================================================= */
 
-.address-form__location-status,
-.address-form__location-error {
-  margin-top: 0.25rem;
-  padding: 0.85rem 1rem;
-
-  border-radius: var(--radius-sm);
-
-  font-size: 0.88rem;
-  line-height: 1.7;
-}
-
 .address-form__location-status {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.8rem 1.1rem;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border-color);
   background: var(--secondary);
   color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.address-form__mini-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
 }
 
 .address-form__location-error {
-  border: 1px solid rgba(220, 80, 80, 0.35);
-  background: rgba(220, 80, 80, 0.08);
-  color: #e08484;
-}
-
-/* =========================================================
-   Fields
-   ========================================================= */
-
-.field-grid--three {
-  grid-template-columns: 1fr;
-}
-
-@media (min-width: 640px) {
-  .field-grid--three {
-    grid-template-columns:
-      1fr
-      1fr
-      1fr;
-  }
-}
-
-/* =========================================================
-   Inputs
-   ========================================================= */
-
-.address-form textarea {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0.85rem 1.1rem;
   border-radius: var(--radius-sm);
-  border: 2px solid var(--border-color);
-  background-color: var(--secondary);
+  border: 1px solid rgba(224, 132, 132, 0.4);
+  background: rgba(224, 132, 132, 0.08);
+  color: #e08484;
+  font-size: 0.86rem;
+}
 
-  padding: 0.65rem 1rem;
-
-  font-size: 0.9rem;
-  color: var(--text-primary);
-
-  outline: none;
-  font-family: inherit;
-
+.address-form__error-switch-btn {
+  background: transparent;
+  border: 1px solid #e08484;
+  border-radius: var(--radius-full);
+  padding: 0.25rem 0.75rem;
+  color: #e08484;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
   transition: var(--transition-fast);
 }
 
-.address-form textarea:focus {
-  border-color: var(--primary);
-
-  box-shadow:
-    0 0 0 4px
-    rgba(201, 162, 75, 0.15);
+.address-form__error-switch-btn:hover {
+  background: #e08484;
+  color: white;
 }
 
 /* =========================================================
-   Default Address
+   Fields & Inputs
+   ========================================================= */
+
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.1rem;
+}
+
+.field-grid--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.field span {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.req {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.field input,
+.address-form textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background-color: var(--secondary);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.92rem;
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.field input::placeholder,
+.address-form textarea::placeholder {
+  color: var(--text-muted);
+  font-size: 0.86rem;
+}
+
+.field input:hover,
+.address-form textarea:hover {
+  border-color: color-mix(in srgb, var(--border-color) 60%, var(--primary) 40%);
+}
+
+.field input:focus,
+.address-form textarea:focus {
+  border-color: var(--primary);
+  background-color: var(--bg-card);
+  box-shadow: 0 0 0 3px rgba(201, 162, 75, 0.18);
+}
+
+.field small {
+  color: #e08484;
+  font-size: 0.78rem;
+  margin-top: 0.15rem;
+}
+
+.location-validation-error {
+  color: #e08484;
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   Manual Section (Dropdowns)
+   ========================================================= */
+
+.address-form__manual-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: 1.25rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--bg-card) 95%, var(--secondary) 5%);
+}
+
+.address-form__manual-notice {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+  border: 1px solid rgba(201, 162, 75, 0.25);
+  font-size: 0.82rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.address-form__manual-notice-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.address-form__manual-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.address-form__manual-header strong {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.address-form__manual-icon {
+  font-size: 1.1rem;
+}
+
+.address-form__manual-section select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-card);
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%23C9A24B' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 0.85rem center;
+  background-size: 10px;
+  padding-left: 2.2rem;
+  transition: var(--transition-fast);
+}
+
+.address-form__manual-section select:hover:not(:disabled) {
+  border-color: var(--primary);
+}
+
+.address-form__manual-section select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(201, 162, 75, 0.18);
+}
+
+.address-form__manual-section select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  background-color: var(--secondary);
+}
+
+.address-form__loading-hint {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  margin-top: 0.2rem;
+}
+
+.address-form__manual-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.25rem;
+}
+
+.address-form__retry-btn {
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary-light);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: var(--transition-fast);
+}
+
+.address-form__retry-btn:hover {
+  color: var(--primary);
+}
+
+/* =========================================================
+   Checkbox (Default address)
    ========================================================= */
 
 .address-form__checkbox {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-
+  gap: 0.65rem;
   font-size: 0.88rem;
-  color: var(--text-secondary);
-
+  font-weight: 500;
+  color: var(--text-primary);
   cursor: pointer;
+  user-select: none;
 }
 
 .address-form__checkbox input {
   width: 18px;
   height: 18px;
-
   accent-color: var(--primary);
-
   cursor: pointer;
 }
 
@@ -230,41 +444,72 @@
 
 .address-form__actions {
   display: flex;
-  gap: 0.75rem;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 0.5rem;
+}
 
-  margin-top: 0.4rem;
+.address-form__submit-btn {
+  flex: 2;
+  padding: 0.85rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.address-form__cancel-btn {
+  flex: 1;
+  padding: 0.85rem 1.25rem;
+  font-size: 0.9rem;
 }
 
 /* =========================================================
-   Location Validation
+   Animations
    ========================================================= */
 
-.location-validation-error {
-  color: #e08484;
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
-  font-size: 0.82rem;
-  line-height: 1.6;
+@keyframes pulseBg {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.75;
+  }
 }
 
 /* =========================================================
    Responsive
    ========================================================= */
 
-@media (max-width: 768px) {
-  .address-form__location-result-grid {
+@media (max-width: 640px) {
+  .field-grid {
     grid-template-columns: 1fr;
     gap: 0.85rem;
   }
 
-  .address-form {
-    padding: 1.1rem;
+  .field-grid--three {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  .address-form__location-result-grid {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
   }
 
   .address-form__actions {
     flex-direction: column;
   }
 
-  .address-form__actions .btn {
+  .address-form__actions button {
     width: 100%;
+  }
+
+  .address-form {
+    padding: 1.1rem;
   }
 }

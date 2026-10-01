@@ -9,6 +9,7 @@ import {
   signal,
   DestroyRef,
 } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 import {
   FormBuilder,
@@ -20,11 +21,15 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { AddressService } from '../../../../core/services/address.service';
 import { LocationService } from '../../../../core/services/LocationService.service';
+import { AreaService } from '../../../../core/services/area.service';
 
 import {
   AddressResponse,
   ResolveLocationResponse,
   CreateAddressRequest,
+  GovernorateLookupResponse,
+  AreaResponse,
+  AreaShiyakhaResponse,
 } from '../../../../core/models/domain.models';
 
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
@@ -59,12 +64,24 @@ export class AddressFormComponent
   private readonly locationService =
     inject(LocationService);
 
+  private readonly areaService =
+    inject(AreaService);
+
+  private readonly http =
+    inject(HttpClient);
+
   private readonly destroyRef =
     inject(DestroyRef);
 
   @Input()
   existingAddress: AddressResponse | null =
     null;
+
+  @Input()
+  isModal = false;
+
+  @Input()
+  showTitle = true;
 
   @Output()
   saved =
@@ -81,6 +98,16 @@ export class AddressFormComponent
     signal<string | null>(null);
 
   // =========================================================
+  // Automatic Location Detection
+  // =========================================================
+
+  readonly isDetectingLocation =
+    signal(false);
+
+  readonly manualNotice =
+    signal<string | null>(null);
+
+  // =========================================================
   // Resolved official location
   // =========================================================
 
@@ -94,6 +121,37 @@ export class AddressFormComponent
 
   readonly locationError =
     signal<string | null>(null);
+
+  // =========================================================
+  // Manual mode
+  // =========================================================
+
+  readonly isManualMode =
+    signal(false);
+
+  readonly governorates =
+    signal<GovernorateLookupResponse[]>([]);
+
+  readonly areas =
+    signal<AreaResponse[]>([]);
+
+  readonly shiyakhas =
+    signal<AreaShiyakhaResponse[]>([]);
+
+  readonly selectedGovernorateId =
+    signal<number | null>(null);
+
+  readonly selectedAreaId =
+    signal<number | null>(null);
+
+  readonly selectedShiyakhaId =
+    signal<number | null>(null);
+
+  readonly isLoadingGovernorates =
+    signal(false);
+
+  readonly isLoadingAreas =
+    signal(false);
 
   // =========================================================
   // Form
@@ -148,12 +206,10 @@ export class AddressFormComponent
 
       latitude: [
         null as number | null,
-        Validators.required,
       ],
 
       longitude: [
         null as number | null,
-        Validators.required,
       ],
     });
 
@@ -270,11 +326,344 @@ export class AddressFormComponent
   }
 
   // =========================================================
+  // Automatic Location Detection & Mode Handling
+  // =========================================================
+
+  private detectLocationAutomatically(): void {
+    if (this.existingAddress) {
+      if (!this.existingAddress.latitude || !this.existingAddress.longitude) {
+        this.switchToManual();
+      }
+      return;
+    }
+
+    if (typeof window === 'undefined' || !navigator.geolocation) {
+      this.switchToManual('المتصفح لا يدعم تحديد الموقع الجغرافي. تم التبديل للاختيار اليدوي.');
+      return;
+    }
+
+    if (navigator.permissions && navigator.permissions.query) {
+      navigator.permissions
+        .query({ name: 'geolocation' })
+        .then((permissionStatus) => {
+          if (permissionStatus.state === 'denied') {
+            this.switchToManual('تم التحويل للاختيار اليدوي لعدم منح صلاحية الموقع.');
+            return;
+          }
+          this.requestGeolocation();
+        })
+        .catch(() => {
+          this.requestGeolocation();
+        });
+    } else {
+      this.requestGeolocation();
+    }
+  }
+
+  private requestGeolocation(): void {
+    this.isDetectingLocation.set(true);
+    this.locationError.set(null);
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.isDetectingLocation.set(false);
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        this.form.patchValue({
+          latitude: lat,
+          longitude: lng,
+        });
+
+        this.resolveLocation(lat, lng);
+        this.reverseGeocode(lat, lng);
+      },
+      (error) => {
+        this.isDetectingLocation.set(false);
+        const reason =
+          error.code === error.PERMISSION_DENIED
+            ? 'تم التحويل للاختيار اليدوي لعدم منح صلاحية الموقع.'
+            : 'تم التحويل للاختيار اليدوي لتعذر تحديد موقعك بدقة.';
+        this.switchToManual(reason);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 7000,
+        maximumAge: 60000,
+      }
+    );
+  }
+
+  private reverseGeocode(lat: number, lng: number): void {
+    this.http
+      .get<{
+        display_name: string;
+        address?: { road?: string; house_number?: string };
+      }>('https://nominatim.openstreetmap.org/reverse', {
+        params: {
+          lat: lat.toString(),
+          lon: lng.toString(),
+          format: 'json',
+          addressdetails: '1',
+          'accept-language': 'ar',
+        },
+      })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          if (res.address?.road && !this.form.get('street')?.value) {
+            this.form.patchValue({ street: res.address.road });
+          }
+          if (res.address?.house_number && !this.form.get('building')?.value) {
+            this.form.patchValue({ building: res.address.house_number });
+          }
+        },
+        error: () => {},
+      });
+  }
+
+  switchToManual(notice?: string): void {
+    this.isDetectingLocation.set(false);
+    this.isManualMode.set(true);
+
+    if (notice) {
+      this.manualNotice.set(notice);
+    }
+
+    if (!this.selectedShiyakhaId()) {
+      this.form.patchValue({
+        latitude: null,
+        longitude: null,
+      });
+      this.resolvedLocation.set(null);
+    }
+
+    if (this.governorates().length === 0) {
+      this.loadGovernorates();
+    }
+  }
+
+  retryMapMode(): void {
+    this.isManualMode.set(false);
+    this.manualNotice.set(null);
+    this.selectedGovernorateId.set(null);
+    this.selectedAreaId.set(null);
+    this.selectedShiyakhaId.set(null);
+    this.areas.set([]);
+    this.shiyakhas.set([]);
+    this.resolvedLocation.set(null);
+    this.requestGeolocation();
+  }
+
+  private loadGovernorates(): void {
+    this.isLoadingGovernorates.set(true);
+
+    this.areaService
+      .getGovernorates()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: (response) => {
+          this.isLoadingGovernorates.set(false);
+
+          if (
+            response.success &&
+            response.data
+          ) {
+            this.governorates.set(
+              response.data
+            );
+          }
+        },
+
+        error: () => {
+          this.isLoadingGovernorates.set(false);
+        },
+      });
+  }
+
+  onGovernorateChange(
+    event: Event
+  ): void {
+    const value =
+      (event.target as HTMLSelectElement).value;
+
+    const govId =
+      value ? Number(value) : null;
+
+    this.selectedGovernorateId.set(govId);
+    this.selectedAreaId.set(null);
+    this.selectedShiyakhaId.set(null);
+    this.areas.set([]);
+    this.shiyakhas.set([]);
+    this.resolvedLocation.set(null);
+    this.locationError.set(null);
+
+    if (govId) {
+      this.loadAreas(govId);
+    }
+  }
+
+  private loadAreas(
+    governorateId: number
+  ): void {
+    this.isLoadingAreas.set(true);
+
+    this.areaService
+      .getAreas({
+        governorateId,
+        pageSize: 200,
+        isDeliveryAvailable: true,
+      })
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: (response) => {
+          this.isLoadingAreas.set(false);
+
+          if (
+            response.success &&
+            response.data
+          ) {
+            this.areas.set(
+              response.data.items
+            );
+          }
+        },
+
+        error: () => {
+          this.isLoadingAreas.set(false);
+        },
+      });
+  }
+
+  onAreaChange(
+    event: Event
+  ): void {
+    const value =
+      (event.target as HTMLSelectElement).value;
+
+    const areaId =
+      value ? Number(value) : null;
+
+    this.selectedAreaId.set(areaId);
+    this.selectedShiyakhaId.set(null);
+    this.resolvedLocation.set(null);
+    this.locationError.set(null);
+
+    if (areaId) {
+      const area =
+        this.areas().find(
+          (a) => a.id === areaId
+        );
+
+      if (area) {
+        this.shiyakhas.set(
+          area.shiyakhas ?? []
+        );
+      }
+    } else {
+      this.shiyakhas.set([]);
+    }
+  }
+
+  onShiyakhaChange(
+    event: Event
+  ): void {
+    const value =
+      (event.target as HTMLSelectElement).value;
+
+    const shiyakhaId =
+      value ? Number(value) : null;
+
+    this.selectedShiyakhaId.set(shiyakhaId);
+    this.locationError.set(null);
+
+    if (shiyakhaId) {
+      this.buildManualResolvedLocation();
+    } else {
+      this.resolvedLocation.set(null);
+    }
+  }
+
+  private buildManualResolvedLocation(): void {
+    const areaId = this.selectedAreaId();
+    const shiyakhaId = this.selectedShiyakhaId();
+
+    if (!areaId || !shiyakhaId) {
+      return;
+    }
+
+    const area =
+      this.areas().find(
+        (a) => a.id === areaId
+      );
+
+    const shiyakha =
+      this.shiyakhas().find(
+        (s) => s.id === shiyakhaId
+      );
+
+    const governorate =
+      this.governorates().find(
+        (g) =>
+          g.id === area?.governorateId
+      );
+
+    if (!area || !shiyakha) {
+      return;
+    }
+
+    this.resolvedLocation.set({
+      isResolved: true,
+
+      isDeliveryAvailable:
+        area.isDeliveryAvailable,
+
+      areaId: area.id,
+      areaNameAr: area.nameAr,
+      areaNameEn: area.nameEn,
+
+      shiyakhaId: shiyakha.id,
+      shiyakhaNameAr: shiyakha.nameAr,
+      shiyakhaNameEn: shiyakha.nameEn,
+
+      governorateId:
+        area.governorateId,
+
+      governorateNameAr:
+        governorate?.nameAr ?? '',
+
+      governorateNameEn:
+        governorate?.nameEn ?? '',
+
+      shippingCost:
+        area.shippingCost,
+
+      status:
+        area.isDeliveryAvailable
+          ? 'Available'
+          : 'DeliveryUnavailable',
+    });
+
+    // Set center coordinates from shiyakha
+    this.form.patchValue({
+      latitude:
+        shiyakha.centerLatitude || null,
+      longitude:
+        shiyakha.centerLongitude || null,
+    });
+  }
+
+  // =========================================================
   // Lifecycle
   // =========================================================
 
   ngOnInit(): void {
     this.patchFormFromExisting();
+    this.detectLocationAutomatically();
   }
 
   ngOnChanges(): void {
@@ -440,7 +829,9 @@ export class AddressFormComponent
       !location.isResolved
     ) {
       this.locationError.set(
-        'Please select a valid location on the map.'
+        this.isManualMode()
+          ? 'يرجى اختيار المحافظة والمنطقة والحي.'
+          : 'Please select a valid location on the map.'
       );
 
       return;
@@ -449,9 +840,12 @@ export class AddressFormComponent
     const raw =
       this.form.getRawValue();
 
+    // In manual mode, lat/lng can be null (we use center coords)
+    // In map mode, lat/lng are required
     if (
-      raw.latitude === null ||
-      raw.longitude === null
+      !this.isManualMode() &&
+      (raw.latitude === null ||
+      raw.longitude === null)
     ) {
       this.locationError.set(
         'Please select a location on the map.'
@@ -491,14 +885,22 @@ export class AddressFormComponent
         raw.notes || null,
 
       latitude:
-        raw.latitude,
+        raw.latitude ?? 0,
 
       longitude:
-        raw.longitude,
+        raw.longitude ?? 0,
 
       isDefault:
         raw.isDefault,
     };
+
+    // Include manual area/shiyakha selection
+    if (this.isManualMode()) {
+      payload.areaId =
+        this.selectedAreaId();
+      payload.shiyakhaId =
+        this.selectedShiyakhaId();
+    }
 
     const request$ =
       this.existingAddress

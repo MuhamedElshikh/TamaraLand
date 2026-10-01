@@ -384,6 +384,22 @@
   "addAddress": "Add Address",
   "cancel": "Cancel",
 
+  "detecting": {
+    "title": "Detecting your location automatically...",
+    "desc": "Please allow location access to pinpoint your address, or you will be switched to manual selection."
+  },
+
+  "manual": {
+    "title": "Select Area Manually",
+    "selectGovernorate": "Select Governorate",
+    "chooseGovFirst": "Choose governorate first",
+    "selectArea": "Select Area",
+    "chooseAreaFirst": "Choose area first",
+    "selectDistrict": "Select District",
+    "loading": "Loading...",
+    "tryMap": "Pin location on map instead"
+  },
+
   "validation": {
     "fullNameRequired": "Full name is required.",
     "phoneRequired": "Phone number is required.",
@@ -620,6 +636,8 @@
       "loading": "Loading your addresses...",
       "empty": "You don't have any saved addresses yet.",
       "addAddress": "Add an Address",
+      "addNew": "Add New",
+      "modalSubtitle": "Enter your delivery details to complete your order smoothly",
       "default": "Default",
       "verified": "Verified",
       "notVerified": "Phone number not verified",

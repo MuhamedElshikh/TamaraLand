@@ -138,3 +138,210 @@
   cursor: pointer;
   white-space: nowrap;
 }
+
+/* =========================================================
+   Header Actions
+   ========================================================= */
+
+.checkout-block__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.checkout-block__add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  padding: 0.4rem 0.85rem;
+
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-full);
+  background: transparent;
+
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--primary);
+
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition-fast);
+}
+
+.checkout-block__add-btn:hover {
+  background: var(--primary);
+  color: var(--bg-card);
+}
+
+/* =========================================================
+   Address Form Modal
+   ========================================================= */
+
+.checkout-address-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000; /* Higher than navbar (5000) and headers */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 1.5rem;
+
+  background: rgba(10, 8, 5, 0.72);
+  backdrop-filter: blur(8px);
+
+  animation: fadeIn 0.2s ease-out;
+}
+
+.checkout-address-modal {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  max-width: 680px;
+  max-height: calc(100vh - 3.5rem);
+
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+
+  animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+  overflow: hidden;
+}
+
+.checkout-address-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  padding: 1.25rem 1.75rem;
+
+  border-bottom: 1px solid var(--border-color);
+  background: color-mix(in srgb, var(--bg-card) 95%, var(--primary) 5%);
+}
+
+.checkout-address-modal__header h3 {
+  margin: 0;
+
+  font-family: 'Cormorant Garamond', 'Tajawal', serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.checkout-address-modal__subtitle {
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.checkout-address-modal__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 2.2rem;
+  height: 2.2rem;
+
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  background: var(--secondary);
+
+  color: var(--text-secondary);
+
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.checkout-address-modal__close:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--secondary-dark);
+  transform: rotate(90deg);
+}
+
+.checkout-address-modal__body {
+  padding: 1.5rem 1.75rem 2rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+}
+
+.checkout-address-modal__body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.checkout-address-modal__body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.checkout-address-modal__body::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+.checkout-address-modal__body::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .checkout-block__header {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .checkout-block__header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .checkout-address-modal__backdrop {
+    padding: 0.75rem;
+  }
+
+  .checkout-address-modal {
+    max-height: calc(100vh - 1.5rem);
+    border-radius: var(--radius-md);
+  }
+
+  .checkout-address-modal__header {
+    padding: 1rem 1.25rem;
+  }
+
+  .checkout-address-modal__body {
+    padding: 1.1rem 1.25rem 1.5rem;
+  }
+}

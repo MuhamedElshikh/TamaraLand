@@ -81,6 +81,7 @@ export class AddressMapPickerComponent
   @Input() initialLocationText = '';
 
   @Output() locationPicked = new EventEmitter<PickedLocation>();
+  @Output() permissionDenied = new EventEmitter<void>();
 
   private map?: google.maps.Map;
   private marker?: google.maps.Marker;
@@ -428,6 +429,7 @@ ngOnChanges(changes: SimpleChanges): void {
       this.locationError.set(
         'المتصفح ده مش بيدعم تحديد الموقع.'
       );
+      this.permissionDenied.emit();
       return;
     }
 
@@ -465,6 +467,7 @@ ngOnChanges(changes: SimpleChanges): void {
             this.locationError.set(
               'محتاجين إذن الوصول لموقعك عشان نقدر نحدده.'
             );
+            this.permissionDenied.emit();
             break;
 
           case error.POSITION_UNAVAILABLE:
