@@ -34,7 +34,7 @@ import {
 
 import { extractErrorMessage } from '../../../../core/utils/error-message.util';
 
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import {
   PickedLocation,
@@ -69,6 +69,9 @@ export class AddressFormComponent
 
   private readonly http =
     inject(HttpClient);
+
+  private readonly translate =
+    inject(TranslateService);
 
   private readonly destroyRef =
     inject(DestroyRef);
@@ -338,7 +341,9 @@ export class AddressFormComponent
     }
 
     if (typeof window === 'undefined' || !navigator.geolocation) {
-      this.switchToManual('المتصفح لا يدعم تحديد الموقع الجغرافي. تم التبديل للاختيار اليدوي.');
+      this.switchToManual(
+        this.translate.instant('addressForm.manual.autoSwitchedNotSupported')
+      );
       return;
     }
 
@@ -347,7 +352,9 @@ export class AddressFormComponent
         .query({ name: 'geolocation' })
         .then((permissionStatus) => {
           if (permissionStatus.state === 'denied') {
-            this.switchToManual('تم التحويل للاختيار اليدوي لعدم منح صلاحية الموقع.');
+            this.switchToManual(
+              this.translate.instant('addressForm.manual.autoSwitchedPermission')
+            );
             return;
           }
           this.requestGeolocation();
@@ -382,8 +389,8 @@ export class AddressFormComponent
         this.isDetectingLocation.set(false);
         const reason =
           error.code === error.PERMISSION_DENIED
-            ? 'تم التحويل للاختيار اليدوي لعدم منح صلاحية الموقع.'
-            : 'تم التحويل للاختيار اليدوي لتعذر تحديد موقعك بدقة.';
+            ? this.translate.instant('addressForm.manual.autoSwitchedPermission')
+            : this.translate.instant('addressForm.manual.autoSwitchedUnavailable');
         this.switchToManual(reason);
       },
       {
@@ -830,8 +837,8 @@ export class AddressFormComponent
     ) {
       this.locationError.set(
         this.isManualMode()
-          ? 'يرجى اختيار المحافظة والمنطقة والحي.'
-          : 'Please select a valid location on the map.'
+          ? this.translate.instant('addressForm.manual.validationError')
+          : this.translate.instant('addressForm.validation.locationRequired')
       );
 
       return;
@@ -848,7 +855,7 @@ export class AddressFormComponent
       raw.longitude === null)
     ) {
       this.locationError.set(
-        'Please select a location on the map.'
+        this.translate.instant('addressForm.validation.locationRequired')
       );
 
       return;
@@ -942,7 +949,7 @@ export class AddressFormComponent
           this.errorMessage.set(
             extractErrorMessage(
               error,
-              'Could not save this address.'
+              this.translate.instant('addressForm.validation.saveFailed')
             )
           );
         },

@@ -24,7 +24,7 @@ import {
 
 import { Subscription } from 'rxjs';
 
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { setOptions, importLibrary } from '@googlemaps/js-api-loader';
 import { environment } from '../../../../../environments/environment';
 
@@ -73,6 +73,7 @@ export class AddressMapPickerComponent
   implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
   private readonly http = inject(HttpClient);
+  private readonly translate = inject(TranslateService);
 
   @Input() initialLat = 30.0444;
   @Input() initialLng = 31.2357;
@@ -427,7 +428,7 @@ ngOnChanges(changes: SimpleChanges): void {
 
     if (!navigator.geolocation) {
       this.locationError.set(
-        'المتصفح ده مش بيدعم تحديد الموقع.'
+        this.translate.instant('addressForm.map.notSupported')
       );
       this.permissionDenied.emit();
       return;
@@ -465,26 +466,26 @@ ngOnChanges(changes: SimpleChanges): void {
 
           case error.PERMISSION_DENIED:
             this.locationError.set(
-              'محتاجين إذن الوصول لموقعك عشان نقدر نحدده.'
+              this.translate.instant('addressForm.map.permissionDenied')
             );
             this.permissionDenied.emit();
             break;
 
           case error.POSITION_UNAVAILABLE:
             this.locationError.set(
-              'مش قادرين نحدد موقعك دلوقتي.'
+              this.translate.instant('addressForm.map.positionUnavailable')
             );
             break;
 
           case error.TIMEOUT:
             this.locationError.set(
-              'استغرق تحديد الموقع وقت طويل، جرب تاني.'
+              this.translate.instant('addressForm.map.timeout')
             );
             break;
 
           default:
             this.locationError.set(
-              'حصل خطأ في تحديد الموقع.'
+              this.translate.instant('addressForm.map.generalError')
             );
         }
       },

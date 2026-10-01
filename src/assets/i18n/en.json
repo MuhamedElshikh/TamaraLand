@@ -335,20 +335,25 @@
   "map": {
     "searchPlaceholder": "Search for your address...",
     "dragHint": "Drag the marker to your exact location",
-    "useMyLocation": "Use my location",
+    "useMyLocation": "Use My Location",
     "locating": "Locating...",
     "changeLocation": "Change Location",
     "chooseLocation": "Choose Location",
     "close": "Close Map",
     "location": "Location",
-    "noLocation": "No location selected"
+    "noLocation": "No location selected",
+    "notSupported": "Your browser does not support geolocation.",
+    "permissionDenied": "Please allow location access to pinpoint your address.",
+    "positionUnavailable": "Your location is currently unavailable.",
+    "timeout": "Location request timed out. Please try again.",
+    "generalError": "An error occurred while detecting your location."
   },
 
   "fullName": "Full Name",
   "phoneNumber": "Phone Number",
   "governorate": "Governorate",
   "area": "Area",
-  "district": "district",
+  "district": "District",
   "street": "Street",
   "building": "Building",
   "floor": "Floor",
@@ -356,15 +361,15 @@
   "notes": "Notes (Optional)",
 
   "resolvedLocation": {
-    "title": "Selected Location",
+    "title": "Verified Delivery Area",
     "governorate": "Governorate",
     "area": "Area",
-    "district": "district"
+    "district": "District"
   },
 
   "locationStatus": {
-    "resolving": "Determining your area...",
-    "error": "We couldn't determine the area for this location.",
+    "resolving": "Verifying delivery area...",
+    "error": "We couldn't determine the delivery area for this location.",
     "required": "Please select your location on the map."
   },
 
@@ -397,7 +402,11 @@
     "chooseAreaFirst": "Choose area first",
     "selectDistrict": "Select District",
     "loading": "Loading...",
-    "tryMap": "Pin location on map instead"
+    "tryMap": "Pin location on map instead",
+    "autoSwitchedPermission": "Switched to manual selection because location permission was not granted.",
+    "autoSwitchedUnavailable": "Switched to manual selection because your location could not be determined.",
+    "autoSwitchedNotSupported": "Your browser does not support geolocation. Switched to manual selection.",
+    "validationError": "Please select governorate, area, and district."
   },
 
   "validation": {
@@ -407,7 +416,8 @@
     "streetRequired": "Street is required.",
     "buildingRequired": "Building number is required.",
     "apartmentRequired": "Apartment number is required.",
-    "locationRequired": "Please select your location on the map."
+    "locationRequired": "Please select your location on the map.",
+    "saveFailed": "Could not save this address. Please try again."
   }
 },
   "auth": {
@@ -654,7 +664,7 @@
   "addressDetails": "Address Details",
   "governorate": "Governorate",
   "area": "Area",
-  "district": "district",
+  "district": "District",
   "street": "Street",
   "building": "Building",
   "floor": "Floor",
@@ -960,6 +970,8 @@
     "backToStore": "Back to store"
   },
   "common": {
+    "egp": "EGP",
+    "currency": "EGP",
     "replace": "Replace",
     "remove": "Remove",
     "cancel": "Cancel",
