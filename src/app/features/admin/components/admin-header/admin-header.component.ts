@@ -6,7 +6,7 @@ import {
   Output,
 } from '@angular/core';
 
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AuthService } from '../../../../core/services/auth.service';
@@ -16,7 +16,7 @@ import { ThemeService } from '../../../../core/theme/theme.service';
 @Component({
   selector: 'app-admin-header',
   standalone: true,
-  imports: [TranslateModule],
+  imports: [RouterLink, TranslateModule],
   templateUrl: './admin-header.component.html',
   styleUrl: './admin-header.component.css',
 })

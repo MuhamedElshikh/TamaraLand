@@ -193,13 +193,70 @@
 
 
 /* ============================= */
+/* Leading & Store Button */
+/* ============================= */
+
+.admin-header__leading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-header__store-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  height: 40px;
+  padding: 0 1rem;
+
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(201, 162, 75, 0.4);
+
+  background: linear-gradient(135deg, rgba(201, 162, 75, 0.14), rgba(201, 162, 75, 0.04));
+  color: var(--text-primary);
+
+  text-decoration: none;
+  font-size: 0.84rem;
+  font-weight: 600;
+  white-space: nowrap;
+
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.admin-header__store-btn i {
+  font-size: 0.95rem;
+  color: var(--gold-primary);
+  transition: transform 0.25s ease;
+}
+
+.admin-header__store-btn:hover {
+  border-color: var(--gold-primary);
+  background: rgba(201, 162, 75, 0.22);
+  color: var(--gold-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(201, 162, 75, 0.2);
+}
+
+.admin-header__store-btn:hover i {
+  transform: scale(1.12);
+}
+
+.admin-header__store-btn:active {
+  transform: scale(0.96);
+}
+
+/* ============================= */
 /* Focus */
 /* ============================= */
 
 .admin-header__action:focus-visible,
 .admin-header__language:focus-visible,
 .admin-header__logout:focus-visible,
-.admin-header__menu:focus-visible {
+.admin-header__menu:focus-visible,
+.admin-header__store-btn:focus-visible {
   outline: 2px solid var(--gold-primary);
   outline-offset: 2px;
 }
@@ -212,7 +269,7 @@
 @media (max-width: 992px) {
 
   .admin-header {
-    padding: 1rem;
+    padding: 0.85rem 1rem;
   }
 
   .admin-header__menu {
@@ -231,6 +288,12 @@
     gap: 0.4rem;
   }
 
+  .admin-header__store-btn {
+    height: 38px;
+    padding: 0 0.85rem;
+    font-size: 0.8rem;
+  }
+
 }
 
 
@@ -241,33 +304,61 @@
 @media (max-width: 480px) {
 
   .admin-header {
+    padding: 0.75rem 0.85rem;
     gap: 0.5rem;
   }
 
+  .admin-header__leading {
+    gap: 0.4rem;
+  }
+
+  .admin-header__menu {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+  }
+
   .admin-header__actions {
-    gap: 0.3rem;
+    gap: 0.25rem;
   }
 
   .admin-header__action {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
   }
 
   .admin-header__language {
-    min-width: 52px;
-    height: 38px;
-
-    padding: 0 0.5rem;
+    min-width: 48px;
+    height: 36px;
+    padding: 0 0.45rem;
   }
 
   .admin-header__language svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
   }
 
   .admin-header__logout {
-    padding: 0.35rem 0.65rem;
+    padding: 0.35rem 0.6rem;
     font-size: 0.75rem;
   }
 
+  .admin-header__store-btn {
+    height: 36px;
+    padding: 0 0.65rem;
+    font-size: 0.75rem;
+    gap: 0.35rem;
+  }
+
+}
+
+@media (max-width: 380px) {
+  .admin-header__store-btn {
+    width: 36px;
+    padding: 0;
+  }
+
+  .admin-header__store-btn-text {
+    display: none;
+  }
 }

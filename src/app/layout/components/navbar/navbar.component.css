@@ -1,4 +1,4 @@
-﻿/* =========================================================
+/* =========================================================
    TAMARA LAND — NAVBAR V5
    Mobile First / Luxury Editorial / Stable Overflow
    ========================================================= */
@@ -691,6 +691,21 @@
   text-align: inherit;
 }
 
+.mobile-account-link--admin {
+  background: rgba(201, 162, 75, 0.1) !important;
+  color: var(--primary) !important;
+  font-weight: 700 !important;
+  padding: 0.65rem 0.75rem !important;
+  border-radius: var(--radius-sm);
+  border-inline-start: 3px solid var(--primary);
+  margin-bottom: 0.4rem;
+}
+
+.mobile-account-link--admin:hover {
+  background: rgba(201, 162, 75, 0.18) !important;
+  color: var(--primary-light) !important;
+}
+
 
 /* =========================================================
    MOBILE FOOTER
@@ -841,7 +856,6 @@
   position: absolute;
 
   top: calc(100% + 14px);
-  inset-inline-end: 0;
 
   width: 235px;
   max-width:
@@ -875,6 +889,16 @@
     accountMenuIn 0.22s ease both;
 
   z-index: 100;
+}
+
+:host-context([dir='rtl']) .account-menu__dropdown {
+  left: 0 !important;
+  right: auto !important;
+}
+
+:host-context([dir='ltr']) .account-menu__dropdown {
+  right: 0 !important;
+  left: auto !important;
 }
 
 .account-menu__top {
@@ -964,6 +988,21 @@
   color: var(--primary-light);
 
   padding-inline-start: 0.7rem;
+}
+
+.account-menu__admin-link {
+  color: var(--primary) !important;
+  font-weight: 700;
+  background: rgba(201, 162, 75, 0.08);
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.25rem;
+}
+
+.account-menu__item-content,
+.mobile-account-link__content {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 

@@ -14,7 +14,8 @@
     "signup": "إنشاء حساب",
     "logout": "تسجيل الخروج",
     "hello": "مرحباً",
-    "search": "بحث"
+    "search": "بحث",
+    "adminPanel": "لوحة الإدارة"
   },
   "home": {
   "shopByCategory": "تسوق حسب القسم",
@@ -980,7 +981,7 @@
     "banners": "البانرات",
     "whatsapp": "واتساب",
     "storeSettings": "إعدادات المتجر",
-    "backToStore": "العودة إلى المتجر"
+    "backToStore": "الذهاب للموقع"
   },
   "common": {
     "egp": "ج.م",

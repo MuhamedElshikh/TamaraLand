@@ -189,21 +189,6 @@
   flex-shrink: 0;
 }
 
-/* ---------------- Back ---------------- */
-
-.admin-sidebar__back {
-  padding-top: 1rem;
-
-  border-top: 1px solid var(--border-color);
-
-  color: var(--text-muted);
-  font-size: .8rem;
-}
-
-.admin-sidebar__back:hover {
-  color: var(--primary);
-}
-
 /* ---------------- Mobile Close ---------------- */
 
 .admin-sidebar__close {

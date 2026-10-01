@@ -14,7 +14,8 @@
     "signup": "Create Account",
     "logout": "Sign Out",
     "hello": "Hi",
-    "search": "Search"
+    "search": "Search",
+    "adminPanel": "Admin Dashboard"
   },
  "home": {
   "shopByCategory": "Shop by category",
@@ -967,7 +968,7 @@
     "banners": "Banners",
     "whatsapp": "WhatsApp",
     "storeSettings": "Store Settings",
-    "backToStore": "Back to store"
+    "backToStore": "Go to Store"
   },
   "common": {
     "egp": "EGP",

@@ -157,6 +157,20 @@
 
         @if (isLoggedIn()) {
 
+          @if (isAdmin()) {
+            <a
+              routerLink="/admin"
+              class="mobile-account-link mobile-account-link--admin"
+              (click)="closeMenu()"
+            >
+              <span class="mobile-account-link__content">
+                <i class="fa-solid fa-gauge-high" aria-hidden="true"></i>
+                {{ 'navbar.adminPanel' | translate }}
+              </span>
+              <span aria-hidden="true">→</span>
+            </a>
+          }
+
           <a
             routerLink="/profile"
             class="mobile-account-link"
@@ -385,6 +399,22 @@
                 </p>
 
               </div>
+
+
+              @if (isAdmin()) {
+                <a
+                  routerLink="/admin"
+                  role="menuitem"
+                  class="account-menu__admin-link"
+                  (click)="closeAccountMenu()"
+                >
+                  <span class="account-menu__item-content">
+                    <i class="fa-solid fa-gauge-high" aria-hidden="true"></i>
+                    {{ 'navbar.adminPanel' | translate }}
+                  </span>
+                  <span aria-hidden="true">→</span>
+                </a>
+              }
 
 
               <a

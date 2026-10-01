@@ -1,42 +1,29 @@
 <header class="admin-header">
 
-  <!-- Menu -->
-  <button
-    type="button"
-    class="admin-header__menu"
-    (click)="openMenu()"
-    [attr.aria-label]="'header.openMenu' | translate"
-  >
-    <i class="fa-solid fa-bars" aria-hidden="true"></i>
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      aria-hidden="true"
+  <div class="admin-header__leading">
+    <!-- Menu -->
+    <button
+      type="button"
+      class="admin-header__menu"
+      (click)="openMenu()"
+      [attr.aria-label]="'header.openMenu' | translate"
     >
-      <path
-        d="M4 6H20"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-      />
+      <i class="fa-solid fa-bars" aria-hidden="true"></i>
+    </button>
 
-      <path
-        d="M4 12H20"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-      />
-
-      <path
-        d="M4 18H20"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-      />
-    </svg>
-  </button>
+    <!-- Go to Store / الذهاب للموقع -->
+    <a
+      routerLink="/"
+      class="admin-header__store-btn"
+      [attr.aria-label]="'sidebar.backToStore' | translate"
+      [title]="'sidebar.backToStore' | translate"
+    >
+      <i class="fa-solid fa-store" aria-hidden="true"></i>
+      <span class="admin-header__store-btn-text">
+        {{ 'sidebar.backToStore' | translate }}
+      </span>
+    </a>
+  </div>
 
 
   <div class="admin-header__actions">

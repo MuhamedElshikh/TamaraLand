@@ -51,6 +51,7 @@ export class NavbarComponent {
   }
 
   isLoggedIn = this.auth.isLoggedIn;
+  isAdmin = this.auth.isAdmin;
   profile = this.auth.profile;
   firstName = computed(() => this.profile()?.firstName ?? '');
 

@@ -97,6 +97,7 @@
 html,
 body {
   min-height: 100%;
+  overflow-x: clip;
 }
 
 html {
@@ -896,7 +897,6 @@ body.dark .site-footer,
 .account-menu__dropdown {
   position: absolute;
   top: calc(100% + 12px);
-  right: 0;
   min-width: 200px;
   background: var(--dropdown-bg);
   border: 1px solid var(--border-color);
@@ -908,6 +908,16 @@ body.dark .site-footer,
   gap: 0.25rem;
   z-index: 1100;
   animation: fadeInUp 0.18s ease;
+}
+
+[dir='rtl'] .account-menu__dropdown {
+  right: auto;
+  left: 0;
+}
+
+[dir='ltr'] .account-menu__dropdown {
+  left: auto;
+  right: 0;
 }
 
 .account-menu__greeting {
