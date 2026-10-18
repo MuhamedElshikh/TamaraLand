@@ -1,9 +1,9 @@
-import { Injectable, signal, computed, inject, PLATFORM_ID } from '@angular/core';
+﻿import { Injectable, signal, computed, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { API_BASE_URL } from '../constants/api.constants';
 import { ApiResponse } from '../models/api-response.model';
 import {
@@ -17,6 +17,8 @@ import { ClarityService } from './clarity.service';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly ACCESS_TOKEN_KEY = 'usertoken';
+  private readonly REFRESH_TOKEN_KEY = 'refreshtoken';
 
   currentUser(): ProfileResponse | null {
     return this._profile();
@@ -28,11 +30,16 @@ export class AuthService {
 
   private readonly _profile = signal<ProfileResponse | null>(null);
   private readonly _token = signal<string | null>(
-    this.isBrowser ? localStorage.getItem('usertoken') : null
+    this.isBrowser ? localStorage.getItem(this.ACCESS_TOKEN_KEY) : null
+  );
+  private readonly _refreshToken = signal<string | null>(
+    this.isBrowser ? localStorage.getItem(this.REFRESH_TOKEN_KEY) : null
   );
   private readonly clarity: ClarityService = new ClarityService();
+
   readonly profile = this._profile.asReadonly();
   readonly token = this._token.asReadonly();
+  readonly refreshTokenSignal = this._refreshToken.asReadonly();
   readonly isLoggedIn = computed(() => !!this._token());
   readonly isAdmin = computed(() => {
     const t = this._token();
@@ -46,6 +53,14 @@ export class AuthService {
   });
 
   constructor(private http: HttpClient, private router: Router, private analytics: AnalyticsService) {}
+
+  getAccessToken(): string | null {
+    return this.isBrowser ? localStorage.getItem(this.ACCESS_TOKEN_KEY) : null;
+  }
+
+  getRefreshToken(): string | null {
+    return this.isBrowser ? localStorage.getItem(this.REFRESH_TOKEN_KEY) : null;
+  }
 
   login(
     data: LoginRequest
@@ -61,8 +76,9 @@ export class AuthService {
             res.success &&
             res.data?.accessToken
           ) {
-            this.saveToken(
-              res.data.accessToken
+            this.saveTokens(
+              res.data.accessToken,
+              res.data.refreshToken
             );
           }
         })
@@ -83,8 +99,9 @@ export class AuthService {
             res.success &&
             res.data?.accessToken
           ) {
-            this.saveToken(
-              res.data.accessToken
+            this.saveTokens(
+              res.data.accessToken,
+              res.data.refreshToken
             );
 
             this.analytics.signUp();
@@ -93,30 +110,46 @@ export class AuthService {
       );
   }
 
+  refreshToken(): Observable<ApiResponse<AuthResponse>> {
+    const token = this.getRefreshToken();
+    if (!token) {
+      return throwError(() => new Error('No refresh token available.'));
+    }
+
+    return this.http
+      .post<ApiResponse<AuthResponse>>(
+        `${API_BASE_URL}/api/Auth/refresh-token`,
+        { refreshToken: token }
+      )
+      .pipe(
+        tap(res => {
+          if (res.success && res.data?.accessToken) {
+            this.saveTokens(
+              res.data.accessToken,
+              res.data.refreshToken
+            );
+          }
+        })
+      );
+  }
+
+  revokeToken(refreshToken: string): Observable<ApiResponse<boolean>> {
+    return this.http.post<ApiResponse<boolean>>(
+      `${API_BASE_URL}/api/Auth/revoke-token`,
+      { refreshToken }
+    );
+  }
+
   completeGoogleLogin(
     response: AuthResponse
   ): void {
-
     if (!response?.accessToken) {
       return;
     }
 
-    this._token.set(
-      response.accessToken
-    );
-
-    if (this.isBrowser) {
-      localStorage.setItem(
-        'usertoken',
-        response.accessToken
-      );
-    }
-
-    this.setupAnalytics(
-      response.accessToken
-    );
-
-    this.analytics.login(
+    this.saveTokens(
+      response.accessToken,
+      response.refreshToken,
       'google'
     );
   }
@@ -124,45 +157,42 @@ export class AuthService {
   loginWithGoogle(
     idToken: string
   ): Observable<ApiResponse<AuthResponse>> {
-
     return this.http
       .post<ApiResponse<AuthResponse>>(
         `${API_BASE_URL}/api/Auth/google`,
-        {
-          idToken
-        }
+        { idToken }
       )
       .pipe(
-
         tap(res => {
-
-          if (
-            res.success &&
-            res.data
-          ) {
-
-            this.setToken(
-              res.data.accessToken
-            );
-
-            this.analytics.login(
+          if (res.success && res.data) {
+            this.saveTokens(
+              res.data.accessToken,
+              res.data.refreshToken,
               'google'
             );
           }
-
         })
       );
   }
 
   logout(): void {
+    const refreshToken = this.getRefreshToken();
+    if (refreshToken) {
+      this.revokeToken(refreshToken).subscribe({
+        error: () => {} // ignore network error or already revoked
+      });
+    }
+
     this.analytics.trackEvent('logout');
     this.analytics.clearUser();
     this.clarity.clearUser();
     this._token.set(null);
+    this._refreshToken.set(null);
     this._profile.set(null);
 
     if (this.isBrowser) {
-      localStorage.removeItem('usertoken');
+      localStorage.removeItem(this.ACCESS_TOKEN_KEY);
+      localStorage.removeItem(this.REFRESH_TOKEN_KEY);
     }
 
     this.router.navigate(['/login']);
@@ -217,37 +247,29 @@ export class AuthService {
     }
   }
 
-  private saveToken(
-    token: string,
+  saveTokens(
+    accessToken: string,
+    refreshToken?: string,
     provider?: string
   ): void {
-    this._token.set(token);
+    this._token.set(accessToken);
 
     if (this.isBrowser) {
-      localStorage.setItem(
-        'usertoken',
-        token
-      );
+      localStorage.setItem(this.ACCESS_TOKEN_KEY, accessToken);
+      if (refreshToken) {
+        localStorage.setItem(this.REFRESH_TOKEN_KEY, refreshToken);
+        this._refreshToken.set(refreshToken);
+      }
     }
 
-    this.setupAnalytics(token);
+    this.setupAnalytics(accessToken);
 
     if (provider) {
       this.analytics.login(provider);
     }
   }
 
-  setToken(token: string): void {
-
-    this._token.set(token);
-
-    if (this.isBrowser) {
-      localStorage.setItem(
-        'usertoken',
-        token
-      );
-    }
-
-    this.setupAnalytics(token);
+  setToken(token: string, refreshToken?: string): void {
+    this.saveTokens(token, refreshToken);
   }
 }
