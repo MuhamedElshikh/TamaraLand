@@ -131,11 +131,12 @@ export class AdminSidebarComponent {
       icon: 'image',
     },
 
-    {
-      labelKey: 'sidebar.whatsapp',
-      link: '/admin/whatsapp',
-      icon: 'whatsapp',
-    },
+    // WhatsApp subscription is paused:
+    // {
+    //   labelKey: 'sidebar.whatsapp',
+    //   link: '/admin/whatsapp',
+    //   icon: 'whatsapp',
+    // },
 
     {
       labelKey: 'sidebar.storeSettings',

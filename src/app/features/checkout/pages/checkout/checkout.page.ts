@@ -110,7 +110,7 @@ export class CheckoutPage implements OnInit {
 
       return (
         !!address &&
-        address.isPhoneVerified &&
+        // address.isPhoneVerified && // WhatsApp subscription is paused
         address.isDeliveryAvailable &&
         !!cart &&
         cart.items.length > 0

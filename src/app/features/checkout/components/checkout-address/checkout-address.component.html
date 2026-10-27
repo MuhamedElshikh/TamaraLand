@@ -111,6 +111,7 @@
 
 </p>
 
+            <!-- WhatsApp subscription is paused: phone verification UI commented out
             @if (isVerified(address)) {
 
               <p class="checkout-address__verified">
@@ -136,6 +137,7 @@
               </div>
 
             }
+            -->
 
           </div>
 
@@ -149,6 +151,7 @@
 
 </section>
 
+<!-- WhatsApp subscription is paused: phone verify dialog commented out
 @if (verifyingAddress(); as address) {
 
   <app-phone-verify-dialog
@@ -157,6 +160,7 @@
     (verified)="onVerified()" />
 
 }
+-->
 
 @if (showAddressForm()) {
 

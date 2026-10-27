@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+﻿import { Routes } from '@angular/router';
 
 /** @see .ai/STRUCTURE.md */
 export const ADMIN_ROUTES: Routes = [
@@ -96,10 +96,11 @@ export const ADMIN_ROUTES: Routes = [
       (m) => m.BannerFormComponent
     ),
 },
- {
-    path: 'whatsapp',
-    loadComponent: () => import('./pages/whatsapp/whatsapp.page/whatsapp.page').then((m) => m.WhatsAppPage),
-  },
+ // WhatsApp subscription is paused:
+ // {
+ //   path: 'whatsapp',
+ //   loadComponent: () => import('./pages/whatsapp/whatsapp.page/whatsapp.page').then((m) => m.WhatsAppPage),
+ // },
   {
     path: 'store-settings',
     loadComponent: () => import('./pages/store-settings/store-settings.page').then((m) => m.AdminStoreSettingsPage),

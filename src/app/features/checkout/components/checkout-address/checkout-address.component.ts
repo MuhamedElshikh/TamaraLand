@@ -13,7 +13,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { AddressService } from '../../../../core/services/address.service';
 import { AddressResponse } from '../../../../core/models/domain.models';
 
-import { PhoneVerifyDialogComponent } from '../../../phone-verification/components/phone-verify-dialog/phone-verify-dialog';
+// import { PhoneVerifyDialogComponent } from '../../../phone-verification/components/phone-verify-dialog/phone-verify-dialog';
 import { AddressFormComponent } from '../../../addresses/components/address-form/address-form.component';
 
 @Component({
@@ -21,7 +21,7 @@ import { AddressFormComponent } from '../../../addresses/components/address-form
   standalone: true,
   imports: [
     RouterLink,
-    PhoneVerifyDialogComponent,
+    // PhoneVerifyDialogComponent,
     AddressFormComponent,
     TranslatePipe,
   ],
